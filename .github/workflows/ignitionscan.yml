@@ -1,5 +1,5 @@
 # IgnitionScan — automated daily scan + grade. Runs on GitHub's servers.
-# Needs ONE repository secret: FMP_API_KEY (Settings > Secrets and variables > Actions).
+# Data source: Yahoo Finance via yfinance — NO API key or secret needed.
 name: IgnitionScan daily
 
 on:
@@ -9,8 +9,8 @@ on:
         description: "scan or grade"
         default: scan
   schedule:
-    - cron: "30 11 * * 1-5"
-    - cron: "0 21 * * 1-5"
+    - cron: "30 11 * * 1-5"   # ~7:30am ET scan (UTC; shifts 1h in winter)
+    - cron: "0 21 * * 1-5"    # ~5:00pm ET grade
 
 permissions:
   contents: write
@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Install deps
+        run: pip install yfinance
       - name: Decide command
         id: cmd
         run: |
@@ -30,9 +32,7 @@ jobs:
           if [ "${{ github.event.schedule }}" = "0 21 * * 1-5" ]; then CMD=grade; fi
           if [ -n "${{ github.event.inputs.command }}" ]; then CMD="${{ github.event.inputs.command }}"; fi
           echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
-      - name: Run
-        env:
-          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+      - name: Run ${{ steps.cmd.outputs.cmd }}
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
       - name: Commit data
         run: |
@@ -40,8 +40,8 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add picks.csv outcomes.csv 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "No data changes."
+            echo "No data changes to commit."
           else
-            git commit -m "data: ${{ steps.cmd.outputs.cmd }} run"
+            git commit -m "data: ${{ steps.cmd.outputs.cmd }} $(date -u +%F)"
             git push
           fi
