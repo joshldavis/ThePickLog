@@ -1,0 +1,47 @@
+# IgnitionScan — automated daily scan + grade. Runs on GitHub's servers.
+# Needs ONE repository secret: FMP_API_KEY (Settings > Secrets and variables > Actions).
+name: IgnitionScan daily
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "scan or grade"
+        default: scan
+  schedule:
+    - cron: "30 11 * * 1-5"
+    - cron: "0 21 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Decide command
+        id: cmd
+        run: |
+          CMD=scan
+          if [ "${{ github.event.schedule }}" = "0 21 * * 1-5" ]; then CMD=grade; fi
+          if [ -n "${{ github.event.inputs.command }}" ]; then CMD="${{ github.event.inputs.command }}"; fi
+          echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
+      - name: Run
+        env:
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
+        run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
+      - name: Commit data
+        run: |
+          git config user.name "ignitionscan-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add picks.csv outcomes.csv 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "data: ${{ steps.cmd.outputs.cmd }} run"
+            git push
+          fi
