@@ -38,7 +38,8 @@ jobs:
         run: |
           git config user.name "ignitionscan-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add picks.csv outcomes.csv 2>/dev/null || true
+          [ -f picks.csv ] && git add picks.csv || true
+          [ -f outcomes.csv ] && git add outcomes.csv || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else
