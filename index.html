@@ -201,14 +201,9 @@
     </div>
 
     <div class="config panel" style="margin-top:18px">
-      <label for="keyIn">Financial Modeling Prep API key (free tier) — paste to pull live quotes for the seed universe:</label>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <input id="keyIn" placeholder="FMP_API_KEY (leave blank for sample data)" />
-        <button class="btn ghost" onclick="applyKey()">Load live data</button>
-        <span class="dim" id="keyMsg"></span>
-      </div>
-      <p class="note">Prototype note: <b>float</b> is approximated from shares-outstanding in the free FMP quote.
-        True public float and short interest come from a paid data source / FINRA in production — see the PRD.</p>
+      <p class="note" style="margin:0">This screen is the <b>real output of the daily logger</b> (<code>picks.csv</code>),
+        pulled from Yahoo Finance and refreshed automatically each morning — no API key needed. <b>Float</b> is the
+        real public float. Short interest / catalyst / dilution are captured but not yet scored (see the PRD).</p>
     </div>
 
     <p class="disclaimer">Educational / informational only — not investment advice or a recommendation.
@@ -408,36 +403,47 @@ function scoreQuote(q){
   };
 }
 
-/* ---------- DATA LAYER ---------- */
-let DATA_MODE="sample";
-async function loadUniverse(){
-  if(FMP_KEY){
-    try{
-      const url=CONFIG.FMP_QUOTE+CONFIG.UNIVERSE.join(",")+"?apikey="+encodeURIComponent(FMP_KEY);
-      const r=await fetch(url);
-      if(!r.ok) throw new Error("HTTP "+r.status);
-      const j=await r.json();
-      if(!Array.isArray(j)||!j.length) throw new Error("empty response");
-      DATA_MODE="live";
-      return j;
-    }catch(e){
-      DATA_MODE="error:"+e.message;
-      return SAMPLE_QUOTES;
-    }
-  }
-  DATA_MODE="sample";
-  return SAMPLE_QUOTES;
+/* ---------- DATA LAYER (reads the live logger output deployed alongside this page) ---------- */
+let DATA_MODE="sample";     // "live-csv" | "sample"
+let LATEST_DATE="";
+let PERF = SAMPLE_PICKS;    // performance rows; replaced by real outcomes.csv when available
+let PERF_IS_REAL = false;
+
+function parseCSV(text){
+  const lines=text.trim().split(/\r?\n/);
+  if(lines.length<2) return [];
+  const head=lines[0].split(",").map(h=>h.trim());
+  return lines.slice(1).map(line=>{
+    const cells=line.split(",");
+    const o={}; head.forEach((h,i)=>o[h]=(cells[i]||"").trim());
+    return o;
+  });
+}
+
+// join graded outcomes.csv to picks (by pick_id) -> SAMPLE_PICKS shape: [date,ticker,score,px,maxGain,win]
+async function loadOutcomes(picksRaw){
+  try{
+    const r=await fetch("./outcomes.csv",{cache:"no-store"});
+    if(!r.ok) return;
+    const outs=parseCSV(await r.text()).filter(o=>o.ret_open_close_net!=="" && o.ret_open_close_net!=null);
+    if(!outs.length) return;
+    const byId={}; picksRaw.forEach(p=>byId[p.pick_id]=p);
+    PERF = outs.map(o=>{
+      const p=byId[o.pick_id]||{};
+      return [o.trading_date, o.ticker, +(p.score||0), +(p.price_at_screen||0),
+              +(o.mfe_5d||0), (+o.ret_open_close_net)>0];
+    });
+    PERF_IS_REAL = true;
+  }catch(e){ /* keep sample */ }
 }
 
 /* ---------- RENDER: banner ---------- */
 function renderBanner(){
   const el=document.getElementById("srcBanner");
-  if(DATA_MODE==="live"){
-    el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live data</b> — quotes pulled from Financial Modeling Prep for the seed universe. Float approximated from shares outstanding.`;
-  }else if(DATA_MODE.startsWith("error")){
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data (live fetch failed: ${DATA_MODE.slice(6)})</b> — showing bundled demo data. Check the API key / rate limit.`;
+  if(DATA_MODE==="live-csv"){
+    el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live</b> — today's screen is the actual output of the daily logger (<code>picks.csv</code>) for ${LATEST_DATE}, refreshed each morning.`;
   }else{
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — add a free <code>FMP</code> API key on the Watchlist tab to pull live quotes for the seed universe.`;
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — could not load <code>picks.csv</code> yet; showing bundled demo rows.`;
   }
 }
 
@@ -453,7 +459,7 @@ function renderWatchlist(rows){
     ${stat("Actionable (A/B)",actionable)}
     ${stat("Top score",tops?tops.score.toFixed(1):"—")}
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
-  document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data";
+  document.getElementById("asof").textContent = DATA_MODE==="live-csv" ? ("Screen for "+LATEST_DATE+" · live from picks.csv") : "Sample data";
   rows.forEach((r,i)=>{
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
@@ -486,7 +492,7 @@ function stat(k,v){return `<div class="stat"><div class="k">${k}</div><div class
 
 /* ---------- RENDER: landing KPIs (from sample track record) ---------- */
 function renderLandingKpis(){
-  const g=gradeAll(SAMPLE_PICKS);
+  const g=gradeAll(PERF);
   document.getElementById("landingKpis").innerHTML=`
     ${stat("Picks logged & graded",g.total)}
     ${stat("Blended win rate",g.winRate+"%")}
@@ -504,7 +510,7 @@ function gradeAll(picks){
   return {total,wins,winRate:Math.round(wins/total*100),best,avgMax,byTier};
 }
 function renderPerformance(){
-  const g=gradeAll(SAMPLE_PICKS);
+  const g=gradeAll(PERF);
   document.getElementById("perfStats").innerHTML=`
     ${stat("Total tracked",g.total)}
     ${stat("Win rate",g.winRate+"%")}
@@ -521,7 +527,7 @@ function renderPerformance(){
   });
   // table
   const body=document.getElementById("perfBody"); body.innerHTML="";
-  SAMPLE_PICKS.slice().sort((a,b)=> a[0]<b[0]?1:-1).forEach(p=>{
+  PERF.slice().sort((a,b)=> a[0]<b[0]?1:-1).forEach(p=>{
     const [d,t,sc,px,mg,win]=p; const tier=tierOf(sc);
     const watch=(px*(1+CONFIG.WATCH_LEVEL_PCT)).toFixed(2);
     body.innerHTML+=`<tr>
@@ -569,26 +575,35 @@ document.getElementById("tabs").addEventListener("click",e=>{
   if(e.target.dataset.view) go(e.target.dataset.view);
 });
 
-/* ---------- KEY HANDLING ---------- */
-function applyKey(){
-  FMP_KEY=document.getElementById("keyIn").value.trim();
-  document.getElementById("keyMsg").textContent=FMP_KEY?"Loading…":"Cleared — using sample data";
-  boot();
-}
-
 /* ---------- BOOT ---------- */
 async function boot(){
-  const quotes=await loadUniverse();
-  const scored=quotes.map(scoreQuote)
-    .filter(r=>r.price>=CONFIG.FILTERS.priceMin); // basic band filter for demo
+  let picksRaw=[];
+  try{
+    const r=await fetch("./picks.csv",{cache:"no-store"});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    picksRaw=parseCSV(await r.text());
+    if(!picksRaw.length) throw new Error("empty");
+    DATA_MODE="live-csv";
+  }catch(e){ DATA_MODE="sample"; }
+
+  let wl;
+  if(DATA_MODE==="live-csv"){
+    LATEST_DATE=picksRaw.reduce((m,p)=>p.trading_date>m?p.trading_date:m,"");
+    wl=picksRaw.filter(p=>p.trading_date===LATEST_DATE).map(p=>({
+      symbol:p.ticker, price:+p.price_at_screen, gap:+p.gap_pct, rvol:+p.rvol,
+      floatM:(+p.float_shares)/1e6, score:+p.score, tier:p.tier, watch:+p.watch_level,
+      parts:{float:+p.float_score, rvol:+p.rvol_score, gap:+p.gap_score, price:+p.price_score}
+    }));
+    await loadOutcomes(picksRaw);  // fills real track record once grades exist
+  }else{
+    wl=SAMPLE_QUOTES.map(scoreQuote).filter(r=>r.price>=CONFIG.FILTERS.priceMin);
+  }
+
   renderBanner();
-  renderWatchlist(scored);
+  renderWatchlist(wl);
   renderLandingKpis();
   renderPerformance();
   renderScoring();
-  document.getElementById("keyMsg").textContent =
-    DATA_MODE==="live"?"Live data loaded ✓":
-    DATA_MODE.startsWith("error")?"Fetch failed — sample data shown":"";
 }
 boot();
 </script>
