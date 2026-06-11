@@ -164,6 +164,13 @@ def cmd_scan(sample=False):
 
     if sample:
         print("\n(SAMPLE mode — nothing written.)"); return
+    # Dedupe guard: never log the same ticker twice for the same trading date
+    # (e.g. a manual run after the scheduled run must not double-count picks).
+    already = {(r["ticker"], r["trading_date"]) for r in read_rows(PICKS_CSV)}
+    skipped = [s["ticker"] for s in rows if (s["ticker"], today) in already]
+    rows = [s for s in rows if (s["ticker"], today) not in already]
+    if skipped:
+        print(f"Dedupe guard: skipped {len(skipped)} already-logged picks for {today}: {', '.join(skipped)}")
     for s in rows:
         append_row(PICKS_CSV, PICK_FIELDS, {
             "pick_id":str(uuid.uuid4()), "published_at":now_iso, "trading_date":today,
