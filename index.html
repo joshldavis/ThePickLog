@@ -44,6 +44,7 @@
   .tbtn{border:0;font:inherit;font-weight:700;font-size:12px;padding:5px 9px;border-radius:7px;cursor:pointer}
   .tbtn.buy{background:var(--green-soft);color:var(--green);border:1px solid #2ec27e55}
   .tbtn.sell{background:var(--red-soft);color:var(--red);border:1px solid #f0506e55}
+  .tbtn.flat{background:#ffffff0d;color:var(--text);border:1px solid var(--line)}
   .tbtn:hover{filter:brightness(1.15)}
   .tbtn:disabled{opacity:.5;cursor:default}
   /* trading status panel */
@@ -139,6 +140,7 @@
     <nav class="tabs" id="tabs">
       <button data-view="landing" class="active">Overview</button>
       <button data-view="watchlist">Watchlist</button>
+      <button data-view="portfolio">Portfolio</button>
       <button data-view="scoring">How scoring works</button>
       <button data-view="performance">Track record</button>
     </nav>
@@ -245,6 +247,49 @@
 
     <p class="disclaimer">Educational / informational only — not investment advice or a recommendation.
       Screened by objective criteria, identical for all users. Sample copy pending legal review.</p>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section class="view" id="view-portfolio">
+  <div class="wrap">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <h1 style="margin:.2em 0">Portfolio <span class="badge-proto">PAPER MODE</span></h1>
+      <button class="btn ghost" style="margin-left:auto" onclick="loadPortfolio()">↻ Refresh</button>
+    </div>
+    <p class="lead">Your live Alpaca paper account — balances, open positions, and working orders.</p>
+
+    <div id="pfMsg" class="note" style="margin:12px 0">Click <b>Refresh</b> to load your account.</div>
+
+    <div class="grid stat-row" id="pfStats" style="margin:18px 0"></div>
+
+    <h2>Positions</h2>
+    <div class="panel" style="padding:6px 6px 0">
+      <table id="posTable">
+        <thead><tr>
+          <th>Ticker</th><th class="num">Qty</th><th class="num">Avg entry</th>
+          <th class="num">Current</th><th class="num">Mkt value</th>
+          <th class="num">Unreal. P&amp;L</th><th class="num">Close</th>
+        </tr></thead>
+        <tbody id="posBody"></tbody>
+      </table>
+    </div>
+    <p class="dim" id="posEmpty" style="font-size:13px;margin:10px 2px;display:none">No open positions.</p>
+
+    <h2>Open orders</h2>
+    <div class="panel" style="padding:6px 6px 0">
+      <table id="ordTable">
+        <thead><tr>
+          <th>Submitted</th><th>Ticker</th><th>Side</th><th class="num">Qty</th>
+          <th>Type</th><th>Status</th><th class="num">Cancel</th>
+        </tr></thead>
+        <tbody id="ordBody"></tbody>
+      </table>
+    </div>
+    <p class="dim" id="ordEmpty" style="font-size:13px;margin:10px 2px;display:none">No open orders.</p>
+
+    <p class="disclaimer">Educational / informational only — not investment advice. Balances and orders
+      reflect your Alpaca paper account via the server-side proxy.</p>
   </div>
 </section>
 
@@ -602,6 +647,7 @@ function go(v){
   document.getElementById("view-"+v).classList.add("active");
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
   window.scrollTo(0,0);
+  if(v==="portfolio" && !go._pfLoaded){ go._pfLoaded=true; loadPortfolio(); }
 }
 document.getElementById("tabs").addEventListener("click",e=>{
   if(e.target.dataset.view) go(e.target.dataset.view);
@@ -676,6 +722,101 @@ async function placeOrder(symbol, side){
   }
   toast(`<b>✓ ${side==="buy"?"Bought":"Sold"} ${qty} ${symbol}</b><br>`+
     `order ${o.status||"submitted"} · id ${String(o.id||"").slice(0,8)}…`,"good");
+}
+
+/* ---------- PORTFOLIO PANEL ---------- */
+function money(n){ return "$"+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function signed(n,suffix){ const v=Number(n||0); return (v>=0?"+":"")+v.toLocaleString(undefined,{maximumFractionDigits:2})+(suffix||""); }
+
+async function loadPortfolio(){
+  const msg=document.getElementById("pfMsg");
+  msg.innerHTML="Loading account…";
+  const [acct,pos,ord]=await Promise.all([
+    callAlpaca({action:"account"}),
+    callAlpaca({action:"positions"}),
+    callAlpaca({action:"orders",status:"open"})
+  ]);
+
+  if(!acct.ok || acct.data.error){
+    msg.innerHTML=`<span style="color:var(--red)">✕ ${acct.data.error||"Could not load account."}</span> `+
+      `Set your Alpaca keys in Vercel env vars, then redeploy.`;
+    document.getElementById("pfStats").innerHTML="";
+    return;
+  }
+  msg.style.display="none";
+
+  // account summary
+  const a=acct.data.account||{};
+  const eq=Number(a.equity||0), lastEq=Number(a.last_equity||eq);
+  const dayPL=eq-lastEq, dayPct=lastEq? (dayPL/lastEq*100):0;
+  document.getElementById("pfStats").innerHTML=`
+    ${stat("Equity",money(a.equity))}
+    ${stat("Buying power",money(a.buying_power))}
+    ${stat("Cash",money(a.cash))}
+    ${stat("Today P&L",signed(dayPL.toFixed(2))+" ("+signed(dayPct.toFixed(2),"%")+")")}`;
+
+  renderPositions(Array.isArray(pos.data.positions)?pos.data.positions:[]);
+  renderOrders(Array.isArray(ord.data.orders)?ord.data.orders:[]);
+}
+
+function renderPositions(rows){
+  const body=document.getElementById("posBody"); body.innerHTML="";
+  document.getElementById("posEmpty").style.display=rows.length?"none":"block";
+  rows.forEach(p=>{
+    const upl=Number(p.unrealized_pl||0), uplpc=Number(p.unrealized_plpc||0)*100;
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td class="tick">${p.symbol}</td>
+      <td class="num">${p.qty}</td>
+      <td class="num">${money(p.avg_entry_price)}</td>
+      <td class="num">${money(p.current_price)}</td>
+      <td class="num">${money(p.market_value)}</td>
+      <td class="num ${upl>=0?'pos':'neg'}">${signed(upl.toFixed(2))} (${signed(uplpc.toFixed(1),"%")})</td>
+      <td class="num"><button class="tbtn flat" onclick="closePosition('${p.symbol}')">Close</button></td>`;
+    body.appendChild(tr);
+  });
+}
+
+function renderOrders(rows){
+  const body=document.getElementById("ordBody"); body.innerHTML="";
+  document.getElementById("ordEmpty").style.display=rows.length?"none":"block";
+  rows.forEach(o=>{
+    const t=o.submitted_at? new Date(o.submitted_at).toLocaleString([], {month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td class="dim">${t}</td>
+      <td class="tick">${o.symbol}</td>
+      <td class="${o.side==='buy'?'pos':'neg'}">${(o.side||"").toUpperCase()}</td>
+      <td class="num">${o.qty}</td>
+      <td>${o.type||o.order_type||"—"}</td>
+      <td class="dim">${o.status||"—"}</td>
+      <td class="num"><button class="tbtn flat" onclick="cancelOrder('${o.id}','${o.symbol}')">Cancel</button></td>`;
+    body.appendChild(tr);
+  });
+}
+
+async function closePosition(symbol){
+  if(!confirm(`Close your ENTIRE ${symbol} position at market (paper)?`)) return;
+  toast(`Closing ${symbol}…`,"info");
+  const {ok,data}=await callAlpaca({action:"close_position",symbol});
+  if(!ok || data.error || (data.close&&data.close.code)){
+    toast(`<b>✕ Close ${symbol} failed</b><br>${data.error||(data.close&&data.close.message)||"Rejected."}`,"bad");
+    return;
+  }
+  toast(`<b>✓ Close order sent for ${symbol}</b>`,"good");
+  setTimeout(loadPortfolio, 800);
+}
+
+async function cancelOrder(id, symbol){
+  if(!confirm(`Cancel the open ${symbol} order?`)) return;
+  toast(`Cancelling ${symbol} order…`,"info");
+  const {ok,data}=await callAlpaca({action:"cancel",id});
+  if(!ok || data.error){
+    toast(`<b>✕ Cancel failed</b><br>${data.error||"Rejected."}`,"bad");
+    return;
+  }
+  toast(`<b>✓ ${symbol} order cancelled</b>`,"good");
+  setTimeout(loadPortfolio, 800);
 }
 
 /* ---------- BOOT ---------- */

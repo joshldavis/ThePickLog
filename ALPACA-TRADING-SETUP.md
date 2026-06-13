@@ -43,7 +43,15 @@ Set `ALPACA_PAPER` to `false` and swap in **live** API keys, then redeploy. The
 "PAPER MODE" badge is hard-coded in the UI text — update it when you flip to live so
 you don't fool yourself. **Live = real money on every click.**
 
+## Portfolio tab (trade panel)
+A **Portfolio** tab shows your live paper account:
+- Account summary — equity, buying power, cash, today's P&L.
+- **Positions** — symbol, qty, avg entry, current price, market value, unrealized P&L, plus a **Close** button (market-closes the whole position).
+- **Open orders** — submitted time, symbol, side, qty, type, status, plus a **Cancel** button.
+
+It loads on first open; hit **↻ Refresh** to update. All actions go through the same secure proxy.
+
 ## Notes / limits
-- Markets must be open for market orders to fill (otherwise they queue).
-- No order cancel/modify or position view in the UI yet — that's the "Trade panel" upgrade if you want it.
+- Markets must be open for market orders to fill (otherwise they queue as "new"/"accepted").
+- Order *modify* isn't in the UI (cancel + re-place instead).
 - Penny/low-float names: Alpaca may reject hard-to-borrow shorts or fractional qty; the toast surfaces Alpaca's reason.
