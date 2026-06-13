@@ -37,6 +37,25 @@
     padding:9px 16px;border-radius:10px;cursor:pointer}
   .btn.ghost{background:#ffffff0d;color:var(--text);border:1px solid var(--line)}
   .btn:hover{filter:brightness(1.05)}
+  /* trade controls */
+  .trade-cell{display:flex;align-items:center;gap:5px;justify-content:flex-end}
+  .trade-cell .qty{width:48px;background:var(--panel-2);border:1px solid var(--line);
+    color:var(--text);border-radius:7px;padding:5px 6px;font:inherit;font-size:12px;text-align:right}
+  .tbtn{border:0;font:inherit;font-weight:700;font-size:12px;padding:5px 9px;border-radius:7px;cursor:pointer}
+  .tbtn.buy{background:var(--green-soft);color:var(--green);border:1px solid #2ec27e55}
+  .tbtn.sell{background:var(--red-soft);color:var(--red);border:1px solid #f0506e55}
+  .tbtn:hover{filter:brightness(1.15)}
+  .tbtn:disabled{opacity:.5;cursor:default}
+  /* trading status panel */
+  #tradeStatus{font-size:13px}
+  #tradeStatus .ok{color:var(--green)} #tradeStatus .warn{color:var(--amber)} #tradeStatus .err{color:var(--red)}
+  .toast{position:fixed;right:18px;bottom:18px;z-index:50;max-width:340px;background:var(--panel);
+    border:1px solid var(--line);border-left-width:4px;border-radius:10px;padding:12px 14px;
+    font-size:13px;box-shadow:0 8px 30px #0008;opacity:0;transform:translateY(8px);
+    transition:opacity .2s,transform .2s}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .toast.good{border-left-color:var(--green)} .toast.bad{border-left-color:var(--red)}
+  .toast.info{border-left-color:var(--blue)}
   /* data-source banner */
   #srcBanner{font-size:12.5px;padding:8px 0;border-bottom:1px solid var(--line);color:var(--muted)}
   #srcBanner .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
@@ -195,15 +214,33 @@
           <th>#</th><th>Ticker</th><th>Tier</th><th class="num">Score</th>
           <th class="num">Price</th><th class="num">Gap %</th><th class="num">RVOL</th>
           <th class="num">Float</th><th class="num">Watch level</th>
+          <th class="num">Trade <span class="dim" style="font-size:10px">(paper)</span></th>
         </tr></thead>
         <tbody id="wlBody"></tbody>
       </table>
     </div>
 
     <div class="config panel" style="margin-top:18px">
-      <p class="note" style="margin:0">This screen is the <b>real output of the daily logger</b> (<code>picks.csv</code>),
-        pulled from Yahoo Finance and refreshed automatically each morning — no API key needed. <b>Float</b> is the
-        real public float. Short interest / catalyst / dilution are captured but not yet scored (see the PRD).</p>
+      <label for="keyIn">Financial Modeling Prep API key (free tier) — paste to pull live quotes for the seed universe:</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <input id="keyIn" placeholder="FMP_API_KEY (leave blank for sample data)" />
+        <button class="btn ghost" onclick="applyKey()">Load live data</button>
+        <span class="dim" id="keyMsg"></span>
+      </div>
+      <p class="note">Prototype note: <b>float</b> is approximated from shares-outstanding in the free FMP quote.
+        True public float and short interest come from a paid data source / FINRA in production — see the PRD.</p>
+    </div>
+
+    <div class="config panel" style="margin-top:18px">
+      <label>Alpaca trading <span class="badge-proto">PAPER MODE</span></label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
+        <button class="btn ghost" onclick="checkAlpaca()">Test connection</button>
+        <span id="tradeStatus" class="dim">Click to verify your Alpaca paper account is connected.</span>
+      </div>
+      <p class="note">Orders route through a server-side proxy (<code>/api/alpaca</code>) — your Alpaca
+        keys live in Vercel env vars and never reach the browser. Buy/Sell places a <b>market</b> order,
+        <b>day</b> time-in-force, for the share quantity in each row. Flip <code>ALPACA_PAPER</code> to
+        <code>false</code> in Vercel to trade live. Educational tool — you are responsible for every order placed.</p>
     </div>
 
     <p class="disclaimer">Educational / informational only — not investment advice or a recommendation.
@@ -403,47 +440,36 @@ function scoreQuote(q){
   };
 }
 
-/* ---------- DATA LAYER (reads the live logger output deployed alongside this page) ---------- */
-let DATA_MODE="sample";     // "live-csv" | "sample"
-let LATEST_DATE="";
-let PERF = SAMPLE_PICKS;    // performance rows; replaced by real outcomes.csv when available
-let PERF_IS_REAL = false;
-
-function parseCSV(text){
-  const lines=text.trim().split(/\r?\n/);
-  if(lines.length<2) return [];
-  const head=lines[0].split(",").map(h=>h.trim());
-  return lines.slice(1).map(line=>{
-    const cells=line.split(",");
-    const o={}; head.forEach((h,i)=>o[h]=(cells[i]||"").trim());
-    return o;
-  });
-}
-
-// join graded outcomes.csv to picks (by pick_id) -> SAMPLE_PICKS shape: [date,ticker,score,px,maxGain,win]
-async function loadOutcomes(picksRaw){
-  try{
-    const r=await fetch("./outcomes.csv",{cache:"no-store"});
-    if(!r.ok) return;
-    const outs=parseCSV(await r.text()).filter(o=>o.ret_open_close_net!=="" && o.ret_open_close_net!=null);
-    if(!outs.length) return;
-    const byId={}; picksRaw.forEach(p=>byId[p.pick_id]=p);
-    PERF = outs.map(o=>{
-      const p=byId[o.pick_id]||{};
-      return [o.trading_date, o.ticker, +(p.score||0), +(p.price_at_screen||0),
-              +(o.mfe_5d||0), (+o.ret_open_close_net)>0];
-    });
-    PERF_IS_REAL = true;
-  }catch(e){ /* keep sample */ }
+/* ---------- DATA LAYER ---------- */
+let DATA_MODE="sample";
+async function loadUniverse(){
+  if(FMP_KEY){
+    try{
+      const url=CONFIG.FMP_QUOTE+CONFIG.UNIVERSE.join(",")+"?apikey="+encodeURIComponent(FMP_KEY);
+      const r=await fetch(url);
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      const j=await r.json();
+      if(!Array.isArray(j)||!j.length) throw new Error("empty response");
+      DATA_MODE="live";
+      return j;
+    }catch(e){
+      DATA_MODE="error:"+e.message;
+      return SAMPLE_QUOTES;
+    }
+  }
+  DATA_MODE="sample";
+  return SAMPLE_QUOTES;
 }
 
 /* ---------- RENDER: banner ---------- */
 function renderBanner(){
   const el=document.getElementById("srcBanner");
-  if(DATA_MODE==="live-csv"){
-    el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live</b> — today's screen is the actual output of the daily logger (<code>picks.csv</code>) for ${LATEST_DATE}, refreshed each morning.`;
+  if(DATA_MODE==="live"){
+    el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live data</b> — quotes pulled from Financial Modeling Prep for the seed universe. Float approximated from shares outstanding.`;
+  }else if(DATA_MODE.startsWith("error")){
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data (live fetch failed: ${DATA_MODE.slice(6)})</b> — showing bundled demo data. Check the API key / rate limit.`;
   }else{
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — could not load <code>picks.csv</code> yet; showing bundled demo rows.`;
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — add a free <code>FMP</code> API key on the Watchlist tab to pull live quotes for the seed universe.`;
   }
 }
 
@@ -459,7 +485,7 @@ function renderWatchlist(rows){
     ${stat("Actionable (A/B)",actionable)}
     ${stat("Top score",tops?tops.score.toFixed(1):"—")}
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
-  document.getElementById("asof").textContent = DATA_MODE==="live-csv" ? ("Screen for "+LATEST_DATE+" · live from picks.csv") : "Sample data";
+  document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data";
   rows.forEach((r,i)=>{
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
@@ -474,10 +500,16 @@ function renderWatchlist(rows){
       <td class="num ${r.gap>=0?'pos':'neg'}">${r.gap>=0?'+':''}${r.gap.toFixed(1)}%</td>
       <td class="num">${r.rvol.toFixed(1)}×</td>
       <td class="num">${fmtFloat(r.floatM)}</td>
-      <td class="num">$${r.watch.toFixed(2)}</td>`;
+      <td class="num">$${r.watch.toFixed(2)}</td>
+      <td class="num">
+        <div class="trade-cell" onclick="event.stopPropagation()">
+          <input type="number" min="1" step="1" value="10" class="qty" id="qty-${r.symbol}" aria-label="Quantity for ${r.symbol}" />
+          <button class="tbtn buy" onclick="placeOrder('${r.symbol}','buy')">Buy</button>
+          <button class="tbtn sell" onclick="placeOrder('${r.symbol}','sell')">Sell</button>
+        </div></td>`;
     const detail=document.createElement("tr");
     detail.style.display="none";
-    detail.innerHTML=`<td colspan="9"><div class="why">
+    detail.innerHTML=`<td colspan="10"><div class="why">
       <b>Why ${r.symbol} screened:</b> float ${fmtFloat(r.floatM)}
       (score ${r.parts.float.toFixed(0)}), RVOL ${r.rvol.toFixed(1)}× (score ${r.parts.rvol.toFixed(0)}),
       gap ${r.gap>=0?'+':''}${r.gap.toFixed(1)}% (score ${r.parts.gap.toFixed(0)}),
@@ -492,7 +524,7 @@ function stat(k,v){return `<div class="stat"><div class="k">${k}</div><div class
 
 /* ---------- RENDER: landing KPIs (from sample track record) ---------- */
 function renderLandingKpis(){
-  const g=gradeAll(PERF);
+  const g=gradeAll(SAMPLE_PICKS);
   document.getElementById("landingKpis").innerHTML=`
     ${stat("Picks logged & graded",g.total)}
     ${stat("Blended win rate",g.winRate+"%")}
@@ -510,7 +542,7 @@ function gradeAll(picks){
   return {total,wins,winRate:Math.round(wins/total*100),best,avgMax,byTier};
 }
 function renderPerformance(){
-  const g=gradeAll(PERF);
+  const g=gradeAll(SAMPLE_PICKS);
   document.getElementById("perfStats").innerHTML=`
     ${stat("Total tracked",g.total)}
     ${stat("Win rate",g.winRate+"%")}
@@ -527,7 +559,7 @@ function renderPerformance(){
   });
   // table
   const body=document.getElementById("perfBody"); body.innerHTML="";
-  PERF.slice().sort((a,b)=> a[0]<b[0]?1:-1).forEach(p=>{
+  SAMPLE_PICKS.slice().sort((a,b)=> a[0]<b[0]?1:-1).forEach(p=>{
     const [d,t,sc,px,mg,win]=p; const tier=tierOf(sc);
     const watch=(px*(1+CONFIG.WATCH_LEVEL_PCT)).toFixed(2);
     body.innerHTML+=`<tr>
@@ -575,35 +607,90 @@ document.getElementById("tabs").addEventListener("click",e=>{
   if(e.target.dataset.view) go(e.target.dataset.view);
 });
 
+/* ---------- KEY HANDLING ---------- */
+function applyKey(){
+  FMP_KEY=document.getElementById("keyIn").value.trim();
+  document.getElementById("keyMsg").textContent=FMP_KEY?"Loading…":"Cleared — using sample data";
+  boot();
+}
+
+/* ---------- ALPACA TRADING ---------- */
+const ALPACA_API = "/api/alpaca";
+
+function toast(msg, kind){
+  let t=document.createElement("div");
+  t.className="toast "+(kind||"info");
+  t.innerHTML=msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add("show"));
+  setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),250);}, kind==="bad"?7000:5000);
+}
+
+async function callAlpaca(payload){
+  const r=await fetch(ALPACA_API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+  let j; try{ j=await r.json(); }catch{ j={error:"Bad response from proxy ("+r.status+")"}; }
+  return {ok:r.ok, status:r.status, data:j};
+}
+
+async function checkAlpaca(){
+  const el=document.getElementById("tradeStatus");
+  el.className=""; el.innerHTML="Checking…";
+  const {ok,data}=await callAlpaca({action:"account"});
+  if(!ok || data.error || (data.account && data.account.code)){
+    const msg=data.error || (data.account&&data.account.message) || "Connection failed.";
+    el.innerHTML=`<span class="err">✕ ${msg}</span>`;
+    return;
+  }
+  const a=data.account||{};
+  const mode=data.paper?"paper":"LIVE";
+  el.innerHTML=`<span class="ok">✓ Connected (${mode})</span> · buying power `+
+    `$${Number(a.buying_power||0).toLocaleString(undefined,{maximumFractionDigits:2})} · `+
+    `status ${a.status||"—"}`;
+}
+
+async function placeOrder(symbol, side){
+  const input=document.getElementById("qty-"+symbol);
+  const qty=parseInt(input&&input.value,10);
+  if(!(qty>0)){ toast("Enter a share quantity greater than 0 for "+symbol+".","bad"); return; }
+
+  if(!confirm(`Place a PAPER ${side.toUpperCase()} market order:\n\n${qty} share(s) of ${symbol}\n\nProceed?`)) return;
+
+  // disable the row buttons while submitting
+  const cell=input.closest(".trade-cell");
+  const btns=cell?cell.querySelectorAll("button"):[];
+  btns.forEach(b=>b.disabled=true);
+  toast(`Submitting ${side} ${qty} ${symbol}…`,"info");
+
+  const {ok,data}=await callAlpaca({action:"order",symbol,qty,side});
+  btns.forEach(b=>b.disabled=false);
+
+  const o=data.order||{};
+  if(!ok || data.error || o.code){
+    const msg=data.error || o.message || "Order rejected.";
+    toast(`<b>✕ ${symbol} ${side} failed</b><br>${msg}`,"bad");
+    return;
+  }
+  toast(`<b>✓ ${side==="buy"?"Bought":"Sold"} ${qty} ${symbol}</b><br>`+
+    `order ${o.status||"submitted"} · id ${String(o.id||"").slice(0,8)}…`,"good");
+}
+
 /* ---------- BOOT ---------- */
 async function boot(){
-  let picksRaw=[];
-  try{
-    const r=await fetch("./picks.csv",{cache:"no-store"});
-    if(!r.ok) throw new Error("HTTP "+r.status);
-    picksRaw=parseCSV(await r.text());
-    if(!picksRaw.length) throw new Error("empty");
-    DATA_MODE="live-csv";
-  }catch(e){ DATA_MODE="sample"; }
-
-  let wl;
-  if(DATA_MODE==="live-csv"){
-    LATEST_DATE=picksRaw.reduce((m,p)=>p.trading_date>m?p.trading_date:m,"");
-    wl=picksRaw.filter(p=>p.trading_date===LATEST_DATE).map(p=>({
-      symbol:p.ticker, price:+p.price_at_screen, gap:+p.gap_pct, rvol:+p.rvol,
-      floatM:(+p.float_shares)/1e6, score:+p.score, tier:p.tier, watch:+p.watch_level,
-      parts:{float:+p.float_score, rvol:+p.rvol_score, gap:+p.gap_score, price:+p.price_score}
-    }));
-    await loadOutcomes(picksRaw);  // fills real track record once grades exist
-  }else{
-    wl=SAMPLE_QUOTES.map(scoreQuote).filter(r=>r.price>=CONFIG.FILTERS.priceMin);
-  }
-
+  const quotes=await loadUniverse();
+  const scored=quotes.map(scoreQuote)
+    .filter(r=>r.price>=CONFIG.FILTERS.priceMin); // basic band filter for demo
   renderBanner();
-  renderWatchlist(wl);
+  renderWatchlist(scored);
   renderLandingKpis();
   renderPerformance();
   renderScoring();
+  document.getElementById("keyMsg").textContent =
+    DATA_MODE==="live"?"Live data loaded ✓":
+    DATA_MODE.startsWith("error")?"Fetch failed — sample data shown":"";
 }
 boot();
 </script>

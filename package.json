@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "ignitionscan",
+  "version": "1.0.0",
+  "description": "IgnitionScan low-float screener + Alpaca paper trading proxy",
+  "engines": {
+    "node": ">=18"
+  }
+}
