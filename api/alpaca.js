@@ -64,6 +64,36 @@ export default async function handler(req, res) {
       return res.status(alpacaRes.status).json({ paper: PAPER, positions: data });
     }
 
+    if (action === "orders") {
+      const status = ["open", "closed", "all"].includes(body.status) ? body.status : "open";
+      alpacaRes = await fetch(`${BASE}/v2/orders?status=${status}&limit=50&nested=false`, { headers });
+      data = await alpacaRes.json();
+      return res.status(alpacaRes.status).json({ paper: PAPER, orders: data });
+    }
+
+    if (action === "cancel") {
+      const id = String(body.id || "").trim();
+      if (!id) return res.status(400).json({ error: "Missing order id." });
+      alpacaRes = await fetch(`${BASE}/v2/orders/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+        headers,
+      });
+      // 204 = success with no body
+      data = alpacaRes.status === 204 ? { canceled: id } : await alpacaRes.json().catch(() => ({}));
+      return res.status(alpacaRes.status === 204 ? 200 : alpacaRes.status).json({ paper: PAPER, cancel: data });
+    }
+
+    if (action === "close_position") {
+      const symbol = String(body.symbol || "").toUpperCase().trim();
+      if (!symbol) return res.status(400).json({ error: "Missing symbol." });
+      alpacaRes = await fetch(`${BASE}/v2/positions/${encodeURIComponent(symbol)}`, {
+        method: "DELETE",
+        headers,
+      });
+      data = await alpacaRes.json().catch(() => ({}));
+      return res.status(alpacaRes.status).json({ paper: PAPER, close: data });
+    }
+
     if (action === "order") {
       const symbol = String(body.symbol || "").toUpperCase().trim();
       const qty = Number(body.qty);
@@ -91,7 +121,9 @@ export default async function handler(req, res) {
       return res.status(alpacaRes.status).json({ paper: PAPER, order: data });
     }
 
-    return res.status(400).json({ error: "Unknown action. Use account | positions | order." });
+    return res.status(400).json({
+      error: "Unknown action. Use account | positions | orders | order | cancel | close_position.",
+    });
   } catch (e) {
     return res.status(502).json({ error: "Alpaca request failed: " + (e?.message || String(e)) });
   }
