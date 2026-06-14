@@ -80,6 +80,15 @@
   .tk-est{font-size:13px;color:var(--text);margin:12px 0 0;min-height:18px}
   .tk-err{font-size:12.5px;color:var(--red);margin:6px 0 0;min-height:16px}
   .tk-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+  /* risk controls */
+  .risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .risk-grid .risk-lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+  @media(max-width:720px){.risk-grid{grid-template-columns:repeat(2,1fr)}}
+  .tk-qtyrow{display:flex;gap:8px;align-items:center}
+  .tk-qtyrow .tk-in{flex:1}
+  .tk-size{white-space:nowrap;background:var(--a-soft);color:var(--a);border:1px solid #ff6a3d55;
+    border-radius:9px;padding:9px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+  .tk-size:hover{filter:brightness(1.1)}
   /* data-source banner */
   #srcBanner{font-size:12.5px;padding:8px 0;border-bottom:1px solid var(--line);color:var(--muted)}
   #srcBanner .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
@@ -268,6 +277,27 @@
         <code>false</code> in Vercel to trade live. Educational tool — you are responsible for every order placed.</p>
     </div>
 
+    <div class="config panel" style="margin-top:18px">
+      <label>Risk controls <span class="dim" style="font-weight:400">— enforced before every buy</span></label>
+      <div class="risk-grid" style="margin-top:10px">
+        <div><span class="risk-lbl">Max $ per trade</span>
+          <input id="rkMax" class="tk-in" type="number" min="0" step="50" /></div>
+        <div><span class="risk-lbl">Max % of buying power</span>
+          <input id="rkBP" class="tk-in" type="number" min="0" max="100" step="1" /></div>
+        <div><span class="risk-lbl">Daily loss limit ($)</span>
+          <input id="rkLoss" class="tk-in" type="number" min="0" step="50" /></div>
+        <div><span class="risk-lbl">Risk % of equity / trade</span>
+          <input id="rkRisk" class="tk-in" type="number" min="0" max="100" step="0.25" /></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+        <button class="btn ghost" onclick="saveRiskFromInputs()">Save risk settings</button>
+        <span class="dim" id="rkMsg" style="font-size:12.5px"></span>
+      </div>
+      <p class="note">A buy is blocked if its dollar value exceeds your per-trade cap or % of buying power,
+        or if today's P&amp;L has hit your daily loss limit. The <b>Risk %</b> drives the "Size to risk"
+        button in the order ticket (shares = risk $ ÷ distance to your stop). Settings save in this browser.</p>
+    </div>
+
     <p class="disclaimer">Educational / informational only — not investment advice or a recommendation.
       Screened by objective criteria, identical for all users. Sample copy pending legal review.</p>
   </div>
@@ -413,7 +443,11 @@
     </div>
 
     <label class="tk-lbl">Quantity (shares)</label>
-    <input id="tkQty" class="tk-in" type="number" min="1" step="1" value="10" />
+    <div class="tk-qtyrow">
+      <input id="tkQty" class="tk-in" type="number" min="1" step="1" value="10" />
+      <button type="button" class="tk-size" title="Suggest share count from your risk % and stop" onclick="sizeToRisk()">Size to risk</button>
+    </div>
+    <div id="tkSizeHint" class="dim" style="font-size:12px;margin-top:4px"></div>
 
     <label class="tk-lbl">Order type</label>
     <select id="tkType" class="tk-in" onchange="updateTicketFields()">
@@ -607,6 +641,8 @@ function renderWatchlist(rows){
     ${stat("Top score",tops?tops.score.toFixed(1):"—")}
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
   document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data";
+  window.LASTPX = window.LASTPX || {};
+  rows.forEach(r=>{ window.LASTPX[r.symbol]=r.price; });
   rows.forEach((r,i)=>{
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
@@ -769,6 +805,7 @@ async function checkAlpaca(){
     return;
   }
   const a=data.account||{};
+  ACCT_CACHE={ at:Date.now(), data:a };
   const mode=data.paper?"paper":"LIVE";
   el.innerHTML=`<span class="ok">✓ Connected (${mode})</span> · buying power `+
     `$${Number(a.buying_power||0).toLocaleString(undefined,{maximumFractionDigits:2})} · `+
@@ -779,6 +816,10 @@ async function placeOrder(symbol, side){
   const input=document.getElementById("qty-"+symbol);
   const qty=parseInt(input&&input.value,10);
   if(!(qty>0)){ toast("Enter a share quantity greater than 0 for "+symbol+".","bad"); return; }
+
+  const px=(window.LASTPX&&window.LASTPX[symbol])||0;
+  const block=await checkRisk(side, qty, px);
+  if(block){ toast(block,"bad"); return; }
 
   if(!confirm(`Place a PAPER ${side.toUpperCase()} market order:\n\n${qty} share(s) of ${symbol}\n\nProceed?`)) return;
 
@@ -801,6 +842,88 @@ async function placeOrder(symbol, side){
     `order ${o.status||"submitted"} · id ${String(o.id||"").slice(0,8)}…`,"good");
 }
 
+/* ---------- RISK CONTROLS + POSITION SIZING ---------- */
+const DEFAULT_RISK = { maxPerTradeUSD:1000, maxPctBP:25, dailyLossUSD:500, riskPctEquity:1 };
+let RISK = (function(){ try{ return {...DEFAULT_RISK, ...JSON.parse(localStorage.getItem("ignitionscan_risk")||"{}")}; }catch{ return {...DEFAULT_RISK}; } })();
+
+function renderRiskInputs(){
+  const g=(id,v)=>{ const el=document.getElementById(id); if(el) el.value=v; };
+  g("rkMax",RISK.maxPerTradeUSD); g("rkBP",RISK.maxPctBP);
+  g("rkLoss",RISK.dailyLossUSD); g("rkRisk",RISK.riskPctEquity);
+}
+function saveRiskFromInputs(){
+  const n=(id,d)=>{ const v=Number(document.getElementById(id).value); return isFinite(v)&&v>=0?v:d; };
+  RISK={ maxPerTradeUSD:n("rkMax",0), maxPctBP:n("rkBP",0), dailyLossUSD:n("rkLoss",0), riskPctEquity:n("rkRisk",0) };
+  try{ localStorage.setItem("ignitionscan_risk", JSON.stringify(RISK)); }catch{}
+  document.getElementById("rkMsg").innerHTML="<span style='color:var(--green)'>✓ Saved</span>";
+  setTimeout(()=>{const m=document.getElementById("rkMsg"); if(m)m.textContent="";}, 2500);
+}
+
+// account cache (avoid refetching on every guardrail check)
+let ACCT_CACHE={ at:0, data:null };
+async function getAccount(maxAgeMs=60000){
+  if(ACCT_CACHE.data && Date.now()-ACCT_CACHE.at < maxAgeMs) return ACCT_CACHE.data;
+  const {ok,data}=await callAlpaca({action:"account"});
+  if(ok && data.account && !data.account.code){ ACCT_CACHE={at:Date.now(), data:data.account}; return data.account; }
+  return null;
+}
+
+// returns a blocking message string, or null if the order is allowed
+async function checkRisk(side, qty, price){
+  const notional=qty*price;
+  if(!(notional>0)) return null;
+  if(RISK.maxPerTradeUSD>0 && notional>RISK.maxPerTradeUSD)
+    return `Risk block: $${Math.round(notional)} order exceeds your max per-trade of $${RISK.maxPerTradeUSD}.`;
+  if(side==="buy"){
+    const a=await getAccount();
+    if(a){
+      const bp=Number(a.buying_power||0);
+      if(RISK.maxPctBP>0 && bp>0 && notional > bp*RISK.maxPctBP/100)
+        return `Risk block: order is ${Math.round(notional/bp*100)}% of buying power (your cap is ${RISK.maxPctBP}%).`;
+      const dayPL=Number(a.equity||0)-Number(a.last_equity||a.equity||0);
+      if(RISK.dailyLossUSD>0 && dayPL <= -RISK.dailyLossUSD)
+        return `Risk block: today's P&L is $${Math.round(dayPL)}, at/below your daily loss limit of -$${RISK.dailyLossUSD}. No new entries.`;
+    }
+  }
+  return null;
+}
+
+// fill ticket qty from risk % and the stop distance
+async function sizeToRisk(){
+  const hint=document.getElementById("tkSizeHint");
+  const type=document.getElementById("tkType").value;
+  const entry = (type==="limit"||type==="stop_limit")
+    ? (Number(document.getElementById("tkLimit").value)||ticket.price)
+    : ticket.price;
+  if(!(entry>0)){ hint.textContent="No reference price to size from."; return; }
+
+  let stop=NaN;
+  if(type==="bracket") stop=Number(document.getElementById("tkSL").value);
+  else if(type==="stop"||type==="stop_limit") stop=Number(document.getElementById("tkStop").value);
+
+  const a=await getAccount();
+  const equity=a?Number(a.equity):null;
+  const riskDollars = (equity && RISK.riskPctEquity>0) ? equity*RISK.riskPctEquity/100 : RISK.maxPerTradeUSD;
+
+  let qty, basis;
+  if(stop>0 && Math.abs(entry-stop)>0){
+    qty=Math.max(1, Math.floor(riskDollars/Math.abs(entry-stop)));
+    basis=`risk $${Math.round(riskDollars)} ÷ $${Math.abs(entry-stop).toFixed(2)}/share stop`;
+  } else {
+    const cap=RISK.maxPerTradeUSD>0?RISK.maxPerTradeUSD:riskDollars;
+    qty=Math.max(1, Math.floor(cap/entry));
+    basis=`$${Math.round(cap)} cap ÷ $${entry.toFixed(2)} (add a stop for risk-based sizing)`;
+  }
+  // never suggest a size your own caps would block
+  let capped=false;
+  if(RISK.maxPerTradeUSD>0){ const m=Math.floor(RISK.maxPerTradeUSD/entry); if(m>0&&m<qty){qty=m;capped=true;} }
+  if(equity){ const bp=Number(a.buying_power||0); if(RISK.maxPctBP>0&&bp>0){ const m=Math.floor(bp*RISK.maxPctBP/100/entry); if(m>0&&m<qty){qty=m;capped=true;} } }
+  qty=Math.max(1,qty);
+  document.getElementById("tkQty").value=qty;
+  hint.innerHTML=`Suggested <b>${qty}</b> shares — ${basis}${capped?" · trimmed to your caps":""}${equity?"":" · connect Alpaca for equity-based sizing"}`;
+  updateTicketFields();
+}
+
 /* ---------- ORDER TICKET (advanced orders) ---------- */
 let ticket = { symbol:"", side:"buy", price:0, watch:0 };
 
@@ -816,6 +939,7 @@ function openTicket(symbol, side, price, watch){
   document.getElementById("tkTP").value = watch ? Number(watch).toFixed(2) : (price? (price*1.2).toFixed(2):"");
   document.getElementById("tkSL").value = price ? (price*0.9).toFixed(2) : "";
   document.getElementById("tkErr").textContent = "";
+  document.getElementById("tkSizeHint").textContent = "";
   setTicketSide(ticket.side);
   updateTicketFields();
   document.getElementById("ticketBackdrop").classList.add("show");
@@ -875,6 +999,11 @@ async function submitTicket(){
     if(type==="market") summary+="market";
   }
 
+  // risk check against entry reference price
+  const refPx = payload.limit_price || payload.stop_price || ticket.price || 0;
+  const block = await checkRisk(ticket.side, qty, refPx);
+  if(block){ err.textContent=block; return; }
+
   if(!confirm(`Place PAPER order:\n\n${summary}\n\nProceed?`)) return;
 
   const btn=document.getElementById("tkSubmit"); btn.disabled=true; btn.textContent="Placing…";
@@ -918,6 +1047,7 @@ async function loadPortfolio(){
 
   // account summary
   const a=acct.data.account||{};
+  ACCT_CACHE={ at:Date.now(), data:a };
   const eq=Number(a.equity||0), lastEq=Number(a.last_equity||eq);
   const dayPL=eq-lastEq, dayPct=lastEq? (dayPL/lastEq*100):0;
   document.getElementById("pfStats").innerHTML=`
@@ -1000,6 +1130,7 @@ async function boot(){
   renderLandingKpis();
   renderPerformance();
   renderScoring();
+  renderRiskInputs();
   document.getElementById("keyMsg").textContent =
     DATA_MODE==="live"?"Live data loaded ✓":
     DATA_MODE.startsWith("error")?"Fetch failed — sample data shown":"";
