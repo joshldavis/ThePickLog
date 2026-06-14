@@ -98,19 +98,45 @@ export default async function handler(req, res) {
       const symbol = String(body.symbol || "").toUpperCase().trim();
       const qty = Number(body.qty);
       const side = String(body.side || "").toLowerCase();
+      const type = ["market", "limit", "stop", "stop_limit"].includes(body.type) ? body.type : "market";
+      const bracket = body.order_class === "bracket";
 
       if (!symbol) return res.status(400).json({ error: "Missing symbol." });
       if (!(qty > 0)) return res.status(400).json({ error: "Quantity must be a positive number." });
       if (side !== "buy" && side !== "sell")
         return res.status(400).json({ error: "Side must be 'buy' or 'sell'." });
 
+      const num = (v) => (v === undefined || v === null || v === "" ? NaN : Number(v));
+      const limit_price = num(body.limit_price);
+      const stop_price = num(body.stop_price);
+
+      // per-type price validation
+      if ((type === "limit" || type === "stop_limit") && !(limit_price > 0))
+        return res.status(400).json({ error: "Limit price required for a limit order." });
+      if ((type === "stop" || type === "stop_limit") && !(stop_price > 0))
+        return res.status(400).json({ error: "Stop price required for a stop order." });
+
+      // bracket orders need GTC/day and a take-profit + stop-loss
       const order = {
         symbol,
         qty,
         side,
-        type: "market",
-        time_in_force: "day",
+        type,
+        time_in_force: bracket ? "gtc" : "day",
       };
+      if (type === "limit" || type === "stop_limit") order.limit_price = limit_price;
+      if (type === "stop" || type === "stop_limit") order.stop_price = stop_price;
+
+      if (bracket) {
+        const tp = num(body.take_profit_limit);
+        const slStop = num(body.stop_loss_stop);
+        const slLimit = num(body.stop_loss_limit);
+        if (!(tp > 0)) return res.status(400).json({ error: "Bracket order needs a take-profit price." });
+        if (!(slStop > 0)) return res.status(400).json({ error: "Bracket order needs a stop-loss price." });
+        order.order_class = "bracket";
+        order.take_profit = { limit_price: tp };
+        order.stop_loss = slLimit > 0 ? { stop_price: slStop, limit_price: slLimit } : { stop_price: slStop };
+      }
 
       alpacaRes = await fetch(`${BASE}/v2/orders`, {
         method: "POST",
