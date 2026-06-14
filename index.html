@@ -57,6 +57,29 @@
   .toast.show{opacity:1;transform:translateY(0)}
   .toast.good{border-left-color:var(--green)} .toast.bad{border-left-color:var(--red)}
   .toast.info{border-left-color:var(--blue)}
+  /* order ticket modal */
+  .modal-backdrop{position:fixed;inset:0;z-index:60;background:#0008;backdrop-filter:blur(2px);
+    display:none;align-items:flex-start;justify-content:center;padding:6vh 16px}
+  .modal-backdrop.show{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    width:100%;max-width:420px;padding:18px;box-shadow:0 20px 60px #000a}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;font-size:16px;font-weight:700;margin-bottom:12px}
+  .modal-x{background:none;border:0;color:var(--muted);font-size:22px;cursor:pointer;line-height:1}
+  .modal-x:hover{color:var(--text)}
+  .tk-row{display:flex;align-items:center;gap:8px}
+  .tk-side{margin-bottom:10px}
+  .tk-side .tbtn{padding:7px 16px;font-size:13px}
+  .tk-side .tbtn[aria-pressed="true"]{outline:2px solid currentColor}
+  .tk-lbl{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+  .tk-in{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:9px;padding:9px 10px;font:inherit;font-size:14px}
+  select.tk-in{cursor:pointer}
+  .tk-hide{display:none}
+  .tk-note{font-size:12px;color:var(--muted);background:#ffffff08;border:1px solid var(--line);
+    border-radius:8px;padding:8px 10px;margin:10px 0 2px}
+  .tk-est{font-size:13px;color:var(--text);margin:12px 0 0;min-height:18px}
+  .tk-err{font-size:12.5px;color:var(--red);margin:6px 0 0;min-height:16px}
+  .tk-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
   /* data-source banner */
   #srcBanner{font-size:12.5px;padding:8px 0;border-bottom:1px solid var(--line);color:var(--muted)}
   #srcBanner .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px;vertical-align:1px}
@@ -375,6 +398,59 @@
   IgnitionScan — working prototype. Not a live product. Educational sample for development hand-off only.
 </div></footer>
 
+<!-- ============ ORDER TICKET MODAL ============ -->
+<div id="ticketBackdrop" class="modal-backdrop" onclick="if(event.target===this)closeTicket()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="tkTitle">
+    <div class="modal-head">
+      <span id="tkTitle">Order — <b id="tkSym">—</b> <span class="badge-proto">PAPER</span></span>
+      <button class="modal-x" onclick="closeTicket()" aria-label="Close">×</button>
+    </div>
+
+    <div class="tk-row tk-side">
+      <button type="button" id="tkBuy" class="tbtn buy" onclick="setTicketSide('buy')">Buy</button>
+      <button type="button" id="tkSell" class="tbtn sell" onclick="setTicketSide('sell')">Sell</button>
+      <span class="dim" style="margin-left:auto;font-size:12px">Last <b id="tkLast">—</b></span>
+    </div>
+
+    <label class="tk-lbl">Quantity (shares)</label>
+    <input id="tkQty" class="tk-in" type="number" min="1" step="1" value="10" />
+
+    <label class="tk-lbl">Order type</label>
+    <select id="tkType" class="tk-in" onchange="updateTicketFields()">
+      <option value="market">Market</option>
+      <option value="limit">Limit</option>
+      <option value="stop">Stop</option>
+      <option value="stop_limit">Stop-limit</option>
+      <option value="bracket">Bracket (entry + take-profit + stop-loss)</option>
+    </select>
+
+    <div id="tkLimitWrap" class="tk-hide">
+      <label class="tk-lbl">Limit price</label>
+      <input id="tkLimit" class="tk-in" type="number" min="0" step="0.01" />
+    </div>
+    <div id="tkStopWrap" class="tk-hide">
+      <label class="tk-lbl">Stop (trigger) price</label>
+      <input id="tkStop" class="tk-in" type="number" min="0" step="0.01" />
+    </div>
+
+    <div id="tkBracketWrap" class="tk-hide">
+      <div class="tk-note">Bracket = a market entry with two protective exit orders attached. Whichever fills first cancels the other (OCO).</div>
+      <label class="tk-lbl">Take-profit price <span class="dim">(prefilled to watch level)</span></label>
+      <input id="tkTP" class="tk-in" type="number" min="0" step="0.01" />
+      <label class="tk-lbl">Stop-loss trigger price</label>
+      <input id="tkSL" class="tk-in" type="number" min="0" step="0.01" />
+    </div>
+
+    <div id="tkEst" class="tk-est"></div>
+    <div id="tkErr" class="tk-err"></div>
+
+    <div class="tk-actions">
+      <button class="btn ghost" onclick="closeTicket()">Cancel</button>
+      <button id="tkSubmit" class="btn" onclick="submitTicket()">Place order</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* =====================================================================
    IgnitionScan — prototype logic
@@ -551,6 +627,7 @@ function renderWatchlist(rows){
           <input type="number" min="1" step="1" value="10" class="qty" id="qty-${r.symbol}" aria-label="Quantity for ${r.symbol}" />
           <button class="tbtn buy" onclick="placeOrder('${r.symbol}','buy')">Buy</button>
           <button class="tbtn sell" onclick="placeOrder('${r.symbol}','sell')">Sell</button>
+          <button class="tbtn flat" title="Advanced order (limit / stop / bracket)" onclick="openTicket('${r.symbol}','buy',${r.price.toFixed(2)},${r.watch.toFixed(2)})">⚙</button>
         </div></td>`;
     const detail=document.createElement("tr");
     detail.style.display="none";
@@ -723,6 +800,100 @@ async function placeOrder(symbol, side){
   toast(`<b>✓ ${side==="buy"?"Bought":"Sold"} ${qty} ${symbol}</b><br>`+
     `order ${o.status||"submitted"} · id ${String(o.id||"").slice(0,8)}…`,"good");
 }
+
+/* ---------- ORDER TICKET (advanced orders) ---------- */
+let ticket = { symbol:"", side:"buy", price:0, watch:0 };
+
+function openTicket(symbol, side, price, watch){
+  ticket = { symbol, side:side||"buy", price:Number(price)||0, watch:Number(watch)||0 };
+  document.getElementById("tkSym").textContent = symbol;
+  document.getElementById("tkLast").textContent = price ? "$"+Number(price).toFixed(2) : "—";
+  const rowQty = document.getElementById("qty-"+symbol);
+  document.getElementById("tkQty").value = (rowQty && rowQty.value) || 10;
+  document.getElementById("tkType").value = "market";
+  document.getElementById("tkLimit").value = price ? Number(price).toFixed(2) : "";
+  document.getElementById("tkStop").value  = price ? Number(price).toFixed(2) : "";
+  document.getElementById("tkTP").value = watch ? Number(watch).toFixed(2) : (price? (price*1.2).toFixed(2):"");
+  document.getElementById("tkSL").value = price ? (price*0.9).toFixed(2) : "";
+  document.getElementById("tkErr").textContent = "";
+  setTicketSide(ticket.side);
+  updateTicketFields();
+  document.getElementById("ticketBackdrop").classList.add("show");
+}
+function closeTicket(){ document.getElementById("ticketBackdrop").classList.remove("show"); }
+
+function setTicketSide(side){
+  ticket.side = side;
+  document.getElementById("tkBuy").setAttribute("aria-pressed", side==="buy");
+  document.getElementById("tkSell").setAttribute("aria-pressed", side==="sell");
+  updateTicketFields();
+}
+
+function updateTicketFields(){
+  const type=document.getElementById("tkType").value;
+  document.getElementById("tkLimitWrap").style.display   = (type==="limit"||type==="stop_limit")?"block":"none";
+  document.getElementById("tkStopWrap").style.display    = (type==="stop"||type==="stop_limit")?"block":"none";
+  document.getElementById("tkBracketWrap").style.display = (type==="bracket")?"block":"none";
+  // estimate
+  const qty=parseInt(document.getElementById("tkQty").value,10)||0;
+  let px=ticket.price;
+  if(type==="limit"||type==="stop_limit") px=Number(document.getElementById("tkLimit").value)||ticket.price;
+  const est=qty*px;
+  document.getElementById("tkEst").innerHTML = qty&&px
+    ? `Est. ${ticket.side==="buy"?"cost":"proceeds"}: <b>$${est.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</b> (${qty} @ ~$${px.toFixed(2)})`
+    : "";
+}
+
+async function submitTicket(){
+  const err=document.getElementById("tkErr"); err.textContent="";
+  const type=document.getElementById("tkType").value;
+  const qty=parseInt(document.getElementById("tkQty").value,10);
+  if(!(qty>0)){ err.textContent="Enter a share quantity greater than 0."; return; }
+
+  const payload={ action:"order", symbol:ticket.symbol, qty, side:ticket.side };
+  let summary=`${ticket.side.toUpperCase()} ${qty} ${ticket.symbol} — `;
+
+  if(type==="bracket"){
+    const tp=Number(document.getElementById("tkTP").value);
+    const sl=Number(document.getElementById("tkSL").value);
+    if(!(tp>0)||!(sl>0)){ err.textContent="Bracket needs both a take-profit and a stop-loss price."; return; }
+    payload.type="market"; payload.order_class="bracket";
+    payload.take_profit_limit=tp; payload.stop_loss_stop=sl;
+    summary+=`market entry, TP $${tp.toFixed(2)} / SL $${sl.toFixed(2)}`;
+  } else {
+    payload.type=type;
+    if(type==="limit"||type==="stop_limit"){
+      const lp=Number(document.getElementById("tkLimit").value);
+      if(!(lp>0)){ err.textContent="Enter a limit price."; return; }
+      payload.limit_price=lp; summary+=`limit $${lp.toFixed(2)}`;
+    }
+    if(type==="stop"||type==="stop_limit"){
+      const sp=Number(document.getElementById("tkStop").value);
+      if(!(sp>0)){ err.textContent="Enter a stop price."; return; }
+      payload.stop_price=sp; summary+=(type==="stop_limit"?` stop $${sp.toFixed(2)}`:`stop $${sp.toFixed(2)}`);
+    }
+    if(type==="market") summary+="market";
+  }
+
+  if(!confirm(`Place PAPER order:\n\n${summary}\n\nProceed?`)) return;
+
+  const btn=document.getElementById("tkSubmit"); btn.disabled=true; btn.textContent="Placing…";
+  const {ok,data}=await callAlpaca(payload);
+  btn.disabled=false; btn.textContent="Place order";
+  const o=data.order||{};
+  if(!ok || data.error || o.code){
+    err.textContent = data.error || o.message || "Order rejected.";
+    return;
+  }
+  closeTicket();
+  toast(`<b>✓ ${ticket.symbol} ${ticket.side} ${type} order placed</b><br>status ${o.status||"submitted"}`,"good");
+}
+
+// keep estimate live as the user types qty / limit
+document.addEventListener("input",e=>{
+  if(["tkQty","tkLimit"].includes(e.target.id)) updateTicketFields();
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeTicket(); });
 
 /* ---------- PORTFOLIO PANEL ---------- */
 function money(n){ return "$"+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
