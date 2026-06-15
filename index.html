@@ -244,16 +244,19 @@
   .steps li b{color:var(--text)}
   .steps li:not(:last-child):after{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line)}
   /* ===== info tooltips (metric explainers) ===== */
-  .info{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;border:1px solid var(--line);
-    color:var(--muted);font-size:10px;font-weight:700;font-style:italic;font-family:Georgia,serif;cursor:pointer;
-    vertical-align:middle;margin-left:5px;line-height:1;user-select:none;flex:none}
-  .info:hover{color:var(--text);border-color:var(--muted);background:#ffffff10}
-  th .info,.cat-row .info,.da-mos .info{text-transform:none;letter-spacing:0}
+  .info{font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:9px;line-height:0;
+    vertical-align:super;margin-left:1px;color:var(--a);cursor:help;user-select:none}
+  .info:hover{color:var(--text)}
+  th .info,.cat-row .info,.da-mos .info,.stat .info{text-transform:none;letter-spacing:normal}
   #infopop{position:fixed;z-index:90;max-width:300px;background:var(--panel);border:1px solid var(--line);
     border-radius:11px;padding:11px 13px;box-shadow:0 12px 36px #000b;font-size:12.5px;line-height:1.5;
     color:var(--text);display:none;text-transform:none;letter-spacing:normal;font-weight:400}
   #infopop.show{display:block}
   #infopop b{display:block;margin-bottom:4px;font-size:13px;color:var(--text)}
+  /* ===== sortable tables ===== */
+  table.sortable th{cursor:pointer}
+  table.sortable th:hover{color:var(--text)}
+  .sortcaret{color:var(--a);font-size:10px;font-weight:700}
 </style>
 </head>
 <body>
@@ -345,7 +348,7 @@
     <div class="grid stat-row" id="wlStats" style="margin:18px 0"></div>
 
     <div class="panel" style="padding:6px 6px 0">
-      <table id="wlTable">
+      <table id="wlTable" class="sortable">
         <thead><tr>
           <th>#</th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
           <th class="num">Price <span class="info" data-info="price" role="button" tabindex="0">i</span></th><th class="num">Gap % <span class="info" data-info="gap" role="button" tabindex="0">i</span></th><th class="num">RVOL <span class="info" data-info="rvol" role="button" tabindex="0">i</span></th>
@@ -428,7 +431,7 @@
 
     <h2>Positions</h2>
     <div class="panel" style="padding:6px 6px 0">
-      <table id="posTable">
+      <table id="posTable" class="sortable">
         <thead><tr>
           <th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th class="num">Qty <span class="info" data-info="qty" role="button" tabindex="0">i</span></th><th class="num">Avg entry <span class="info" data-info="avg-entry" role="button" tabindex="0">i</span></th>
           <th class="num">Current <span class="info" data-info="current" role="button" tabindex="0">i</span></th><th class="num">Mkt value <span class="info" data-info="mkt-value" role="button" tabindex="0">i</span></th>
@@ -441,7 +444,7 @@
 
     <h2>Open orders</h2>
     <div class="panel" style="padding:6px 6px 0">
-      <table id="ordTable">
+      <table id="ordTable" class="sortable">
         <thead><tr>
           <th>Submitted <span class="info" data-info="submitted" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Side <span class="info" data-info="side" role="button" tabindex="0">i</span></th><th class="num">Qty <span class="info" data-info="qty" role="button" tabindex="0">i</span></th>
           <th>Type <span class="info" data-info="otype" role="button" tabindex="0">i</span></th><th>Status <span class="info" data-info="ostatus" role="button" tabindex="0">i</span></th><th class="num">Cancel <span class="info" data-info="cancel" role="button" tabindex="0">i</span></th>
@@ -453,7 +456,7 @@
 
     <h2>Recent orders</h2>
     <div class="panel" style="padding:6px 6px 0">
-      <table id="histTable">
+      <table id="histTable" class="sortable">
         <thead><tr>
           <th>Submitted <span class="info" data-info="submitted" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Side <span class="info" data-info="side" role="button" tabindex="0">i</span></th><th class="num">Qty <span class="info" data-info="qty" role="button" tabindex="0">i</span></th>
           <th>Type <span class="info" data-info="otype" role="button" tabindex="0">i</span></th><th class="num">Avg fill <span class="info" data-info="avg-fill" role="button" tabindex="0">i</span></th><th>Status <span class="info" data-info="ostatus" role="button" tabindex="0">i</span></th>
@@ -665,7 +668,7 @@
 
     <h2>Every logged pick</h2>
     <div class="panel" style="padding:6px 6px 0">
-      <table id="perfTable">
+      <table id="perfTable" class="sortable">
         <thead><tr>
           <th>Date <span class="info" data-info="date" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
           <th class="num">Screen px <span class="info" data-info="screen-px" role="button" tabindex="0">i</span></th><th class="num">Watch <span class="info" data-info="watch" role="button" tabindex="0">i</span></th><th class="num">5d net <span class="info" data-info="5d-net" role="button" tabindex="0">i</span></th><th>Result <span class="info" data-info="result" role="button" tabindex="0">i</span></th>
@@ -1070,14 +1073,59 @@ function showInfo(key, anchor){
   pop.style.left=left+"px"; pop.style.top=top+"px";
 }
 function closeInfo(){ const p=document.getElementById("infopop"); if(p) p.classList.remove("show"); }
-document.addEventListener("click",e=>{
-  const t=e.target.closest && e.target.closest(".info[data-info]");
-  if(t){ e.stopPropagation(); const k=t.getAttribute("data-info"); const p=document.getElementById("infopop");
-    if(p.classList.contains("show") && p.dataset.k===k) closeInfo(); else showInfo(k,t); return; }
-  if(!(e.target.closest && e.target.closest("#infopop"))) closeInfo();
+// hover (and keyboard-focus) to reveal; tap still works on touch
+document.addEventListener("mouseover",e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) showInfo(t.getAttribute("data-info"),t); });
+document.addEventListener("mouseout", e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) closeInfo(); });
+document.addEventListener("focusin", e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) showInfo(t.getAttribute("data-info"),t); });
+document.addEventListener("focusout",e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) closeInfo(); });
+document.addEventListener("click",e=>{   // touch / click support
+  const t=e.target.closest&&e.target.closest(".info[data-info]");
+  if(t){ e.stopPropagation(); showInfo(t.getAttribute("data-info"),t); return; }
+  if(!(e.target.closest&&e.target.closest("#infopop"))) closeInfo();
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeInfo(); });
 window.addEventListener("scroll",closeInfo,true);
+
+/* ===== click-a-header to sort any table.sortable ===== */
+function cellVal(td){
+  let s=(td?td.innerText:"").trim();
+  if(/^WIN$/i.test(s)) return 2;
+  if(/^MISS$/i.test(s)) return 1;
+  if(/^[ABCD]$/.test(s)) return ({A:4,B:3,C:2,D:1})[s];            // tier: A high → D low
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return s;                        // dates sort lexically
+  if(!s || s==="—" || /^(pending|n\/?a\.?)$/i.test(s)) return -Infinity;  // blanks/pending to one end
+  const m=s.replace(/,/g,"").match(/-?\d+(?:\.\d+)?/);              // first number in the cell
+  if(m){ let n=parseFloat(m[0]); if(/\d\s*k\b/i.test(s)) n/=1000; return n; }  // normalise 820K → 0.82(M)
+  return s.toLowerCase();
+}
+function sortCmp(a,b){
+  const na=typeof a==="number", nb=typeof b==="number";
+  if(na&&nb) return a-b;
+  if(na) return 1; if(nb) return -1;          // text (tickers) before numbers
+  return a<b?-1:a>b?1:0;
+}
+function applySort(table, th){
+  const ths=[...th.parentNode.children], col=ths.indexOf(th);
+  const tb=table.tBodies[0]; if(!tb||!tb.rows.length) return;
+  const dir=(table.__sc===col && table.__sd===1)?-1:1; table.__sc=col; table.__sd=dir;
+  const units=[];   // keep watchlist "why it screened" detail rows attached to their pick row
+  [...tb.rows].forEach(r=>{
+    const detail = r.cells.length===1 && r.cells[0].hasAttribute("colspan");
+    if(detail && units.length) units[units.length-1].x.push(r);
+    else units.push({m:r, x:[]});
+  });
+  units.sort((a,b)=>sortCmp(cellVal(a.m.cells[col]), cellVal(b.m.cells[col]))*dir);
+  const frag=document.createDocumentFragment();
+  units.forEach(u=>{ frag.appendChild(u.m); u.x.forEach(e=>frag.appendChild(e)); });
+  tb.appendChild(frag);
+  const head=th.closest("thead"); if(head) head.querySelectorAll(".sortcaret").forEach(c=>c.remove());
+  const car=document.createElement("span"); car.className="sortcaret"; car.textContent=dir===1?" ▲":" ▼"; th.appendChild(car);
+}
+document.addEventListener("click",e=>{
+  if(e.target.closest && e.target.closest(".info")) return;        // info icon → tooltip, not sort
+  const th=e.target.closest && e.target.closest("table.sortable thead th");
+  if(th) applySort(th.closest("table.sortable"), th);
+});
 
 /* stat card — auto-appends a metric info button when the label is known */
 const STAT_INFO={
@@ -2120,7 +2168,7 @@ async function renderDashboardQuality(scored){
       ${stat("Flagged Red / Black",avoid)}
       ${stat("Fundamentals",qSrc)}
     </div>
-    <table><thead><tr><th>Ticker ${infoBtn("ticker")}</th><th>Tier ${infoBtn("tier")}</th><th class="num">Momentum ${infoBtn("momentumScore")}</th><th class="num">Price ${infoBtn("price")}</th><th>Quality ${infoBtn("quality")}</th><th>Class ${infoBtn("cls")}</th></tr></thead>
+    <table class="sortable"><thead><tr><th>Ticker ${infoBtn("ticker")}</th><th>Tier ${infoBtn("tier")}</th><th class="num">Momentum ${infoBtn("momentumScore")}</th><th class="num">Price ${infoBtn("price")}</th><th>Quality ${infoBtn("quality")}</th><th>Class ${infoBtn("cls")}</th></tr></thead>
     <tbody>${rows}</tbody></table>
     ${avoid?`<div class="note" style="margin-top:12px">${avoid} of today's top ${top.length} movers flag <b>Red/Black</b> on the quality lens — exactly the names momentum-only scanners would have you chasing.</div>`:""}`;
 }
