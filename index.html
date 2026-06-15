@@ -163,6 +163,82 @@
     border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:13px;width:260px;max-width:100%}
   .config label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
   footer.foot{border-top:1px solid var(--line);padding:24px 0;color:var(--dim);font-size:12.5px}
+  /* ===== Quality Lens (Buffett-style deep analysis) ===== */
+  .tlink{cursor:pointer;border-bottom:1px dashed #ffffff33}
+  .tlink:hover{border-bottom-color:currentColor;color:var(--a)}
+  .qbadge{border:1px solid var(--line);background:#ffffff0d;color:var(--muted);font:inherit;font-size:12px;
+    font-weight:700;padding:5px 9px;border-radius:8px;cursor:pointer;white-space:nowrap}
+  .qbadge:hover{filter:brightness(1.25);color:var(--text)}
+  .qlabel{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:12px;
+    padding:4px 10px;border-radius:999px;cursor:pointer;border:1px solid transparent;white-space:nowrap}
+  .qlabel .qdot{width:8px;height:8px;border-radius:50%}
+  .q-green{background:var(--green-soft);color:var(--green);border-color:#2ec27e55}
+  .q-green .qdot{background:var(--green)}
+  .q-yellow{background:#f5b14c1f;color:var(--amber);border-color:#f5b14c55}
+  .q-yellow .qdot{background:var(--amber)}
+  .q-red{background:var(--red-soft);color:var(--red);border-color:#f0506e55}
+  .q-red .qdot{background:var(--red)}
+  .q-black{background:#ffffff12;color:#c9d2dd;border-color:#ffffff30}
+  .q-black .qdot{background:#c9d2dd}
+  .modal.wide{max-width:780px;max-height:88vh;overflow:auto}
+  .da-head{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+  .da-score{text-align:center;background:var(--panel-2);border:1px solid var(--line);border-radius:14px;
+    padding:12px 18px;min-width:118px}
+  .da-score .big{font-size:42px;font-weight:800;font-family:var(--mono);line-height:1}
+  .da-score .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+  .da-meta{flex:1;min-width:240px}
+  .da-meta h2{margin:.05em 0 .15em;font-size:21px}
+  .da-meta .sub{font-size:13px;color:var(--muted)}
+  .da-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px;align-items:center}
+  .da-tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+  .da-tag.invest{color:var(--green);border-color:#2ec27e55;background:var(--green-soft)}
+  .da-tag.spec{color:var(--amber);border-color:#f5b14c55;background:#f5b14c1f}
+  .da-tag.hard{color:var(--red);border-color:#f0506e55;background:var(--red-soft)}
+  .cat-row{display:flex;align-items:center;gap:12px;margin:7px 0}
+  .cat-row .cl{width:170px;font-size:13px}
+  .cat-row .cl .cw{font-size:10px;color:var(--dim);margin-left:6px}
+  .cat-row .cbar{flex:1;height:9px;background:#ffffff10;border-radius:6px;overflow:hidden}
+  .cat-row .cbar>i{display:block;height:100%}
+  .cat-row .cv{width:34px;text-align:right;font-family:var(--mono);font-size:13px}
+  .da-flags{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:640px){.da-flags{grid-template-columns:1fr}}
+  .da-flags h3{font-size:12px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .flaglist{list-style:none;padding:0;margin:0;font-size:13px}
+  .flaglist li{padding:5px 0 5px 22px;position:relative;color:var(--text)}
+  .flaglist li:before{position:absolute;left:0;font-weight:800;top:6px;font-size:11px}
+  .flaglist.bad li:before{content:"▲";color:var(--red)}
+  .flaglist.good li:before{content:"✓";color:var(--green);top:5px}
+  .flaglist .sev{font-size:9.5px;font-weight:800;padding:1px 5px;border-radius:5px;margin-right:6px;vertical-align:1px}
+  .sev.red{background:var(--red-soft);color:var(--red)} .sev.yellow{background:#f5b14c1f;color:var(--amber)}
+  .sev.black{background:#ffffff14;color:#c9d2dd}
+  .da-summary{font-size:14px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:13px 15px;margin-top:14px;line-height:1.55}
+  .da-mos{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+  .da-mos .m{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;flex:1;min-width:130px}
+  .da-mos .m .k{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .da-mos .m .v{font-size:19px;font-weight:800;font-family:var(--mono);margin-top:3px}
+  .dasrc{font-size:12px;color:var(--dim);margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+  /* ===== Guide page ===== */
+  .readrow{display:grid;grid-template-columns:1fr 1fr;gap:2px 28px}
+  @media(max-width:720px){.readrow{grid-template-columns:1fr}}
+  .readrow .ri{font-size:13.5px;padding:9px 0;border-bottom:1px solid #ffffff08}
+  .readrow .ri b{font-family:var(--mono);color:var(--a);margin-right:4px}
+  .gcat{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin:20px 0 9px;font-weight:700}
+  .gloss{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:720px){.gloss{grid-template-columns:1fr}}
+  .gterm{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .gterm h4{margin:0 0 4px;font-size:14px}
+  .gterm h4 .u{font-weight:600;color:var(--muted);font-size:12px;font-family:var(--mono)}
+  .gterm p{margin:0;font-size:13px;color:var(--muted);line-height:1.5}
+  .gterm .read{display:block;margin-top:6px;font-size:12px;color:var(--dim)}
+  .gterm .read b{color:var(--text);font-weight:600}
+  .steps{counter-reset:st;list-style:none;padding:0;margin:0}
+  .steps li{position:relative;padding:0 0 16px 42px;font-size:14px}
+  .steps li:before{counter-increment:st;content:counter(st);position:absolute;left:0;top:-2px;
+    width:28px;height:28px;border-radius:50%;background:var(--a-soft);color:var(--a);font-weight:800;
+    display:grid;place-items:center;font-size:14px}
+  .steps li b{color:var(--text)}
+  .steps li:not(:last-child):after{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line)}
 </style>
 </head>
 <body>
@@ -173,7 +249,7 @@
       <button data-view="landing" class="active">Overview</button>
       <button data-view="watchlist">Watchlist</button>
       <button data-view="portfolio">Portfolio</button>
-      <button data-view="scoring">How scoring works</button>
+      <button data-view="scoring">Guide</button>
       <button data-view="performance">Track record</button>
     </nav>
     <div class="top-cta">
@@ -247,7 +323,9 @@
         <thead><tr>
           <th>#</th><th>Ticker</th><th>Tier</th><th class="num">Score</th>
           <th class="num">Price</th><th class="num">Gap %</th><th class="num">RVOL</th>
-          <th class="num">Float</th><th class="num">Watch level</th>
+          <th class="num">Float</th>
+          <th class="num">Quality <span class="dim" style="font-size:10px">(Buffett lens)</span></th>
+          <th class="num">Watch level</th>
           <th class="num">Trade <span class="dim" style="font-size:10px">(paper)</span></th>
         </tr></thead>
         <tbody id="wlBody"></tbody>
@@ -349,12 +427,49 @@
 <!-- ============ SCORING ============ -->
 <section class="view" id="view-scoring">
   <div class="wrap">
-    <h1>How the score works</h1>
-    <p class="lead">No "proprietary AI." The IgnitionScan score is a transparent, deterministic blend of four
-      objective inputs. Publishing it is deliberate — it builds trust and keeps the product on the
-      educational side of the line.</p>
+    <h1>Guide — how to read &amp; use the screen</h1>
+    <p class="lead">No "proprietary AI." IgnitionScan runs <b>two</b> transparent, deterministic models on
+      every name. Neither is a buy signal — together they help you separate <i>"this is moving"</i> from
+      <i>"this is actually worth the risk."</i> Below is what every number means and how to use it.</p>
 
+    <!-- the two models -->
     <div class="grid two" style="margin-top:18px">
+      <div class="panel">
+        <h2 style="margin-top:0">① Momentum score <span class="pill">0–100 · tiers A–D</span></h2>
+        <p style="font-size:14px;margin-bottom:0">Answers <b>"is this moving right now?"</b> A weighted blend of
+          four pre-market facts — float, relative volume, gap, and price. It's what ranks the Watchlist. High
+          score = the stock is unusually active for its size, nothing more.</p>
+      </div>
+      <div class="panel">
+        <h2 style="margin-top:0">② Quality Lens <span class="pill">0–100 · Green→Black</span></h2>
+        <p style="font-size:14px;margin-bottom:0">Answers <b>"is this a real business?"</b> A Buffett-style read of
+          the financial statements that scores quality, value and risk, and tags the name Investable / Speculative /
+          Too&nbsp;Hard. <b>Click any ticker</b> (or its Quality chip) on the Watchlist to run it.</p>
+      </div>
+    </div>
+
+    <!-- how to read a row -->
+    <h2 style="margin-top:34px">How to read a Watchlist row</h2>
+    <div class="panel">
+      <div class="readrow">
+        <div class="ri"><b>#</b> Rank, sorted by momentum score (highest first).</div>
+        <div class="ri"><b>Ticker</b> The symbol — <b style="font-family:inherit;color:inherit">click it</b> to run the Quality Lens deep-analysis.</div>
+        <div class="ri"><b>Tier</b> Letter bucket of the momentum score: A ≥75, B ≥60, C ≥45, D below.</div>
+        <div class="ri"><b>Score</b> The momentum score, 0–100. The bar is the same number, drawn.</div>
+        <div class="ri"><b>Price</b> Latest / screen price per share.</div>
+        <div class="ri"><b>Gap %</b> Move from yesterday's close into the pre-market. Green up, red down.</div>
+        <div class="ri"><b>RVOL</b> Today's volume ÷ the stock's own average. 1× = normal, 5×+ = something's happening.</div>
+        <div class="ri"><b>Float</b> Shares actually available to trade. Smaller = more violent moves.</div>
+        <div class="ri"><b>Quality</b> Buffett risk label (Green/Yellow/Red/Black + score). Click for the full scorecard.</div>
+        <div class="ri"><b>Watch level</b> A +20% reference price — used only to grade hits later. Not a target or advice.</div>
+      </div>
+      <div class="note" style="margin-top:14px">Click anywhere else on a row to expand <i>why it screened</i> —
+        the four momentum components and their individual sub-scores.</div>
+    </div>
+
+    <!-- model 1 detail -->
+    <h2 style="margin-top:34px">Model 1 — the Momentum score</h2>
+    <div class="grid two" style="margin-top:6px">
       <div class="panel">
         <h2 style="margin-top:0">The formula</h2>
         <div class="formula" id="formulaBox"></div>
@@ -364,19 +479,113 @@
       <div class="panel">
         <h2 style="margin-top:0">What each input means</h2>
         <p style="font-size:14px"><b>Float</b> — shares available to trade. Smaller float, more violent moves.
-          Sweet spot under ~5M shares.</p>
+          Sweet spot under ~3–5M shares; scored down toward a 50M ceiling.</p>
         <p style="font-size:14px"><b>RVOL</b> — today's volume vs. the stock's own average. The single best
-          tell that something unusual is happening. 5×+ is notable.</p>
+          tell that something unusual is happening. ~10× maxes the input; 5×+ is notable.</p>
         <p style="font-size:14px"><b>Gap %</b> — move from prior close into the pre-market. Bigger gaps =
-          more attention and momentum.</p>
+          more attention and momentum; ~20% maxes the input.</p>
         <p style="font-size:14px"><b>Price band</b> — strategy targets roughly $0.50–$10. Outside the band is
           down-weighted, not auto-excluded.</p>
         <div class="note">Tiers: <b>A</b> ≥ 75 · <b>B</b> ≥ 60 · <b>C</b> ≥ 45 · <b>D</b> below.
-          Watch level = entry reference set at +20% from the screen price; "WIN" = the stock reaches it within 5 trading days.</div>
+          Watch level = +20% from the screen price; on the Track record page, "WIN" = it reached that within 5 trading days.</div>
       </div>
     </div>
+
+    <!-- model 2 detail -->
+    <h2 style="margin-top:34px">Model 2 — the Quality Lens <span class="badge-proto">BUFFETT-STYLE</span></h2>
+    <p class="lead" style="margin-top:4px">A deterministic, rule-based second opinion — no AI in the score —
+      layered on as a defensive filter. It reads the income statement, balance sheet and cash-flow statement
+      and rolls seven categories into one 0–100 score and a risk label.</p>
+    <div class="grid two" style="margin-top:14px">
+      <div class="panel">
+        <h2 style="margin-top:0">Category weights</h2>
+        <div id="qualWeights"></div>
+        <div class="note" style="margin-top:12px">Risk labels: <b style="color:var(--green)">Green</b> low risk ·
+          <b style="color:var(--amber)">Yellow</b> needs review · <b style="color:var(--red)">Red</b> high risk ·
+          <b>Black</b> likely uninvestable. <b>Risk subtracts</b> from the overall, so cash-burning, heavily-diluting
+          names can't hide behind a flashy chart. A critical flag (e.g. going-concern) forces Black no matter the score.</div>
+      </div>
+      <div class="panel">
+        <h2 style="margin-top:0">What it checks</h2>
+        <p style="font-size:14px"><b>Financial health, business quality &amp; valuation</b> — revenue trend,
+          margins, free cash flow, leverage, liquidity, returns on capital, and conservative value multiples.</p>
+        <p style="font-size:14px"><b>Management alignment</b> centers on <b>share-count discipline</b> —
+          dilution is the #1 way low-float names destroy holders, and it's read straight from the filings.</p>
+        <p style="font-size:14px"><b>Buffett's "too hard" filter</b> tags each name <b>Investable</b>,
+          <b>Speculative</b>, or <b>Too Hard</b> (pre-revenue, biotech, mining) — because knowing what
+          <i>not</i> to analyze is half the edge.</p>
+        <div class="note">Some inputs (insider ownership, auditor changes, going-concern, filing timeliness)
+          need a paid fundamentals/filings feed; in the prototype they're shown as "not checked" rather than guessed.</div>
+      </div>
+    </div>
+
+    <!-- glossary -->
+    <h2 style="margin-top:34px">Metric glossary</h2>
+    <p class="muted" style="font-size:14px;margin-top:0">Plain-English definitions for every metric in the
+      screen and the deep-analysis scorecard — what it is, and how to read it.</p>
+
+    <div class="gcat">Momentum metrics</div>
+    <div class="gloss">
+      <div class="gterm"><h4>Float</h4><p>Shares a company has freely trading in the market (excludes insider / locked-up shares).</p><span class="read"><b>Read it:</b> smaller float = thinner supply = sharper moves. Under ~5M is the strategy's sweet spot.</span></div>
+      <div class="gterm"><h4>RVOL <span class="u">relative volume</span></h4><p>Today's volume divided by the stock's own average volume.</p><span class="read"><b>Read it:</b> 1× is a normal day; 5×+ means unusual interest; very high RVOL on no news can be a pump.</span></div>
+      <div class="gterm"><h4>Gap %</h4><p>The percentage move from the prior close into the pre-market / open.</p><span class="read"><b>Read it:</b> bigger gap = more overnight attention. Direction matters — chasing a huge gap is how you buy the top.</span></div>
+      <div class="gterm"><h4>Price band</h4><p>The strategy's target range, roughly $0.50–$10 per share.</p><span class="read"><b>Read it:</b> inside the band scores full; outside is down-weighted, not banned.</span></div>
+      <div class="gterm"><h4>Tier</h4><p>A letter bucket of the momentum score: A ≥75, B ≥60, C ≥45, D below.</p><span class="read"><b>Read it:</b> a quick "how strong is the setup" shorthand — not a grade of the business.</span></div>
+      <div class="gterm"><h4>Watch level</h4><p>A reference price set +20% above the screen price.</p><span class="read"><b>Read it:</b> a yardstick for grading the screen later — <b>not</b> a price target or a recommendation.</span></div>
+    </div>
+
+    <div class="gcat">Financial health</div>
+    <div class="gloss">
+      <div class="gterm"><h4>Revenue CAGR</h4><p>The smoothed annual growth rate of sales over the years available.</p><span class="read"><b>Read it:</b> ~10–20%+/yr is healthy; a negative rate (shrinking sales) is a yellow flag.</span></div>
+      <div class="gterm"><h4>Gross / operating / net margin</h4><p>Profit left after cost of goods (gross), after running the business (operating), and after everything incl. tax/interest (net).</p><span class="read"><b>Read it:</b> higher and positive is better. Negative operating/net margin = the business loses money on its core operations.</span></div>
+      <div class="gterm"><h4>Free cash flow <span class="u">FCF</span></h4><p>Cash from operations minus capital spending — the cash a business actually generates.</p><span class="read"><b>Read it:</b> positive FCF is the single best sign of a real business; persistent negative FCF means it survives on raising money.</span></div>
+      <div class="gterm"><h4>Operating cash flow</h4><p>Cash produced by day-to-day operations, before capital spending.</p><span class="read"><b>Read it:</b> negative for three straight years is a serious cash-burn red flag.</span></div>
+      <div class="gterm"><h4>Debt / equity <span class="u">D/E</span></h4><p>Total debt divided by shareholder equity — how leveraged the company is.</p><span class="read"><b>Read it:</b> ≤0.3 is conservative, ~1 is moderate, &gt;2.5 is a high-leverage red flag.</span></div>
+      <div class="gterm"><h4>Current ratio</h4><p>Current assets ÷ current liabilities — can it cover the next year's bills?</p><span class="read"><b>Read it:</b> ≥1.5 is comfortable; below 1 means short-term obligations exceed liquid assets.</span></div>
+    </div>
+
+    <div class="gcat">Business quality</div>
+    <div class="gloss">
+      <div class="gterm"><h4>ROIC <span class="u">return on invested capital</span></h4><p>Profit earned per dollar of capital put into the business.</p><span class="read"><b>Read it:</b> ≥15% signals a genuinely good business; negative means it destroys capital.</span></div>
+      <div class="gterm"><h4>ROE <span class="u">return on equity</span></h4><p>Net profit as a percentage of shareholder equity.</p><span class="read"><b>Read it:</b> ≥20% is strong, but check it isn't just from heavy debt.</span></div>
+      <div class="gterm"><h4>Revenue consistency</h4><p>How steady (and positive) year-over-year growth has been.</p><span class="read"><b>Read it:</b> steady growth scores higher than the same average delivered in lumpy, unpredictable jumps.</span></div>
+      <div class="gterm"><h4>Moat proxy</h4><p>A stand-in for durable advantage: high, stable gross margin plus positive returns on capital.</p><span class="read"><b>Read it:</b> high here suggests pricing power; it's an estimate, not a guarantee of a moat.</span></div>
+    </div>
+
+    <div class="gcat">Valuation</div>
+    <div class="gloss">
+      <div class="gterm"><h4>P/S <span class="u">price / sales</span></h4><p>Market value relative to annual revenue.</p><span class="read"><b>Read it:</b> ≤1 is cheap, &gt;6 is rich. Most useful when a company isn't yet profitable.</span></div>
+      <div class="gterm"><h4>P/E <span class="u">price / earnings</span></h4><p>Price relative to net profit.</p><span class="read"><b>Read it:</b> ≤10 cheap, &gt;35 rich; <b>negative P/E = no profits</b>, so the multiple is meaningless.</span></div>
+      <div class="gterm"><h4>P/FCF <span class="u">price / free cash flow</span></h4><p>Price relative to the cash the business throws off.</p><span class="read"><b>Read it:</b> ≤10 cheap, &gt;35 rich — harder to fake than earnings.</span></div>
+      <div class="gterm"><h4>EV/EBITDA</h4><p>Enterprise value (incl. debt, minus cash) vs. pre-interest, pre-tax operating earnings.</p><span class="read"><b>Read it:</b> ≤6 cheap, &gt;20 rich; accounts for debt that P/E ignores.</span></div>
+      <div class="gterm"><h4>Net cash</h4><p>Cash on hand minus total debt.</p><span class="read"><b>Read it:</b> positive (more cash than debt) is a balance-sheet cushion and a plus for value.</span></div>
+      <div class="gterm"><h4>Intrinsic estimate &amp; margin of safety</h4><p>A conservative value (latest FCF per share × 14) and how far below it the price sits: (value − price) ÷ value.</p><span class="read"><b>Read it:</b> a positive margin of safety (≈30%+) means the price is meaningfully below a cautious estimate. Needs positive FCF to compute.</span></div>
+    </div>
+
+    <div class="gcat">Management, risk &amp; labels</div>
+    <div class="gloss">
+      <div class="gterm"><h4>Share dilution</h4><p>The change in share count over the years available.</p><span class="read"><b>Read it:</b> flat-to-shrinking is great; +15% is a yellow flag; +50% is a red flag and the top way pennies erode holders.</span></div>
+      <div class="gterm"><h4>Insider ownership</h4><p>Percentage of the company held by executives and directors.</p><span class="read"><b>Read it:</b> ≥10% means management eats its own cooking. Needs a paid feed — shown as "not checked" otherwise.</span></div>
+      <div class="gterm"><h4>Risk label</h4><p>Green / Yellow / Red / Black summary of the risk category and critical flags.</p><span class="read"><b>Read it:</b> <b>Black</b> = a critical disqualifier (e.g. going-concern) and overrides the score regardless of how the rest looks.</span></div>
+      <div class="gterm"><h4>"Too Hard" classification</h4><p>Investable, Speculative, or Too&nbsp;Hard (pre-revenue, biotech, mining, opaque financials).</p><span class="read"><b>Read it:</b> Too&nbsp;Hard isn't an insult — it's Buffett's rule to skip what you can't reliably value.</span></div>
+    </div>
+
+    <!-- how to use it -->
+    <h2 style="margin-top:34px">Putting it together — a sane workflow</h2>
+    <div class="panel">
+      <ol class="steps">
+        <li><b>Start with the Watchlist, top down.</b> The momentum score tells you where the action is — but action alone is just volatility.</li>
+        <li><b>Glance at the Quality chip before anything else.</b> A <span style="color:var(--red)">Red</span> or <b>Black</b> label next to a hot mover is the screen telling you "this is the part that gets people rugged."</li>
+        <li><b>Click the ticker for the full scorecard.</b> Read the red flags and positive signals, not just the number — one going-concern or +50% dilution flag outweighs a pretty score.</li>
+        <li><b>Check the "Too Hard" tag.</b> If it's pre-revenue biotech or a miner, the financials genuinely can't be valued reliably — that's a reason to pass, not push harder.</li>
+        <li><b>Use it as a filter, not a trigger.</b> Neither model says buy or sell. They narrow a noisy list to a shorter one worth your own due diligence in the actual filings.</li>
+      </ol>
+    </div>
+
     <p class="disclaimer">The methodology is provided for education. A high score is not a recommendation to
-      buy; it is a description of how a stock ranks on these public criteria.</p>
+      buy; it describes how a stock ranks on these public criteria. Both models are deterministic, rule-based
+      research tooling — not investment advice, and not a buy/sell/hold signal. Verify everything in primary
+      filings before acting.</p>
   </div>
 </section>
 
@@ -482,6 +691,17 @@
       <button class="btn ghost" onclick="closeTicket()">Cancel</button>
       <button id="tkSubmit" class="btn" onclick="submitTicket()">Place order</button>
     </div>
+  </div>
+</div>
+
+<!-- ============ DEEP ANALYSIS (QUALITY LENS) MODAL ============ -->
+<div id="deepBackdrop" class="modal-backdrop" onclick="if(event.target===this)closeDeep()">
+  <div class="modal wide" role="dialog" aria-modal="true" aria-labelledby="daTitle">
+    <div class="modal-head">
+      <span id="daTitle">Deep analysis <span class="badge-proto">QUALITY LENS</span></span>
+      <button class="modal-x" onclick="closeDeep()" aria-label="Close">×</button>
+    </div>
+    <div id="daBody"><div class="muted" style="padding:34px;text-align:center">Loading…</div></div>
   </div>
 </div>
 
@@ -642,12 +862,13 @@ function renderWatchlist(rows){
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
   document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data";
   window.LASTPX = window.LASTPX || {};
-  rows.forEach(r=>{ window.LASTPX[r.symbol]=r.price; });
+  window.SCORED_BY_SYM = window.SCORED_BY_SYM || {};
+  rows.forEach(r=>{ window.LASTPX[r.symbol]=r.price; window.SCORED_BY_SYM[r.symbol]=r; });
   rows.forEach((r,i)=>{
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
       <td class="dim">${i+1}</td>
-      <td class="tick">${r.symbol}</td>
+      <td class="tick"><span class="tlink" title="Run Buffett-style deep analysis" onclick="event.stopPropagation();openDeep('${r.symbol}')">${r.symbol}</span></td>
       <td><span class="tier ${r.tier}">${r.tier}</span></td>
       <td class="num">
         <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
@@ -657,6 +878,7 @@ function renderWatchlist(rows){
       <td class="num ${r.gap>=0?'pos':'neg'}">${r.gap>=0?'+':''}${r.gap.toFixed(1)}%</td>
       <td class="num">${r.rvol.toFixed(1)}×</td>
       <td class="num">${fmtFloat(r.floatM)}</td>
+      <td class="num"><div id="q-${r.symbol}" onclick="event.stopPropagation()" style="display:flex;justify-content:flex-end">${QUALITY_CACHE[r.symbol]?qualityChip(r.symbol,QUALITY_CACHE[r.symbol]):`<button class="qbadge" onclick="openDeep('${r.symbol}')">⌕ Analyze</button>`}</div></td>
       <td class="num">$${r.watch.toFixed(2)}</td>
       <td class="num">
         <div class="trade-cell" onclick="event.stopPropagation()">
@@ -667,7 +889,7 @@ function renderWatchlist(rows){
         </div></td>`;
     const detail=document.createElement("tr");
     detail.style.display="none";
-    detail.innerHTML=`<td colspan="10"><div class="why">
+    detail.innerHTML=`<td colspan="11"><div class="why">
       <b>Why ${r.symbol} screened:</b> float ${fmtFloat(r.floatM)}
       (score ${r.parts.float.toFixed(0)}), RVOL ${r.rvol.toFixed(1)}× (score ${r.parts.rvol.toFixed(0)}),
       gap ${r.gap>=0?'+':''}${r.gap.toFixed(1)}% (score ${r.parts.gap.toFixed(0)}),
@@ -1120,6 +1342,377 @@ async function cancelOrder(id, symbol){
   setTimeout(loadPortfolio, 800);
 }
 
+/* =====================================================================
+   QUALITY LENS — Buffett-style deep analysis overlay
+   ---------------------------------------------------------------------
+   A deterministic, rule-based second opinion layered on top of the
+   momentum screen. The momentum score answers "is this MOVING?"; the
+   quality lens answers "is this a real business, or speculative garbage
+   you'd get rugged on?" — Buffett's question, applied to the low-float
+   universe as a defensive filter.
+
+   Scoring mirrors the Quality Small Cap Screener spec (7 weighted
+   categories, 0-100, risk label). It is fully DETERMINISTIC — no AI in
+   the score. Fundamentals come from Financial Modeling Prep when an API
+   key is present; otherwise stable sample fundamentals are synthesized
+   from the ticker so the scorecard always renders (mirrors the momentum
+   screen's sample-data fallback). Nothing here is advice.
+   ===================================================================== */
+const QUALITY = {
+  WEIGHTS:{ financial:0.25, business:0.20, management:0.15, valuation:0.15, risk:0.15, momentum:0.05, governance:0.05 },
+  FMP:"https://financialmodelingprep.com/api/v3/"
+};
+const QUALITY_CACHE = {};                  // symbol -> computed result (also gates the watchlist chip)
+const LABEL_NAME = { green:"Green", yellow:"Yellow", red:"Red", black:"Black" };
+const LABEL_DESC = { green:"Low risk", yellow:"Needs review", red:"High risk", black:"Likely uninvestable" };
+
+/* ---------- scoring helpers (deterministic) ---------- */
+function band(x, pts){                      // piecewise-linear map; pts ascending by x
+  if(x==null||!isFinite(x)) return null;
+  if(x<=pts[0][0]) return pts[0][1];
+  for(let i=1;i<pts.length;i++){
+    if(x<=pts[i][0]){ const [x0,s0]=pts[i-1],[x1,s1]=pts[i]; return s0+(s1-s0)*(x-x0)/(x1-x0); }
+  }
+  return pts[pts.length-1][1];
+}
+function cagr(newest, oldest, years){
+  if(!(oldest>0)||!(newest>0)||!(years>0)) return null;
+  return (Math.pow(newest/oldest,1/years)-1)*100;
+}
+function avgDefined(a){ const v=a.filter(x=>x!=null&&isFinite(x)); return v.length? v.reduce((s,x)=>s+x,0)/v.length : null; }
+function hashUnit(s){ let h=2166136261; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return (h>>>0)/4294967295; }
+
+/* ---------- THE ENGINE: normalized fundamentals -> scorecard ---------- */
+function computeQuality(f){
+  const flags=[], positives=[], notes=[];
+  const rev=f.revenue||[], ocf=f.operatingCashFlow||[], fcf=f.freeCashFlow||[], shares=f.shares||[];
+  const revNew=rev[0], revOld=rev[rev.length-1];
+  const years=Math.max(1, rev.length-1);
+  const revCagr=cagr(revNew,revOld,years);
+  const fcf0=fcf[0], gm=f.grossMargin, om=f.operatingMargin, nm=f.netMargin;
+  const fcfMargin=(fcf0!=null && revNew>0)? fcf0/revNew*100 : null;
+  const de=f.debtToEquity, cr=f.currentRatio;
+  const ocfNeg3 = ocf.length>=3 && ocf.slice(0,3).every(x=>x!=null && x<0);
+
+  /* ---- 1. Financial Health (25%) ---- */
+  const sRev = revCagr==null?45:band(revCagr,[[-20,0],[0,40],[10,72],[20,90],[35,100]]);
+  if(revCagr!=null && revCagr>=8) positives.push(`Revenue compounded ~${revCagr.toFixed(0)}%/yr over ${years}y.`);
+  if(revCagr!=null && revCagr<-5) flags.push({sev:"yellow",t:"Declining revenue",d:`Revenue shrank ~${Math.abs(revCagr).toFixed(0)}%/yr.`});
+  let sFcf;
+  if(fcf0==null) sFcf=45;
+  else { sFcf=band(fcfMargin,[[-15,0],[0,50],[5,75],[15,95],[25,100]]);
+    if(fcf0>0) positives.push("Positive free cash flow."); else flags.push({sev:"yellow",t:"Negative FCF",d:"Free cash flow was negative in the latest year."}); }
+  if(ocfNeg3) flags.push({sev:"red",t:"Cash burn",d:"Operating cash flow negative three years running."});
+  const sMar = avgDefined([
+    band(gm,[[0,10],[20,45],[40,75],[60,95],[80,100]]),
+    band(om,[[-20,0],[0,45],[10,75],[25,100]]),
+    band(nm,[[-20,0],[0,45],[8,72],[20,100]])
+  ]) ?? 45;
+  let sDebt;
+  if(de==null) sDebt=55;
+  else { sDebt=band(de,[[0,100],[0.3,92],[1,62],[2,28],[2.5,8],[4,0]]);
+    if(de>2.5) flags.push({sev:"red",t:"High leverage",d:`Debt/equity of ${de.toFixed(1)} is above 2.5.`});
+    else if(de<=0.5) positives.push(`Low debt (D/E ${de.toFixed(2)}).`); }
+  let sLiq;
+  if(cr==null) sLiq=55;
+  else { sLiq=band(cr,[[0.5,5],[1,45],[1.5,78],[2,95],[3,100]]);
+    if(cr<1) flags.push({sev:"yellow",t:"Weak liquidity",d:`Current ratio ${cr.toFixed(2)} — current liabilities exceed current assets.`}); }
+  const financial = sRev*.20 + sFcf*.25 + sMar*.20 + sDebt*.20 + sLiq*.15;
+
+  /* ---- 2. Business Quality (20%) ---- */
+  const sRoic = avgDefined([
+    band(f.roic,[[-10,0],[0,35],[8,60],[15,82],[25,100]]),
+    band(f.roe ,[[-15,0],[0,35],[10,60],[20,85],[35,100]])
+  ]) ?? 45;
+  if(f.roic!=null && f.roic>=15) positives.push(`Strong returns on capital (ROIC ~${f.roic.toFixed(0)}%).`);
+  const sMq = band(gm,[[10,20],[30,55],[50,82],[70,100]]) ?? 45;
+  let sCons=50;
+  if(rev.length>=3){
+    const g=[]; for(let i=0;i<rev.length-1;i++){ if(rev[i+1]>0) g.push((rev[i]-rev[i+1])/rev[i+1]*100); }
+    if(g.length){ const m=avgDefined(g); const sd=Math.sqrt(avgDefined(g.map(x=>(x-m)**2))||0); const allPos=g.every(x=>x>0);
+      sCons=Math.max(0,Math.min(100, 60+(allPos?20:-10)-Math.min(sd/2,40)+Math.max(-10,Math.min(20,m/2))));
+      if(allPos) positives.push("Revenue rose in every year measured."); }
+  }
+  const sMoat = avgDefined([ sMq, band(f.roic,[[0,20],[10,60],[20,100]]) ]) ?? sMq;
+  const business = sRoic*.30 + sMq*.25 + sCons*.25 + sMoat*.20;
+
+  /* ---- 3. Management / Alignment (15%) ---- */
+  let sShare=55, dil=null;
+  if(shares.length>=2 && shares[shares.length-1]>0){
+    dil=(shares[0]-shares[shares.length-1])/shares[shares.length-1]*100;
+    sShare=band(dil,[[-10,100],[0,90],[5,70],[15,45],[30,20],[50,5],[100,0]]);
+    if(dil>50) flags.push({sev:"red",t:"Heavy dilution",d:`Share count up ~${dil.toFixed(0)}% over ${years}y.`});
+    else if(dil>15) flags.push({sev:"yellow",t:"Dilution",d:`Share count up ~${dil.toFixed(0)}% over ${years}y.`});
+    else if(dil<=2) positives.push("Flat-to-shrinking share count — no heavy dilution.");
+  }
+  let sOwn;
+  if(f.insiderOwnership==null){ sOwn=50; notes.push("Insider ownership not available from this data source."); }
+  else { sOwn=band(f.insiderOwnership,[[0,20],[5,50],[10,72],[20,92],[35,100]]);
+    if(f.insiderOwnership>=10) positives.push(`Insider ownership ~${f.insiderOwnership.toFixed(0)}%.`); }
+  let sIns = f.insiderNet==null?50:(f.insiderNet>0?75:f.insiderNet<0?35:50);
+  if(f.insiderNet==null) notes.push("Insider buy/sell transactions not checked.");
+  const sStab = f.founderLed?80:60;
+  const management = sShare*.30 + sOwn*.30 + sIns*.20 + sStab*.20;
+
+  /* ---- 4. Valuation (15%) ---- */
+  const vps  = f.ps==null?null:band(f.ps,[[0.5,100],[1,92],[3,60],[6,30],[10,5]]);
+  const vpfcf= (f.pfcf==null||f.pfcf<0)?null:band(f.pfcf,[[5,100],[10,88],[20,58],[35,22],[50,5]]);
+  const vev  = (f.evEbitda==null||f.evEbitda<0)?null:band(f.evEbitda,[[4,100],[6,90],[12,55],[20,15]]);
+  const vpe  = f.pe==null?null:(f.pe<0?15:band(f.pe,[[6,100],[10,88],[20,58],[35,22],[50,5]]));
+  let valuation = avgDefined([vps,vpfcf,vev,vpe]) ?? 45;
+  const netCash = (f.cash!=null && f.totalDebt!=null)? f.cash-f.totalDebt : null;
+  if(netCash!=null && netCash>0){ valuation=Math.min(100,valuation+8); positives.push("Balance sheet holds net cash."); }
+  if(f.pe!=null && f.pe<0 && (fcf0==null||fcf0<0)) flags.push({sev:"yellow",t:"No profits to value",d:"No positive earnings or free cash flow to anchor a valuation."});
+  let iv=null, mos=null;
+  if(fcf0!=null && fcf0>0 && shares[0]>0 && f.price>0){
+    iv=(fcf0/shares[0])*14;                 // conservative FCF multiple
+    mos=(iv-f.price)/iv*100;
+    if(mos>=30) positives.push(`Trades ~${mos.toFixed(0)}% below a conservative FCF-based value estimate.`);
+  }
+
+  /* ---- 5. Risk / Red Flags (15%) — starts at 100, penalties reduce ---- */
+  let risk=100;
+  if(ocfNeg3) risk-=30; else if(fcf0!=null && fcf0<0) risk-=12;
+  if(dil!=null && dil>50) risk-=25; else if(dil!=null && dil>15) risk-=10;
+  if(de!=null && de>2.5) risk-=18;
+  if(cr!=null && cr<1) risk-=8;
+  if(nm!=null && nm<0) risk-=8;
+  if(f.goingConcern){ risk-=40; flags.push({sev:"black",t:"Going concern",d:"Filings flag going-concern doubt."}); }
+  if(f.otc){ risk-=12; flags.push({sev:"yellow",t:"OTC listing",d:"Trades over-the-counter — thinner disclosure and liquidity."}); }
+  if(f.marketCap!=null && f.marketCap<50e6) risk-=6;
+  risk=Math.max(0,Math.min(100,risk));
+
+  /* ---- 6. Momentum / Recognition (5%) — tempered; hype is penalized ---- */
+  let momentum=50;
+  if(f.rvol!=null){
+    momentum=band(f.rvol,[[0.5,30],[1,50],[3,70],[6,78]]) ?? 50;
+    if(f.rvol>12){ momentum=35; flags.push({sev:"yellow",t:"Possible hype",d:`Volume ~${f.rvol.toFixed(0)}× normal on thin fundamentals can signal a pump.`}); }
+  }
+
+  /* ---- 7. Governance / Transparency (5%) — proxied by data completeness ---- */
+  const complete = rev.length>=2 && f.equity!=null && fcf0!=null;
+  let governance = complete?70:40;
+  if(!complete) flags.push({sev:"yellow",t:"Sparse financials",d:"Some core financial statements are missing or stale."});
+  if(f.dataSource==="sample") notes.push("Filing timeliness, auditor and restatement checks need a filings feed — neutral in this prototype.");
+
+  /* ---- overall ---- */
+  const W=QUALITY.WEIGHTS;
+  const cats={
+    financial:Math.round(financial), business:Math.round(business), management:Math.round(management),
+    valuation:Math.round(valuation), risk:Math.round(risk), momentum:Math.round(momentum), governance:Math.round(governance)
+  };
+  const overall=Math.round(financial*W.financial+business*W.business+management*W.management+
+    valuation*W.valuation+risk*W.risk+momentum*W.momentum+governance*W.governance);
+
+  /* ---- risk label ---- */
+  let label;
+  const hasBlack=flags.some(x=>x.sev==="black");
+  if(hasBlack || (ocfNeg3 && dil!=null && dil>50)) label="black";
+  else if(risk<45 || overall<42) label="red";
+  else if(risk<68 || overall<60) label="yellow";
+  else label="green";
+
+  /* ---- Buffett "Too Hard" classification ---- */
+  const sec=((f.sector||"")+" "+(f.industry||"")).toLowerCase();
+  const tooHardSector=/bio|pharma|therapeut|clinical|mining|explorat|gold|silver|metal|drilling/.test(sec);
+  const preRev = revNew!=null && revNew<1e6;
+  const profitable = nm!=null && nm>0 && fcf0!=null && fcf0>0;
+  const classification = (tooHardSector||preRev) ? "Too Hard" : profitable ? "Investable" : "Speculative";
+
+  /* ---- plain-English summary (templated, deterministic, never buy/sell) ---- */
+  const statusPhrase={green:"passes the initial quality screen",yellow:"clears parts of the screen but carries reservations",
+    red:"shows elevated risk and needs deeper review",black:"looks likely uninvestable on these criteria"}[label];
+  let summary=`<b>${f.symbol}</b> ${statusPhrase}. Quality-adjusted score <b>${overall}/100</b>, risk label <b>${LABEL_NAME[label]}</b>. `;
+  if(classification==="Too Hard") summary+=`Buffett would likely set this in the <b>"too hard" pile</b> — ${tooHardSector?"its sector makes the numbers hard to assess with confidence":"it is effectively pre-revenue"}. `;
+  else if(classification==="Speculative") summary+=`It reads as <b>speculative</b> — not yet consistently profitable on the figures available. `;
+  else summary+=`It reads as a potentially <b>investable</b> business — profitable with positive cash generation. `;
+  if(positives[0]) summary+=positives[0]+" ";
+  const worst=flags.find(x=>x.sev==="black")||flags.find(x=>x.sev==="red")||flags[0];
+  if(worst) summary+=`Biggest concern: ${worst.d.replace(/\.$/,"")}. `;
+  summary+=`Treat this as a research signal to investigate, not a recommendation — verify everything in the filings.`;
+
+  return { symbol:f.symbol, overall, label, classification, cats, flags, positives, notes,
+    iv, mos, netCash, summary, dataSource:f.dataSource, f };
+}
+
+/* ---------- fundamentals: live (FMP) with sample fallback ---------- */
+async function fetchFundamentals(sym){
+  if(!FMP_KEY) return mockFundamentals(sym);
+  const k=encodeURIComponent(FMP_KEY), B=QUALITY.FMP;
+  const u=(p)=>`${B}${p}${p.includes("?")?"&":"?"}apikey=${k}`;
+  try{
+    const [profile,inc,bal,cf,rat,km]=await Promise.all([
+      fetch(u(`profile/${sym}`)).then(r=>r.json()),
+      fetch(u(`income-statement/${sym}?period=annual&limit=4`)).then(r=>r.json()),
+      fetch(u(`balance-sheet-statement/${sym}?period=annual&limit=2`)).then(r=>r.json()),
+      fetch(u(`cash-flow-statement/${sym}?period=annual&limit=4`)).then(r=>r.json()),
+      fetch(u(`ratios/${sym}?period=annual&limit=1`)).then(r=>r.json()),
+      fetch(u(`key-metrics/${sym}?period=annual&limit=1`)).then(r=>r.json())
+    ]);
+    if(!Array.isArray(inc)||!inc.length) throw new Error("no fundamentals");
+    const P=(profile&&profile[0])||{}, I=inc[0]||{}, B0=(bal&&bal[0])||{}, R=(rat&&rat[0])||{}, K=(km&&km[0])||{};
+    const f={
+      symbol:sym, name:P.companyName||sym, sector:P.sector||"", industry:P.industry||"",
+      exchange:P.exchangeShortName||"", price:P.price||((window.SCORED_BY_SYM||{})[sym]||{}).price||0, marketCap:P.mktCap||null,
+      otc:/otc|pink|grey/i.test(P.exchangeShortName||""),
+      revenue:inc.map(x=>x.revenue), grossProfit:inc.map(x=>x.grossProfit),
+      operatingIncome:inc.map(x=>x.operatingIncome), netIncome:inc.map(x=>x.netIncome),
+      shares:inc.map(x=>x.weightedAverageShsOut),
+      operatingCashFlow:cf.map(x=>x.operatingCashFlow), freeCashFlow:cf.map(x=>x.freeCashFlow),
+      totalDebt:B0.totalDebt, cash:B0.cashAndCashEquivalents, equity:B0.totalStockholdersEquity,
+      currentAssets:B0.totalCurrentAssets, currentLiabilities:B0.totalCurrentLiabilities,
+      grossMargin:I.revenue?I.grossProfit/I.revenue*100:null,
+      operatingMargin:I.revenue?I.operatingIncome/I.revenue*100:null,
+      netMargin:I.revenue?I.netIncome/I.revenue*100:null,
+      roic:(K.roic!=null?K.roic*100:(R.returnOnCapitalEmployed!=null?R.returnOnCapitalEmployed*100:null)),
+      roe:(R.returnOnEquity!=null?R.returnOnEquity*100:null),
+      debtToEquity:(R.debtEquityRatio!=null?Math.abs(R.debtEquityRatio):(B0.totalStockholdersEquity>0&&B0.totalDebt!=null?B0.totalDebt/B0.totalStockholdersEquity:null)),
+      currentRatio:(R.currentRatio!=null?R.currentRatio:(B0.totalCurrentLiabilities>0?B0.totalCurrentAssets/B0.totalCurrentLiabilities:null)),
+      ps:R.priceToSalesRatio||K.priceToSalesRatio||null,
+      pe:R.priceEarningsRatio||null,
+      pfcf:R.priceToFreeCashFlowsRatio||null,
+      evEbitda:R.enterpriseValueMultiple||K.enterpriseValueOverEBITDA||null,
+      insiderOwnership:null, insiderNet:null, founderLed:false, goingConcern:false, dataSource:"live"
+    };
+    return f;
+  }catch(e){ const f=mockFundamentals(sym); f.fetchError=e.message; return f; }
+}
+
+/* Synthesize stable, varied (and mostly penny-stock-realistic) fundamentals
+   from the ticker so the scorecard always renders without an API key. */
+function mockFundamentals(sym){
+  const row=(window.SCORED_BY_SYM||{})[sym]||{};
+  const q=k=>hashUnit(sym+"|"+k);
+  const price=row.price || +(0.6+q("p")*9).toFixed(2);
+  const sharesOut=row.floatM? row.floatM*1e6 : Math.round(4e6+q("s")*4.4e7);
+  const marketCap=price*sharesOut;
+  const revNew=Math.round(1.2e6+q("rev")*9e7);
+  const growth=(q("grow")-0.45);                       // -.45 .. +.55
+  const gFac=1+growth*0.5+0.05;
+  const revenue=[revNew, revNew/gFac, revNew/(gFac*gFac), revNew/(gFac*gFac*gFac)].map(x=>Math.round(x));
+  const gm=+(8+q("gm")*70).toFixed(1);
+  const om=+(gm-(6+q("om")*38)).toFixed(1);
+  const nm=+(om-(2+q("nm")*14)).toFixed(1);
+  const netIncome=revenue.map(r=>Math.round(r*nm/100));
+  const grossProfit=revenue.map(r=>Math.round(r*gm/100));
+  const operatingIncome=revenue.map(r=>Math.round(r*om/100));
+  const fcfMar=nm-(1+q("fcf")*6);
+  const freeCashFlow=revenue.map(r=>Math.round(r*fcfMar/100));
+  const operatingCashFlow=freeCashFlow.map((v,i)=>Math.round(v+revenue[i]*0.03));
+  const dilTot=0.05+q("dil")*0.75;                     // 5%..80% over 3y, dilution common
+  const shares=[sharesOut, sharesOut/(1+dilTot*0.6), sharesOut/(1+dilTot*0.85), sharesOut/(1+dilTot)].map(x=>Math.round(x));
+  const de=+(q("de")*3.4).toFixed(2);
+  const equity=Math.max(1, Math.round(marketCap*(0.3+q("eq")*0.8)));
+  const totalDebt=Math.round(equity*de);
+  const cash=Math.round(equity*(0.1+q("cash")*0.9));
+  const cr=+(0.6+q("cr")*2.6).toFixed(2);
+  const currentLiabilities=Math.round(revNew*0.25+1e6);
+  const currentAssets=Math.round(currentLiabilities*cr);
+  const roic=nm>0? +(2+q("ri")*22).toFixed(1) : +(-(1+q("ri")*16)).toFixed(1);
+  const roe =nm>0? +(3+q("re")*30).toFixed(1) : +(-(2+q("re")*20)).toFixed(1);
+  const ps=+(marketCap/revNew).toFixed(2);
+  const pe=nm>0? +(price/((revNew*nm/100)/sharesOut)).toFixed(1) : -1;
+  const pfcf=freeCashFlow[0]>0? +(marketCap/freeCashFlow[0]).toFixed(1) : -1;
+  const evEbitda=operatingIncome[0]>0? +(((marketCap+totalDebt-cash)/operatingIncome[0])).toFixed(1) : -1;
+  const SECTORS=["Technology","Healthcare","Industrials","Consumer","Energy","Biotechnology","Mining","Financials"];
+  const sector=SECTORS[Math.floor(q("sec")*SECTORS.length)];
+  return {
+    symbol:sym, name:sym+" (sample)", sector, industry:"", exchange:row?"":"", price, marketCap, otc:q("otc")>0.92,
+    revenue, grossProfit, operatingIncome, netIncome, shares, operatingCashFlow, freeCashFlow,
+    totalDebt, cash, equity, currentAssets, currentLiabilities,
+    grossMargin:gm, operatingMargin:om, netMargin:nm, roic, roe, debtToEquity:de, currentRatio:cr,
+    ps, pe, pfcf, evEbitda,
+    insiderOwnership:+(q("io")*28).toFixed(1), insiderNet:(q("in")>0.55?1:q("in")<0.3?-1:0),
+    founderLed:q("fl")>0.7, goingConcern:q("gc")>0.9, dataSource:"sample"
+  };
+}
+
+/* ---------- render: watchlist chip + deep modal ---------- */
+function barColor(s){ return s>=70?"var(--green)":s>=45?"var(--amber)":"var(--red)"; }
+function qualityChip(sym,res){
+  return `<button class="qlabel q-${res.label}" title="Quality lens ${res.overall}/100 — click for full scorecard" onclick="event.stopPropagation();openDeep('${sym}')"><span class="qdot"></span>${res.overall} · ${LABEL_NAME[res.label]}</button>`;
+}
+function updateQualityBadge(sym,res){ const c=document.getElementById("q-"+sym); if(c) c.innerHTML=qualityChip(sym,res); }
+
+const CAT_META=[
+  ["financial","Financial Health","25%"],["business","Business Quality","20%"],
+  ["management","Mgmt / Alignment","15%"],["valuation","Valuation","15%"],
+  ["risk","Risk / Red flags","15%"],["momentum","Momentum","5%"],["governance","Governance","5%"]
+];
+function openDeep(sym){
+  document.getElementById("deepBackdrop").classList.add("show");
+  const body=document.getElementById("daBody");
+  if(QUALITY_CACHE[sym]){ renderDeep(QUALITY_CACHE[sym]); return; }
+  body.innerHTML=`<div class="muted" style="padding:34px;text-align:center">Analyzing ${sym}…</div>`;
+  fetchFundamentals(sym).then(f=>{
+    const row=(window.SCORED_BY_SYM||{})[sym]; if(row){ f.rvol=row.rvol; f.gap=row.gap; }
+    const res=computeQuality(f);
+    QUALITY_CACHE[sym]=res; renderDeep(res); updateQualityBadge(sym,res);
+  }).catch(e=>{ body.innerHTML=`<div class="tk-err" style="padding:20px">Could not analyze ${sym}: ${e.message}</div>`; });
+}
+function closeDeep(){ document.getElementById("deepBackdrop").classList.remove("show"); }
+
+function renderDeep(res){
+  const f=res.f;
+  const money=(n)=> n==null?"—":(Math.abs(n)>=1e9?"$"+(n/1e9).toFixed(2)+"B":Math.abs(n)>=1e6?"$"+(n/1e6).toFixed(1)+"M":"$"+Math.round(n).toLocaleString());
+  const clsTag = res.classification==="Investable"?"invest":res.classification==="Speculative"?"spec":"hard";
+  const cats=CAT_META.map(([k,name,w])=>{
+    const s=res.cats[k];
+    return `<div class="cat-row"><div class="cl">${name}<span class="cw">${w}</span></div>
+      <div class="cbar"><i style="width:${s}%;background:${barColor(s)}"></i></div>
+      <div class="cv">${s}</div></div>`;
+  }).join("");
+  const flagList = res.flags.length
+    ? `<ul class="flaglist bad">`+res.flags.map(x=>`<li><span class="sev ${x.sev}">${x.sev}</span>${x.d}</li>`).join("")+`</ul>`
+    : `<p class="muted" style="font-size:13px;margin:4px 0">No major red flags detected on the checked criteria.</p>`;
+  const posList = res.positives.length
+    ? `<ul class="flaglist good">`+res.positives.map(x=>`<li>${x}</li>`).join("")+`</ul>`
+    : `<p class="muted" style="font-size:13px;margin:4px 0">No standout positive signals.</p>`;
+  const srcLine = res.dataSource==="live"
+    ? `Fundamentals: live via Financial Modeling Prep.`
+    : `Fundamentals: <b>sample</b> (synthesized from the ticker — add an FMP key on the Watchlist tab for live financials).`
+      + (f.fetchError?` <span style="color:var(--amber)">Live fetch failed: ${f.fetchError}.</span>`:"");
+  const notesLine = res.notes.length? `<br><span class="dim">Not checked: ${res.notes.map(n=>n.replace(/\.$/,"")).join("; ")}.</span>`:"";
+  document.getElementById("daBody").innerHTML=`
+    <div class="da-head">
+      <div class="da-score">
+        <div class="big" style="color:${barColor(res.overall)}">${res.overall}</div>
+        <div class="lbl">Quality score</div>
+      </div>
+      <div class="da-meta">
+        <h2>${f.symbol} <span class="muted" style="font-size:15px;font-weight:600">${f.name&&f.name!==f.symbol?("· "+f.name):""}</span></h2>
+        <div class="sub">${[f.sector||"—",f.exchange||"",f.price?("$"+Number(f.price).toFixed(2)):"",f.marketCap?("mkt cap "+money(f.marketCap)):""].filter(Boolean).join(" · ")}</div>
+        <div class="da-tags">
+          <span class="qlabel q-${res.label}" style="cursor:default"><span class="qdot"></span>${LABEL_NAME[res.label]} · ${LABEL_DESC[res.label]}</span>
+          <span class="da-tag ${clsTag}">${res.classification}</span>
+        </div>
+      </div>
+    </div>
+    <div class="da-cats" style="margin-top:14px">${cats}</div>
+    <div class="da-mos">
+      <div class="m"><div class="k">Intrinsic est. (FCF×14)</div><div class="v">${res.iv?("$"+res.iv.toFixed(2)):"n/a"}</div></div>
+      <div class="m"><div class="k">Margin of safety</div><div class="v" style="color:${res.mos==null?"var(--muted)":res.mos>=0?"var(--green)":"var(--red)"}">${res.mos==null?"n/a":(res.mos>=0?"+":"")+res.mos.toFixed(0)+"%"}</div></div>
+      <div class="m"><div class="k">Net cash</div><div class="v" style="color:${res.netCash==null?"var(--muted)":res.netCash>0?"var(--green)":"var(--red)"}">${res.netCash==null?"—":money(res.netCash)}</div></div>
+    </div>
+    <div class="da-flags">
+      <div><h3>Red flags</h3>${flagList}</div>
+      <div><h3>Positive signals</h3>${posList}</div>
+    </div>
+    <div class="da-summary">${res.summary}</div>
+    <div class="dasrc">${srcLine}${notesLine}<br>Deterministic, rule-based scoring — educational research only, not investment advice or a recommendation to buy, sell, or hold.</div>`;
+}
+
+/* ---------- render: Quality Lens methodology (scoring page) ---------- */
+function renderQualityMethodology(){
+  const box=document.getElementById("qualWeights"); if(!box) return;
+  box.innerHTML="";
+  Object.entries(QUALITY.WEIGHTS).forEach(([k,v])=>{
+    box.innerHTML+=`<div class="wt"><div class="lbl">${k}</div>
+      <div class="bar"><i style="width:${v*100}%"></i></div>
+      <div class="pct">${Math.round(v*100)}%</div></div>`;
+  });
+}
+
 /* ---------- BOOT ---------- */
 async function boot(){
   const quotes=await loadUniverse();
@@ -1130,6 +1723,7 @@ async function boot(){
   renderLandingKpis();
   renderPerformance();
   renderScoring();
+  renderQualityMethodology();
   renderRiskInputs();
   document.getElementById("keyMsg").textContent =
     DATA_MODE==="live"?"Live data loaded ✓":
