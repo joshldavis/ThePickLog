@@ -1535,13 +1535,18 @@ function computeQuality(f){
   const business = sRoic*.30 + sMq*.25 + sCons*.25 + sMoat*.20;
 
   /* ---- 3. Management / Alignment (15%) ---- */
-  let sShare=55, dil=null;
+  let sShare=55, dil=null, reverseSplit=false;
   if(shares.length>=2 && shares[shares.length-1]>0){
     dil=(shares[0]-shares[shares.length-1])/shares[shares.length-1]*100;
-    sShare=band(dil,[[-10,100],[0,90],[5,70],[15,45],[30,20],[50,5],[100,0]]);
-    if(dil>50) flags.push({sev:"red",t:"Heavy dilution",d:`Share count up ~${dil.toFixed(0)}% over ${years}y.`});
-    else if(dil>15) flags.push({sev:"yellow",t:"Dilution",d:`Share count up ~${dil.toFixed(0)}% over ${years}y.`});
-    else if(dil<=2) positives.push("Flat-to-shrinking share count — no heavy dilution.");
+    if(dil<=-40){            // a big drop in share count is a reverse split, not buybacks
+      reverseSplit=true; sShare=42;
+      flags.push({sev:"yellow",t:"Reverse split",d:`Share count fell ~${Math.abs(dil).toFixed(0)}% — typically a reverse split to keep a listing, not shareholder-friendly buybacks.`});
+    } else {
+      sShare=band(dil,[[-10,100],[0,90],[5,70],[15,45],[30,20],[50,5],[100,0]]);
+      if(dil>50) flags.push({sev:"red",t:"Heavy dilution",d:`Share count up ~${dil.toFixed(0)}% over ${years}y.`});
+      else if(dil>15) flags.push({sev:"yellow",t:"Dilution",d:`Share count up ~${dil.toFixed(0)}% over ${years}y.`});
+      else if(dil<=2) positives.push("Flat-to-shrinking share count — no heavy dilution.");
+    }
   }
   let sOwn;
   if(f.insiderOwnership==null){ sOwn=50; notes.push("Insider ownership not available from this data source."); }
@@ -1572,6 +1577,7 @@ function computeQuality(f){
   let risk=100;
   if(ocfNeg3) risk-=30; else if(fcf0!=null && fcf0<0) risk-=12;
   if(dil!=null && dil>50) risk-=25; else if(dil!=null && dil>15) risk-=10;
+  if(reverseSplit) risk-=8;
   if(de!=null && de>2.5) risk-=18;
   if(cr!=null && cr<1) risk-=8;
   if(nm!=null && nm<0) risk-=8;
@@ -1633,57 +1639,81 @@ function computeQuality(f){
     iv, mos, netCash, summary, dataSource:f.dataSource, f };
 }
 
-/* ---------- fundamentals: live (FMP) with sample fallback ---------- */
+/* ---------- fundamentals: SEC EDGAR (primary) → FMP → sample ----------
+   Company info (price, sector, market cap) comes from the FMP profile, which
+   is free for ALL symbols incl. micro-caps. Financial statements come from
+   SEC EDGAR (free, every filer); if EDGAR has nothing we try FMP statements
+   (works for large caps free, all on paid); else synthesized sample. Ratios
+   are always computed here from raw figures, so one code path scores all. */
 async function fetchFundamentals(sym){
-  // No key typed and the proxy is known-unconfigured → straight to sample.
-  if(!FMP_KEY && FMP_PROXY_OFF) return mockFundamentals(sym);
+  const num=(x)=> (x==null||!isFinite(x))?null:Number(x);
+  const row=(window.SCORED_BY_SYM||{})[sym]||{};
+
+  // 1) company info — FMP profile (free for all symbols)
+  let P={};
+  try{ const pr=await fmpGet("profile",{symbol:sym}); if(Array.isArray(pr)&&pr[0]) P=pr[0]; }catch{}
+
+  // 2) statements — prefer SEC EDGAR
+  let s=null, source=null, err=null;
   try{
-    // Only 3 statements + profile. Valuation/quality ratios are computed from
-    // these raw figures (whose field names are stable across the FMP API)
-    // instead of FMP's ratio endpoints, so renames there can't break scoring.
-    const [profile,inc,bal,cf]=await Promise.all([
-      fmpGet("profile",{symbol:sym}),
-      fmpGet("income",{symbol:sym,limit:4}),
-      fmpGet("balance",{symbol:sym,limit:2}),
-      fmpGet("cash",{symbol:sym,limit:4})
-    ]);
-    if(!Array.isArray(inc)||!inc.length) throw new Error("no fundamentals");
-    const P=(profile&&profile[0])||{}, I=inc[0]||{}, B0=(bal&&bal[0])||{};
-    const num=(x)=> (x==null||!isFinite(x))?null:Number(x);
-    const price=num(P.price)||((window.SCORED_BY_SYM||{})[sym]||{}).price||0;
-    const equity=num(B0.totalStockholdersEquity)!=null?num(B0.totalStockholdersEquity):num(B0.totalEquity);
-    const totalDebt=num(B0.totalDebt)!=null?num(B0.totalDebt):(num(B0.shortTermDebt)||0)+(num(B0.longTermDebt)||0)||null;
-    const cashBal=num(B0.cashAndCashEquivalents)!=null?num(B0.cashAndCashEquivalents):num(B0.cashAndShortTermInvestments);
-    const cA=num(B0.totalCurrentAssets), cL=num(B0.totalCurrentLiabilities);
-    const shares=num(I.weightedAverageShsOut);
-    const marketCap=num(P.marketCap)!=null?num(P.marketCap):(price&&shares?price*shares:null);
-    const rev=num(I.revenue), ni=num(I.netIncome), oi=num(I.operatingIncome), ebitda=num(I.ebitda);
-    const fcf0=num((cf[0]||{}).freeCashFlow);
-    const investedCap=(totalDebt!=null||equity!=null)?((totalDebt||0)+(equity||0)):null;
-    const f={
-      symbol:sym, name:P.companyName||sym, sector:P.sector||"", industry:P.industry||"",
-      exchange:P.exchange||P.exchangeFullName||"", price, marketCap,
-      otc:/otc|pink|grey/i.test((P.exchange||"")+" "+(P.exchangeFullName||"")),
-      revenue:inc.map(x=>num(x.revenue)), grossProfit:inc.map(x=>num(x.grossProfit)),
-      operatingIncome:inc.map(x=>num(x.operatingIncome)), netIncome:inc.map(x=>num(x.netIncome)),
-      shares:inc.map(x=>num(x.weightedAverageShsOut)),
-      operatingCashFlow:cf.map(x=>num(x.operatingCashFlow)), freeCashFlow:cf.map(x=>num(x.freeCashFlow)),
-      totalDebt, cash:cashBal, equity, currentAssets:cA, currentLiabilities:cL,
-      grossMargin:rev?num(I.grossProfit)/rev*100:null,
-      operatingMargin:rev?oi/rev*100:null,
-      netMargin:rev?ni/rev*100:null,
-      roic:(investedCap>0 && oi!=null)? oi*0.79/investedCap*100 : null,   // NOPAT≈EBIT×(1−21%) ÷ invested capital
-      roe:(equity>0 && ni!=null)? ni/equity*100 : null,
-      debtToEquity:(equity>0 && totalDebt!=null)? totalDebt/equity : null,
-      currentRatio:(cA!=null && cL>0)? cA/cL : null,
-      ps:(marketCap && rev>0)? marketCap/rev : null,
-      pe:(marketCap && ni)? marketCap/ni : null,                          // negative when ni<0 → scorer treats as "no earnings"
-      pfcf:(marketCap && fcf0>0)? marketCap/fcf0 : (fcf0!=null && fcf0<0? -1 : null),
-      evEbitda:(marketCap!=null && ebitda>0)? (marketCap+(totalDebt||0)-(cashBal||0))/ebitda : (ebitda!=null && ebitda<0? -1 : null),
-      insiderOwnership:null, insiderNet:null, founderLed:false, goingConcern:false, dataSource:"live"
-    };
-    return f;
-  }catch(e){ const f=mockFundamentals(sym); f.fetchError=e.message; return f; }
+    const e=await fetch("/api/edgar?symbol="+encodeURIComponent(sym)).then(r=>r.json());
+    if(e && !e.error && Array.isArray(e.revenue) && e.revenue.length){ s=e; source="edgar"; }
+    else if(e && e.error){ err=e.error; }
+  }catch(ex){ err=ex.message; }
+
+  // 3) fallback — FMP statements
+  if(!s && !(!FMP_KEY && FMP_PROXY_OFF)){
+    try{
+      const [inc,bal,cf]=await Promise.all([
+        fmpGet("income",{symbol:sym}), fmpGet("balance",{symbol:sym}), fmpGet("cash",{symbol:sym})]);
+      if(Array.isArray(inc)&&inc.length){
+        const B0=(bal&&bal[0])||{};
+        s={ revenue:inc.map(x=>x.revenue), grossProfit:inc.map(x=>x.grossProfit),
+            operatingIncome:inc.map(x=>x.operatingIncome), netIncome:inc.map(x=>x.netIncome),
+            ebitda:inc.map(x=>x.ebitda), shares:inc.map(x=>x.weightedAverageShsOut),
+            operatingCashFlow:(cf||[]).map(x=>x.operatingCashFlow), freeCashFlow:(cf||[]).map(x=>x.freeCashFlow),
+            totalDebt:B0.totalDebt, cash:B0.cashAndCashEquivalents, equity:B0.totalStockholdersEquity,
+            currentAssets:B0.totalCurrentAssets, currentLiabilities:B0.totalCurrentLiabilities };
+        source="fmp";
+      }
+    }catch(ex){ err=err||ex.message; }
+  }
+
+  // 4) nothing live → synthesized sample
+  if(!s){ const f=mockFundamentals(sym); if(err) f.fetchError=err; return f; }
+
+  // 5) normalize + compute ratios (shared across EDGAR / FMP)
+  const rev=num(s.revenue[0]), ni=num(s.netIncome[0]), oi=num((s.operatingIncome||[])[0]);
+  const ebitda=num((s.ebitda||[])[0]), gp0=num((s.grossProfit||[])[0]), fcf0=num((s.freeCashFlow||[])[0]);
+  const shares0=num(s.shares[0]);
+  const equity=num(s.equity), totalDebt=num(s.totalDebt), cashBal=num(s.cash);
+  const cA=num(s.currentAssets), cL=num(s.currentLiabilities);
+  const price=num(P.price)||row.price||0;
+  const marketCap=num(P.marketCap)!=null?num(P.marketCap):(price&&shares0?price*shares0:null);
+  const investedCap=(totalDebt!=null||equity!=null)?((totalDebt||0)+(equity||0)):null;
+  return {
+    symbol:sym, name:P.companyName||s.name||sym, sector:P.sector||"", industry:P.industry||"",
+    exchange:P.exchange||P.exchangeFullName||"", price, marketCap,
+    otc:/otc|pink|grey/i.test((P.exchange||"")+" "+(P.exchangeFullName||"")),
+    revenue:s.revenue.map(num), grossProfit:(s.grossProfit||[]).map(num),
+    operatingIncome:(s.operatingIncome||[]).map(num), netIncome:s.netIncome.map(num),
+    shares:s.shares.map(num),
+    operatingCashFlow:(s.operatingCashFlow||[]).map(num), freeCashFlow:(s.freeCashFlow||[]).map(num),
+    totalDebt, cash:cashBal, equity, currentAssets:cA, currentLiabilities:cL,
+    grossMargin:rev?gp0/rev*100:null,
+    operatingMargin:rev?oi/rev*100:null,
+    netMargin:rev?ni/rev*100:null,
+    roic:(investedCap>0 && oi!=null)? oi*0.79/investedCap*100 : null,   // NOPAT≈EBIT×(1−21%) ÷ invested capital
+    roe:(equity>0 && ni!=null)? ni/equity*100 : null,
+    debtToEquity:(equity>0 && totalDebt!=null)? totalDebt/equity : null,
+    currentRatio:(cA!=null && cL>0)? cA/cL : null,
+    ps:(marketCap && rev>0)? marketCap/rev : null,
+    pe:(marketCap && ni)? marketCap/ni : null,
+    pfcf:(marketCap && fcf0>0)? marketCap/fcf0 : (fcf0!=null && fcf0<0? -1 : null),
+    evEbitda:(marketCap!=null && ebitda>0)? (marketCap+(totalDebt||0)-(cashBal||0))/ebitda : (ebitda!=null && ebitda<0? -1 : null),
+    insiderOwnership:null, insiderNet:null, founderLed:false, goingConcern:false,
+    dataSource: source==="edgar" ? "edgar" : "live"
+  };
 }
 
 /* Synthesize stable, varied (and mostly penny-stock-realistic) fundamentals
@@ -1776,10 +1806,12 @@ function renderDeep(res){
   const posList = res.positives.length
     ? `<ul class="flaglist good">`+res.positives.map(x=>`<li>${x}</li>`).join("")+`</ul>`
     : `<p class="muted" style="font-size:13px;margin:4px 0">No standout positive signals.</p>`;
-  const srcLine = res.dataSource==="live"
+  const srcLine = res.dataSource==="edgar"
+    ? `Fundamentals: live from <b>SEC EDGAR</b> filings; quote/sector via Financial Modeling Prep.`
+    : res.dataSource==="live"
     ? `Fundamentals: live via Financial Modeling Prep.`
-    : `Fundamentals: <b>sample</b> (synthesized from the ticker — add an FMP key on the Watchlist tab for live financials).`
-      + (f.fetchError?` <span style="color:var(--amber)">Live fetch failed: ${f.fetchError}.</span>`:"");
+    : `Fundamentals: <b>sample</b> (synthesized from the ticker — SEC EDGAR had no usable filings for it).`
+      + (f.fetchError?` <span style="color:var(--amber)">Source note: ${f.fetchError}.</span>`:"");
   const notesLine = res.notes.length? `<br><span class="dim">Not checked: ${res.notes.map(n=>n.replace(/\.$/,"")).join("; ")}.</span>`:"";
   document.getElementById("daBody").innerHTML=`
     <div class="da-head">
@@ -1845,7 +1877,7 @@ async function renderDashboardQuality(scored){
       ${stat("Top movers screened",top.length)}
       ${stat("Avg quality score",avg)}
       ${stat("Flagged Red / Black",avoid)}
-      ${stat("Fundamentals",qSrc==="live"?"Live":"Sample")}
+      ${stat("Fundamentals",qSrc==="edgar"?"SEC EDGAR":qSrc==="live"?"Live (FMP)":"Sample")}
     </div>
     <table><thead><tr><th>Ticker</th><th>Tier</th><th class="num">Momentum</th><th class="num">Price</th><th>Quality</th><th>Class</th></tr></thead>
     <tbody>${rows}</tbody></table>
