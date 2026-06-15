@@ -97,9 +97,21 @@ def _yf():
     except ImportError:
         sys.exit("yfinance not installed. Run:  pip install yfinance")
 
-def fetch_one(yf, symbol):
-    """Return dict of price/prev/vol/avg/float for a symbol, or None."""
-    info = yf.Ticker(symbol).info
+def fetch_one(yf, symbol, retries=3):
+    """Return dict of price/prev/vol/avg/float for a symbol, or None.
+    yfinance .info is intermittently throttled on CI, so retry with backoff."""
+    info = None
+    for attempt in range(retries):
+        try:
+            info = yf.Ticker(symbol).info
+            if info and (info.get("regularMarketPrice") or info.get("currentPrice")):
+                break
+        except Exception:
+            if attempt == retries - 1:
+                raise
+        time.sleep(1.5 * (attempt + 1))  # 1.5s, 3s, 4.5s backoff
+    if not info:
+        return None
     price = info.get("regularMarketPrice") or info.get("currentPrice")
     prev  = info.get("regularMarketPreviousClose") or info.get("previousClose")
     vol   = info.get("regularMarketVolume") or info.get("volume")
@@ -144,15 +156,21 @@ def cmd_scan(sample=False):
     else:
         yf = _yf()
         regime = market_regime(yf)
+        fetched = 0
         for sym in CONFIG["UNIVERSE"]:
             try:
                 q = fetch_one(yf, sym)
                 if not q: print(f"  skip {sym}: no price"); continue
+                fetched += 1
                 s = score_inputs(q["price"], q["prev"], q["vol"], q["avg"], q["float_shares"])
                 s["ticker"] = sym; rows.append(s)
                 time.sleep(0.4)  # be gentle with Yahoo
             except Exception as e:
                 print(f"  skip {sym}: {type(e).__name__} {str(e)[:80]}")
+        # Total data outage → fail loudly so the run is flagged, not a silent gap.
+        if fetched == 0:
+            sys.exit("ERROR: data feed returned nothing for the entire universe "
+                     "(likely throttled). No picks logged for today — run will be marked failed.")
     rows = [s for s in rows if f["price_min"] <= s["price_at_screen"] <= f["price_max"]]
     rows.sort(key=lambda s: s["score"], reverse=True)
 

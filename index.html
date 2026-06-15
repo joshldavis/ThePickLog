@@ -627,8 +627,8 @@
   <div class="wrap">
     <h1>Track record</h1>
     <p class="lead">Every pick logged before the open, graded after 5 trading days — <b>all of them</b>,
-      winners and losers. This is the page most scanners won't show you. <span class="dim">(Prototype data is a
-      worked sample so the grading logic is visible; production fills this from the live grader job.)</span></p>
+      winners and losers. This is the page most scanners won't show you.</p>
+    <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
 
     <div class="grid stat-row" id="perfStats" style="margin:18px 0"></div>
 
@@ -647,8 +647,8 @@
           <li>Outcomes graded by a scheduled job, not by hand</li>
           <li>Worst misses shown right next to best calls</li>
         </ul>
-        <div class="note" style="margin-top:14px">A modest-but-real win rate beats a fake 90%. The number
-          below is sample data — the point is that the column exists and can't be edited.</div>
+        <div class="note" style="margin-top:14px">A modest-but-real win rate beats a fake 90%. Win rate is
+          blank until picks reach the 5-trading-day grading mark, then fills in from the immutable log.</div>
       </div>
     </div>
 
@@ -657,7 +657,7 @@
       <table id="perfTable">
         <thead><tr>
           <th>Date</th><th>Ticker</th><th>Tier</th><th class="num">Score</th>
-          <th class="num">Screen px</th><th class="num">Watch</th><th class="num">Max gain</th><th>Result</th>
+          <th class="num">Screen px</th><th class="num">Watch</th><th class="num">5d net</th><th>Result</th>
         </tr></thead>
         <tbody id="perfBody"></tbody>
       </table>
@@ -988,54 +988,113 @@ function renderWatchlist(rows){
 }
 function stat(k,v){return `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`;}
 
-/* ---------- RENDER: landing KPIs (from sample track record) ---------- */
-function renderLandingKpis(){
-  const g=gradeAll(SAMPLE_PICKS);
-  document.getElementById("landingKpis").innerHTML=`
-    ${stat("Picks logged & graded",g.total)}
-    ${stat("Blended win rate",g.winRate+"%")}
-    ${stat("Best single call","+"+g.best+"%")}`;
+/* ===== LIVE TRACK RECORD — reads the real, immutable pick log ============
+   picks.csv (logged before each open) and outcomes.csv (graded 5 trading
+   days later, cost-adjusted) are committed by the scheduled grader job and
+   served as static files. We render the REAL record; a clearly-labelled
+   sample is shown only if those files can't be loaded (e.g. local file://). */
+function parseCSV(txt){
+  const lines=txt.trim().split(/\r?\n/); if(lines.length<2) return [];
+  const split=(l)=>{ const out=[]; const re=/("(?:[^"]|"")*"|[^,]*)(,|$)/g; let m;
+    while((m=re.exec(l))){ out.push(m[1].replace(/^"|"$/g,"").replace(/""/g,'"')); if(m[2]==="") break; } return out; };
+  const head=split(lines[0]);
+  return lines.slice(1).map(l=>{ const c=split(l); const o={}; head.forEach((h,i)=>o[h]=c[i]); return o; });
+}
+let _trCache=null;
+function getTrackRecord(){
+  if(_trCache) return _trCache;
+  _trCache=(async()=>{
+    try{
+      const [pT,oT]=await Promise.all([
+        fetch("picks.csv",{cache:"no-store"}).then(r=>r.ok?r.text():Promise.reject("picks "+r.status)),
+        fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
+      ]);
+      const picks=parseCSV(pT).filter(p=>p.pick_id&&p.ticker);
+      if(!picks.length) throw new Error("empty picks.csv");
+      return {real:true, picks, outcomes: oT?parseCSV(oT):[]};
+    }catch(e){ return {real:false, err:String(e)}; }
+  })();
+  return _trCache;
+}
+function aggregateReal(picks, outcomes){
+  const byId={}; outcomes.forEach(o=>{ byId[o.pick_id]=o; });
+  const graded=picks.filter(p=>byId[p.pick_id]);
+  const wins=graded.filter(p=>byId[p.pick_id].win==="1").length;
+  const rets=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_5dclose_net)).filter(isFinite);
+  const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
+  graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(byId[p.pick_id].win==="1") byTier[t][1]++; } });
+  return { total:picks.length, graded:graded.length,
+    winRate: graded.length? Math.round(wins/graded.length*100): null,
+    best: rets.length? Math.max(...rets): null,
+    days: [...new Set(picks.map(p=>p.trading_date))].sort(), byId, byTier };
 }
 
-/* ---------- PERFORMANCE aggregation ---------- */
+/* ---------- legacy sample aggregation (fallback only) ---------- */
 function gradeAll(picks){
   const total=picks.length;
   const wins=picks.filter(p=>p[5]).length;
   const best=Math.max(...picks.map(p=>p[4]));
-  const avgMax=(picks.reduce((s,p)=>s+p[4],0)/total).toFixed(1);
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
   picks.forEach(p=>{const t=tierOf(p[2]); byTier[t][0]++; if(p[5])byTier[t][1]++;});
-  return {total,wins,winRate:Math.round(wins/total*100),best,avgMax,byTier};
+  return {total,wins,winRate:Math.round(wins/total*100),best,byTier};
 }
-function renderPerformance(){
-  const g=gradeAll(SAMPLE_PICKS);
+
+/* ---------- RENDER: landing KPIs ---------- */
+async function renderLandingKpis(){
+  const el=document.getElementById("landingKpis"); if(!el) return;
+  const tr=await getTrackRecord();
+  if(!tr.real){ const g=gradeAll(SAMPLE_PICKS);
+    el.innerHTML=`${stat("Picks (sample)",g.total)}${stat("Blended win rate",g.winRate+"%")}${stat("Best single call","+"+g.best+"%")}`; return; }
+  const g=aggregateReal(tr.picks,tr.outcomes);
+  el.innerHTML=`
+    ${stat("Picks logged", g.total)}
+    ${stat("Blended win rate", g.winRate==null? "Grading soon" : g.winRate+"%")}
+    ${stat(g.best!=null?"Best 5d (net)":"Trading days", g.best!=null? (g.best>=0?"+":"")+g.best.toFixed(0)+"%" : g.days.length)}`;
+}
+
+/* ---------- RENDER: Track record page ---------- */
+async function renderPerformance(){
+  const tr=await getTrackRecord();
+  const note=document.getElementById("perfNote");
+  if(!tr.real){
+    if(note) note.innerHTML=`<span class="dim">Showing a worked <b>sample</b> (live pick log couldn't be loaded: ${tr.err}). The grading logic below is identical to production.</span>`;
+    const g=gradeAll(SAMPLE_PICKS);
+    document.getElementById("perfStats").innerHTML=`${stat("Total tracked",g.total)}${stat("Win rate",g.winRate+"%")}${stat("Best call","+"+g.best+"%")}${stat("Data","sample")}`;
+    const bt=document.getElementById("byTier"); bt.innerHTML="";
+    ["A","B","C","D"].forEach(t=>{const [n,w]=g.byTier[t];const wr=n?Math.round(w/n*100):0;
+      bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} picks</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`;});
+    const body=document.getElementById("perfBody"); body.innerHTML="";
+    SAMPLE_PICKS.slice().sort((a,b)=>a[0]<b[0]?1:-1).forEach(p=>{const [d,t,sc,px,mg,win]=p;const tier=tierOf(sc);const watch=(px*1.2).toFixed(2);
+      body.innerHTML+=`<tr><td class="dim">${d}</td><td class="tick">${t}</td><td><span class="tier ${tier}">${tier}</span></td><td class="num">${sc.toFixed(1)}</td><td class="num">$${px.toFixed(2)}</td><td class="num">$${watch}</td><td class="num ${mg>=20?'pos':''}">+${mg}%</td><td>${win?'<span class="win">WIN</span>':'<span class="miss">MISS</span>'}</td></tr>`;});
+    return;
+  }
+  const g=aggregateReal(tr.picks,tr.outcomes);
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged, on cost-adjusted open→close returns.`;
   document.getElementById("perfStats").innerHTML=`
-    ${stat("Total tracked",g.total)}
-    ${stat("Win rate",g.winRate+"%")}
-    ${stat("Avg max gain",g.avgMax+"%")}
-    ${stat("Best call","+"+g.best+"%")}`;
-  // by tier
+    ${stat("Picks logged", g.total)}
+    ${stat("Graded", g.graded)}
+    ${stat("Win rate", g.winRate==null? "—" : g.winRate+"%")}
+    ${stat("Best 5d (net)", g.best==null? "—" : (g.best>=0?"+":"")+g.best.toFixed(0)+"%")}`;
   const bt=document.getElementById("byTier"); bt.innerHTML="";
-  ["A","B","C","D"].forEach(t=>{
-    const [n,w]=g.byTier[t]; const wr=n?Math.round(w/n*100):0;
-    bt.innerHTML+=`<div class="wt">
-      <div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} picks</span></div>
-      <div class="bar"><i style="width:${wr}%"></i></div>
-      <div class="pct">${n?wr+'%':'—'}</div></div>`;
-  });
-  // table
+  ["A","B","C","D"].forEach(t=>{ const [n,w]=g.byTier[t]; const wr=n?Math.round(w/n*100):0;
+    bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} graded</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`; });
+  if(!g.graded) bt.innerHTML+=`<p class="muted" style="font-size:13px;margin-top:8px">No graded outcomes yet — the earliest picks reach the 5-trading-day mark shortly, and win-rate-by-tier fills in automatically.</p>`;
   const body=document.getElementById("perfBody"); body.innerHTML="";
-  SAMPLE_PICKS.slice().sort((a,b)=> a[0]<b[0]?1:-1).forEach(p=>{
-    const [d,t,sc,px,mg,win]=p; const tier=tierOf(sc);
-    const watch=(px*(1+CONFIG.WATCH_LEVEL_PCT)).toFixed(2);
+  tr.picks.slice().sort((a,b)=> a.trading_date<b.trading_date?1:(a.trading_date>b.trading_date?-1:0)).forEach(p=>{
+    const o=g.byId[p.pick_id];
+    const px=parseFloat(p.price_at_screen), watch=parseFloat(p.watch_level), sc=parseFloat(p.score);
+    let gainCell, resCell;
+    if(o){ const r5=parseFloat(o.ret_open_5dclose_net);
+      gainCell=`<td class="num ${r5>=0?'pos':'neg'}">${isFinite(r5)?(r5>=0?'+':'')+r5.toFixed(1)+'%':'—'}</td>`;
+      resCell= o.win==="1"? '<span class="win">WIN</span>' : '<span class="miss">MISS</span>';
+    } else { gainCell=`<td class="num dim">pending</td>`; resCell=`<span class="dim">pending</span>`; }
     body.innerHTML+=`<tr>
-      <td class="dim">${d}</td><td class="tick">${t}</td>
-      <td><span class="tier ${tier}">${tier}</span></td>
-      <td class="num">${sc.toFixed(1)}</td>
-      <td class="num">$${px.toFixed(2)}</td>
-      <td class="num">$${watch}</td>
-      <td class="num ${mg>=20?'pos':''}">+${mg}%</td>
-      <td>${win?'<span class="win">WIN</span>':'<span class="miss">MISS</span>'}</td></tr>`;
+      <td class="dim">${p.trading_date}</td><td class="tick">${p.ticker}</td>
+      <td><span class="tier ${(p.tier||'').toUpperCase()}">${p.tier}</span></td>
+      <td class="num">${isFinite(sc)?sc.toFixed(1):'—'}</td>
+      <td class="num">$${isFinite(px)?px.toFixed(2):'—'}</td>
+      <td class="num">$${isFinite(watch)?watch.toFixed(2):'—'}</td>
+      ${gainCell}<td>${resCell}</td></tr>`;
   });
 }
 
