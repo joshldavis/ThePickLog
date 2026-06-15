@@ -204,6 +204,17 @@
   .cat-row .cbar{flex:1;height:9px;background:#ffffff10;border-radius:6px;overflow:hidden}
   .cat-row .cbar>i{display:block;height:100%}
   .cat-row .cv{width:34px;text-align:right;font-family:var(--mono);font-size:13px}
+  .cat-block{margin:7px 0}
+  .cat-block .cat-row{margin:0}
+  .cat-why{margin:2px 0 0 0}
+  .cat-why>summary{cursor:pointer;list-style:none;user-select:none;font-size:11px;color:var(--muted);padding:1px 0 1px 2px}
+  .cat-why>summary::-webkit-details-marker{display:none}
+  .cat-why>summary::before{content:"› ";color:var(--dim)}
+  .cat-why[open]>summary::before{content:"⌄ "}
+  .cat-why>summary:hover{color:var(--text)}
+  .cat-why .why-body{margin:4px 0 8px 8px;padding-left:8px;border-left:1px solid #ffffff14;font-size:11px;color:var(--dim);line-height:1.5}
+  .cat-why .why-body .d{display:block;margin:2px 0}
+  .cat-why .why-body .d b{color:var(--muted);font-weight:600;font-family:inherit}
   .da-flags{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
   @media(max-width:640px){.da-flags{grid-template-columns:1fr}}
   .da-flags h3{font-size:12px;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
@@ -1922,7 +1933,71 @@ function computeQuality(f){
   if(worst) summary+=`Biggest concern: ${worst.d.replace(/\.$/,"")}. `;
   summary+=`Treat this as a research signal to investigate, not a recommendation — verify everything in the filings.`;
 
-  return { symbol:f.symbol, overall, label, classification, cats, flags, positives, notes,
+  /* ---- per-category objective rationale: the exact figures + sub-scores behind each number ----
+     Every category score is a deterministic weighted blend of band-mapped inputs. We expose that
+     arithmetic so a reader can see WHY a score landed where it did, not just the number. */
+  const R0=(x)=> x==null?"n/a":Math.round(x);
+  const sgn=(x,d=0,suf="")=> x==null?"n/a":(x>=0?"+":"")+x.toFixed(d)+suf;
+  const drv=(label,detail,sub,wt)=> `<span class="d"><b>${label}</b> ${detail} → <b>${R0(sub)}</b>/100 ×${wt}</span>`;
+  const line=(txt)=> `<span class="d">${txt}</span>`;
+  const rationale={};
+
+  rationale.financial =
+    drv("Revenue trend", revCagr==null?"n/a":sgn(revCagr,0,"%/yr over "+years+"y"), sRev, "20%")+
+    drv("Free cash flow", fcfMargin==null?"FCF n/a":sgn(fcfMargin,0,"% FCF margin"), sFcf, "25%")+
+    drv("Margins", (gm==null&&om==null&&nm==null)?"n/a":`gross ${gm==null?"–":gm.toFixed(0)+"%"}, op ${om==null?"–":om.toFixed(0)+"%"}, net ${nm==null?"–":nm.toFixed(0)+"%"}`, sMar, "20%")+
+    drv("Leverage", de==null?"n/a":"debt/equity "+de.toFixed(2), sDebt, "20%")+
+    drv("Liquidity", cr==null?"n/a":"current ratio "+cr.toFixed(2), sLiq, "15%");
+
+  rationale.business =
+    drv("Return on capital", (f.roic==null&&f.roe==null)?"n/a":`ROIC ${f.roic==null?"–":f.roic.toFixed(0)+"%"}, ROE ${f.roe==null?"–":f.roe.toFixed(0)+"%"}`, sRoic, "30%")+
+    drv("Margin quality", gm==null?"n/a":"gross margin "+gm.toFixed(0)+"%", sMq, "25%")+
+    drv("Revenue consistency", rev.length>=3?`${rev.length}y of revenue history`:"under 3y of history", sCons, "25%")+
+    drv("Moat proxy", "margin + ROIC blend", sMoat, "20%");
+
+  rationale.management =
+    drv("Share-count discipline", dil==null?"dilution n/a":(reverseSplit?`reverse split (${sgn(dil,0,"%")})`:`shares ${sgn(dil,0,"%")} over ${years}y`), sShare, "30%")+
+    drv("Insider ownership", f.insiderOwnership==null?"not in this feed":f.insiderOwnership.toFixed(0)+"%", sOwn, "30%")+
+    drv("Insider buying", f.insiderNet==null?"not checked":(f.insiderNet>0?"net buying":f.insiderNet<0?"net selling":"neutral"), sIns, "20%")+
+    drv("Leadership stability", f.founderLed?"founder-led":"standard", sStab, "20%");
+
+  { const vp=[];
+    if(vps!=null)  vp.push(drv("P/S", f.ps.toFixed(1)+"×", vps, "avg"));
+    if(vpfcf!=null)vp.push(drv("P/FCF", f.pfcf.toFixed(1)+"×", vpfcf, "avg"));
+    if(vev!=null)  vp.push(drv("EV/EBITDA", f.evEbitda.toFixed(1)+"×", vev, "avg"));
+    if(vpe!=null)  vp.push(drv("P/E", f.pe.toFixed(1)+"×", vpe, "avg"));
+    if(!vp.length) vp.push(line("No positive valuation multiples available → neutral 45 baseline."));
+    if(netCash!=null && netCash>0) vp.push(line("<b>Net cash</b> on the balance sheet → +8 bonus"));
+    if(mos!=null) vp.push(line(`<b>Margin of safety</b> ${sgn(mos,0,"%")} vs a conservative FCF×14 estimate`));
+    rationale.valuation=vp.join("");
+  }
+
+  { const rp=[]; const pen=(c,t)=>{ if(c) rp.push(line("−"+t)); };
+    if(ocfNeg3) pen(true,"30 cash-burn (operating cash flow negative 3y)");
+    else if(fcf0!=null&&fcf0<0) pen(true,"12 negative free cash flow");
+    if(dil!=null&&dil>50) pen(true,"25 heavy dilution");
+    else if(dil!=null&&dil>15) pen(true,"10 dilution");
+    pen(reverseSplit,"8 reverse split");
+    pen(de!=null&&de>2.5,"18 high leverage (D/E > 2.5)");
+    pen(cr!=null&&cr<1,"8 weak liquidity (current ratio < 1)");
+    pen(nm!=null&&nm<0,"8 unprofitable (negative net margin)");
+    pen(f.goingConcern,"40 going-concern doubt in filings");
+    pen(f.otc,"12 OTC listing");
+    pen(f.marketCap!=null&&f.marketCap<50e6,"6 micro-cap (< $50M)");
+    rationale.risk = line("Starts at <b>100</b>; deductions:") + (rp.length?rp.join(""):line("none — clean on the checked risk criteria")) + line(`Final → <b>${R0(risk)}</b>/100`);
+  }
+
+  rationale.momentum = f.rvol==null
+    ? line("Relative volume n/a → neutral 50 baseline. Weighted only 5% — momentum is recognition, not quality.")
+    : (f.rvol>12
+       ? line(`<b>Relative volume</b> ~${f.rvol.toFixed(0)}× normal → capped at <b>35</b> (possible hype/pump). Only 5% of score.`)
+       : line(`<b>Relative volume</b> ~${f.rvol.toFixed(1)}× normal → <b>${R0(momentum)}</b>/100. Only 5% of score — momentum is recognition, not quality.`));
+
+  rationale.governance = complete
+    ? line("Core statements present (revenue, equity, FCF) → <b>70</b>. Filing-timeliness, auditor and restatement checks need a paid filings feed — neutral here.")
+    : line("Some core statements missing or stale → <b>40</b>, treated as a transparency penalty.");
+
+  return { symbol:f.symbol, overall, label, classification, cats, rationale, flags, positives, notes,
     iv, mos, netCash, summary, dataSource:f.dataSource, f };
 }
 
@@ -2083,9 +2158,13 @@ function renderDeep(res){
   const clsTag = res.classification==="Investable"?"invest":res.classification==="Speculative"?"spec":"hard";
   const cats=CAT_META.map(([k,name,w])=>{
     const s=res.cats[k];
-    return `<div class="cat-row"><div class="cl">${name}<span class="cw">${w}</span>${infoBtn("cat-"+k)}</div>
-      <div class="cbar"><i style="width:${s}%;background:${barColor(s)}"></i></div>
-      <div class="cv">${s}</div></div>`;
+    const why=(res.rationale&&res.rationale[k])||"";
+    return `<div class="cat-block">
+      <div class="cat-row"><div class="cl">${name}<span class="cw">${w}</span>${infoBtn("cat-"+k)}</div>
+        <div class="cbar"><i style="width:${s}%;background:${barColor(s)}"></i></div>
+        <div class="cv">${s}</div></div>
+      ${why?`<details class="cat-why"><summary>Why this score</summary><div class="why-body">${why}</div></details>`:""}
+    </div>`;
   }).join("");
   const flagList = res.flags.length
     ? `<ul class="flaglist bad">`+res.flags.map(x=>`<li><span class="sev ${x.sev}">${x.sev}</span>${x.d}</li>`).join("")+`</ul>`
