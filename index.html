@@ -344,14 +344,20 @@
     </div>
 
     <div class="config panel" style="margin-top:18px">
-      <label for="keyIn">Financial Modeling Prep API key (free tier) — paste to pull live quotes for the seed universe:</label>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <input id="keyIn" placeholder="FMP_API_KEY (leave blank for sample data)" />
+      <label for="keyIn">Live market data &amp; fundamentals — served securely via <code>/api/fmp</code></label>
+      <p class="note" style="margin-top:8px">For the deployed app, set <code>FMP_API_KEY</code> in your Vercel
+        environment variables. Quotes and fundamentals are then proxied server-side — <b>the key never reaches
+        the browser</b> (same pattern as the Alpaca keys). No setup needed here.</p>
+      <label for="keyIn" style="display:block;margin-top:12px">Local override <span class="dim" style="font-weight:400">— optional, for running this file on your own machine</span></label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px">
+        <input id="keyIn" placeholder="paste a free, disposable FMP key (blank = use proxy / sample)" />
         <button class="btn ghost" onclick="applyKey()">Load live data</button>
         <span class="dim" id="keyMsg"></span>
       </div>
-      <p class="note">Prototype note: <b>float</b> is approximated from shares-outstanding in the free FMP quote.
-        True public float and short interest come from a paid data source / FINRA in production — see the PRD.</p>
+      <p class="note"><b>Don't paste a key here on the public URL</b> — a browser-side key is visible to anyone.
+        Use the Vercel env var above for the live demo; this field is only for local testing with a throwaway key.
+        Note: <b>float</b> is approximated from shares-outstanding in the free FMP quote; true public float and
+        short interest come from a paid feed / FINRA in production.</p>
     </div>
 
     <div class="config panel" style="margin-top:18px">
@@ -736,7 +742,46 @@ const CONFIG = {
   WATCH_LEVEL_PCT: 0.20,   // +20% reference level used to grade WIN/MISS
   FMP_QUOTE: "https://financialmodelingprep.com/api/v3/quote/"
 };
-let FMP_KEY = ""; // set via the UI
+let FMP_KEY = ""; // optional LOCAL override typed in the UI; normally blank
+const FMP_BASE = "https://financialmodelingprep.com/api/v3/";
+
+/* Single access point for FMP data.
+   - If a key is typed in the UI (local use), call FMP directly from the browser.
+   - Otherwise use the secure server proxy /api/fmp, where the key lives in a
+     Vercel env var (FMP_API_KEY) and never reaches the browser.
+   Once the proxy reports it's unconfigured, we stop pinging it and fall back
+   to sample data so we don't spam failing requests. */
+let FMP_PROXY_OFF = false;
+function fmpPath(fn, p){
+  p = p || {};
+  switch(fn){
+    case "quote":      return "quote/"+encodeURIComponent(p.symbols);
+    case "profile":    return "profile/"+encodeURIComponent(p.symbol);
+    case "income":     return "income-statement/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||4);
+    case "balance":    return "balance-sheet-statement/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||2);
+    case "cash":       return "cash-flow-statement/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||4);
+    case "ratios":     return "ratios/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||1);
+    case "keymetrics": return "key-metrics/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||1);
+    default: throw new Error("unknown fn "+fn);
+  }
+}
+async function fmpGet(fn, p){
+  if(FMP_KEY){                                   // local override — direct call
+    const path=fmpPath(fn,p);
+    const url=FMP_BASE+path+(path.includes("?")?"&":"?")+"apikey="+encodeURIComponent(FMP_KEY);
+    const r=await fetch(url); if(!r.ok) throw new Error("HTTP "+r.status); return r.json();
+  }
+  if(FMP_PROXY_OFF) throw new Error("proxy unconfigured");
+  const qs=new URLSearchParams(Object.assign({fn}, p)).toString();
+  const r=await fetch("/api/fmp?"+qs);
+  let j=null; try{ j=await r.json(); }catch{}
+  if(!r.ok || !j || j.error){
+    const msg=(j&&j.error)||("proxy HTTP "+r.status);
+    if(/not configured/i.test(msg)) FMP_PROXY_OFF=true;   // stop retrying
+    throw new Error(msg);
+  }
+  return j;
+}
 
 /* ---------- SAMPLE DATA (fallback; shape mirrors FMP /quote) ---------- */
 const SAMPLE_QUOTES = [
@@ -829,22 +874,16 @@ function scoreQuote(q){
 /* ---------- DATA LAYER ---------- */
 let DATA_MODE="sample";
 async function loadUniverse(){
-  if(FMP_KEY){
-    try{
-      const url=CONFIG.FMP_QUOTE+CONFIG.UNIVERSE.join(",")+"?apikey="+encodeURIComponent(FMP_KEY);
-      const r=await fetch(url);
-      if(!r.ok) throw new Error("HTTP "+r.status);
-      const j=await r.json();
-      if(!Array.isArray(j)||!j.length) throw new Error("empty response");
-      DATA_MODE="live";
-      return j;
-    }catch(e){
-      DATA_MODE="error:"+e.message;
-      return SAMPLE_QUOTES;
-    }
+  try{
+    const j=await fmpGet("quote",{symbols:CONFIG.UNIVERSE.join(",")});
+    if(!Array.isArray(j)||!j.length) throw new Error("empty response");
+    DATA_MODE="live";
+    return j;
+  }catch(e){
+    // typed a key but it failed → surface the error; otherwise quietly use sample
+    DATA_MODE = FMP_KEY ? "error:"+e.message : "sample";
+    return SAMPLE_QUOTES;
   }
-  DATA_MODE="sample";
-  return SAMPLE_QUOTES;
 }
 
 /* ---------- RENDER: banner ---------- */
@@ -1548,17 +1587,16 @@ function computeQuality(f){
 
 /* ---------- fundamentals: live (FMP) with sample fallback ---------- */
 async function fetchFundamentals(sym){
-  if(!FMP_KEY) return mockFundamentals(sym);
-  const k=encodeURIComponent(FMP_KEY), B=QUALITY.FMP;
-  const u=(p)=>`${B}${p}${p.includes("?")?"&":"?"}apikey=${k}`;
+  // No key typed and the proxy is known-unconfigured → straight to sample.
+  if(!FMP_KEY && FMP_PROXY_OFF) return mockFundamentals(sym);
   try{
     const [profile,inc,bal,cf,rat,km]=await Promise.all([
-      fetch(u(`profile/${sym}`)).then(r=>r.json()),
-      fetch(u(`income-statement/${sym}?period=annual&limit=4`)).then(r=>r.json()),
-      fetch(u(`balance-sheet-statement/${sym}?period=annual&limit=2`)).then(r=>r.json()),
-      fetch(u(`cash-flow-statement/${sym}?period=annual&limit=4`)).then(r=>r.json()),
-      fetch(u(`ratios/${sym}?period=annual&limit=1`)).then(r=>r.json()),
-      fetch(u(`key-metrics/${sym}?period=annual&limit=1`)).then(r=>r.json())
+      fmpGet("profile",{symbol:sym}),
+      fmpGet("income",{symbol:sym,limit:4}),
+      fmpGet("balance",{symbol:sym,limit:2}),
+      fmpGet("cash",{symbol:sym,limit:4}),
+      fmpGet("ratios",{symbol:sym,limit:1}),
+      fmpGet("keymetrics",{symbol:sym,limit:1})
     ]);
     if(!Array.isArray(inc)||!inc.length) throw new Error("no fundamentals");
     const P=(profile&&profile[0])||{}, I=inc[0]||{}, B0=(bal&&bal[0])||{}, R=(rat&&rat[0])||{}, K=(km&&km[0])||{};
