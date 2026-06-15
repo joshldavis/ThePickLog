@@ -45,6 +45,10 @@
   .tbtn.buy{background:var(--green-soft);color:var(--green);border:1px solid #2ec27e55}
   .tbtn.sell{background:var(--red-soft);color:var(--red);border:1px solid #f0506e55}
   .tbtn.flat{background:#ffffff0d;color:var(--text);border:1px solid var(--line)}
+  .tick .held{display:inline-block;margin-left:7px;font-size:10.5px;font-weight:700;font-family:var(--mono);
+    padding:1px 6px;border-radius:999px;cursor:pointer;vertical-align:1px;white-space:nowrap}
+  .held.up{background:var(--green-soft);color:var(--green)}
+  .held.down{background:var(--red-soft);color:var(--red)}
   .tbtn:hover{filter:brightness(1.15)}
   .tbtn:disabled{opacity:.5;cursor:default}
   /* trading status panel */
@@ -918,7 +922,7 @@ function renderWatchlist(rows){
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
       <td class="dim">${i+1}</td>
-      <td class="tick"><span class="tlink" title="Run Buffett-style deep analysis" onclick="event.stopPropagation();openDeep('${r.symbol}')">${r.symbol}</span></td>
+      <td class="tick"><span class="tlink" title="Run Buffett-style deep analysis" onclick="event.stopPropagation();openDeep('${r.symbol}')">${r.symbol}</span><span class="held" id="held-${r.symbol}"></span></td>
       <td><span class="tier ${r.tier}">${r.tier}</span></td>
       <td class="num">
         <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
@@ -1112,6 +1116,7 @@ async function placeOrder(symbol, side){
   }
   toast(`<b>✓ ${side==="buy"?"Bought":"Sold"} ${qty} ${symbol}</b><br>`+
     `order ${o.status||"submitted"} · id ${String(o.id||"").slice(0,8)}…`,"good");
+  setTimeout(()=>refreshHeld(true), 1500);
 }
 
 /* ---------- RISK CONTROLS + POSITION SIZING ---------- */
@@ -1138,6 +1143,34 @@ async function getAccount(maxAgeMs=60000){
   const {ok,data}=await callAlpaca({action:"account"});
   if(ok && data.account && !data.account.code){ ACCT_CACHE={at:Date.now(), data:data.account}; return data.account; }
   return null;
+}
+
+/* ---------- HELD-POSITION AWARENESS ---------- */
+let POS_CACHE={ at:0, data:null };
+async function getPositions(maxAgeMs=30000){
+  if(POS_CACHE.data && Date.now()-POS_CACHE.at < maxAgeMs) return POS_CACHE.data;
+  const {ok,data}=await callAlpaca({action:"positions"});
+  if(ok && Array.isArray(data.positions)){ POS_CACHE={at:Date.now(), data:data.positions}; return data.positions; }
+  return null;
+}
+async function refreshHeld(force){
+  if(force) POS_CACHE={ at:0, data:null };
+  // clear existing pills
+  document.querySelectorAll(".tick .held").forEach(el=>{ el.textContent=""; el.className="held"; el.removeAttribute("title"); el.onclick=null; });
+  const pos=await getPositions();
+  if(!pos) return;
+  pos.forEach(p=>{
+    const el=document.getElementById("held-"+p.symbol);
+    if(!el) return;
+    const sh=Math.round(Number(p.qty)||0);
+    const plpc=Number(p.unrealized_plpc||0)*100;
+    const pl=Number(p.unrealized_pl||0);
+    const up=plpc>=0;
+    el.className="held "+(up?"up":"down");
+    el.textContent=`${sh}sh ${up?"+":""}${plpc.toFixed(1)}%`;
+    el.title=`You hold ${sh} ${p.symbol} @ $${Number(p.avg_entry_price).toFixed(2)} · unrealized ${pl>=0?"+":""}$${pl.toFixed(2)}. Click to set sell qty to your full position.`;
+    el.onclick=(e)=>{ e.stopPropagation(); const q=document.getElementById("qty-"+p.symbol); if(q){ q.value=Math.abs(sh); toast(`Qty set to ${Math.abs(sh)} (your full ${p.symbol} position) — click Sell to close, or Buy to add.`,"info"); } };
+  });
 }
 
 // returns a blocking message string, or null if the order is allowed
@@ -1288,6 +1321,7 @@ async function submitTicket(){
   }
   closeTicket();
   toast(`<b>✓ ${ticket.symbol} ${ticket.side} ${type} order placed</b><br>status ${o.status||"submitted"}`,"good");
+  setTimeout(()=>refreshHeld(true), 1500);
 }
 
 // keep estimate live as the user types qty / limit
@@ -1328,8 +1362,11 @@ async function loadPortfolio(){
     ${stat("Cash",money(a.cash))}
     ${stat("Today P&L",signed(dayPL.toFixed(2))+" ("+signed(dayPct.toFixed(2),"%")+")")}`;
 
-  renderPositions(Array.isArray(pos.data.positions)?pos.data.positions:[]);
+  const positions=Array.isArray(pos.data.positions)?pos.data.positions:[];
+  POS_CACHE={ at:Date.now(), data:positions };   // seed cache + sync watchlist pills
+  renderPositions(positions);
   renderOrders(Array.isArray(ord.data.orders)?ord.data.orders:[]);
+  refreshHeld();
 }
 
 function renderPositions(rows){
@@ -1817,6 +1854,7 @@ async function boot(){
   renderQualityMethodology();
   renderDashboardQuality(scored);   // async — fills the Overview quality panel
   renderRiskInputs();
+  refreshHeld();                     // async — badges any held tickers (needs connected Alpaca)
   document.getElementById("keyMsg").textContent =
     DATA_MODE==="live"?"Live data loaded ✓":
     DATA_MODE.startsWith("error")?"Fetch failed — sample data shown":"";
