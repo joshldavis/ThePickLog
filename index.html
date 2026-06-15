@@ -761,9 +761,9 @@ function fmpPath(fn, p){
   switch(fn){                       // FMP "stable" API — query-param style
     case "profile": return "profile?symbol="+s;
     case "quote":   return "quote?symbol="+s;
-    case "income":  return "income-statement?symbol="+s+"&period=annual&limit="+(p.limit||4);
-    case "balance": return "balance-sheet-statement?symbol="+s+"&period=annual&limit="+(p.limit||2);
-    case "cash":    return "cash-flow-statement?symbol="+s+"&period=annual&limit="+(p.limit||4);
+    case "income":  return "income-statement?symbol="+s;   // period/limit are premium params — omit
+    case "balance": return "balance-sheet-statement?symbol="+s;
+    case "cash":    return "cash-flow-statement?symbol="+s;
     default: throw new Error("unknown fn "+fn);
   }
 }

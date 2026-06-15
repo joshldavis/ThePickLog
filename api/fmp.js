@@ -39,9 +39,11 @@ function buildPath(fn, q) {
   switch (fn) {
     case "profile": return `profile?symbol=${sym}`;
     case "quote":   return `quote?symbol=${sym}`;
-    case "income":  return `income-statement?symbol=${sym}&period=annual&limit=${clampInt(q.limit,1,8,4)}`;
-    case "balance": return `balance-sheet-statement?symbol=${sym}&period=annual&limit=${clampInt(q.limit,1,8,2)}`;
-    case "cash":    return `cash-flow-statement?symbol=${sym}&period=annual&limit=${clampInt(q.limit,1,8,4)}`;
+    // NOTE: period/limit are premium params on FMP — omit them so the free
+    // tier returns its default (~4 years of annual statements).
+    case "income":  return `income-statement?symbol=${sym}`;
+    case "balance": return `balance-sheet-statement?symbol=${sym}`;
+    case "cash":    return `cash-flow-statement?symbol=${sym}`;
     default:        return null;
   }
 }
@@ -69,8 +71,14 @@ export default async function handler(req, res) {
   try {
     const url = BASE + path + (path.includes("?") ? "&" : "?") + "apikey=" + encodeURIComponent(KEY);
     const r = await fetch(url);
-    const data = await r.json();
-    if (!r.ok) return res.status(r.status).json({ error: "FMP upstream error", detail: data });
+    const text = await r.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch { // FMP returns plaintext for paywalled/invalid requests (e.g. "Premium ...")
+      return res.status(502).json({ error: "FMP non-JSON response (often a premium-only endpoint)", detail: text.slice(0, 160) });
+    }
+    if (!r.ok || (data && data["Error Message"]))
+      return res.status(r.ok ? 502 : r.status).json({ error: "FMP upstream error", detail: data });
     cache.set(path, { at: Date.now(), data });
     res.setHeader("x-cache", "MISS");
     return res.status(200).json(data);
