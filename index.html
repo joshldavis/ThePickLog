@@ -545,7 +545,9 @@
         <p style="font-size:14px"><b>Price band</b> — strategy targets roughly $0.50–$10. Outside the band is
           down-weighted, not auto-excluded.</p>
         <div class="note">Tiers: <b>A</b> ≥ 75 · <b>B</b> ≥ 60 · <b>C</b> ≥ 45 · <b>D</b> below.
-          Watch level = +20% from the screen price; on the Track record page, "WIN" = it reached that within 5 trading days.</div>
+          Watch level = +20% from the screen price — a reference only. On the Track record page a pick is a <b>WIN</b> if its
+          cost-adjusted <b>open→close</b> return (enter at the next open, exit that day's close, −2% costs) is positive — the realizable
+          result, deliberately not "ever touched +20%".</div>
       </div>
     </div>
 
@@ -682,7 +684,7 @@
       <table id="perfTable" class="sortable">
         <thead><tr>
           <th>Date <span class="info" data-info="date" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
-          <th class="num">Screen px <span class="info" data-info="screen-px" role="button" tabindex="0">i</span></th><th class="num">Watch <span class="info" data-info="watch" role="button" tabindex="0">i</span></th><th class="num">5d net <span class="info" data-info="5d-net" role="button" tabindex="0">i</span></th><th>Result <span class="info" data-info="result" role="button" tabindex="0">i</span></th>
+          <th class="num">Screen px <span class="info" data-info="screen-px" role="button" tabindex="0">i</span></th><th class="num">Watch <span class="info" data-info="watch" role="button" tabindex="0">i</span></th><th class="num">Net <span class="info" data-info="ocnet" role="button" tabindex="0">i</span></th><th>Result <span class="info" data-info="result" role="button" tabindex="0">i</span></th>
         </tr></thead>
         <tbody id="perfBody"></tbody>
       </table>
@@ -1032,11 +1034,11 @@ const INFO={
   "top-score":{t:"Top score",d:"The highest momentum score in today's screen."},
   "top-ticker":{t:"Top ticker",d:"The single highest-scoring name today."},
   "picks-logged":{t:"Picks logged",d:"Total picks in the immutable public log (picks.csv), each recorded before the open."},
-  "blended-win-rate":{t:"Blended win rate",d:"Share of GRADED picks with a positive cost-adjusted return — every pick counts, winners and losers. Blank until picks reach the 5-trading-day mark."},
-  "best-5d":{t:"Best 5-day (net)",d:"Best single graded pick by realized return from open to the 5-trading-day close, after a 2% cost haircut."},
+  "blended-win-rate":{t:"Blended win rate",d:"Share of GRADED picks with a positive cost-adjusted open→close return — every pick counts, winners and losers. Blank until picks are graded (5 trading days after logging)."},
+  "best-net":{t:"Best net return",d:"Best single graded pick by realized open→close return (next open to that day's close, minus a 2% cost haircut)."},
   "trading-days":{t:"Trading days",d:"Distinct trading days logged so far."},
   graded:{t:"Graded",d:"How many logged picks have reached the 5-trading-day mark and been graded."},
-  "win-rate":{t:"Win rate",d:"Graded wins ÷ graded picks. A win = a positive cost-adjusted 5-day return."},
+  "win-rate":{t:"Win rate",d:"Graded wins ÷ graded picks. A win = a positive cost-adjusted open→close return (enter at the next open, exit at that day's close) — the realizable result, not 'ever touched a level'."},
   data:{t:"Data source",d:"Whether these figures are live or sample/demo data."},
   "top-movers-screened":{t:"Top movers screened",d:"How many of today's highest-momentum names were run through the Quality Lens here."},
   "avg-quality":{t:"Avg quality score",d:"Average Buffett quality score (0–100) across those top movers."},
@@ -1060,8 +1062,8 @@ const INFO={
   "avg-fill":{t:"Avg fill",d:"Average price at which the order actually executed."},
   date:{t:"Date",d:"Trading date the pick was logged — before the open."},
   "screen-px":{t:"Screen price",d:"Price when the pick was screened and logged."},
-  "5d-net":{t:"5-day net",d:"Realized return from the pick day's open to the 5-trading-day close, minus a 2% cost haircut. 'pending' until 5 days pass."},
-  result:{t:"Result",d:"WIN if the 5-day cost-adjusted return was positive, MISS if not. Pending until graded."},
+  ocnet:{t:"Net return (open→close)",d:"The realizable per-pick result: enter at the next open, exit at that day's close, minus a 2% cost haircut. This is what determines WIN/MISS. 'pending' until graded (5 trading days after logging). The 5-day swing return is also recorded in outcomes.csv."},
+  result:{t:"Result",d:"WIN if the cost-adjusted open→close return was positive, MISS if not. Chosen over 'touched +20%' because a stock can spike then collapse — open→close is what a subscriber could actually realize. Pending until graded."},
   cls:{t:"Classification",d:"Buffett 'too hard' tag: Investable, Speculative, or Too Hard (pre-revenue / biotech / mining you can't reliably value)."},
   "cat-financial":{t:"Financial Health — 25% of score",d:"Revenue trend, margins, free cash flow, leverage and liquidity from the statements."},
   "cat-business":{t:"Business Quality — 20%",d:"Returns on capital, margin quality, revenue consistency, and a moat proxy."},
@@ -1143,7 +1145,7 @@ const STAT_INFO={
   "Universe screened":"universe-screened","Actionable (A/B)":"actionable","Top score":"top-score","Top ticker":"top-ticker",
   "Picks logged":"picks-logged","Picks (sample)":"picks-logged","Total tracked":"picks-logged",
   "Blended win rate":"blended-win-rate","Win rate":"win-rate","Graded":"graded",
-  "Best 5d (net)":"best-5d","Best call":"best-5d","Best single call":"best-5d","Trading days":"trading-days","Data":"data",
+  "Best net":"best-net","Best call":"best-net","Best single call":"best-net","Trading days":"trading-days","Data":"data",
   "Top movers screened":"top-movers-screened","Avg quality score":"avg-quality","Flagged Red / Black":"flagged-rb","Fundamentals":"fundamentals",
   "Equity":"equity","Buying power":"buying-power","Cash":"cash","Today P&L":"today-pl"
 };
@@ -1181,7 +1183,7 @@ function aggregateReal(picks, outcomes){
   const byId={}; outcomes.forEach(o=>{ byId[o.pick_id]=o; });
   const graded=picks.filter(p=>byId[p.pick_id]);
   const wins=graded.filter(p=>byId[p.pick_id].win==="1").length;
-  const rets=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_5dclose_net)).filter(isFinite);
+  const rets=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_close_net)).filter(isFinite);  // realizable open→close (matches WIN)
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
   graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(byId[p.pick_id].win==="1") byTier[t][1]++; } });
   return { total:picks.length, graded:graded.length,
@@ -1210,7 +1212,7 @@ async function renderLandingKpis(){
   el.innerHTML=`
     ${stat("Picks logged", g.total)}
     ${stat("Blended win rate", g.winRate==null? "Grading soon" : g.winRate+"%")}
-    ${stat(g.best!=null?"Best 5d (net)":"Trading days", g.best!=null? (g.best>=0?"+":"")+g.best.toFixed(0)+"%" : g.days.length)}`;
+    ${stat(g.best!=null?"Best net":"Trading days", g.best!=null? (g.best>=0?"+":"")+g.best.toFixed(0)+"%" : g.days.length)}`;
 }
 
 /* ---------- RENDER: Track record page ---------- */
@@ -1235,7 +1237,7 @@ async function renderPerformance(){
     ${stat("Picks logged", g.total)}
     ${stat("Graded", g.graded)}
     ${stat("Win rate", g.winRate==null? "—" : g.winRate+"%")}
-    ${stat("Best 5d (net)", g.best==null? "—" : (g.best>=0?"+":"")+g.best.toFixed(0)+"%")}`;
+    ${stat("Best net", g.best==null? "—" : (g.best>=0?"+":"")+g.best.toFixed(0)+"%")}`;
   const bt=document.getElementById("byTier"); bt.innerHTML="";
   ["A","B","C","D"].forEach(t=>{ const [n,w]=g.byTier[t]; const wr=n?Math.round(w/n*100):0;
     bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} graded</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`; });
@@ -1245,8 +1247,8 @@ async function renderPerformance(){
     const o=g.byId[p.pick_id];
     const px=parseFloat(p.price_at_screen), watch=parseFloat(p.watch_level), sc=parseFloat(p.score);
     let gainCell, resCell;
-    if(o){ const r5=parseFloat(o.ret_open_5dclose_net);
-      gainCell=`<td class="num ${r5>=0?'pos':'neg'}">${isFinite(r5)?(r5>=0?'+':'')+r5.toFixed(1)+'%':'—'}</td>`;
+    if(o){ const rc=parseFloat(o.ret_open_close_net);   // realizable open→close, same basis as WIN
+      gainCell=`<td class="num ${rc>=0?'pos':'neg'}">${isFinite(rc)?(rc>=0?'+':'')+rc.toFixed(1)+'%':'—'}</td>`;
       resCell= o.win==="1"? '<span class="win">WIN</span>' : '<span class="miss">MISS</span>';
     } else { gainCell=`<td class="num dim">pending</td>`; resCell=`<span class="dim">pending</span>`; }
     body.innerHTML+=`<tr>
