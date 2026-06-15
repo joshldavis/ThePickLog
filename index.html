@@ -440,6 +440,18 @@
     </div>
     <p class="dim" id="ordEmpty" style="font-size:13px;margin:10px 2px;display:none">No open orders.</p>
 
+    <h2>Recent orders</h2>
+    <div class="panel" style="padding:6px 6px 0">
+      <table id="histTable">
+        <thead><tr>
+          <th>Submitted</th><th>Ticker</th><th>Side</th><th class="num">Qty</th>
+          <th>Type</th><th class="num">Avg fill</th><th>Status</th>
+        </tr></thead>
+        <tbody id="histBody"></tbody>
+      </table>
+    </div>
+    <p class="dim" id="histEmpty" style="font-size:13px;margin:10px 2px;display:none">No recent orders yet.</p>
+
     <p class="disclaimer">Educational / informational only — not investment advice. Balances and orders
       reflect your Alpaca paper account via the server-side proxy.</p>
   </div>
@@ -1102,6 +1114,7 @@ async function checkAlpaca(){
   }
   const a=data.account||{};
   ACCT_CACHE={ at:Date.now(), data:a };
+  startAlertPolling();
   const mode=data.paper?"paper":"LIVE";
   el.innerHTML=`<span class="ok">✓ Connected (${mode})</span> · buying power `+
     `$${Number(a.buying_power||0).toLocaleString(undefined,{maximumFractionDigits:2})} · `+
@@ -1137,6 +1150,7 @@ async function placeOrder(symbol, side){
   toast(`<b>✓ ${side==="buy"?"Bought":"Sold"} ${qty} ${symbol}</b><br>`+
     `order ${o.status||"submitted"} · id ${String(o.id||"").slice(0,8)}…`,"good");
   setTimeout(()=>refreshHeld(true), 1500);
+  startAlertPolling();
 }
 
 /* ---------- RISK CONTROLS + POSITION SIZING ---------- */
@@ -1342,6 +1356,7 @@ async function submitTicket(){
   closeTicket();
   toast(`<b>✓ ${ticket.symbol} ${ticket.side} ${type} order placed</b><br>status ${o.status||"submitted"}`,"good");
   setTimeout(()=>refreshHeld(true), 1500);
+  startAlertPolling();
 }
 
 // keep estimate live as the user types qty / limit
@@ -1349,6 +1364,35 @@ document.addEventListener("input",e=>{
   if(["tkQty","tkLimit"].includes(e.target.id)) updateTicketFields();
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeTicket(); });
+
+/* ---------- FILL + WATCH-LEVEL ALERTS (polling) ---------- */
+let SEEN_ORDERS={}, WATCH_ALERTED={}, ALERT_POLL=null, ALERTS_PRIMED=false, POLLING=false;
+async function pollAlerts(){
+  if(POLLING) return; POLLING=true;
+  try{
+    const r=await callAlpaca({action:"orders", status:"all"});
+    if(!(r.ok && Array.isArray(r.data.orders))) return; // not connected — stay un-primed
+    r.data.orders.forEach(o=>{
+      const prev=SEEN_ORDERS[o.id]; const st=(o.status||"").toLowerCase();
+      if(ALERTS_PRIMED && prev!==undefined && prev!=="filled" && st==="filled"){
+        const px=o.filled_avg_price?` @ $${Number(o.filled_avg_price).toFixed(2)}`:"";
+        toast(`<b>✓ Filled: ${(o.side||"").toUpperCase()} ${o.filled_qty||o.qty} ${o.symbol}${px}</b>`,"good");
+      }
+      SEEN_ORDERS[o.id]=st;
+    });
+    const pos=await getPositions(15000);
+    if(pos) pos.forEach(p=>{
+      const sc=window.SCORED_BY_SYM&&window.SCORED_BY_SYM[p.symbol]; const watch=sc?sc.watch:0;
+      const cur=Number(p.current_price||0);
+      if(ALERTS_PRIMED && watch>0 && cur>=watch && !WATCH_ALERTED[p.symbol]){
+        WATCH_ALERTED[p.symbol]=true;
+        toast(`<b>▲ ${p.symbol} hit its watch level $${watch.toFixed(2)}</b><br>now $${cur.toFixed(2)}`,"info");
+      }
+    });
+    ALERTS_PRIMED=true;
+  } finally { POLLING=false; }
+}
+function startAlertPolling(){ if(ALERT_POLL) return; ALERT_POLL=setInterval(pollAlerts, 25000); pollAlerts(); }
 
 /* ---------- PORTFOLIO PANEL ---------- */
 function money(n){ return "$"+Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -1360,7 +1404,7 @@ async function loadPortfolio(){
   const [acct,pos,ord]=await Promise.all([
     callAlpaca({action:"account"}),
     callAlpaca({action:"positions"}),
-    callAlpaca({action:"orders",status:"open"})
+    callAlpaca({action:"orders",status:"all"})
   ]);
 
   if(!acct.ok || acct.data.error){
@@ -1385,8 +1429,34 @@ async function loadPortfolio(){
   const positions=Array.isArray(pos.data.positions)?pos.data.positions:[];
   POS_CACHE={ at:Date.now(), data:positions };   // seed cache + sync watchlist pills
   renderPositions(positions);
-  renderOrders(Array.isArray(ord.data.orders)?ord.data.orders:[]);
+
+  const allOrders=Array.isArray(ord.data.orders)?ord.data.orders:[];
+  const CLOSED=["filled","canceled","cancelled","expired","rejected","replaced","done_for_day"];
+  renderOrders(allOrders.filter(o=>!CLOSED.includes((o.status||"").toLowerCase())));
+  renderHistory(allOrders.filter(o=>CLOSED.includes((o.status||"").toLowerCase())).slice(0,25));
   refreshHeld();
+  startAlertPolling();
+}
+
+function renderHistory(rows){
+  const body=document.getElementById("histBody"); body.innerHTML="";
+  document.getElementById("histEmpty").style.display=rows.length?"none":"block";
+  rows.forEach(o=>{
+    const t=o.submitted_at? new Date(o.submitted_at).toLocaleString([], {month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"}):"—";
+    const fill=Number(o.filled_avg_price||0);
+    const st=(o.status||"").toLowerCase();
+    const stCls = st==="filled"?"pos":(st==="canceled"||st==="cancelled"||st==="rejected"||st==="expired")?"neg":"dim";
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td class="dim">${t}</td>
+      <td class="tick">${o.symbol}</td>
+      <td class="${o.side==='buy'?'pos':'neg'}">${(o.side||"").toUpperCase()}</td>
+      <td class="num">${o.filled_qty&&Number(o.filled_qty)>0?o.filled_qty:(o.qty||"—")}</td>
+      <td>${o.type||o.order_type||"—"}</td>
+      <td class="num">${fill>0?money(fill):"—"}</td>
+      <td class="${stCls}">${o.status||"—"}</td>`;
+    body.appendChild(tr);
+  });
 }
 
 function renderPositions(rows){
