@@ -743,11 +743,10 @@ const CONFIG = {
              "SVRN","RKDA","BNZI","CUPR","ATPC","JAGX"],
   WEIGHTS: { float:0.30, rvol:0.35, gap:0.25, price:0.10 }, // must sum to 1
   FILTERS: { priceMin:0.50, priceMax:10, floatMaxM:50 },    // floatMax in millions
-  WATCH_LEVEL_PCT: 0.20,   // +20% reference level used to grade WIN/MISS
-  FMP_QUOTE: "https://financialmodelingprep.com/api/v3/quote/"
+  WATCH_LEVEL_PCT: 0.20    // +20% reference level used to grade WIN/MISS
 };
 let FMP_KEY = ""; // optional LOCAL override typed in the UI; normally blank
-const FMP_BASE = "https://financialmodelingprep.com/api/v3/";
+const FMP_BASE = "https://financialmodelingprep.com/stable/";
 
 /* Single access point for FMP data.
    - If a key is typed in the UI (local use), call FMP directly from the browser.
@@ -758,14 +757,13 @@ const FMP_BASE = "https://financialmodelingprep.com/api/v3/";
 let FMP_PROXY_OFF = false;
 function fmpPath(fn, p){
   p = p || {};
-  switch(fn){
-    case "quote":      return "quote/"+encodeURIComponent(p.symbols);
-    case "profile":    return "profile/"+encodeURIComponent(p.symbol);
-    case "income":     return "income-statement/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||4);
-    case "balance":    return "balance-sheet-statement/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||2);
-    case "cash":       return "cash-flow-statement/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||4);
-    case "ratios":     return "ratios/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||1);
-    case "keymetrics": return "key-metrics/"+encodeURIComponent(p.symbol)+"?period=annual&limit="+(p.limit||1);
+  const s = encodeURIComponent(p.symbol||"");
+  switch(fn){                       // FMP "stable" API — query-param style
+    case "profile": return "profile?symbol="+s;
+    case "quote":   return "quote?symbol="+s;
+    case "income":  return "income-statement?symbol="+s+"&period=annual&limit="+(p.limit||4);
+    case "balance": return "balance-sheet-statement?symbol="+s+"&period=annual&limit="+(p.limit||2);
+    case "cash":    return "cash-flow-statement?symbol="+s+"&period=annual&limit="+(p.limit||4);
     default: throw new Error("unknown fn "+fn);
   }
 }
@@ -879,12 +877,26 @@ function scoreQuote(q){
 let DATA_MODE="sample";
 async function loadUniverse(){
   try{
-    const j=await fmpGet("quote",{symbols:CONFIG.UNIVERSE.join(",")});
-    if(!Array.isArray(j)||!j.length) throw new Error("empty response");
+    // FMP "stable" quote dropped avgVolume & sharesOutstanding, but the company
+    // profile carries price, change, volume, averageVolume and marketCap — every
+    // momentum input — so we screen off the profile (shares ≈ marketCap / price).
+    const results=await Promise.all(CONFIG.UNIVERSE.map(s=>
+      fmpGet("profile",{symbol:s}).then(a=>a&&a[0]).catch(()=>null)));
+    const quotes=results.filter(Boolean).map(p=>{
+      const price=Number(p.price)||0;
+      return {
+        symbol:p.symbol,
+        price,
+        previousClose: price-(Number(p.change)||0),
+        volume: Number(p.volume)||0,
+        avgVolume: Number(p.averageVolume)||0,
+        sharesOutstanding: (price>0 && p.marketCap) ? p.marketCap/price : 0
+      };
+    });
+    if(!quotes.length) throw new Error("no live profiles");
     DATA_MODE="live";
-    return j;
+    return quotes;
   }catch(e){
-    // typed a key but it failed → surface the error; otherwise quietly use sample
     DATA_MODE = FMP_KEY ? "error:"+e.message : "sample";
     return SAMPLE_QUOTES;
   }
@@ -1446,8 +1458,7 @@ async function cancelOrder(id, symbol){
    screen's sample-data fallback). Nothing here is advice.
    ===================================================================== */
 const QUALITY = {
-  WEIGHTS:{ financial:0.25, business:0.20, management:0.15, valuation:0.15, risk:0.15, momentum:0.05, governance:0.05 },
-  FMP:"https://financialmodelingprep.com/api/v3/"
+  WEIGHTS:{ financial:0.25, business:0.20, management:0.15, valuation:0.15, risk:0.15, momentum:0.05, governance:0.05 }
 };
 const QUALITY_CACHE = {};                  // symbol -> computed result (also gates the watchlist chip)
 const LABEL_NAME = { green:"Green", yellow:"Yellow", red:"Red", black:"Black" };
@@ -1627,37 +1638,48 @@ async function fetchFundamentals(sym){
   // No key typed and the proxy is known-unconfigured → straight to sample.
   if(!FMP_KEY && FMP_PROXY_OFF) return mockFundamentals(sym);
   try{
-    const [profile,inc,bal,cf,rat,km]=await Promise.all([
+    // Only 3 statements + profile. Valuation/quality ratios are computed from
+    // these raw figures (whose field names are stable across the FMP API)
+    // instead of FMP's ratio endpoints, so renames there can't break scoring.
+    const [profile,inc,bal,cf]=await Promise.all([
       fmpGet("profile",{symbol:sym}),
       fmpGet("income",{symbol:sym,limit:4}),
       fmpGet("balance",{symbol:sym,limit:2}),
-      fmpGet("cash",{symbol:sym,limit:4}),
-      fmpGet("ratios",{symbol:sym,limit:1}),
-      fmpGet("keymetrics",{symbol:sym,limit:1})
+      fmpGet("cash",{symbol:sym,limit:4})
     ]);
     if(!Array.isArray(inc)||!inc.length) throw new Error("no fundamentals");
-    const P=(profile&&profile[0])||{}, I=inc[0]||{}, B0=(bal&&bal[0])||{}, R=(rat&&rat[0])||{}, K=(km&&km[0])||{};
+    const P=(profile&&profile[0])||{}, I=inc[0]||{}, B0=(bal&&bal[0])||{};
+    const num=(x)=> (x==null||!isFinite(x))?null:Number(x);
+    const price=num(P.price)||((window.SCORED_BY_SYM||{})[sym]||{}).price||0;
+    const equity=num(B0.totalStockholdersEquity)!=null?num(B0.totalStockholdersEquity):num(B0.totalEquity);
+    const totalDebt=num(B0.totalDebt)!=null?num(B0.totalDebt):(num(B0.shortTermDebt)||0)+(num(B0.longTermDebt)||0)||null;
+    const cashBal=num(B0.cashAndCashEquivalents)!=null?num(B0.cashAndCashEquivalents):num(B0.cashAndShortTermInvestments);
+    const cA=num(B0.totalCurrentAssets), cL=num(B0.totalCurrentLiabilities);
+    const shares=num(I.weightedAverageShsOut);
+    const marketCap=num(P.marketCap)!=null?num(P.marketCap):(price&&shares?price*shares:null);
+    const rev=num(I.revenue), ni=num(I.netIncome), oi=num(I.operatingIncome), ebitda=num(I.ebitda);
+    const fcf0=num((cf[0]||{}).freeCashFlow);
+    const investedCap=(totalDebt!=null||equity!=null)?((totalDebt||0)+(equity||0)):null;
     const f={
       symbol:sym, name:P.companyName||sym, sector:P.sector||"", industry:P.industry||"",
-      exchange:P.exchangeShortName||"", price:P.price||((window.SCORED_BY_SYM||{})[sym]||{}).price||0, marketCap:P.mktCap||null,
-      otc:/otc|pink|grey/i.test(P.exchangeShortName||""),
-      revenue:inc.map(x=>x.revenue), grossProfit:inc.map(x=>x.grossProfit),
-      operatingIncome:inc.map(x=>x.operatingIncome), netIncome:inc.map(x=>x.netIncome),
-      shares:inc.map(x=>x.weightedAverageShsOut),
-      operatingCashFlow:cf.map(x=>x.operatingCashFlow), freeCashFlow:cf.map(x=>x.freeCashFlow),
-      totalDebt:B0.totalDebt, cash:B0.cashAndCashEquivalents, equity:B0.totalStockholdersEquity,
-      currentAssets:B0.totalCurrentAssets, currentLiabilities:B0.totalCurrentLiabilities,
-      grossMargin:I.revenue?I.grossProfit/I.revenue*100:null,
-      operatingMargin:I.revenue?I.operatingIncome/I.revenue*100:null,
-      netMargin:I.revenue?I.netIncome/I.revenue*100:null,
-      roic:(K.roic!=null?K.roic*100:(R.returnOnCapitalEmployed!=null?R.returnOnCapitalEmployed*100:null)),
-      roe:(R.returnOnEquity!=null?R.returnOnEquity*100:null),
-      debtToEquity:(R.debtEquityRatio!=null?Math.abs(R.debtEquityRatio):(B0.totalStockholdersEquity>0&&B0.totalDebt!=null?B0.totalDebt/B0.totalStockholdersEquity:null)),
-      currentRatio:(R.currentRatio!=null?R.currentRatio:(B0.totalCurrentLiabilities>0?B0.totalCurrentAssets/B0.totalCurrentLiabilities:null)),
-      ps:R.priceToSalesRatio||K.priceToSalesRatio||null,
-      pe:R.priceEarningsRatio||null,
-      pfcf:R.priceToFreeCashFlowsRatio||null,
-      evEbitda:R.enterpriseValueMultiple||K.enterpriseValueOverEBITDA||null,
+      exchange:P.exchange||P.exchangeFullName||"", price, marketCap,
+      otc:/otc|pink|grey/i.test((P.exchange||"")+" "+(P.exchangeFullName||"")),
+      revenue:inc.map(x=>num(x.revenue)), grossProfit:inc.map(x=>num(x.grossProfit)),
+      operatingIncome:inc.map(x=>num(x.operatingIncome)), netIncome:inc.map(x=>num(x.netIncome)),
+      shares:inc.map(x=>num(x.weightedAverageShsOut)),
+      operatingCashFlow:cf.map(x=>num(x.operatingCashFlow)), freeCashFlow:cf.map(x=>num(x.freeCashFlow)),
+      totalDebt, cash:cashBal, equity, currentAssets:cA, currentLiabilities:cL,
+      grossMargin:rev?num(I.grossProfit)/rev*100:null,
+      operatingMargin:rev?oi/rev*100:null,
+      netMargin:rev?ni/rev*100:null,
+      roic:(investedCap>0 && oi!=null)? oi*0.79/investedCap*100 : null,   // NOPAT≈EBIT×(1−21%) ÷ invested capital
+      roe:(equity>0 && ni!=null)? ni/equity*100 : null,
+      debtToEquity:(equity>0 && totalDebt!=null)? totalDebt/equity : null,
+      currentRatio:(cA!=null && cL>0)? cA/cL : null,
+      ps:(marketCap && rev>0)? marketCap/rev : null,
+      pe:(marketCap && ni)? marketCap/ni : null,                          // negative when ni<0 → scorer treats as "no earnings"
+      pfcf:(marketCap && fcf0>0)? marketCap/fcf0 : (fcf0!=null && fcf0<0? -1 : null),
+      evEbitda:(marketCap!=null && ebitda>0)? (marketCap+(totalDebt||0)-(cashBal||0))/ebitda : (ebitda!=null && ebitda<0? -1 : null),
       insiderOwnership:null, insiderNet:null, founderLed:false, goingConcern:false, dataSource:"live"
     };
     return f;
