@@ -875,31 +875,38 @@ function scoreQuote(q){
 
 /* ---------- DATA LAYER ---------- */
 let DATA_MODE="sample";
+// run an async fn over items with bounded concurrency (avoids bursting the
+// FMP free-tier rate limit with 16 simultaneous requests)
+async function mapLimit(items, limit, fn){
+  const out=new Array(items.length); let i=0;
+  const worker=async()=>{ while(i<items.length){ const idx=i++; try{ out[idx]=await fn(items[idx]); }catch{ out[idx]=null; } } };
+  await Promise.all(Array.from({length:Math.min(limit,items.length)}, worker));
+  return out;
+}
 async function loadUniverse(){
-  try{
-    // FMP "stable" quote dropped avgVolume & sharesOutstanding, but the company
-    // profile carries price, change, volume, averageVolume and marketCap — every
-    // momentum input — so we screen off the profile (shares ≈ marketCap / price).
-    const results=await Promise.all(CONFIG.UNIVERSE.map(s=>
-      fmpGet("profile",{symbol:s}).then(a=>a&&a[0]).catch(()=>null)));
-    const quotes=results.filter(Boolean).map(p=>{
-      const price=Number(p.price)||0;
-      return {
-        symbol:p.symbol,
-        price,
-        previousClose: price-(Number(p.change)||0),
-        volume: Number(p.volume)||0,
-        avgVolume: Number(p.averageVolume)||0,
-        sharesOutstanding: (price>0 && p.marketCap) ? p.marketCap/price : 0
-      };
-    });
-    if(!quotes.length) throw new Error("no live profiles");
-    DATA_MODE="live";
-    return quotes;
-  }catch(e){
-    DATA_MODE = FMP_KEY ? "error:"+e.message : "sample";
-    return SAMPLE_QUOTES;
-  }
+  // FMP "stable" quote dropped avgVolume & sharesOutstanding, but the company
+  // profile carries price, change, volume, averageVolume and marketCap — every
+  // momentum input — so we screen off the profile (shares ≈ marketCap / price).
+  // Server caches profiles 5 min, and we cap concurrency to stay under the rate limit.
+  let lastErr=null;
+  const results=await mapLimit(CONFIG.UNIVERSE, 4, async (s)=>{
+    try{ const a=await fmpGet("profile",{symbol:s}); return (a&&a[0])||null; }
+    catch(e){ lastErr=e.message; return null; }
+  });
+  const quotes=results.filter(Boolean).map(p=>{
+    const price=Number(p.price)||0;
+    return {
+      symbol:p.symbol, price,
+      previousClose: price-(Number(p.change)||0),
+      volume: Number(p.volume)||0,
+      avgVolume: Number(p.averageVolume)||0,
+      sharesOutstanding: (price>0 && p.marketCap) ? p.marketCap/price : 0
+    };
+  });
+  if(quotes.length){ DATA_MODE="live"; return quotes; }
+  // nothing came back: distinguish "no source configured" from "configured but failing"
+  DATA_MODE = (!FMP_KEY && FMP_PROXY_OFF) ? "sample" : "unavailable:"+(lastErr||"no data");
+  return SAMPLE_QUOTES;
 }
 
 /* ---------- RENDER: banner ---------- */
@@ -907,8 +914,9 @@ function renderBanner(){
   const el=document.getElementById("srcBanner");
   if(DATA_MODE==="live"){
     el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live data</b> — quotes pulled from Financial Modeling Prep for the seed universe. Float approximated from shares outstanding.`;
-  }else if(DATA_MODE.startsWith("error")){
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data (live fetch failed: ${DATA_MODE.slice(6)})</b> — showing bundled demo data. Check the API key / rate limit.`;
+  }else if(DATA_MODE.startsWith("unavailable")||DATA_MODE.startsWith("error")){
+    const reason=/429|rate/i.test(DATA_MODE)?"data feed rate limit reached":"live feed temporarily unavailable";
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data — ${reason}</b>. Showing bundled demo data; the live screen refreshes automatically once the feed recovers. <span class="dim">(The Quality Lens still uses live SEC filings.)</span>`;
   }else{
     el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — add a free <code>FMP</code> API key on the Watchlist tab to pull live quotes for the seed universe.`;
   }

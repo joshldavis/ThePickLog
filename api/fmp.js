@@ -22,7 +22,7 @@
 
 const BASE = "https://financialmodelingprep.com/stable/";
 const cache = new Map(); // path -> { at, data }
-const TTL_PRICE = 60 * 1000;
+const TTL_PRICE = 5 * 60 * 1000;  // 5 min — pre-market screen doesn't need finer; protects the free-tier daily cap
 const TTL_FUND = 12 * 60 * 60 * 1000;
 const SHORT_TTL = new Set(["profile", "quote"]); // price-bearing → refresh often
 
