@@ -32,8 +32,6 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error:
         "Alpaca keys not configured. In Vercel set ALPACA_KEY_ID and ALPACA_SECRET_KEY (scope: Production), then redeploy.",
-      // diagnostic: NAMES ONLY (never values) of env vars the function can see
-      seenAlpacaEnvNames: Object.keys(process.env).filter((k) => /ALPACA|APCA/i.test(k)),
     });
   }
 
