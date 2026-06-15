@@ -20,14 +20,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed. Use POST." });
   }
 
-  const KEY = process.env.ALPACA_KEY_ID;
-  const SECRET = process.env.ALPACA_SECRET_KEY;
+  // Accept the proxy's own names plus Alpaca's native names (APCA_*) and a few
+  // common variants, so a reasonable env-var name choice just works.
+  const KEY = process.env.ALPACA_KEY_ID || process.env.APCA_API_KEY_ID
+    || process.env.ALPACA_API_KEY_ID || process.env.ALPACA_API_KEY || process.env.ALPACA_KEY;
+  const SECRET = process.env.ALPACA_SECRET_KEY || process.env.APCA_API_SECRET_KEY
+    || process.env.ALPACA_API_SECRET_KEY || process.env.ALPACA_SECRET;
   const PAPER = (process.env.ALPACA_PAPER ?? "true").toLowerCase() !== "false";
 
   if (!KEY || !SECRET) {
     return res.status(500).json({
       error:
-        "Alpaca keys not configured. Set ALPACA_KEY_ID and ALPACA_SECRET_KEY in Vercel env vars.",
+        "Alpaca keys not configured. In Vercel set ALPACA_KEY_ID and ALPACA_SECRET_KEY (scope: Production), then redeploy.",
     });
   }
 
