@@ -1859,7 +1859,9 @@ async function renderDashboardQuality(scored){
   const done=top.filter(r=>QUALITY_CACHE[r.symbol]);
   const avoid=done.filter(r=>["red","black"].includes(QUALITY_CACHE[r.symbol].label)).length;
   const avg=done.length?Math.round(done.reduce((s,r)=>s+QUALITY_CACHE[r.symbol].overall,0)/done.length):0;
-  const qSrc=done.length?QUALITY_CACHE[done[0].symbol].dataSource:"sample";
+  const realN=done.filter(r=>QUALITY_CACHE[r.symbol].dataSource!=="sample").length;
+  const anyEdgar=done.some(r=>QUALITY_CACHE[r.symbol].dataSource==="edgar");
+  const qSrc=realN ? `${anyEdgar?"SEC EDGAR":"Live"} ${realN}/${done.length}` : "Sample";
   const rows=top.map(r=>{
     const q=QUALITY_CACHE[r.symbol];
     if(!q) return `<tr><td class="tick">${r.symbol}</td><td colspan="5" class="dim">— couldn't score —</td></tr>`;
@@ -1877,7 +1879,7 @@ async function renderDashboardQuality(scored){
       ${stat("Top movers screened",top.length)}
       ${stat("Avg quality score",avg)}
       ${stat("Flagged Red / Black",avoid)}
-      ${stat("Fundamentals",qSrc==="edgar"?"SEC EDGAR":qSrc==="live"?"Live (FMP)":"Sample")}
+      ${stat("Fundamentals",qSrc)}
     </div>
     <table><thead><tr><th>Ticker</th><th>Tier</th><th class="num">Momentum</th><th class="num">Price</th><th>Quality</th><th>Class</th></tr></thead>
     <tbody>${rows}</tbody></table>

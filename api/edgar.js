@@ -53,7 +53,8 @@ function fyMap(G, tags) {
     if (!n || !n.units) continue;
     const unit = n.units.USD ? "USD" : (n.units.shares ? "shares" : Object.keys(n.units)[0]);
     for (const p of (n.units[unit] || [])) {
-      if (!/^10-K/.test(p.form || "") || p.fp !== "FY") continue;
+      // 10-K (domestic), 20-F / 40-F (foreign private issuers) = annual reports
+      if (!/^(10-K|20-F|40-F)/.test(p.form || "") || p.fp !== "FY") continue;
       const fy = p.fy || (p.end ? +p.end.slice(0, 4) : null);
       if (fy == null) continue;
       if (out[fy] == null || p.end > out[fy].end) out[fy] = { val: p.val, end: p.end };
