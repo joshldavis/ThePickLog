@@ -365,7 +365,7 @@
     <div class="panel" id="dashQualityPanel" style="margin-top:26px">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
         <h2 style="margin:0">Quality check on today's top movers</h2>
-        <span class="pill" style="margin-left:auto">Buffett lens</span>
+        <span class="pill" style="margin-left:auto">Buffett-style lens</span>
       </div>
       <p class="muted" style="font-size:13px;margin:6px 0 14px">The highest-momentum names, screened for business
         quality — so you can see at a glance which movers are real businesses and which are likely to rug you.
@@ -421,7 +421,7 @@
           <th>#</th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
           <th class="num">Price <span class="info" data-info="price" role="button" tabindex="0">i</span></th><th class="num">Gap % <span class="info" data-info="gap" role="button" tabindex="0">i</span></th><th class="num">RVOL <span class="info" data-info="rvol" role="button" tabindex="0">i</span></th>
           <th class="num">Float <span class="info" data-info="float" role="button" tabindex="0">i</span></th>
-          <th class="num">Quality <span class="dim" style="font-size:10px">(Buffett lens)</span> <span class="info" data-info="quality" role="button" tabindex="0">i</span></th>
+          <th class="num">Quality <span class="dim" style="font-size:10px">(Buffett-style)</span> <span class="info" data-info="quality" role="button" tabindex="0">i</span></th>
           <th class="num">Watch level <span class="info" data-info="watch" role="button" tabindex="0">i</span></th>
           <th class="num">Trade <span class="dim" style="font-size:10px">(paper)</span> <span class="info" data-info="trade" role="button" tabindex="0">i</span></th>
         </tr></thead>
@@ -575,7 +575,7 @@
         <div class="ri"><b>Gap %</b> Move from yesterday's close into the pre-market. Green up, red down.</div>
         <div class="ri"><b>RVOL</b> Today's volume ÷ the stock's own average. 1× = normal, 5×+ = something's happening.</div>
         <div class="ri"><b>Float</b> Shares actually available to trade. Smaller = more violent moves.</div>
-        <div class="ri"><b>Quality</b> Buffett risk label (Green/Yellow/Red/Black + score). Click for the full scorecard.</div>
+        <div class="ri"><b>Quality</b> Buffett-style risk label (Green/Yellow/Red/Black + score). Click for the full scorecard.</div>
         <div class="ri"><b>Watch level</b> A +20% reference price — used only to grade hits later. Not a target or advice.</div>
       </div>
       <div class="note" style="margin-top:14px">Click anywhere else on a row to expand <i>why it screened</i> —
@@ -1133,14 +1133,14 @@ function renderWatchlist(rows){
 /* ===== metric info tooltips ===== */
 const INFO={
   rank:{t:"Rank",d:"Row position, sorted by the momentum score (highest first)."},
-  ticker:{t:"Ticker",d:"The stock symbol. Click it to run the Buffett Quality Lens deep-analysis."},
+  ticker:{t:"Ticker",d:"The stock symbol. Click it to run the Buffett-style Quality Lens deep-analysis."},
   tier:{t:"Tier",d:"Letter bucket of the momentum score — A ≥75, B ≥60, C ≥45, D below. A 'how strong is the setup' shorthand, not a grade of the business."},
   momentumScore:{t:"Momentum score (0–100)",d:"Weighted blend of float, RVOL, gap and price. High = unusually active for its size. It ranks the screen — it is NOT a buy signal."},
   price:{t:"Price",d:"Latest / screen price per share."},
   gap:{t:"Gap %",d:"Move from yesterday's close into the pre-market. Bigger = more attention; chasing a huge gap is how you buy the top."},
   rvol:{t:"RVOL — relative volume",d:"Today's volume ÷ the stock's own average. 1× is normal, 5×+ is unusual; very high on no news can signal a pump."},
   float:{t:"Float",d:"Shares actually available to trade. Smaller float = thinner supply = sharper moves; under ~5M is the strategy's sweet spot."},
-  quality:{t:"Quality (Buffett lens)",d:"Risk label (Green/Yellow/Red/Black) + a 0–100 quality score from the financials. Click for the full scorecard. A Red/Black next to a hot mover is your 'don't get rugged' flag."},
+  quality:{t:"Quality (Buffett-style lens)",d:"Risk label (Green/Yellow/Red/Black) + a 0–100 quality score from the financials. Click for the full scorecard. A Red/Black next to a hot mover is your 'don't get rugged' flag."},
   watch:{t:"Watch level",d:"A +20% reference price, used only to grade hits later. Not a target or a recommendation."},
   trade:{t:"Trade (paper)",d:"Places a simulated order via your Alpaca paper account — no real money."},
   "universe-screened":{t:"Universe screened",d:"How many names from the seed universe were scored today."},
@@ -1155,7 +1155,7 @@ const INFO={
   "win-rate":{t:"Win rate",d:"Graded wins ÷ graded picks. A win = a positive cost-adjusted open→close return (enter at the next open, exit at that day's close) — the realizable result, not 'ever touched a level'."},
   data:{t:"Data source",d:"Whether these figures are live or sample/demo data."},
   "top-movers-screened":{t:"Top movers screened",d:"How many of today's highest-momentum names were run through the Quality Lens here."},
-  "avg-quality":{t:"Avg quality score",d:"Average Buffett quality score (0–100) across those top movers."},
+  "avg-quality":{t:"Avg quality score",d:"Average Buffett-style quality score (0–100) across those top movers."},
   "flagged-rb":{t:"Flagged Red / Black",d:"How many top movers earned a Red or Black risk label — the names momentum-only scanners would have you chasing."},
   fundamentals:{t:"Fundamentals source",d:"Where the financials behind the quality scores come from: SEC EDGAR (real filings), Live (FMP), or Sample."},
   equity:{t:"Equity",d:"Total value of your Alpaca paper account — cash plus positions."},
