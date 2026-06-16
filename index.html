@@ -321,7 +321,32 @@
   table.sortable th{cursor:pointer}
   table.sortable th:hover{color:var(--text)}
   .sortcaret{color:var(--a);font-size:10px;font-weight:700}
+  /* ---- multiplayer / compete layer ---- */
+  #isAuthBar{display:flex;align-items:center;gap:8px;font-size:13px}
+  #isAuthBar .who{color:var(--a);font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .is-modal-back{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}
+  .is-modal-back.show{display:flex}
+  .is-modal{background:var(--panel,#12161d);border:1px solid var(--line,#222);border-radius:14px;padding:22px;width:360px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .is-modal h3{margin:.1em 0 .5em}
+  .is-modal input{width:100%;box-sizing:border-box;margin:6px 0;padding:10px;border-radius:8px;border:1px solid var(--line,#333);background:var(--bg,#0c0f14);color:var(--text,#e8e8e8)}
+  .is-modal .err{color:var(--red,#ff5a5a);font-size:12px;min-height:14px}
+  .is-modal .row{display:flex;gap:8px;margin-top:10px}
+  .is-pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(120,200,120,.15);color:#7fd18a;border:1px solid rgba(120,200,120,.3)}
+  .lb-table{width:100%;border-collapse:collapse}
+  .lb-table th,.lb-table td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line,#1d222b)}
+  .lb-table td.num,.lb-table th.num{text-align:right}
+  .lb-table tr.me{background:rgba(90,150,255,.10)}
+  .tbtn.star{background:transparent;border:1px solid var(--line,#333);color:#e8c95a}
+  .tbtn.star.on{background:rgba(232,201,90,.15)}
 </style>
+<!-- Supabase JS client (multiplayer demo layer) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  window.IS_SUPABASE = {
+    url: "https://qkdgijiotxxndrfagexr.supabase.co",
+    key: "sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3"
+  };
+</script>
 </head>
 <body>
 <header class="top">
@@ -333,11 +358,12 @@
       <button data-view="portfolio">Portfolio</button>
       <button data-view="scoring">Guide</button>
       <button data-view="performance">Track record</button>
+      <button data-view="compete">Compete</button>
       <button data-view="assistant">Assistant</button>
     </nav>
     <div class="top-cta">
+      <span id="isAuthBar"></span>
       <span class="badge-proto">PROTOTYPE</span>
-      <button class="btn" onclick="go('landing')">Join waitlist</button>
     </div>
   </div>
   <div class="wrap"><div id="srcBanner"></div></div>
@@ -536,6 +562,48 @@
 
     <p class="disclaimer">Educational / informational only — not investment advice. Balances and orders
       reflect your Alpaca paper account via the server-side proxy.</p>
+  </div>
+</section>
+
+<!-- ============ COMPETE (multiplayer demo) ============ -->
+<section class="view" id="view-compete">
+  <div class="wrap">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <h1 style="margin:.2em 0">Compete <span class="is-pill">SIM</span></h1>
+      <button class="btn ghost" style="margin-left:auto" onclick="IS_SIM&&IS_SIM.refreshLeaderboard()">↻ Refresh</button>
+    </div>
+    <p class="lead">Each player starts with <b>$100,000</b> in simulated cash. Buy and sell the screened
+      names from the Watchlist tab at live prices — your portfolio and everyone else's are ranked below by total return.</p>
+
+    <div id="isCompeteSignedOut" class="note" style="margin:14px 0">
+      <b>Sign in to play.</b> Create an account (just an email + password), get $100k in play money,
+      and your trades will count toward the leaderboard.
+      <div style="margin-top:10px"><button class="btn" onclick="IS_SIM&&IS_SIM.openAuth()">Sign in / Sign up</button></div>
+    </div>
+
+    <div id="isCompeteSignedIn" style="display:none">
+      <div class="grid stat-row" id="isMyStats" style="margin:18px 0"></div>
+      <h2>Leaderboard</h2>
+      <div class="panel" style="padding:6px 12px">
+        <table class="lb-table">
+          <thead><tr><th>#</th><th>Player</th><th class="num">Equity</th><th class="num">Return</th><th class="num">Positions</th></tr></thead>
+          <tbody id="lbBody"></tbody>
+        </table>
+      </div>
+      <p class="dim" id="lbEmpty" style="font-size:13px;margin:10px 2px;display:none">No players yet — be the first to trade.</p>
+
+      <h2 style="margin-top:22px">My saved watchlist</h2>
+      <div class="panel" style="padding:12px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+          <input id="wlAddSym" placeholder="Ticker (e.g. PW)" style="width:130px;padding:8px;border-radius:8px;border:1px solid var(--line,#333);background:var(--bg,#0c0f14);color:var(--text,#e8e8e8)" />
+          <input id="wlAddNote" placeholder="Note (optional)" style="flex:1;min-width:160px;padding:8px;border-radius:8px;border:1px solid var(--line,#333);background:var(--bg,#0c0f14);color:var(--text,#e8e8e8)" />
+          <button class="btn" onclick="IS_SIM&&IS_SIM.addWatch()">＋ Save</button>
+        </div>
+        <div id="myWatchList"></div>
+      </div>
+    </div>
+    <p class="disclaimer">Educational / informational only — not investment advice. The Compete mode is a
+      simulation with play money; no real orders are placed.</p>
   </div>
 </section>
 
@@ -1116,6 +1184,7 @@ function renderWatchlist(rows){
           <button class="tbtn buy" onclick="placeOrder('${r.symbol}','buy')">Buy</button>
           <button class="tbtn sell" onclick="placeOrder('${r.symbol}','sell')">Sell</button>
           <button class="tbtn flat" title="Advanced order (limit / stop / bracket)" onclick="openTicket('${r.symbol}','buy',${r.price.toFixed(2)},${r.watch.toFixed(2)})">⚙</button>
+          <button class="tbtn star" id="star-${r.symbol}" title="Save to my watchlist" onclick="IS_SIM&&IS_SIM.toggleWatch('${r.symbol}')">★</button>
         </div></td>`;
     const detail=document.createElement("tr");
     detail.style.display="none";
@@ -1426,7 +1495,11 @@ function go(v){
   document.getElementById("view-"+v).classList.add("active");
   document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
   window.scrollTo(0,0);
-  if(v==="portfolio" && !go._pfLoaded){ go._pfLoaded=true; loadPortfolio(); }
+  if(v==="portfolio"){
+    if(window.IS_SIM && IS_SIM.active){ loadPortfolio(); }       // sim: refresh each open
+    else if(!go._pfLoaded){ go._pfLoaded=true; loadPortfolio(); } // alpaca: lazy once
+  }
+  if(v==="compete" && window.IS_SIM){ IS_SIM.onView(); }
 }
 document.getElementById("tabs").addEventListener("click",e=>{
   if(e.target.dataset.view) go(e.target.dataset.view);
@@ -1480,6 +1553,7 @@ async function checkAlpaca(){
 }
 
 async function placeOrder(symbol, side){
+  if(window.IS_SIM && IS_SIM.active){ return IS_SIM.placeOrderFromRow(symbol, side); }
   const input=document.getElementById("qty-"+symbol);
   const qty=parseInt(input&&input.value,10);
   if(!(qty>0)){ toast("Enter a share quantity greater than 0 for "+symbol+".","bad"); return; }
@@ -1668,6 +1742,14 @@ function updateTicketFields(){
 async function submitTicket(){
   const err=document.getElementById("tkErr"); err.textContent="";
   const type=document.getElementById("tkType").value;
+  if(window.IS_SIM && IS_SIM.active){
+    if(type!=="market"){ err.textContent="Compete (sim) mode supports market orders only. Sign out to use Alpaca for advanced order types."; return; }
+    const q=parseInt(document.getElementById("tkQty").value,10);
+    if(!(q>0)){ err.textContent="Enter a share quantity greater than 0."; return; }
+    const okSim=await IS_SIM.trade(ticket.symbol, ticket.side, q, ticket.price);
+    if(okSim){ closeTicket(); }
+    return;
+  }
   const qty=parseInt(document.getElementById("tkQty").value,10);
   if(!(qty>0)){ err.textContent="Enter a share quantity greater than 0."; return; }
 
@@ -1757,6 +1839,7 @@ function money(n){ return "$"+Number(n||0).toLocaleString(undefined,{minimumFrac
 function signed(n,suffix){ const v=Number(n||0); return (v>=0?"+":"")+v.toLocaleString(undefined,{maximumFractionDigits:2})+(suffix||""); }
 
 async function loadPortfolio(){
+  if(window.IS_SIM && IS_SIM.active){ return IS_SIM.renderPortfolio(); }
   const msg=document.getElementById("pfMsg");
   msg.innerHTML="Loading account…";
   const [acct,pos,ord]=await Promise.all([
@@ -2656,6 +2739,237 @@ go=function(v){ _go(v); if(v==="assistant" && !go._greeted){ go._greeted=true;
   updateChatCtx(); } };
 
 boot();
+</script>
+
+<!-- ===================================================================
+     IgnitionScan — multiplayer / Compete layer (Supabase)
+     Per-user sim portfolios ($100k play money), saved watchlists, and a
+     live leaderboard. picks.csv / outcomes.csv stay the canonical, git-
+     committed track record — this layer only stores user state.
+     =================================================================== -->
+<script>
+(function(){
+  if(!window.supabase || !window.IS_SUPABASE){ console.warn("Supabase not loaded; Compete mode disabled."); return; }
+  const sb = window.supabase.createClient(window.IS_SUPABASE.url, window.IS_SUPABASE.key);
+
+  const IS_SIM = window.IS_SIM = {
+    active:false, user:null, session:null, _saved:new Set(),
+
+    /* ---------- pricing ---------- */
+    async markPrice(sym){
+      sym=String(sym||"").toUpperCase();
+      if(window.LASTPX && window.LASTPX[sym]>0) return Number(window.LASTPX[sym]);
+      try{ const j=await fmpGet("quote",{symbol:sym});
+        const p=Array.isArray(j)?(j[0]&&j[0].price):(j&&j.price);
+        if(p>0) return Number(p);
+      }catch(e){}
+      return null;
+    },
+
+    /* ---------- trading ---------- */
+    async trade(symbol, side, qty, price){
+      symbol=String(symbol||"").toUpperCase();
+      if(!IS_SIM.active){ toast("Sign in (Compete tab) to trade with play money.","bad"); IS_SIM.openAuth(); return false; }
+      let px = price>0 ? Number(price) : await IS_SIM.markPrice(symbol);
+      if(!(px>0)){ toast("No live price for "+symbol+" yet — open the Watchlist tab to load prices.","bad"); return false; }
+      const {data,error}=await sb.rpc("is_execute_trade",{p_ticker:symbol,p_side:side,p_qty:qty,p_price:px});
+      if(error){ toast("<b>✕ "+symbol+" "+side+" failed</b><br>"+(error.message||"rejected"),"bad"); return false; }
+      toast("<b>✓ "+(side==="buy"?"Bought":"Sold")+" "+qty+" "+symbol+"</b><br>@ ~$"+px.toFixed(2)+" · sim","good");
+      IS_SIM.refreshLeaderboard();
+      if(document.getElementById("view-portfolio").classList.contains("active")) IS_SIM.renderPortfolio();
+      return true;
+    },
+    placeOrderFromRow(symbol, side){
+      const input=document.getElementById("qty-"+symbol);
+      const qty=parseInt(input&&input.value,10);
+      if(!(qty>0)){ toast("Enter a share quantity greater than 0 for "+symbol+".","bad"); return; }
+      const px=(window.LASTPX&&window.LASTPX[symbol])||0;
+      return IS_SIM.trade(symbol, side, qty, px);
+    },
+
+    /* ---------- portfolio tab (sim) ---------- */
+    async renderPortfolio(){
+      const msg=document.getElementById("pfMsg");
+      if(!IS_SIM.active){ msg.style.display="block"; msg.innerHTML="Sign in on the <b>Compete</b> tab to view your simulated portfolio."; return; }
+      msg.style.display="block"; msg.innerHTML="Loading your simulated portfolio…";
+      const [pr,po,tr]=await Promise.all([
+        sb.from("is_profiles").select("cash,starting_cash,display_name").maybeSingle(),
+        sb.from("is_positions").select("ticker,qty,avg_cost").order("ticker"),
+        sb.from("is_trades").select("ticker,side,qty,price,executed_at").order("executed_at",{ascending:false}).limit(25)
+      ]);
+      const prof=pr.data||{cash:0,starting_cash:100000};
+      const positions=po.data||[]; const trades=tr.data||[];
+      let invested=0;
+      const rows=[];
+      for(const p of positions){
+        let mark=await IS_SIM.markPrice(p.ticker); if(!(mark>0)) mark=Number(p.avg_cost);
+        sb.rpc("is_cache_quote",{p_ticker:p.ticker,p_price:mark}); // keep leaderboard marks fresh
+        const mv=p.qty*mark, cost=p.qty*Number(p.avg_cost), pl=mv-cost;
+        invested+=mv;
+        rows.push(`<tr><td class="tick">${p.ticker}</td><td class="num">${p.qty}</td>`+
+          `<td class="num">$${Number(p.avg_cost).toFixed(2)}</td><td class="num">$${mark.toFixed(2)}</td>`+
+          `<td class="num">$${mv.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>`+
+          `<td class="num ${pl>=0?'pos':'neg'}">${pl>=0?'+':''}$${Math.abs(pl).toFixed(2)}</td>`+
+          `<td class="num"><button class="tbtn sell" onclick="IS_SIM.trade('${p.ticker}','sell',${p.qty},${mark})">Sell all</button></td></tr>`);
+      }
+      const cash=Number(prof.cash), equity=cash+invested, start=Number(prof.starting_cash||100000), pl=equity-start;
+      msg.style.display="none";
+      document.getElementById("pfStats").innerHTML=
+        stat("Equity","$"+equity.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+
+        stat("Cash","$"+cash.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+
+        stat("Invested","$"+invested.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+
+        stat("Total P&L",(pl>=0?'+':'-')+"$"+Math.abs(pl).toFixed(2)+" ("+(pl>=0?'+':'')+(pl/start*100).toFixed(2)+"%)");
+      document.getElementById("posBody").innerHTML=rows.join("");
+      document.getElementById("posEmpty").style.display=rows.length?"none":"block";
+      // sim has no working orders
+      document.getElementById("ordBody").innerHTML="";
+      const oe=document.getElementById("ordEmpty"); oe.style.display="block"; oe.textContent="Compete mode uses instant market fills — no working orders.";
+      document.getElementById("histBody").innerHTML=trades.map(t=>{
+        const d=new Date(t.executed_at).toLocaleString();
+        return `<tr><td>${d}</td><td class="tick">${t.ticker}</td><td>${t.side}</td><td class="num">${t.qty}</td>`+
+               `<td>market</td><td class="num">$${Number(t.price).toFixed(2)}</td><td>filled</td></tr>`;
+      }).join("");
+      document.getElementById("histEmpty").style.display=trades.length?"none":"block";
+    },
+
+    /* ---------- leaderboard ---------- */
+    async refreshLeaderboard(){
+      if(!IS_SIM.active) return;
+      const {data,error}=await sb.rpc("is_get_leaderboard");
+      const body=document.getElementById("lbBody"), empty=document.getElementById("lbEmpty");
+      if(error||!data){ if(body) body.innerHTML=""; return; }
+      body.innerHTML=data.map((r,i)=>{
+        const ret=Number(r.return_pct||0);
+        return `<tr class="${r.is_me?'me':''}"><td>${i+1}</td><td>${escapeHtml(r.display_name)}${r.is_me?' <span class="is-pill">you</span>':''}</td>`+
+          `<td class="num">$${Number(r.equity).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})}</td>`+
+          `<td class="num ${ret>=0?'pos':'neg'}">${ret>=0?'+':''}${ret.toFixed(2)}%</td>`+
+          `<td class="num">${r.positions_count}</td></tr>`;
+      }).join("");
+      empty.style.display=data.length?"none":"block";
+      const me=data.find(r=>r.is_me), rank=data.findIndex(r=>r.is_me)+1;
+      const ms=document.getElementById("isMyStats");
+      if(me){
+        const ret=Number(me.return_pct||0);
+        ms.innerHTML=stat("My equity","$"+Number(me.equity).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}))+
+          stat("My return",(ret>=0?'+':'')+ret.toFixed(2)+"%")+
+          stat("My rank","#"+rank+" of "+data.length)+
+          stat("Players",String(data.length));
+      } else { ms.innerHTML=""; }
+    },
+
+    /* ---------- saved watchlist ---------- */
+    async loadMyWatch(){
+      const {data}=await sb.from("is_watchlist").select("ticker,note").order("ticker");
+      IS_SIM._saved=new Set((data||[]).map(w=>w.ticker));
+      const box=document.getElementById("myWatchList");
+      if(box){
+        box.innerHTML=(data&&data.length)? data.map(w=>
+          `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line,#1d222b)">
+             <b style="min-width:64px">${escapeHtml(w.ticker)}</b>
+             <span class="dim" style="flex:1">${escapeHtml(w.note||"")}</span>
+             <button class="tbtn flat" onclick="IS_SIM.removeWatch('${w.ticker}')">✕</button></div>`).join("")
+          : `<p class="dim" style="font-size:13px">No saved tickers yet. Star a name on the Watchlist tab, or add one above.</p>`;
+      }
+      IS_SIM.markStars();
+    },
+    markStars(){
+      document.querySelectorAll('[id^="star-"]').forEach(btn=>{
+        const sym=btn.id.slice(5);
+        btn.classList.toggle("on", IS_SIM._saved && IS_SIM._saved.has(sym));
+      });
+    },
+    async toggleWatch(sym){
+      sym=String(sym||"").toUpperCase();
+      if(!IS_SIM.active){ toast("Sign in (Compete tab) to save tickers.","bad"); IS_SIM.openAuth(); return; }
+      if(IS_SIM._saved.has(sym)){ await sb.from("is_watchlist").delete().eq("ticker",sym); }
+      else { await sb.from("is_watchlist").insert({user_id:IS_SIM.user.id, ticker:sym}); toast("★ Saved "+sym,"good"); }
+      await IS_SIM.loadMyWatch();
+    },
+    async removeWatch(sym){ await sb.from("is_watchlist").delete().eq("ticker",String(sym).toUpperCase()); await IS_SIM.loadMyWatch(); },
+    async addWatch(){
+      const s=document.getElementById("wlAddSym"), n=document.getElementById("wlAddNote");
+      const sym=(s.value||"").trim().toUpperCase(); if(!sym){ return; }
+      await sb.from("is_watchlist").upsert({user_id:IS_SIM.user.id, ticker:sym, note:(n.value||"").trim()||null},{onConflict:"user_id,ticker"});
+      s.value=""; n.value=""; toast("★ Saved "+sym,"good"); await IS_SIM.loadMyWatch();
+    },
+
+    /* ---------- view + auth UI ---------- */
+    onView(){
+      const so=document.getElementById("isCompeteSignedOut"), si=document.getElementById("isCompeteSignedIn");
+      if(so&&si){ so.style.display=IS_SIM.active?"none":"block"; si.style.display=IS_SIM.active?"block":"none"; }
+      if(IS_SIM.active){ IS_SIM.refreshLeaderboard(); IS_SIM.loadMyWatch(); }
+    },
+    updateAuthBar(){
+      const bar=document.getElementById("isAuthBar"); if(!bar) return;
+      if(IS_SIM.active){
+        const who=(IS_SIM.user.email||"trader");
+        bar.innerHTML=`<span class="who" title="${escapeHtml(who)}">▮ ${escapeHtml(who)}</span>`+
+          `<button class="btn ghost" onclick="IS_SIM.signOut()">Sign out</button>`;
+      } else {
+        bar.innerHTML=`<button class="btn" onclick="IS_SIM.openAuth()">Sign in</button>`;
+      }
+    },
+    openAuth(){ document.getElementById("isAuthBack").classList.add("show"); document.getElementById("isAuthErr").textContent=""; },
+    closeAuth(){ document.getElementById("isAuthBack").classList.remove("show"); },
+    async signUp(){
+      const email=val("isEmail"), pw=val("isPass"), name=val("isName");
+      const err=document.getElementById("isAuthErr"); err.textContent="";
+      if(!email||!pw){ err.textContent="Enter an email and password."; return; }
+      const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{display_name:name||email.split("@")[0]}}});
+      if(error){ err.textContent=error.message; return; }
+      if(!data.session){ err.textContent="Account created. If email confirmation is on, check your inbox — or ask the owner to disable it for instant access."; return; }
+      IS_SIM.closeAuth();
+    },
+    async signIn(){
+      const email=val("isEmail"), pw=val("isPass");
+      const err=document.getElementById("isAuthErr"); err.textContent="";
+      if(!email||!pw){ err.textContent="Enter an email and password."; return; }
+      const {error}=await sb.auth.signInWithPassword({email,password:pw});
+      if(error){ err.textContent=error.message; return; }
+      IS_SIM.closeAuth();
+    },
+    async signOut(){ await sb.auth.signOut(); }
+  };
+
+  function val(id){ const el=document.getElementById(id); return el?el.value.trim():""; }
+  function escapeHtml(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+  // auth modal (injected so we don't touch more markup)
+  const back=document.createElement("div");
+  back.className="is-modal-back"; back.id="isAuthBack";
+  back.innerHTML=`<div class="is-modal" role="dialog" aria-modal="true">
+      <h3>IgnitionScan — Compete</h3>
+      <p class="dim" style="font-size:13px;margin:.2em 0 .6em">Sign in or create an account. New players get <b>$100,000</b> in simulated cash.</p>
+      <input id="isName" placeholder="Display name (shown on leaderboard)" autocomplete="nickname" />
+      <input id="isEmail" type="email" placeholder="Email" autocomplete="email" />
+      <input id="isPass" type="password" placeholder="Password (min 6 chars)" autocomplete="current-password" />
+      <div class="err" id="isAuthErr"></div>
+      <div class="row">
+        <button class="btn" style="flex:1" onclick="IS_SIM.signIn()">Sign in</button>
+        <button class="btn ghost" style="flex:1" onclick="IS_SIM.signUp()">Create account</button>
+      </div>
+      <div style="text-align:center;margin-top:8px"><button class="btn ghost" onclick="IS_SIM.closeAuth()">Cancel</button></div>
+    </div>`;
+  back.addEventListener("click",e=>{ if(e.target===back) IS_SIM.closeAuth(); });
+  document.body.appendChild(back);
+
+  async function applySession(session){
+    IS_SIM.session=session; IS_SIM.user=(session&&session.user)||null; IS_SIM.active=!!IS_SIM.user;
+    if(IS_SIM.active){
+      const name=(IS_SIM.user.user_metadata&&IS_SIM.user.user_metadata.display_name)||(IS_SIM.user.email||"Trader").split("@")[0];
+      try{ await sb.rpc("is_ensure_profile",{p_display_name:name}); }catch(e){}
+      await IS_SIM.loadMyWatch();
+    } else { IS_SIM._saved=new Set(); }
+    IS_SIM.updateAuthBar(); IS_SIM.markStars();
+    if(document.getElementById("view-compete").classList.contains("active")) IS_SIM.onView();
+    else { const so=document.getElementById("isCompeteSignedOut"), si=document.getElementById("isCompeteSignedIn");
+           if(so&&si){ so.style.display=IS_SIM.active?"none":"block"; si.style.display=IS_SIM.active?"block":"none"; } }
+    if(document.getElementById("view-portfolio").classList.contains("active")) loadPortfolio();
+  }
+
+  sb.auth.getSession().then(({data})=>applySession(data.session));
+  sb.auth.onAuthStateChange((_e,session)=>applySession(session));
+})();
 </script>
 </body>
 </html>
