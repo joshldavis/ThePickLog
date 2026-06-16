@@ -807,6 +807,14 @@
       </div>
     </div>
 
+    <div class="panel" id="calibWrap" style="margin-top:14px;display:none">
+      <h2 style="margin-top:0">Calibration — does a higher score mean a better outcome?</h2>
+      <p class="muted" style="font-size:13px;margin-top:0">The curve that's hardest to fake: for each score
+        band, the share of picks that closed positive (net of costs). A score that's actually predictive rises
+        left&nbsp;→&nbsp;right. If it's flat, the score ranks attention, not edge — and we'll say so.</p>
+      <div id="calib"></div>
+    </div>
+
     <h2>Every logged pick</h2>
     <div class="panel" style="padding:6px 6px 0">
       <table id="perfTable" class="sortable">
@@ -1375,12 +1383,21 @@ function aggregateReal(picks, outcomes){
   const maes=graded.map(p=>parseFloat(byId[p.pick_id].mae_5d)).filter(isFinite);               // worst drawdown — the downside the brief promises to show
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
   graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(byId[p.pick_id].win==="1") byTier[t][1]++; } });
+  // Calibration: % positive by score band — the validity curve (SYNTHESIS 1.3).
+  const bands=[[0,45],[45,55],[55,65],[65,75],[75,85],[85,101]];
+  const calib=bands.map(([lo,hi])=>{
+    const v=graded.filter(p=>{const sc=parseFloat(p.score); return isFinite(sc)&&sc>=lo&&sc<hi;})
+      .map(p=>parseFloat(byId[p.pick_id].ret_open_close_net)).filter(isFinite);
+    return {lo, hi, n:v.length,
+      pos: v.length? Math.round(v.filter(x=>x>0).length/v.length*100): null,
+      mean: _mean(v)};
+  });
   return { total:picks.length, graded:graded.length,
     winRate: graded.length? Math.round(wins/graded.length*100): null,
     best: rets.length? Math.max(...rets): null,
     meanNet: _mean(rets), medianNet: _median(rets),
     pctPos: rets.length? Math.round(rets.filter(x=>x>0).length/rets.length*100): null,
-    mean5d: _mean(r5), meanMae: _mean(maes),
+    mean5d: _mean(r5), meanMae: _mean(maes), calib,
     days: [...new Set(picks.map(p=>p.trading_date))].sort(), byId, byTier };
 }
 
@@ -1445,6 +1462,14 @@ async function renderPerformance(){
   ["A","B","C","D"].forEach(t=>{ const [n,w]=g.byTier[t]; const wr=n?Math.round(w/n*100):0;
     bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} graded</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`; });
   if(!g.graded) bt.innerHTML+=`<p class="muted" style="font-size:13px;margin-top:8px">No graded outcomes yet — the earliest picks reach the 5-trading-day mark shortly, and win-rate-by-tier fills in automatically.</p>`;
+  const cw=document.getElementById("calibWrap"), cb=document.getElementById("calib");
+  if(cw&&cb&&g.graded){ cw.style.display="block"; cb.innerHTML="";
+    g.calib.forEach(c=>{ const lbl=`${c.lo}–${c.hi-1}`;
+      cb.innerHTML+=`<div class="wt"><div class="lbl" style="width:96px">${lbl} <span class="muted" style="font-size:11px">n=${c.n}</span></div>`+
+        `<div class="bar"><i style="width:${c.pos==null?0:c.pos}%"></i></div>`+
+        `<div class="pct">${c.pos==null?'—':c.pos+'%'}</div>`+
+        `<div class="pct" style="width:62px" title="mean net return">${c.mean==null?'—':(c.mean>=0?'+':'')+c.mean.toFixed(1)+'%'}</div></div>`; });
+  } else if(cw){ cw.style.display="none"; }
   const body=document.getElementById("perfBody"); body.innerHTML="";
   tr.picks.slice().sort((a,b)=> a.trading_date<b.trading_date?1:(a.trading_date>b.trading_date?-1:0)).forEach(p=>{
     const o=g.byId[p.pick_id];

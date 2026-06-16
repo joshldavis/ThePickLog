@@ -119,8 +119,15 @@ def fetch_one(yf, symbol, retries=3):
     flt   = info.get("floatShares") or info.get("sharesOutstanding")
     if price is None:
         return None
+    # Group B instrumentation (captured, NOT scored — see VALIDATION-PLAN.md Part 1).
+    # Pulled from the .info dict we already fetched above, so this adds ZERO extra
+    # network calls / throttle risk. Short interest is the one Group-B variable Yahoo
+    # exposes for free; catalyst_type and dilution_flag still need other feeds.
+    si  = info.get("shortPercentOfFloat")
+    si_pct = round(si*100, 2) if isinstance(si, (int, float)) else ""
     return {"symbol":symbol, "price":float(price), "prev":float(prev or 0),
-            "vol":float(vol or 0), "avg":float(avg or 0), "float_shares":int(flt or 0)}
+            "vol":float(vol or 0), "avg":float(avg or 0), "float_shares":int(flt or 0),
+            "short_interest_pct": si_pct}
 
 def market_regime(yf):
     try:
@@ -157,6 +164,7 @@ def cmd_scan(sample=False):
         yf = _yf()
         regime = market_regime(yf)
         fetched = 0
+        si_by_sym = {}  # Group B: short interest captured at scan time, keyed by ticker
         for sym in CONFIG["UNIVERSE"]:
             try:
                 q = fetch_one(yf, sym)
@@ -164,6 +172,7 @@ def cmd_scan(sample=False):
                 fetched += 1
                 s = score_inputs(q["price"], q["prev"], q["vol"], q["avg"], q["float_shares"])
                 s["ticker"] = sym; rows.append(s)
+                si_by_sym[sym] = q.get("short_interest_pct", "")
                 time.sleep(0.4)  # be gentle with Yahoo
             except Exception as e:
                 print(f"  skip {sym}: {type(e).__name__} {str(e)[:80]}")
@@ -193,7 +202,8 @@ def cmd_scan(sample=False):
         append_row(PICKS_CSV, PICK_FIELDS, {
             "pick_id":str(uuid.uuid4()), "published_at":now_iso, "trading_date":today,
             "model_version":MODEL_VERSION, **s,
-            "catalyst_type":"", "dilution_flag":"", "short_interest_pct":"", "market_regime":regime,
+            "catalyst_type":"", "dilution_flag":"",
+            "short_interest_pct": si_by_sym.get(s["ticker"], ""), "market_regime":regime,
         })
     print(f"\nLogged {len(rows)} picks -> {PICKS_CSV}")
 
@@ -250,25 +260,130 @@ def append_outcome(p, note):
         "graded_at":datetime.now(timezone.utc).isoformat(),"entry_open":"","same_day_close":"",
         "ret_open_close_net":"","ret_open_5dclose_net":"","mfe_5d":"","mae_5d":"","win":"","note":note})
 
+def _f(x):
+    try: return float(x)
+    except (TypeError, ValueError): return None
+
 def cmd_report():
     picks = {p["pick_id"]: p for p in read_rows(PICKS_CSV)}
     outs  = [o for o in read_rows(OUTCOMES_CSV) if o.get("ret_open_close_net") not in ("", None)]
     if not outs:
         print("No graded outcomes yet. Run scan daily, then grade after 5 trading days."); return
-    by = {"A":[], "B":[], "C":[], "D":[]}
+
+    # ---- Tier table: return AND downside (MAE) per momentum tier --------------
+    by_ret = {"A":[], "B":[], "C":[], "D":[]}
+    by_mae = {"A":[], "B":[], "C":[], "D":[]}
     for o in outs:
-        p = picks.get(o["pick_id"])
-        if p: by[p["tier"]].append(float(o["ret_open_close_net"]))
+        p = picks.get(o["pick_id"]);  r = _f(o.get("ret_open_close_net"))
+        if not p or r is None: continue
+        by_ret[p["tier"]].append(r)
+        m = _f(o.get("mae_5d"))
+        if m is not None: by_mae[p["tier"]].append(m)
     print(f"\nTier table — net same-day open->close return (after {CONFIG['COST_HAIRCUT_PCT']}% haircut)")
     print(f"  graded picks: {len(outs)}\n")
-    print(f"{'TIER':<6}{'N':>5}{'MEAN%':>9}{'MEDIAN%':>10}{'WIN%':>8}")
+    print(f"{'TIER':<6}{'N':>5}{'MEAN%':>9}{'MEDIAN%':>10}{'WIN%':>8}{'MEAN_MAE%':>11}")
     for t in ["A","B","C","D"]:
-        v = by[t]
-        if not v: print(f"{t:<6}{0:>5}{'-':>9}{'-':>10}{'-':>8}"); continue
+        v = by_ret[t]
+        if not v: print(f"{t:<6}{0:>5}{'-':>9}{'-':>10}{'-':>8}{'-':>11}"); continue
         win = 100*sum(1 for x in v if x>0)/len(v)
-        print(f"{t:<6}{len(v):>5}{statistics.mean(v):>9.2f}{statistics.median(v):>10.2f}{win:>8.1f}")
+        mae = statistics.mean(by_mae[t]) if by_mae[t] else float('nan')
+        print(f"{t:<6}{len(v):>5}{statistics.mean(v):>9.2f}{statistics.median(v):>10.2f}{win:>8.1f}{mae:>11.2f}")
+
+    # ---- Calibration: does a higher raw score => higher % positive? -----------
+    # Finer than tiers; this is the curve that's hardest to fake (SYNTHESIS 1.3).
+    bands = [(0,45),(45,55),(55,65),(65,75),(75,85),(85,101)]
+    buck = {b: [] for b in bands}
+    for o in outs:
+        p = picks.get(o["pick_id"]);  r = _f(o.get("ret_open_close_net"))
+        if not p or r is None: continue
+        sc = _f(p.get("score"))
+        if sc is None: continue
+        for b in bands:
+            if b[0] <= sc < b[1]: buck[b].append(r); break
+    print("\nCalibration — % positive by score band (the validity curve)")
+    print(f"{'BAND':<9}{'N':>5}{'%POS':>8}{'MEAN%':>9}")
+    for b in bands:
+        v = buck[b]; lbl = f"{b[0]}-{b[1]-1}"
+        if not v: print(f"{lbl:<9}{0:>5}{'-':>8}{'-':>9}"); continue
+        pos = 100*sum(1 for x in v if x>0)/len(v)
+        print(f"{lbl:<9}{len(v):>5}{pos:>8.1f}{statistics.mean(v):>9.2f}")
+
     print("\nPASS BAR (VALIDATION-PLAN.md): A>B>C>D monotonic on mean AND median,")
     print("A-tier mean > 0 after costs, >=200 picks, ordering holds out-of-sample.")
+    print("Downside read (SYNTHESIS 1.1): is MEAN_MAE shallower for higher tiers / score bands?")
+    print("Note: the Quality-Lens downside test (Green vs Red MAE) needs quality grades")
+    print("logged into picks.csv first — that's a Group-B instrumentation item (IMPROVEMENTS C2).")
+
+BRIEF_MD = os.path.join(HERE, "brief.md")
+
+def cmd_brief():
+    """Generate an IMPERSONAL, educational morning brief from the latest logged screen.
+    Same content for everyone, objective observations only, no buy/sell language — this
+    keeps it inside the publisher's exclusion (REQUIREMENTS.md §7). NOTE: wiring this to
+    the public site / charging for it still needs securities-counsel review (gate G4,
+    IMPROVEMENTS-v0.3 B4). For now it just writes brief.md for review."""
+    picks = read_rows(PICKS_CSV)
+    if not picks:
+        print("No picks logged yet — run `scan` first."); return
+    latest = max(p["trading_date"] for p in picks)
+    todays = [p for p in picks if p["trading_date"] == latest]
+    todays.sort(key=lambda p: _f(p.get("score")) or 0, reverse=True)
+    regime = todays[0].get("market_regime", "unknown") if todays else "unknown"
+
+    def obs(p):
+        notes = []
+        rvol = _f(p.get("rvol")); fl = _f(p.get("float_shares")); gap = _f(p.get("gap_pct"))
+        si = _f(p.get("short_interest_pct"))
+        if rvol and rvol >= 10: notes.append(f"very high relative volume ({rvol:.0f}×)")
+        elif rvol and rvol >= 5: notes.append(f"elevated relative volume ({rvol:.1f}×)")
+        if fl and fl < 3e6: notes.append(f"thin float ({fl/1e6:.1f}M)")
+        if gap and abs(gap) >= 15: notes.append(f"large {'up' if gap>0 else 'down'}-gap ({gap:+.0f}%)")
+        return "; ".join(notes) or "screened on the published criteria"
+
+    def caution(p):
+        c = []
+        si = _f(p.get("short_interest_pct")); price = _f(p.get("price_at_screen"))
+        gap = _f(p.get("gap_pct")); fl = _f(p.get("float_shares"))
+        if si and si >= 20: c.append(f"high short interest ({si:.0f}% of float) — squeeze-prone and violent both ways")
+        if gap and gap >= 20: c.append("already extended pre-market — chasing buys the top")
+        if fl and fl < 1e6: c.append("ultra-thin float — spreads and slippage can be severe")
+        if price and price < 1: c.append("sub-$1 — heightened manipulation / delisting risk")
+        return c
+
+    L = []
+    L.append(f"# IgnitionScan — Morning Brief · {latest}")
+    L.append("")
+    L.append(f"_Impersonal, educational watchlist — identical for all readers. Market regime: **{regime}**. "
+             f"Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, "
+             f"published criteria. Low-float / low-priced stocks are highly volatile._")
+    L.append("")
+    top = todays[:5]
+    L.append("## What stands out today")
+    for p in top:
+        L.append(f"- **{p['ticker']}** (tier {p['tier']}, score {p['score']}) — {obs(p)}. "
+                 f"Watch level (reference only, +{int(CONFIG['WATCH_LEVEL_PCT']*100)}%): ${p['watch_level']}.")
+    L.append("")
+    cautions = [(p["ticker"], caution(p)) for p in todays if caution(p)]
+    L.append("## Risk area — read before anything")
+    if cautions:
+        for tk, cs in cautions:
+            for c in cs: L.append(f"- **{tk}**: {c}.")
+    else:
+        L.append("- Standard low-float risks apply to every name: wide spreads, fast reversals, and gap-fills. "
+                 "A high score measures activity, not safety.")
+    L.append("")
+    L.append("## How to read this")
+    L.append("- The score answers *“is this moving?”* — not *“is this worth buying?”* Pair it with the Quality "
+             "Lens and the primary filings before doing anything.")
+    L.append("- Every pick above is logged immutably and graded honestly after 5 trading days on the public "
+             "track record — winners and losers.")
+    L.append("")
+    L.append("_Educational / informational only. Not investment advice. The operators may hold positions in "
+             "screened securities. Past performance does not predict future results._")
+    md = "\n".join(L) + "\n"
+    with open(BRIEF_MD, "w") as f: f.write(md)
+    print(md)
+    print(f"\n(Wrote {BRIEF_MD} — NOT published to the live site; charging on this needs G4 legal review.)")
 
 # sample data (price, prev, vol, avg, float_shares) for offline demo
 SAMPLE_QUOTES = [
@@ -281,12 +396,13 @@ SAMPLE_QUOTES = [
 
 def main():
     ap = argparse.ArgumentParser(description="IgnitionScan logger/grader (v0.2, Yahoo Finance)")
-    ap.add_argument("command", choices=["scan","grade","report","demo"])
+    ap.add_argument("command", choices=["scan","grade","report","brief","demo"])
     args = ap.parse_args()
     if   args.command=="scan":   cmd_scan()
     elif args.command=="demo":   cmd_scan(sample=True)
     elif args.command=="grade":  cmd_grade()
     elif args.command=="report": cmd_report()
+    elif args.command=="brief":  cmd_brief()
 
 if __name__ == "__main__":
     main()

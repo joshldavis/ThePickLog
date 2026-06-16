@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+
+# Backtest is exploratory/regenerable — never commit it as if it were the record.
+# The ONLY committed track record is the forward log: picks.csv + outcomes.csv.
+backtest_results.csv
+backtest_picks.csv
+backtest_outcomes.csv
+
+# Generated brief (review locally; publishing needs G4 legal review)
+brief.md
