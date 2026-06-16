@@ -170,6 +170,59 @@
   /* ===== Quality Lens (Buffett-style deep analysis) ===== */
   .tlink{cursor:pointer;border-bottom:1px dashed #ffffff33}
   .tlink:hover{border-bottom-color:currentColor;color:var(--a)}
+
+  /* ===== ticker info drawer ===== */
+  #infoDrawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;z-index:70;
+    background:var(--panel);border-left:1px solid var(--line);box-shadow:-18px 0 50px #000a;
+    transform:translateX(100%);transition:transform .22s ease;display:flex;flex-direction:column}
+  #infoDrawer.show{transform:translateX(0)}
+  #infoOverlay{position:fixed;inset:0;z-index:69;background:#0006;backdrop-filter:blur(2px);
+    display:none}
+  #infoOverlay.show{display:block}
+  .idr-head{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .idr-head .sym{font-size:22px;font-weight:800;letter-spacing:-.02em}
+  .idr-head .nm{font-size:12.5px;color:var(--muted);line-height:1.25}
+  .idr-body{padding:16px 18px;overflow-y:auto;flex:1}
+  .idr-sec{margin:0 0 18px}
+  .idr-sec h4{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+    margin:0 0 9px;font-weight:700}
+  .idr-kv{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+  .idr-kv .kv{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+  .idr-kv .kv .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .idr-kv .kv .v{font-size:15px;font-weight:700;font-family:var(--mono);margin-top:2px}
+  .idr-links{display:flex;flex-wrap:wrap;gap:8px}
+  .idr-links a{font-size:12.5px;color:var(--text);text-decoration:none;background:#ffffff0d;
+    border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-weight:600}
+  .idr-links a:hover{border-color:var(--a);color:var(--a)}
+  .idr-links a::after{content:" ↗";color:var(--dim);font-weight:400}
+  .idr-actions{display:flex;gap:9px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--line)}
+  .idr-actions .btn{flex:1;min-width:120px;text-align:center;font-size:13px;padding:9px 10px}
+  .idr-load{color:var(--muted);font-size:13px;padding:8px 0}
+  .idr-news li{margin:0 0 7px;font-size:13px;line-height:1.35}
+
+  /* ===== assistant chat ===== */
+  #chatFab{position:fixed;right:20px;bottom:20px;z-index:55;background:var(--a);color:#1a0f0a;
+    border:0;border-radius:999px;padding:12px 18px;font:inherit;font-weight:800;font-size:14px;
+    cursor:pointer;box-shadow:0 10px 30px #000a;display:flex;align-items:center;gap:8px}
+  #chatFab:hover{filter:brightness(1.06)}
+  .chat-wrap{display:flex;flex-direction:column;height:min(620px,72vh);
+    background:var(--panel-2);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .chat-log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .chat-msg{max-width:88%;padding:10px 13px;border-radius:12px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+  .chat-msg.user{align-self:flex-end;background:var(--a-soft);border:1px solid #ff6a3d44}
+  .chat-msg.bot{align-self:flex-start;background:var(--panel);border:1px solid var(--line)}
+  .chat-msg.bot b{color:var(--text)}
+  .chat-msg.err{align-self:flex-start;background:var(--red-soft);border:1px solid #f0506e55;color:var(--text)}
+  .chat-typing{align-self:flex-start;color:var(--muted);font-size:13px;padding:4px 6px}
+  .chat-chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
+  .chat-chip{background:#ffffff0d;border:1px solid var(--line);color:var(--text);border-radius:999px;
+    padding:7px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+  .chat-chip:hover{border-color:var(--a);color:var(--a)}
+  .chat-input{display:flex;gap:9px;padding:12px 14px;border-top:1px solid var(--line)}
+  .chat-input textarea{flex:1;resize:none;background:var(--panel);border:1px solid var(--line);
+    color:var(--text);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;max-height:120px}
+  .chat-ctx{font-size:11.5px;color:var(--dim);padding:0 16px 10px;margin-top:-2px}
+  .chat-disc{font-size:11px;color:var(--dim);padding:8px 16px;border-top:1px solid var(--line);background:#ffffff05}
   .qbadge{border:1px solid var(--line);background:#ffffff0d;color:var(--muted);font:inherit;font-size:12px;
     font-weight:700;padding:5px 9px;border-radius:8px;cursor:pointer;white-space:nowrap}
   .qbadge:hover{filter:brightness(1.25);color:var(--text)}
@@ -280,6 +333,7 @@
       <button data-view="portfolio">Portfolio</button>
       <button data-view="scoring">Guide</button>
       <button data-view="performance">Track record</button>
+      <button data-view="assistant">Assistant</button>
     </nav>
     <div class="top-cta">
       <span class="badge-proto">PROTOTYPE</span>
@@ -293,13 +347,16 @@
 <section class="view active" id="view-landing">
   <div class="wrap">
     <div class="hero">
-      <h1>The pre-market screen for low-float movers — with a track record you can actually audit.</h1>
-      <p class="lead">Every trading day at 7:30am ET we rank the low-float universe by objective,
-        published criteria and log every pick <b>before</b> the open. Then we grade all of them — winners
-        and losers — five days later, in public. No black box. No cherry-picked screenshots.</p>
+      <h1>The pre-market low-float screener with a built-in Buffett-style quality filter.</h1>
+      <p class="lead">Every pre-market, we rank movers by transparent momentum — then run a deterministic
+        Quality Lens on every name, so you can instantly see which are real businesses and which are
+        likely dilution traps.</p>
+      <p class="muted" style="color:var(--green);font-weight:600;margin:0 auto 26px">
+        Every pick logged before the open &nbsp;•&nbsp; Public track record you can verify &nbsp;•&nbsp; No black box
+      </p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <button class="btn" onclick="go('watchlist')">See today's screen →</button>
-        <button class="btn ghost" onclick="go('performance')">See the full track record</button>
+        <button class="btn ghost" onclick="go('performance')">View the public track record</button>
       </div>
     </div>
 
@@ -658,24 +715,27 @@
     <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
 
     <div class="grid stat-row" id="perfStats" style="margin:18px 0"></div>
+    <p id="perfDist" class="muted" style="font-size:13px;margin:-4px 0 18px;max-width:90ch"></p>
 
     <div class="grid two">
       <div class="panel">
-        <h2 style="margin-top:0">Win rate by tier</h2>
-        <p class="muted" style="font-size:13px;margin-top:0">Does a higher score actually mean a better hit
-          rate? This is how you'd know — and how you'd kill the product honestly if it doesn't.</p>
+        <h2 style="margin-top:0">Return by tier</h2>
+        <p class="muted" style="font-size:13px;margin-top:0">Does a higher score actually mean a better
+          outcome? The bars show win rate by tier — but the real test is whether A beats B beats C on
+          <i>mean net return</i>. This is how you'd know, and how you'd kill the product honestly if it doesn't.</p>
         <div id="byTier"></div>
       </div>
       <div class="panel">
         <h2 style="margin-top:0">Honesty checks</h2>
         <ul class="feat-list" style="color:var(--muted)">
-          <li>Blended win rate includes every miss</li>
-          <li>Picks are immutable once logged</li>
-          <li>Outcomes graded by a scheduled job, not by hand</li>
+          <li>We publish the full return distribution — median, mean, % positive — not a lone win rate</li>
+          <li>Average worst-case drawdown (MAE) is shown, not hidden</li>
+          <li>"WIN" means a realizable open→close return after costs, never "ever touched +20%"</li>
+          <li>Picks are immutable once logged; outcomes graded by a scheduled job, not by hand</li>
           <li>Worst misses shown right next to best calls</li>
         </ul>
-        <div class="note" style="margin-top:14px">A modest-but-real win rate beats a fake 90%. Win rate is
-          blank until picks reach the 5-trading-day grading mark, then fills in from the immutable log.</div>
+        <div class="note" style="margin-top:14px">A modest-but-real edge beats a fake 90%. Stats are blank
+          until picks reach the 5-trading-day grading mark, then fill in from the immutable log.</div>
       </div>
     </div>
 
@@ -684,7 +744,7 @@
       <table id="perfTable" class="sortable">
         <thead><tr>
           <th>Date <span class="info" data-info="date" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
-          <th class="num">Screen px <span class="info" data-info="screen-px" role="button" tabindex="0">i</span></th><th class="num">Watch <span class="info" data-info="watch" role="button" tabindex="0">i</span></th><th class="num">Net <span class="info" data-info="ocnet" role="button" tabindex="0">i</span></th><th>Result <span class="info" data-info="result" role="button" tabindex="0">i</span></th>
+          <th class="num">Screen px <span class="info" data-info="screen-px" role="button" tabindex="0">i</span></th><th class="num">Watch <span class="info" data-info="watch" role="button" tabindex="0">i</span></th><th class="num">Net <span class="info" data-info="ocnet" role="button" tabindex="0">i</span></th><th class="num">Worst dip <span class="info" data-info="mae" role="button" tabindex="0">i</span></th><th>Result <span class="info" data-info="result" role="button" tabindex="0">i</span></th>
         </tr></thead>
         <tbody id="perfBody"></tbody>
       </table>
@@ -695,6 +755,9 @@
 
 <footer class="foot"><div class="wrap">
   IgnitionScan — working prototype. Not a live product. Educational sample for development hand-off only.
+  <br><br>
+  Not affiliated with, endorsed by, or sponsored by Warren Buffett or Berkshire Hathaway.
+  &ldquo;Buffett-style&rdquo; describes an investing methodology, not an endorsement.
 </div></footer>
 
 <!-- ============ ORDER TICKET MODAL ============ -->
@@ -767,6 +830,57 @@
 
 <!-- info tooltip popover (shared) -->
 <div id="infopop"></div>
+
+<!-- ============ ASSISTANT (Q&A + decision walkthrough) ============ -->
+<section class="view" id="view-assistant">
+  <div class="wrap">
+    <h1>Ask the assistant</h1>
+    <p class="lead">A built-in guide for understanding what you're looking at — metrics, why a name
+      screened, the quality lens — and for walking through a decision step by step. It answers
+      <b>only</b> from the data this app has fetched and IgnitionScan's published method. It will not
+      pick stocks for you or give financial advice.</p>
+
+    <div class="chat-wrap" style="margin-top:18px">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-chips" id="chatChips">
+        <button class="chat-chip" onclick="chatSeed(this.textContent)">I have $1,000 — walk me through how to think about it</button>
+        <button class="chat-chip" onclick="chatSeed(this.textContent)">What does RVOL mean and why does it matter?</button>
+        <button class="chat-chip" onclick="chatSeed(this.textContent)">How should I read the quality score?</button>
+        <button class="chat-chip" onclick="chatSeed(this.textContent)">Is a low float good or bad?</button>
+        <button class="chat-chip" onclick="chatSeed(this.textContent)">How is position sizing supposed to work?</button>
+      </div>
+      <div class="chat-ctx" id="chatCtx"></div>
+      <div class="chat-input">
+        <textarea id="chatIn" rows="1" placeholder="Ask anything about the screen, a metric, or a decision…"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();chatSend();}"></textarea>
+        <button class="btn" onclick="chatSend()">Send</button>
+      </div>
+      <div class="chat-disc">Educational only — not financial advice, not a recommendation to buy or sell.
+        Low-float names are high-risk. Verify every figure via the linked sources.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER INFO DRAWER ============ -->
+<div id="infoOverlay" onclick="closeInfo()"></div>
+<aside id="infoDrawer" aria-label="Ticker info">
+  <div class="idr-head">
+    <div style="flex:1;min-width:0">
+      <div class="sym" id="idrSym">—</div>
+      <div class="nm" id="idrName"></div>
+    </div>
+    <button class="modal-x" onclick="closeInfo()" aria-label="Close">×</button>
+  </div>
+  <div class="idr-body" id="idrBody"></div>
+  <div class="idr-actions">
+    <button class="btn ghost" id="idrAsk">Ask about this</button>
+    <button class="btn ghost" id="idrDeep">Deep analysis</button>
+    <button class="btn" id="idrTrade">Trade</button>
+  </div>
+</aside>
+
+<!-- floating assistant launcher -->
+<button id="chatFab" onclick="go('assistant');document.getElementById('chatIn').focus()" title="Ask the IgnitionScan assistant">🔥 Ask</button>
 
 <script>
 /* =====================================================================
@@ -984,7 +1098,7 @@ function renderWatchlist(rows){
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
       <td class="dim">${i+1}</td>
-      <td class="tick"><span class="tlink" title="Run Buffett-style deep analysis" onclick="event.stopPropagation();openDeep('${r.symbol}')">${r.symbol}</span><span class="held" id="held-${r.symbol}"></span></td>
+      <td class="tick"><span class="tlink" title="Company data, links & news" onclick="event.stopPropagation();openInfo('${r.symbol}')">${r.symbol}</span><span class="held" id="held-${r.symbol}"></span></td>
       <td><span class="tier ${r.tier}">${r.tier}</span></td>
       <td class="num">
         <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
@@ -1063,6 +1177,7 @@ const INFO={
   date:{t:"Date",d:"Trading date the pick was logged — before the open."},
   "screen-px":{t:"Screen price",d:"Price when the pick was screened and logged."},
   ocnet:{t:"Net return (open→close)",d:"The realizable per-pick result: enter at the next open, exit at that day's close, minus a 2% cost haircut. This is what determines WIN/MISS. 'pending' until graded (5 trading days after logging). The 5-day swing return is also recorded in outcomes.csv."},
+  mae:{t:"Worst dip (MAE)",d:"Maximum adverse excursion — the deepest the stock fell below the entry open at any point in the 5-trading-day window. This is the downside you'd have had to sit through, shown deliberately because most scanners hide it. Best-case intraday move (MFE) is recorded in outcomes.csv too, but labelled as not an achievable return."},
   result:{t:"Result",d:"WIN if the cost-adjusted open→close return was positive, MISS if not. Chosen over 'touched +20%' because a stock can spike then collapse — open→close is what a subscriber could actually realize. Pending until graded."},
   cls:{t:"Classification",d:"Buffett 'too hard' tag: Investable, Speculative, or Too Hard (pre-revenue / biotech / mining you can't reliably value)."},
   "cat-financial":{t:"Financial Health — 25% of score",d:"Revenue trend, margins, free cash flow, leverage and liquidity from the statements."},
@@ -1179,16 +1294,24 @@ function getTrackRecord(){
   })();
   return _trCache;
 }
+const _mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const _median=a=>{ if(!a.length)return null; const s=[...a].sort((x,y)=>x-y); const m=s.length>>1;
+  return s.length%2? s[m] : (s[m-1]+s[m])/2; };
 function aggregateReal(picks, outcomes){
   const byId={}; outcomes.forEach(o=>{ byId[o.pick_id]=o; });
   const graded=picks.filter(p=>byId[p.pick_id]);
   const wins=graded.filter(p=>byId[p.pick_id].win==="1").length;
   const rets=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_close_net)).filter(isFinite);  // realizable open→close (matches WIN)
+  const r5=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_5dclose_net)).filter(isFinite);   // 5-day swing
+  const maes=graded.map(p=>parseFloat(byId[p.pick_id].mae_5d)).filter(isFinite);               // worst drawdown — the downside the brief promises to show
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
   graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(byId[p.pick_id].win==="1") byTier[t][1]++; } });
   return { total:picks.length, graded:graded.length,
     winRate: graded.length? Math.round(wins/graded.length*100): null,
     best: rets.length? Math.max(...rets): null,
+    meanNet: _mean(rets), medianNet: _median(rets),
+    pctPos: rets.length? Math.round(rets.filter(x=>x>0).length/rets.length*100): null,
+    mean5d: _mean(r5), meanMae: _mean(maes),
     days: [...new Set(picks.map(p=>p.trading_date))].sort(), byId, byTier };
 }
 
@@ -1228,16 +1351,27 @@ async function renderPerformance(){
       bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} picks</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`;});
     const body=document.getElementById("perfBody"); body.innerHTML="";
     SAMPLE_PICKS.slice().sort((a,b)=>a[0]<b[0]?1:-1).forEach(p=>{const [d,t,sc,px,mg,win]=p;const tier=tierOf(sc);const watch=(px*1.2).toFixed(2);
-      body.innerHTML+=`<tr><td class="dim">${d}</td><td class="tick">${t}</td><td><span class="tier ${tier}">${tier}</span></td><td class="num">${sc.toFixed(1)}</td><td class="num">$${px.toFixed(2)}</td><td class="num">$${watch}</td><td class="num ${mg>=20?'pos':''}">+${mg}%</td><td>${win?'<span class="win">WIN</span>':'<span class="miss">MISS</span>'}</td></tr>`;});
+      body.innerHTML+=`<tr><td class="dim">${d}</td><td class="tick">${t}</td><td><span class="tier ${tier}">${tier}</span></td><td class="num">${sc.toFixed(1)}</td><td class="num">$${px.toFixed(2)}</td><td class="num">$${watch}</td><td class="num ${mg>=20?'pos':''}">+${mg}%</td><td class="num dim">—</td><td>${win?'<span class="win">WIN</span>':'<span class="miss">MISS</span>'}</td></tr>`;});
     return;
   }
   const g=aggregateReal(tr.picks,tr.outcomes);
   if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged, on cost-adjusted open→close returns.`;
+  const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}
     ${stat("Graded", g.graded)}
     ${stat("Win rate", g.winRate==null? "—" : g.winRate+"%")}
-    ${stat("Best net", g.best==null? "—" : (g.best>=0?"+":"")+g.best.toFixed(0)+"%")}`;
+    ${stat("Median net", sgn(g.medianNet))}
+    ${stat("Mean net", sgn(g.meanNet))}
+    ${stat("Avg worst dip", sgn(g.meanMae))}`;
+  if(g.graded){
+    const dist=document.getElementById("perfDist");
+    if(dist) dist.innerHTML=`A win rate alone is easy to dress up, so here's the whole distribution of the
+      <b>realizable</b> open→close return (enter at the open, exit that day's close, −2% costs): median <b>${sgn(g.medianNet)}</b>,
+      mean <b>${sgn(g.meanNet)}</b>, <b>${g.pctPos==null?"—":g.pctPos+"%"}</b> of picks positive. The average pick also drew down
+      <b>${sgn(g.meanMae)}</b> at its worst point in the 5-day window (<span class="muted">avg worst dip</span>) and the
+      5-day-swing return averaged <b>${sgn(g.mean5d)}</b> — the downside and the swing case most scanners never show.`;
+  }
   const bt=document.getElementById("byTier"); bt.innerHTML="";
   ["A","B","C","D"].forEach(t=>{ const [n,w]=g.byTier[t]; const wr=n?Math.round(w/n*100):0;
     bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} graded</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`; });
@@ -1246,18 +1380,20 @@ async function renderPerformance(){
   tr.picks.slice().sort((a,b)=> a.trading_date<b.trading_date?1:(a.trading_date>b.trading_date?-1:0)).forEach(p=>{
     const o=g.byId[p.pick_id];
     const px=parseFloat(p.price_at_screen), watch=parseFloat(p.watch_level), sc=parseFloat(p.score);
-    let gainCell, resCell;
+    let gainCell, dipCell, resCell;
     if(o){ const rc=parseFloat(o.ret_open_close_net);   // realizable open→close, same basis as WIN
+      const mae=parseFloat(o.mae_5d);                   // worst drawdown over the 5-day window
       gainCell=`<td class="num ${rc>=0?'pos':'neg'}">${isFinite(rc)?(rc>=0?'+':'')+rc.toFixed(1)+'%':'—'}</td>`;
+      dipCell=`<td class="num ${isFinite(mae)&&mae<0?'neg':'dim'}">${isFinite(mae)?mae.toFixed(1)+'%':'—'}</td>`;
       resCell= o.win==="1"? '<span class="win">WIN</span>' : '<span class="miss">MISS</span>';
-    } else { gainCell=`<td class="num dim">pending</td>`; resCell=`<span class="dim">pending</span>`; }
+    } else { gainCell=`<td class="num dim">pending</td>`; dipCell=`<td class="num dim">—</td>`; resCell=`<span class="dim">pending</span>`; }
     body.innerHTML+=`<tr>
       <td class="dim">${p.trading_date}</td><td class="tick">${p.ticker}</td>
       <td><span class="tier ${(p.tier||'').toUpperCase()}">${p.tier}</span></td>
       <td class="num">${isFinite(sc)?sc.toFixed(1):'—'}</td>
       <td class="num">$${isFinite(px)?px.toFixed(2):'—'}</td>
       <td class="num">$${isFinite(watch)?watch.toFixed(2):'—'}</td>
-      ${gainCell}<td>${resCell}</td></tr>`;
+      ${gainCell}${dipCell}<td>${resCell}</td></tr>`;
   });
 }
 
@@ -2235,7 +2371,7 @@ async function renderDashboardQuality(scored){
     if(!q) return `<tr><td class="tick">${r.symbol}</td><td colspan="5" class="dim">— couldn't score —</td></tr>`;
     const cls=q.classification==="Investable"?"invest":q.classification==="Speculative"?"spec":"hard";
     return `<tr style="cursor:pointer" onclick="openDeep('${r.symbol}')">
-      <td class="tick"><span class="tlink">${r.symbol}</span></td>
+      <td class="tick"><span class="tlink" title="Company data, links & news" onclick="event.stopPropagation();openInfo('${r.symbol}')">${r.symbol}</span></td>
       <td><span class="tier ${r.tier}">${r.tier}</span></td>
       <td class="num">${r.score.toFixed(0)}</td>
       <td class="num">$${r.price.toFixed(2)}</td>
@@ -2283,6 +2419,242 @@ async function boot(){
     DATA_MODE==="live"?"Live data loaded ✓":
     DATA_MODE.startsWith("error")?"Fetch failed — sample data shown":"";
 }
+
+/* =====================================================================
+   TICKER INFO DRAWER  — links, basic + detailed data, news
+   Pulls from the same live sources the rest of the app uses
+   (screen row, FMP profile, SEC EDGAR via fetchFundamentals). News and
+   Google Finance are deep-links to live external sources rather than
+   re-hosted text, so every claim stays independently verifiable.
+   ===================================================================== */
+const INFO_CACHE = {};          // sym -> fundamentals (for grounding the chat)
+let INFO_SYM = null;
+
+function escHtml(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+function moneyShort(n){ if(n==null||!isFinite(n))return "—"; const a=Math.abs(n);
+  return a>=1e9?"$"+(n/1e9).toFixed(2)+"B":a>=1e6?"$"+(n/1e6).toFixed(1)+"M":a>=1e3?"$"+(n/1e3).toFixed(0)+"K":"$"+Math.round(n).toLocaleString(); }
+function pct(n,d=1){ return (n==null||!isFinite(n))?"—":(n>=0?"":"")+n.toFixed(d)+"%"; }
+
+function googleFinanceUrl(sym, exch){
+  const e=String(exch||"").toUpperCase();
+  const g = e.includes("NASDAQ")?"NASDAQ" : e.includes("NYSE AMERICAN")||e.includes("AMEX")?"NYSEAMERICAN"
+          : e.includes("NYSE")?"NYSE" : (/OTC|PINK|GREY/.test(e))?"OTCMKTS" : "";
+  return g ? `https://www.google.com/finance/quote/${encodeURIComponent(sym)}:${g}`
+           : `https://www.google.com/search?q=${encodeURIComponent(sym+" stock google finance")}`;
+}
+
+function openInfo(sym){
+  INFO_SYM=sym;
+  document.getElementById("infoOverlay").classList.add("show");
+  document.getElementById("infoDrawer").classList.add("show");
+  document.getElementById("idrSym").textContent=sym;
+  document.getElementById("idrName").textContent="";
+  const row=(window.SCORED_BY_SYM||{})[sym]||{};
+  // action buttons
+  document.getElementById("idrAsk").onclick=()=>{ closeInfo(); chatFocus(sym); go("assistant");
+    chatSeed("Tell me about "+sym+" — why did it screen, and what should I be cautious about?"); };
+  document.getElementById("idrDeep").onclick=()=>{ closeInfo(); openDeep(sym); };
+  document.getElementById("idrTrade").onclick=()=>{ closeInfo();
+    openTicket(sym,"buy", row.price||0, row.watch||0); };
+  // first paint: links + whatever the screen already knows, then enrich
+  renderInfo(sym, null);
+  fetchFundamentals(sym).then(f=>{ INFO_CACHE[sym]=f; if(INFO_SYM===sym) renderInfo(sym, f); })
+    .catch(()=>{ /* links + screen data still shown */ });
+}
+function closeInfo(){
+  document.getElementById("infoOverlay").classList.remove("show");
+  document.getElementById("infoDrawer").classList.remove("show");
+}
+
+function renderInfo(sym, f){
+  const row=(window.SCORED_BY_SYM||{})[sym]||{};
+  const name = (f&&f.name)||row.name||"";
+  document.getElementById("idrName").textContent = name && name!==sym ? name : "";
+  const exch = (f&&f.exchange)||"";
+  const sub = [exch, f&&f.sector].filter(Boolean).join(" · ");
+
+  // ---- Basics (from the screen + FMP profile) ----
+  const basics = [
+    ["Price", row.price!=null?("$"+Number(row.price).toFixed(2)):(f&&f.price?("$"+Number(f.price).toFixed(2)):"—")],
+    ["Gap %", row.gap!=null?((row.gap>=0?"+":"")+row.gap.toFixed(1)+"%"):"—"],
+    ["RVOL", row.rvol!=null?(row.rvol.toFixed(1)+"×"):"—"],
+    ["Float", row.floatM!=null?fmtFloat(row.floatM):"—"],
+    ["Mkt cap", moneyShort(f&&f.marketCap)],
+    ["Score", row.score!=null?(row.score.toFixed(1)+(row.tier?(" · "+row.tier):"")):"—"],
+  ];
+
+  // ---- Detailed fundamentals (EDGAR / FMP) ----
+  let detailHtml;
+  if(!f){
+    detailHtml = `<div class="idr-load">Loading fundamentals from SEC EDGAR…</div>`;
+  } else {
+    const q = QUALITY_CACHE[sym];
+    const det = [
+      ["Revenue (latest)", moneyShort(f.revenue&&f.revenue[0])],
+      ["Net income", moneyShort(f.netIncome&&f.netIncome[0])],
+      ["Gross margin", pct(f.grossMargin)],
+      ["Net margin", pct(f.netMargin)],
+      ["ROIC", pct(f.roic)],
+      ["Debt / equity", f.debtToEquity!=null?f.debtToEquity.toFixed(2):"—"],
+      ["Current ratio", f.currentRatio!=null?f.currentRatio.toFixed(2):"—"],
+      ["P/S", f.ps!=null?f.ps.toFixed(1)+"×":"—"],
+    ];
+    const qLine = q ? `<div style="margin-top:10px;font-size:13px"><b>Quality lens:</b> ${q.overall}/100 · ${escHtml(q.classification)}</div>`
+                    : `<div style="margin-top:10px;font-size:12.5px" class="muted">Open <b>Deep analysis</b> for the full Buffett-style quality score.</div>`;
+    const srcLbl = f.dataSource==="edgar"?"SEC EDGAR filings":f.dataSource==="live"?"Financial Modeling Prep":"sample (no live filings found)";
+    detailHtml = `<div class="idr-kv">${det.map(([k,v])=>`<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("")}</div>
+      ${qLine}
+      <div class="dim" style="font-size:11.5px;margin-top:8px">Source: ${srcLbl}.</div>`;
+  }
+
+  const gf=googleFinanceUrl(sym, exch);
+  const links = [
+    ["Google Finance", gf],
+    ["Yahoo Finance", `https://finance.yahoo.com/quote/${encodeURIComponent(sym)}`],
+    ["Finviz", `https://finviz.com/quote.ashx?t=${encodeURIComponent(sym)}`],
+    ["SEC filings", `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker=${encodeURIComponent(sym)}&type=&dateb=&owner=include&count=40`],
+  ];
+  const news = [
+    ["Google News", `https://news.google.com/search?q=${encodeURIComponent(sym+" stock")}`],
+    ["Yahoo news", `https://finance.yahoo.com/quote/${encodeURIComponent(sym)}/news`],
+    ["StockTwits", `https://stocktwits.com/symbol/${encodeURIComponent(sym)}`],
+  ];
+
+  document.getElementById("idrBody").innerHTML = `
+    ${sub?`<div class="muted" style="font-size:13px;margin:-4px 0 14px">${escHtml(sub)}</div>`:""}
+    <div class="idr-sec">
+      <h4>Quote & screen</h4>
+      <div class="idr-kv">${basics.map(([k,v])=>`<div class="kv"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("")}</div>
+    </div>
+    <div class="idr-sec">
+      <h4>Company fundamentals</h4>
+      ${detailHtml}
+    </div>
+    <div class="idr-sec">
+      <h4>Open in</h4>
+      <div class="idr-links">${links.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`).join("")}</div>
+    </div>
+    <div class="idr-sec">
+      <h4>Trending news (live)</h4>
+      <div class="idr-links">${news.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`).join("")}</div>
+      <p class="dim" style="font-size:11.5px;margin:9px 0 0">Headlines open at the source — we link out rather than re-host, so you can verify everything yourself.</p>
+    </div>`;
+}
+
+/* =====================================================================
+   ASSISTANT CHAT  — grounded Q&A + decision walkthrough via /api/agent
+   ===================================================================== */
+const CHAT_HISTORY = [];        // {role:'user'|'assistant', content}
+let CHAT_FOCUS = null;          // focused symbol for grounding
+let CHAT_BUSY = false;
+
+function chatFocus(sym){ CHAT_FOCUS=sym; updateChatCtx(); }
+function updateChatCtx(){
+  const el=document.getElementById("chatCtx"); if(!el) return;
+  el.innerHTML = CHAT_FOCUS
+    ? `Context: focused on <b>${escHtml(CHAT_FOCUS)}</b> · <a href="#" onclick="CHAT_FOCUS=null;updateChatCtx();return false" style="color:var(--a)">clear</a>`
+    : "";
+}
+
+/* Build a verifiable grounding block: published method + live screen rows +
+   the focused ticker's fetched fundamentals. The model is instructed to use
+   ONLY this. */
+function buildAgentContext(){
+  const w=CONFIG.WEIGHTS, fl=CONFIG.FILTERS;
+  let s = `IGNITIONSCAN METHOD (published):\n`+
+    `- Universe: low-float names, price $${fl.priceMin}–$${fl.priceMax}, float < ${fl.floatMaxM}M shares.\n`+
+    `- Composite score weights: float ${Math.round(w.float*100)}%, RVOL (relative volume) ${Math.round(w.rvol*100)}%, gap ${Math.round(w.gap*100)}%, price ${Math.round(w.price*100)}%. Tiers: A≥75, B≥60, C≥45, else D.\n`+
+    `- The score measures momentum/structure for a SHORT pre-market trade window. It does NOT judge business quality or valuation.\n`+
+    `- A separate "Quality lens" (Buffett-style, from SEC EDGAR / FMP fundamentals) scores business quality 0–100.\n`+
+    `- Track record: every pick is logged before the open and graded 5 trading days later; a WIN is a positive open→close net move. Results are public and unedited.\n`;
+
+  const rows=Object.values(window.SCORED_BY_SYM||{}).sort((a,b)=>b.score-a.score).slice(0,12);
+  if(rows.length){
+    s += `\nTODAY'S SCREEN (top by score, live):\n`;
+    rows.forEach(r=>{ s += `- ${r.symbol}: score ${r.score?.toFixed(1)} (${r.tier}), price $${r.price?.toFixed(2)}, gap ${r.gap>=0?"+":""}${r.gap?.toFixed(1)}%, RVOL ${r.rvol?.toFixed(1)}×, float ${fmtFloat(r.floatM)}\n`; });
+  }
+
+  if(CHAT_FOCUS){
+    const r=(window.SCORED_BY_SYM||{})[CHAT_FOCUS]||{}, f=INFO_CACHE[CHAT_FOCUS], q=QUALITY_CACHE[CHAT_FOCUS];
+    s += `\nFOCUSED TICKER ${CHAT_FOCUS}:\n`;
+    if(r.score!=null) s += `- Screen: score ${r.score.toFixed(1)} (${r.tier}), price $${r.price?.toFixed(2)}, gap ${r.gap>=0?"+":""}${r.gap?.toFixed(1)}%, RVOL ${r.rvol?.toFixed(1)}×, float ${fmtFloat(r.floatM)}, watch trigger $${r.watch?.toFixed(2)}\n`;
+    if(f){ s += `- Fundamentals (${f.dataSource}): name ${f.name||"?"}, sector ${f.sector||"?"}, mkt cap ${moneyShort(f.marketCap)}, revenue ${moneyShort(f.revenue&&f.revenue[0])}, net income ${moneyShort(f.netIncome&&f.netIncome[0])}, gross margin ${pct(f.grossMargin)}, net margin ${pct(f.netMargin)}, ROIC ${pct(f.roic)}, debt/equity ${f.debtToEquity!=null?f.debtToEquity.toFixed(2):"?"}, current ratio ${f.currentRatio!=null?f.currentRatio.toFixed(2):"?"}\n`; }
+    else s += `- Fundamentals not yet loaded (user can open the ticker info panel / deep analysis to fetch them).\n`;
+    if(q) s += `- Quality lens: ${q.overall}/100, classification ${q.classification}.\n`;
+  }
+  return s;
+}
+
+/* tiny, safe markdown: **bold**, bullet lines, paragraph breaks */
+function mdLite(t){
+  let h=escHtml(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+  const lines=h.split("\n"); let out="", inList=false;
+  for(const ln of lines){
+    if(/^\s*[-•]\s+/.test(ln)){ if(!inList){out+="<ul style='margin:6px 0;padding-left:18px'>";inList=true;} out+="<li>"+ln.replace(/^\s*[-•]\s+/,"")+"</li>"; }
+    else { if(inList){out+="</ul>";inList=false;} out+= ln.trim()? ("<div>"+ln+"</div>") : "<div style='height:6px'></div>"; }
+  }
+  if(inList) out+="</ul>";
+  return out;
+}
+
+function chatPush(role, content, cls){
+  CHAT_HISTORY.push({role, content});
+  chatRender();
+}
+function chatRender(){
+  const log=document.getElementById("chatLog");
+  log.innerHTML = CHAT_HISTORY.map(m=>
+    `<div class="chat-msg ${m.role==="user"?"user":"bot"}">${m.role==="user"?escHtml(m.content):mdLite(m.content)}</div>`).join("");
+  log.scrollTop=log.scrollHeight;
+}
+
+function chatSeed(text){
+  document.getElementById("chatIn").value=text;
+  chatSend();
+}
+
+async function chatSend(){
+  if(CHAT_BUSY) return;
+  const ta=document.getElementById("chatIn");
+  const msg=(ta.value||"").trim();
+  if(!msg) return;
+  ta.value="";
+  chatPush("user", msg);
+  CHAT_BUSY=true;
+  const log=document.getElementById("chatLog");
+  const typing=document.createElement("div");
+  typing.className="chat-typing"; typing.textContent="Thinking…"; log.appendChild(typing); log.scrollTop=log.scrollHeight;
+
+  try{
+    const r=await fetch("/api/agent",{
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({ messages:CHAT_HISTORY, context:buildAgentContext() })
+    });
+    let j; try{ j=await r.json(); }catch{ j={error:"Bad response ("+r.status+")"}; }
+    typing.remove();
+    if(!r.ok || j.error){
+      const detail = j && j.error ? (typeof j.error==="string"?j.error:JSON.stringify(j.error)) : ("HTTP "+r.status);
+      const note = r.status===500 ? " (the ANTHROPIC_API_KEY may not be set in Vercel yet)" : "";
+      const div=document.createElement("div"); div.className="chat-msg err";
+      div.textContent="Assistant unavailable: "+detail+note; log.appendChild(div); log.scrollTop=log.scrollHeight;
+    } else {
+      chatPush("assistant", j.reply||"(no reply)");
+    }
+  }catch(e){
+    typing.remove();
+    const div=document.createElement("div"); div.className="chat-msg err";
+    div.textContent="Network error: "+e.message; log.appendChild(div);
+  } finally {
+    CHAT_BUSY=false;
+  }
+}
+
+// greet once when the Assistant tab is first opened
+const _go=go;
+go=function(v){ _go(v); if(v==="assistant" && !go._greeted){ go._greeted=true;
+  chatPush("assistant","Hi — I'm the IgnitionScan assistant. I can explain any metric on the screen, why a name screened, or walk you through how to think about a decision step by step.\n\nI work only from the data this app has fetched and the published method, and I won't pick stocks or give financial advice. Try a suggestion below, or ask anything.");
+  updateChatCtx(); } };
+
 boot();
 </script>
 </body>
