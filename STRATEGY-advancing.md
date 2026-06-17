@@ -88,4 +88,62 @@ The data fork in `VALIDATION-PLAN.md` Part 4 (predictor vs. media product) will 
 
 ---
 
+## 6. Dated results log — first run of the §1.1 backtest (2026-06-16)
+
+These are the first empirical reads against §1.1, on the existing 2,124-row backtest
+(`backtest_results.csv`, 16-ticker seed universe, 2025-07 → 2026-06, MAE = worst intraday
+dip over 5 trading days, returns net of a 2% cost haircut). **Both reads point against the
+hypothesis as written — but the data is far too thin and biased to settle it.** Logged here
+so the next run is measured against a written baseline, not memory.
+
+### Finding A — Momentum tier does NOT protect the downside; it inverts it
+Grouping the backtest by the **momentum score tier** (A/B/C/D):
+
+| Group | n | median MAE | catastrophic-rug rate (MAE < −30%) | win % |
+|---|---|---|---|---|
+| High momentum (A+B) | 174 | **−22.3%** | **33.9%** | 36.8% |
+| Low momentum (C+D) | 1,950 | **−11.6%** | **9.9%** | 31.9% |
+
+`corr(score, MAE) = −0.25` — a higher momentum score reliably means a *deeper* drawdown.
+This is a stronger nail in the coffin for the old "A-tier goes up more" claim (§1.1): the
+high-momentum names aren't survivable, they're where the rugs concentrate. **Bankable
+direction; useful for messaging** ("the hottest movers are the most likely to gut you").
+
+### Finding B — The Quality Lens did NOT show a protective edge here (and the test is too weak to trust)
+Joined the actual **Buffett-style Quality Lens** grade (ported faithfully to Python in
+`quality_lens.py`, graded off the same SEC EDGAR filings the live site uses; see
+`fundamentals_cache.json`) onto every pick and grouped by risk label:
+
+| Group | n rows | median MAE | rug rate (<−30%) | win % |
+|---|---|---|---|---|
+| Safe (Green+Yellow) | 1,137 | −13.6% | 13.1% | 32.6% |
+| Risky (Red+Black) | 800 | −8.8% | 7.4% | 32.5% |
+
+The relationship runs **backwards** from §1.1 — the "safer" grades drew down *more*. **But
+this is not evidence against the thesis**, because the test is structurally too weak to
+conclude anything:
+
+1. **Effective N = 14, not 2,124.** The grade is constant within a ticker (current
+   fundamentals), so all 2,124 rows collapse to **14 independent data points** (one grade per
+   ticker). "Green" is just two 2025-IPO names (MASK, NCT) that happened to be volatile; one
+   name (BNZI, Red, −25.6% median) swings the "Risky" group. Pseudo-replication, not signal.
+2. **Selection bias.** The 16-ticker hand-picked seed universe is exactly the validity threat
+   §1.2 flags — you cannot generalize a quality→drawdown claim from it.
+3. **Look-ahead.** Grades use *current* (June-2026) filings applied to the whole window, not
+   as-of-pick-date fundamentals. Quality is slow-moving so it's a defensible first pass, but
+   it is not a clean external-validity test.
+4. Coverage: 14/16 graded; **GCDT and VMAR are absent from EDGAR** and remain ungraded
+   (notably, both ungraded names had deep ~−21% median MAE).
+
+**Verdict (verifiability standard):** the §1.1 quality-downside claim is **neither confirmed
+nor refuted** — it is *untested* on data strong enough to matter. The harness now exists and
+is reproducible; what it needs is the §1.2 inputs: a **full-market screen** (FR-1) and
+**as-of-pick-date fundamentals**, then a re-run. Do not put any quality→drawdown claim in
+front of users until that clears. Finding A (inverse momentum) is the only bankable read so far.
+
+*Artifacts: `quality_lens.py` (faithful port), `backtest_quality.py` (join + test, re-runnable),
+`fundamentals_cache.json` (captured filings + provenance), `backtest_quality.csv` (graded picks).*
+
+---
+
 *Strategic plan, not legal or financial advice. The model is unvalidated until VALIDATION-PLAN Part 3 clears its bar; obtain securities counsel before charging subscribers (gate G4).*
