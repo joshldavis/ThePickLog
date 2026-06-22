@@ -166,6 +166,40 @@ def main():
         w("- Not enough graded picks across tiers yet.")
     w("")
 
+    # ---- 4b. follow-the-screen reality check + Finding-A counterfactual ----
+    w("## 4b. Would following the screen have paid? (personal reality check)")
+    w("")
+    # equal-weight: average net 5-day return per pick = avg % P&L if you took every pick same size
+    r5_all = [(by_id.get(o["pick_id"], {}).get("tier"), col(o, "ret_open_5dclose_net"))
+              for o in outs if col(o, "ret_open_5dclose_net") is not None]
+    if r5_all:
+        allr = [r for _, r in r5_all]
+        skip_ab = [r for t, r in r5_all if t not in ("A", "B")]  # Finding-A rule: skip the hot names
+        only_ab = [r for t, r in r5_all if t in ("A", "B")]
+        w("Equal-weight, every graded pick held to the 5-day close, net of the 2% cost haircut "
+          "(an honest 'if I'd taken them all' proxy — not advice):")
+        w("")
+        w("| strategy | n | avg net/trade | median | win% |")
+        w("|---|---|---|---|---|")
+        def line(name, xs):
+            if not xs:
+                w(f"| {name} | 0 | — | — | — |"); return
+            wr = pct(sum(1 for r in xs if r > 0), len(xs))
+            w(f"| {name} | {len(xs)} | {mean(xs):+.1f}% | {med(xs):+.1f}% | {wr:.0f}% |")
+        line("Take every pick", allr)
+        line("Skip A/B (Finding-A rule)", skip_ab)
+        line("Only A/B (the hot names)", only_ab)
+        w("")
+        if skip_ab and only_ab:
+            delta = mean(skip_ab) - mean(allr)
+            verdict = (f"Skipping the hot A/B names changes avg net/trade by **{delta:+.1f}pp** vs taking everything"
+                       f" — {'Finding A pays as a filter here' if delta > 0 else 'no edge from the filter yet'} "
+                       "(small N, directional).")
+            w(verdict)
+    else:
+        w("- No 5-day-graded picks yet.")
+    w("")
+
     # ---- 5. integrity ----
     w("## 5. Integrity checks (verifiability standard)")
     w("")

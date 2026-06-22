@@ -316,6 +316,27 @@ def cmd_report():
 
 BRIEF_MD = os.path.join(HERE, "brief.md")
 
+def finding_a_stats():
+    """Live-log drawdown by momentum tier — the Finding A signal (hotter A/B = deeper
+    drawdown / higher rug rate). Computed from the immutable forward log, so the brief's
+    risk flag is grounded in real graded outcomes, not assertion. Returns None if too few
+    graded picks across tiers to be worth showing."""
+    picks = read_rows(PICKS_CSV); outs = read_rows(OUTCOMES_CSV)
+    if not outs: return None
+    tier_by_id = {p.get("pick_id"): p.get("tier") for p in picks if p.get("pick_id")}
+    hi, lo = [], []
+    for o in outs:
+        mae = _f(o.get("mae_5d"))
+        if mae is None: continue
+        t = tier_by_id.get(o.get("pick_id"))
+        if t in ("A", "B"): hi.append(mae)
+        elif t in ("C", "D"): lo.append(mae)
+    if len(hi) < 3 or len(lo) < 3: return None
+    rug = lambda xs: 100.0 * sum(1 for m in xs if m < -30) / len(xs)
+    return {"n_hi": len(hi), "mae_hi": statistics.median(hi), "rug_hi": rug(hi),
+            "n_lo": len(lo), "mae_lo": statistics.median(lo), "rug_lo": rug(lo),
+            "holds": statistics.median(hi) < statistics.median(lo)}
+
 def cmd_brief():
     """Generate an IMPERSONAL, educational morning brief from the latest logged screen.
     Same content for everyone, objective observations only, no buy/sell language — this
@@ -357,11 +378,15 @@ def cmd_brief():
              f"Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, "
              f"published criteria. Low-float / low-priced stocks are highly volatile._")
     L.append("")
+    fa = finding_a_stats()
     top = todays[:5]
     L.append("## What stands out today")
     for p in top:
+        flag = ""
+        if fa and fa["holds"] and p["tier"] in ("A", "B"):
+            flag = "  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold."
         L.append(f"- **{p['ticker']}** (tier {p['tier']}, score {p['score']}) — {obs(p)}. "
-                 f"Watch level (reference only, +{int(CONFIG['WATCH_LEVEL_PCT']*100)}%): ${p['watch_level']}.")
+                 f"Watch level (reference only, +{int(CONFIG['WATCH_LEVEL_PCT']*100)}%): ${p['watch_level']}.{flag}")
     L.append("")
     cautions = [(p["ticker"], caution(p)) for p in todays if caution(p)]
     L.append("## Risk area — read before anything")
@@ -372,6 +397,14 @@ def cmd_brief():
         L.append("- Standard low-float risks apply to every name: wide spreads, fast reversals, and gap-fills. "
                  "A high score measures activity, not safety.")
     L.append("")
+    if fa and fa["holds"]:
+        L.append("## Finding A — the one edge that holds (from your own log)")
+        L.append(f"- Across **{fa['n_hi']+fa['n_lo']}** graded picks, the **hottest momentum tier (A/B) "
+                 f"draws down deeper**: median worst-dip **{fa['mae_hi']:+.0f}%** (rug rate {fa['rug_hi']:.0f}%) "
+                 f"vs **{fa['mae_lo']:+.0f}%** (rug {fa['rug_lo']:.0f}%) for C/D.")
+        L.append("- **Actionable read:** a top-of-leaderboard A/B name is the part most likely to gut you. "
+                 "Treat a high score as a *warning label on the downside*, not a green light.")
+        L.append("")
     L.append("## How to read this")
     L.append("- The score answers *“is this moving?”* — not *“is this worth buying?”* Pair it with the Quality "
              "Lens and the primary filings before doing anything.")
@@ -382,8 +415,13 @@ def cmd_brief():
              "screened securities. Past performance does not predict future results._")
     md = "\n".join(L) + "\n"
     with open(BRIEF_MD, "w") as f: f.write(md)
+    # Also write a committed copy so the daily Action can publish it to the repo
+    # for phone viewing (reports/ is tracked; brief.md stays gitignored).
+    reports_dir = os.path.join(HERE, "reports")
+    os.makedirs(reports_dir, exist_ok=True)
+    with open(os.path.join(reports_dir, "brief-LATEST.md"), "w") as f: f.write(md)
     print(md)
-    print(f"\n(Wrote {BRIEF_MD} — NOT published to the live site; charging on this needs G4 legal review.)")
+    print(f"\n(Wrote {BRIEF_MD} and reports/brief-LATEST.md — personal use; not wired to the public site.)")
 
 # sample data (price, prev, vol, avg, float_shares) for offline demo
 SAMPLE_QUOTES = [
