@@ -1,0 +1,35 @@
+# IgnitionScan — weekly forward-log report. Runs on GitHub's servers (no Mac/wifi).
+# Summarizes the immutable pick log into reports/forward-YYYY-MM-DD.md + reports/LATEST.md
+# so progress is trackable from a phone via GitHub while Josh is away. No API key needed.
+name: IgnitionScan weekly report
+
+on:
+  workflow_dispatch:          # allow manual run any time
+  schedule:
+    - cron: "0 14 * * 6"      # Saturdays ~10am ET (UTC; shifts 1h in winter), after Fri grade
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate forward-log report
+        run: python weekly_report.py
+      - name: Commit report
+        run: |
+          # Author as the repo owner so Vercel authorizes the auto-deploy.
+          git config user.name "joshldavis"
+          git config user.email "davis1163@gmail.com"
+          git add reports/
+          if git diff --cached --quiet; then
+            echo "No report changes."
+          else
+            git commit -m "report: forward-log snapshot $(date -u +%F)"
+            git push
+          fi
