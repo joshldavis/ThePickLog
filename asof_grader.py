@@ -157,14 +157,26 @@ def build_asof_statements(facts_usgaap, asof, top_n=4):
 _TICKER_MAP = None
 
 
-def _get(url):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip, deflate"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        raw = r.read()
-        if r.headers.get("Content-Encoding") == "gzip":
-            import gzip
-            raw = gzip.decompress(raw)
-        return json.loads(raw)
+def _get(url, _retries=2):
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"})
+    last = None
+    for attempt in range(_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                raw = r.read()
+                enc = (r.headers.get("Content-Encoding") or "").lower()
+                if enc == "gzip" or raw[:2] == b"\x1f\x8b":   # gzip magic, even if header absent
+                    import gzip
+                    raw = gzip.decompress(raw)
+                elif enc == "deflate":
+                    import zlib
+                    raw = zlib.decompress(raw)
+                return json.loads(raw)
+        except Exception as e:                                # transient SEC hiccup -> brief backoff + retry
+            last = e
+            if attempt < _retries:
+                time.sleep(1.5 * (attempt + 1))
+    raise last
 
 
 def ticker_to_cik(ticker):

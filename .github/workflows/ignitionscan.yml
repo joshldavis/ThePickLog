@@ -49,5 +49,10 @@ jobs:
             echo "No data changes to commit."
           else
             git commit -m "data: ${{ steps.cmd.outputs.cmd }} $(date -u +%F)"
-            git push
+            # Rebase on any commit that landed since checkout, then push (avoids
+            # non-fast-forward rejection when runs/manual pushes overlap).
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed; retrying"; sleep 5
+            done
           fi

@@ -31,5 +31,8 @@ jobs:
             echo "No report changes."
           else
             git commit -m "report: forward-log snapshot $(date -u +%F)"
-            git push
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed; retrying"; sleep 5
+            done
           fi

@@ -159,6 +159,10 @@ def compute_quality(f):
         s_fcf = band(fcf_margin, [[-15, 0], [0, 50], [5, 75], [15, 95], [25, 100]])
         if fcf0 <= 0:
             flags.append({"sev": "yellow", "t": "Negative FCF"})
+    # Fidelity: when fcf0 present but revenue<=0, JS fcfMargin=null -> band=null and
+    # null*0.25 contributes 0 to the sum. Replicate that (Python would otherwise crash).
+    if s_fcf is None:
+        s_fcf = 0.0
     if ocf_neg3:
         flags.append({"sev": "red", "t": "Cash burn"})
     s_mar = avg_defined([
@@ -196,8 +200,10 @@ def compute_quality(f):
     if len(rev) >= 3:
         g = []
         for i in range(len(rev) - 1):
-            if rev[i + 1] is not None and rev[i + 1] > 0 and rev[i] is not None:
-                g.append((rev[i] - rev[i + 1]) / rev[i + 1] * 100)
+            nxt = rev[i + 1]
+            if nxt is not None and nxt > 0:               # JS guard: rev[i+1] > 0
+                cur = rev[i] if rev[i] is not None else 0  # JS: a null year coerces to 0 (= -100% growth)
+                g.append((cur - nxt) / nxt * 100)
         if g:
             m = avg_defined(g)
             sd = (avg_defined([(x - m) ** 2 for x in g]) or 0) ** 0.5
