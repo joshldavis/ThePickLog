@@ -144,6 +144,37 @@ front of users until that clears. Finding A (inverse momentum) is the only banka
 *Artifacts: `quality_lens.py` (faithful port), `backtest_quality.py` (join + test, re-runnable),
 `fundamentals_cache.json` (captured filings + provenance), `backtest_quality.csv` (graded picks).*
 
+### Update 2026-06-22 — look-ahead removed (Phase 1 as-of grader)
+
+Re-ran Finding B with point-in-time grades: `asof_grader.py` pulls SEC companyfacts and grades
+each pick using only filings **filed on or before the pick date** (the financials a reader could
+actually have seen that morning), then `compare_asof.py` re-scores against the §1 bars with
+ticker-clustered stats. This removes the look-ahead threat; the universe is still the 16 seeds
+(Phase 2 not yet done).
+
+**The inverse signal from the first run was largely a look-ahead artifact.** Removing it:
+
+| | Safe (Green+Yellow) | Risky (Red+Black) | gap |
+|---|---|---|---|
+| median MAE — current grades | −13.6% | −8.8% | **−4.75pp** (CI [−8.3, −2.4], excl. 0) |
+| median MAE — **as-of grades** | −11.9% | −10.7% | **−1.20pp** (CI [−4.95, **+1.91**], crosses 0) |
+
+The gap collapsed toward zero and its CI now straddles zero; the held-out split flips sign
+(+0.9pp → −2.8pp). 5/16 tickers' grades changed once look-ahead was removed (CODX, CUPR, PW, RKDA,
+SUGP — several shifting mid-window as new filings landed). So the corrected read is **no
+detectable quality→drawdown relationship** — neither the protective effect §1.1 hoped for nor the
+inverse the first run showed. All four pre-registered bars still FAIL, blocker = **power**
+(12/6 distinct tickers per bucket vs the ≥25 required).
+
+**Net:** the cleaner null *strengthens* the discipline — do not ship any quality→drawdown claim.
+Quality stays a "is this a real business?" descriptor; Finding A (inverse momentum) remains the
+only bankable read. Genuinely settling Finding B now requires **Phase 2** (full-market screen +
+as-of fundamentals) for the distinct-ticker count to clear the power bar.
+
+*Added artifacts: `asof_grader.py` (point-in-time grader, SEC companyfacts), `compare_asof.py`
+(as-of vs current + clustered scorer), `TEST-PLAN-quality-downside.md` (pre-registration).
+As-of/quality CSVs are gitignored — regenerable, never the track record.*
+
 ---
 
 *Strategic plan, not legal or financial advice. The model is unvalidated until VALIDATION-PLAN Part 3 clears its bar; obtain securities counsel before charging subscribers (gate G4).*

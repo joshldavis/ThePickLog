@@ -176,13 +176,22 @@ def ticker_to_cik(ticker):
     return _TICKER_MAP.get(ticker.upper())
 
 
+_FACTS = {}  # cik -> us-gaap facts dict (download companyfacts once per ticker)
+
+
+def _get_usgaap(cik):
+    if cik not in _FACTS:
+        facts = _get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json")
+        time.sleep(0.15)  # be polite: <10 req/s
+        _FACTS[cik] = (facts.get("facts") or {}).get("us-gaap") or {}
+    return _FACTS[cik]
+
+
 def grade_asof(ticker, asof, profile=None):
     cik = ticker_to_cik(ticker)
     if not cik:
         return {"symbol": ticker, "error": "no CIK (foreign/OTC or non-filer)"}
-    facts = _get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json")
-    time.sleep(0.15)  # be polite: <10 req/s
-    usgaap = (facts.get("facts") or {}).get("us-gaap") or {}
+    usgaap = _get_usgaap(cik)
     stmts = build_asof_statements(usgaap, asof)
     if not stmts:
         return {"symbol": ticker, "error": f"no annual revenue filed on/before {asof}"}
