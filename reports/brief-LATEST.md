@@ -1,13 +1,13 @@
-# IgnitionScan — Morning Brief · 2026-06-19
+# IgnitionScan — Morning Brief · 2026-06-22
 
 _Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
 - **ATPC** (tier A, score 100.0) — very high relative volume (21×); thin float (0.4M); large up-gap (+42%). Watch level (reference only, +20%): $4.656.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **VMAR** (tier B, score 65.5) — thin float (0.1M); large down-gap (-15%). Watch level (reference only, +20%): $3.564.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **VMAR** (tier B, score 66.0) — thin float (0.1M); large down-gap (-15%). Watch level (reference only, +20%): $3.564.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 - **CUPR** (tier B, score 61.5) — thin float (0.9M); large down-gap (-17%). Watch level (reference only, +20%): $5.244.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 - **JAGX** (tier C, score 56.4) — thin float (0.6M). Watch level (reference only, +20%): $2.7.
-- **BNZI** (tier C, score 51.4) — thin float (1.4M). Watch level (reference only, +20%): $4.176.
+- **BNZI** (tier C, score 51.5) — thin float (1.4M). Watch level (reference only, +20%): $4.176.
 
 ## Risk area — read before anything
 - **ATPC**: high short interest (31% of float) — squeeze-prone and violent both ways.
@@ -25,7 +25,6 @@ _Impersonal, educational watchlist — identical for all readers. Market regime:
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: high short interest (43% of float) — squeeze-prone and violent both ways.
-- **SUGP**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: high short interest (50% of float) — squeeze-prone and violent both ways.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: ultra-thin float — spreads and slippage can be severe.
