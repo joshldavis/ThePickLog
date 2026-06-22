@@ -8,6 +8,7 @@ backtest_results.csv
 backtest_picks.csv
 backtest_outcomes.csv
 backtest_quality.csv
+backtest_quality_asof.csv
 
 # Generated brief (review locally; publishing needs G4 legal review)
 brief.md
