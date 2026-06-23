@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+"""
+exit_sim.py — make EXIT RULES testable on the graded forward log.
+
+The grader records only the max-favorable (MFE) and max-adverse (MAE) move over the
+5-session window — not their ORDER — so it can't tell you what a profit target or stop
+would actually have returned. This simulator fills that gap by replaying the **daily
+OHLC path** of each graded pick and applying a grid of exit rules, then comparing win
+rate / expectancy against the current hold-to-close baseline.
+
+Why daily bars, not true intraday: intraday history expires (~60 days on Yahoo) and isn't
+reproducible, which would break the "a stranger can verify" standard. Daily OHLC is always
+retrievable and stable, so this study is fully reproducible. The one thing daily bars
+can't resolve is a same-day collision where BOTH the target and the stop are touched — we
+apply the **conservative convention (assume the STOP filled first)** so results can't be
+optimistically inflated. Fills are assumed exactly at the level; the same 2% cost haircut
+as the grader is applied. These are IN-SAMPLE exploratory results on a small N — a chosen
+rule must be pre-registered (HYPOTHESES.md) and validated forward, never fit-and-shipped.
+
+USAGE:
+  python3 exit_sim.py --selftest          # offline logic check (no network)
+  python3 exit_sim.py                      # fetch daily paths for graded picks, write report
+NOT INVESTMENT ADVICE.
+"""
+import argparse, csv, os, statistics as st
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+HAIRCUT = 2.0          # match ignitionscan grader
+WINDOW = 5             # trading sessions after entry (entry day + 5 -> 6 bars)
+
+
+# ---------------------------------------------------------------------------
+# PURE CORE (offline-testable): given entry price + daily bars, return net %.
+# bars: list of {"o","h","l","c"}, bars[0] is the entry session.
+# ---------------------------------------------------------------------------
+def _ret(entry, exit_price):
+    return (exit_price - entry) / entry * 100.0
+
+
+def simulate(entry, bars, rule):
+    """Gross % for one exit rule, before the cost haircut."""
+    T, S, TR = rule.get("target"), rule.get("stop"), rule.get("trail")
+    hi = entry * (1 + T / 100.0) if T else None
+    lo = entry * (1 - S / 100.0) if S else None
+    typ = rule["type"]
+    last_c = bars[-1]["c"]
+
+    if typ == "close0":
+        return _ret(entry, bars[0]["c"])
+    if typ == "hold":
+        return _ret(entry, last_c)
+    if typ == "target":
+        for b in bars:
+            if b["h"] >= hi:
+                return _ret(entry, hi)
+        return _ret(entry, last_c)
+    if typ == "stop":
+        for b in bars:
+            if b["l"] <= lo:
+                return _ret(entry, lo)
+        return _ret(entry, last_c)
+    if typ == "target_stop":
+        for b in bars:
+            hit_t, hit_s = b["h"] >= hi, b["l"] <= lo
+            if hit_s:                       # conservative: stop wins a same-day collision
+                return _ret(entry, lo)
+            if hit_t:
+                return _ret(entry, hi)
+        return _ret(entry, last_c)
+    if typ == "trail":
+        peak = entry
+        for b in bars:
+            trail_lvl = peak * (1 - TR / 100.0)   # peak known ENTERING this session
+            if b["l"] <= trail_lvl:
+                return _ret(entry, trail_lvl)
+            peak = max(peak, b["h"])              # today's high only arms tomorrow's stop
+        return _ret(entry, last_c)
+    raise ValueError("unknown rule type " + typ)
+
+
+def net(entry, bars, rule):
+    return simulate(entry, bars, rule) - HAIRCUT
+
+
+RULES = [
+    {"name": "Same-day close (current)", "type": "close0"},
+    {"name": "Hold to 5d close", "type": "hold"},
+    {"name": "Target +10%", "type": "target", "target": 10},
+    {"name": "Target +15%", "type": "target", "target": 15},
+    {"name": "Target +20%", "type": "target", "target": 20},
+    {"name": "Target +30%", "type": "target", "target": 30},
+    {"name": "Stop -10%", "type": "stop", "stop": 10},
+    {"name": "Stop -15%", "type": "stop", "stop": 15},
+    {"name": "Target +20% / Stop -10%", "type": "target_stop", "target": 20, "stop": 10},
+    {"name": "Target +15% / Stop -10%", "type": "target_stop", "target": 15, "stop": 10},
+    {"name": "Target +20% / Stop -15%", "type": "target_stop", "target": 20, "stop": 15},
+    {"name": "Trailing 15%", "type": "trail", "trail": 15},
+    {"name": "Trailing 20%", "type": "trail", "trail": 20},
+]
+
+
+# ---------------------------------------------------------------------------
+# Data (network): daily bars for each graded pick
+# ---------------------------------------------------------------------------
+def _read(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, newline="") as fh:
+        return list(csv.DictReader(fh))
+
+
+def _f(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+
+
+def fetch_bars(ticker, start):
+    """Daily OHLC window: entry session + WINDOW sessions (<= WINDOW+1 bars)."""
+    import yfinance as yf
+    from datetime import datetime, timedelta
+    end = (datetime.strptime(start, "%Y-%m-%d") + timedelta(days=16)).strftime("%Y-%m-%d")
+    df = yf.Ticker(ticker).history(start=start, end=end, auto_adjust=False)
+    if df is None or len(df) == 0:
+        return None
+    df = df.reset_index()
+    df["d"] = df["Date"].astype(str).str[:10]
+    idx = df.index[df["d"] == start]
+    if len(idx) == 0:
+        return None
+    i0 = idx[0]
+    w = df.iloc[i0:i0 + WINDOW + 1]
+    if len(w) < WINDOW + 1:
+        return None
+    return [{"o": float(r["Open"]), "h": float(r["High"]),
+             "l": float(r["Low"]), "c": float(r["Close"])} for _, r in w.iterrows()]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--selftest", action="store_true")
+    a = ap.parse_args()
+    if a.selftest:
+        return _selftest()
+
+    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))}
+    outs = _read(os.path.join(HERE, "outcomes.csv"))
+    graded = [o for o in outs if _f(o.get("entry_open")) and _f(o.get("ret_open_close_net")) is not None]
+
+    results = {r["name"]: [] for r in RULES}
+    used = 0
+    for o in graded:
+        entry = _f(o.get("entry_open"))
+        bars = None
+        try:
+            bars = fetch_bars(o["ticker"], o["trading_date"])
+        except Exception as e:
+            print(f"  fetch skip {o['ticker']} {o['trading_date']}: {type(e).__name__}")
+        if not bars:
+            continue
+        used += 1
+        for r in RULES:
+            results[r["name"]].append(net(entry, bars, r))
+
+    _write_report(results, used, len(graded))
+
+
+def _agg(xs):
+    if not xs:
+        return (float("nan"), float("nan"), float("nan"))
+    wr = 100.0 * sum(1 for x in xs if x > 0) / len(xs)
+    return (wr, st.mean(xs), st.median(xs))
+
+
+def _write_report(results, used, n_graded):
+    from datetime import datetime
+    L = ["# IgnitionScan — exit-rule study · " + datetime.utcnow().date().isoformat(), "",
+         f"Daily-resolution replay of **{used}** graded picks (of {n_graded}). Conservative "
+         "same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / "
+         "exploratory** — a chosen rule must be pre-registered and validated forward.", "",
+         "| exit rule | n | win% | avg net/trade | median |", "|---|---|---|---|---|"]
+    base = None
+    rows = []
+    for r in RULES:
+        wr, mean, med = _agg(results[r["name"]])
+        rows.append((r["name"], wr, mean, med))
+        if r["type"] == "close0":
+            base = mean
+    for name, wr, mean, med in rows:
+        star = ""
+        if base is not None and mean == mean and mean - base >= 2.0 and "current" not in name:
+            star = " ⭐"
+        L.append(f"| {name}{star} | {len(results[name])} | {wr:.0f}% | {mean:+.1f}% | {med:+.1f}% |")
+    L += ["", "⭐ = avg net/trade at least +2pp better than the current same-day-close exit.",
+          "", "_Not investment advice. Exploratory; see HYPOTHESES.md for the forward-validation rule._"]
+    os.makedirs(os.path.join(HERE, "reports"), exist_ok=True)
+    out = os.path.join(HERE, "reports", "exit-study-LATEST.md")
+    with open(out, "w") as fh:
+        fh.write("\n".join(L) + "\n")
+    print("\n".join(L))
+    print(f"\nwrote {out}")
+
+
+def _selftest():
+    # Construct a known path and verify each rule exits where expected.
+    entry = 100.0
+    # day0: o100 h112 l95 c108 ; day1: h120 l104 c118 ; day2: h130 l85 c90
+    bars = [{"o": 100, "h": 112, "l": 95, "c": 108},
+            {"o": 108, "h": 120, "l": 104, "c": 118},
+            {"o": 118, "h": 130, "l": 85, "c": 90}]
+    g = lambda rule: round(simulate(entry, bars, rule), 1)
+    assert g({"type": "close0"}) == 8.0, g({"type": "close0"})
+    assert g({"type": "hold"}) == -10.0
+    assert g({"type": "target", "target": 10}) == 10.0          # day0 high 112 >= 110
+    assert g({"type": "target", "target": 25}) == 25.0          # day1 high 120 >= 125? no -> day2 130>=125 yes
+    assert g({"type": "stop", "stop": 10}) == -10.0             # day2 low 85 <= 90
+    # target+stop: +20% (120) vs -10% (90). day0: h112<120,l95>90 none. day1: h120>=120 hit_t, l104>90 -> +20.
+    assert g({"type": "target_stop", "target": 20, "stop": 10}) == 20.0
+    # collision day2 if target high: +35/-10 -> stop first. target 35 -> 135 never; use target 28 (128) and stop 12 (88): day2 h130>=128 AND l85<=88 -> conservative stop -> -12
+    assert g({"type": "target_stop", "target": 28, "stop": 12}) == -12.0
+    # trailing 15% (peak known entering each session): day0 trail=85, low95>85 keep, peak->112;
+    # day1 trail=95.2, low104>95.2 keep, peak->120; day2 trail=102, low85<=102 -> exit 102 -> +2.0
+    assert g({"type": "trail", "trail": 15}) == 2.0, g({"type": "trail", "trail": 15})
+    print("exit_sim selftest PASS — all rule paths exit where expected")
+    print("  (target+stop collision correctly resolves to the stop — conservative)")
+
+
+if __name__ == "__main__":
+    main()

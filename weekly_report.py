@@ -200,6 +200,56 @@ def main():
         w("- No 5-day-graded picks yet.")
     w("")
 
+    # ---- 4c. pre-registered filter hypotheses (HYPOTHESES.md) ----
+    REG = "2026-06-22"   # registration date — only later picks are the out-of-sample test
+    w("## 4c. Pre-registered filters (tracking vs HYPOTHESES.md)")
+    w("")
+    w(f"Each filter **skips** some picks; we want the kept subset to beat baseline on avg "
+      f"net/trade. Registered {REG} from an in-sample cut — only **post-{REG}** picks are the "
+      f"honest test. Both windows shown; judge on the post-registration column as it grows.")
+    w("")
+
+    def keep(p, fid):
+        pr, fl, gp, t = _f(p.get("price_at_screen")), _f(p.get("float_shares")), _f(p.get("gap_pct")), p.get("tier")
+        if fid == "F1":    return pr is None or pr >= 1.0
+        if fid == "F2":    return fl is None or fl < 3e6
+        if fid == "F3":    return gp is None or gp < 20
+        if fid == "F4":    return t not in ("A", "B")
+        if fid == "CLEAN": return all(keep(p, x) for x in ("F1", "F2", "F3", "F4"))
+        return True
+
+    def arm(fid, post_only):
+        kept = []
+        for o in outs:
+            p = by_id.get(o["pick_id"])
+            r = col(o, "ret_open_close_net")
+            if not p or r is None:
+                continue
+            if post_only and not (p.get("trading_date", "") > REG):
+                continue
+            if fid == "ALL" or keep(p, fid):
+                kept.append((r, int(o["win"]) if o.get("win") not in (None, "") else (1 if r > 0 else 0)))
+        return kept
+
+    def fmt(kept):
+        if not kept:
+            return "n=0", "—", "—"
+        rs = [r for r, _ in kept]
+        return f"n={len(kept)}", f"{pct(sum(wv for _, wv in kept), len(kept)):.0f}%", f"{mean(rs):+.1f}%"
+
+    labels = {"ALL": "Baseline (all picks)", "F1": "H-F1 skip <$1", "F2": "H-F2 skip float≥3M",
+              "F3": "H-F3 skip gap≥+20%", "F4": "H-F4 skip A/B (Finding A)", "CLEAN": "H-CLEAN (all filters)"}
+    w("| filter | all-time | | | post-reg (out-of-sample) | | |")
+    w("|---|---|---|---|---|---|---|")
+    w("| | n | win% | avg net | n | win% | avg net |")
+    for fid in ["ALL", "F1", "F2", "F3", "F4", "CLEAN"]:
+        a_n, a_w, a_m = fmt(arm(fid, False))
+        p_n, p_w, p_m = fmt(arm(fid, True))
+        w(f"| {labels[fid]} | {a_n} | {a_w} | {a_m} | {p_n} | {p_w} | {p_m} |")
+    w("")
+    w("_Exit-rule study: see reports/exit-study-LATEST.md (in-sample, exploratory)._")
+    w("")
+
     # ---- 5. integrity ----
     w("## 5. Integrity checks (verifiability standard)")
     w("")

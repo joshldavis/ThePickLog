@@ -21,6 +21,10 @@ jobs:
           python-version: "3.11"
       - name: Generate forward-log report
         run: python weekly_report.py
+      - name: Install deps for exit study
+        run: pip install yfinance
+      - name: Run exit-rule study (daily-resolution, in-sample)
+        run: python exit_sim.py || true   # network/data hiccup must not block the report commit
       - name: Commit report
         run: |
           # Author as the repo owner so Vercel authorizes the auto-deploy.
