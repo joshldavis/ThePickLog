@@ -71,5 +71,64 @@ rejected and that day's commit silently lost. **Now:** `git pull --rebase --auto
   TEST-PLAN-quality-downside.md and PHASE2-SCOPE.md.
 
 ---
-*QA pass on the analysis + automation layer. Not investment advice. Backtest outputs stay
-in-sample/exploratory; the forward log remains the only public-credibility source.*
+
+# Round 2 — web app + scan/grade core · 2026-06-22
+
+Independent review of `ignitionscan.py` (the scan/grade core that writes the immutable
+log), the four `api/*.js` Vercel proxies, and `index.html`. No Critical issues: no secret
+leaks, no SSRF/open-proxy, no triggerable XSS, and the log is genuinely append-only
+(verified: 0 duplicate `(ticker, trading_date)` pairs, 0 duplicate outcome `pick_id`s).
+Two HIGH bugs biased the track record and are now fixed.
+
+### BUG 3 (fixed, HIGH) — transient fetch failure permanently dropped a pick from the record
+`cmd_grade` wrote a terminal `"no history"` outcome on any empty Yahoo response, and the
+`done` set then blocked it from ever being re-graded. A momentary Yahoo hiccup on grade
+night would silently delete a real win/loss from the denominator → survivorship bias in
+win rate / mean / calibration. **Fix:** a missing fetch is now treated as transient — the
+pick is left ungraded so the next run retries; a terminal note is written only after the
+pick is genuinely stale (>20 weekday-days old, i.e. delisted/halted). Happy path unchanged.
+
+### BUG 4 (fixed, HIGH) — grading ignored market holidays, grading a session early
+`_trading_days_since` counted Mon–Fri with no holiday calendar, so in any week with a
+market holiday (Juneteenth, July 4, Thanksgiving…) a pick hit the 5-day mark one session
+early and was graded off a 4-session window — mis-stating the return and making the
+"graded 5 trading days later" claim literally false for those rows. **Fix:** grading now
+keys off the *actual trading bars* in the fetched data — if the 5th session hasn't closed
+(`len(window) < 6`), it defers to the next run instead of grading short. Removes the
+holiday bug and the timezone fragility at once. (Note: pre-fix rows graded during a
+holiday week may have used a short window; not rewritten, since the log is immutable —
+flagged here as an erratum. Going forward it's correct. Relevant: July 4 falls in the
+away-month window.)
+
+### HARDENING 3 (fixed, MEDIUM) — accidental live-money orders
+`api/alpaca.js` routed to the live endpoint whenever `ALPACA_PAPER=false` — one stray env
+var from real orders, while the UI still said "PAPER." **Fix:** paper is now the floor;
+going live requires TWO deliberate signals (`ALPACA_PAPER=false` **and**
+`ALPACA_ALLOW_LIVE=yes_i_understand`). A single typo can no longer place real trades.
+
+### Logged for later (lower severity, not yet changed)
+- **M2** — `api/*.js` in-memory caches are per-warm-instance and unbounded; the free-tier
+  rate-limit protection is weaker than the comments imply, and `factsCache` can grow.
+  Bound with an LRU when convenient.
+- **M3** — `index.html` track-record table trusts the `win` column rather than deriving it
+  from `ret_open_close_net`. Clean today (grader sets them consistently); derive-from-return
+  would keep the "stranger can verify" property even if a row were ever hand-edited.
+- **M4** — `index.html` risk settings use `localStorage` (unsupported here); wrapped in
+  try/catch so it degrades to defaults — settings just don't persist.
+- **L1–L4** — gap proxy depends on which Yahoo `.info` field is populated; CSV appends
+  aren't atomic; agent grounding is same-user prompt-injectable (text-only, contained);
+  symbol sanitizer verified safe. All low / informational.
+
+### Verified clean (core + proxies)
+- Scan + grade are append-only and idempotent; the `(ticker, date)` dedupe works.
+- Scoring math (`score_inputs`, `tier_of`, float/rvol/gap/price) and the grade math
+  (entry=open, 2% haircut, MFE/MAE, win=positive net) are internally consistent.
+- `agent.js` / `edgar.js` clean; keys env-only; Alpaca order validation (qty/side/type/price)
+  is solid; symbol sanitizer blocks traversal.
+- Post-fix: `ignitionscan.py` compiles, `api/alpaca.js` passes `node --check`, grader
+  happy-path window selection is unchanged (regression-checked).
+
+---
+*QA pass on the analysis + automation layer AND the scan/grade core + web app. Not
+investment advice. Backtest outputs stay in-sample/exploratory; the forward log remains
+the only public-credibility source.*

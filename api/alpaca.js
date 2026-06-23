@@ -26,7 +26,12 @@ export default async function handler(req, res) {
     || process.env.ALPACA_API_KEY_ID || process.env.ALPACA_API_KEY || process.env.ALPACA_KEY;
   const SECRET = process.env.ALPACA_SECRET_KEY || process.env.APCA_API_SECRET_KEY
     || process.env.ALPACA_API_SECRET_KEY || process.env.ALPACA_SECRET;
-  const PAPER = (process.env.ALPACA_PAPER ?? "true").toLowerCase() !== "false";
+  // Paper is the default AND the floor. Going live takes TWO deliberate signals:
+  // ALPACA_PAPER=false AND ALPACA_ALLOW_LIVE=yes_i_understand. A single stray/typo'd
+  // env var can no longer route real-money orders to the live endpoint. [QA M1]
+  const wantsLive = (process.env.ALPACA_PAPER ?? "true").toLowerCase() === "false";
+  const liveArmed = (process.env.ALPACA_ALLOW_LIVE ?? "").toLowerCase() === "yes_i_understand";
+  const PAPER = !(wantsLive && liveArmed);
 
   if (!KEY || !SECRET) {
     return res.status(500).json({

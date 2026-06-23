@@ -220,24 +220,38 @@ def cmd_grade():
     picks = read_rows(PICKS_CSV)
     done = {o["pick_id"] for o in read_rows(OUTCOMES_CSV)}
     haircut = CONFIG["COST_HAIRCUT_PCT"]; graded = 0
+    GRADE = CONFIG["GRADE_AFTER_DAYS"]
     for p in picks:
         if p["pick_id"] in done: continue
-        if _trading_days_since(p["trading_date"]) < CONFIG["GRADE_AFTER_DAYS"]: continue
+        tds = _trading_days_since(p["trading_date"])
+        if tds < GRADE: continue
+        # Past ~4 weeks of weekdays with still-no-gradeable-data, treat the symbol as
+        # genuinely dead (delisted/halted) and record a terminal note. Before that, a
+        # missing fetch is treated as TRANSIENT: skip and retry next run rather than
+        # permanently dropping a real win/loss from the record (survivorship bias). [H1]
+        stale = tds > 20
         try:
             start = p["trading_date"]
             end = (datetime.strptime(start,"%Y-%m-%d")+timedelta(days=16)).strftime("%Y-%m-%d")
             df = yf.Ticker(p["ticker"]).history(start=start, end=end, auto_adjust=False)
             if df is None or len(df)==0:
-                append_outcome(p, "no history"); graded += 1; continue
+                if stale: append_outcome(p, "no history (gave up after retries)"); graded += 1
+                continue  # transient: leave ungraded so the next run retries
             df = df.reset_index()
             df["d"] = df["Date"].astype(str).str[:10]
             idx = df.index[df["d"]==start]
             if len(idx)==0:
-                append_outcome(p, "no entry bar"); graded += 1; continue
+                if stale: append_outcome(p, "no entry bar"); graded += 1
+                continue
             i0 = idx[0]
-            window = df.iloc[i0:i0+CONFIG["GRADE_AFTER_DAYS"]+1]
+            window = df.iloc[i0:i0+GRADE+1]
+            # Grade on ACTUAL trading sessions, not wall-clock weekdays: if the 5th
+            # session hasn't closed yet (e.g., a market-holiday week), defer rather than
+            # grade off a short window — which would mis-state the return. [H2]
+            if len(window) < GRADE+1:
+                continue
             o = float(window.iloc[0]["Open"]); c = float(window.iloc[0]["Close"])
-            close_5d = float(window.iloc[-1]["Close"])
+            close_5d = float(window.iloc[GRADE]["Close"])
             hi = float(window["High"].max()); lo = float(window["Low"].min())
             roc = (c-o)/o*100 - haircut
             r5d = (close_5d-o)/o*100 - haircut
