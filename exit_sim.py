@@ -193,7 +193,19 @@ def _write_report(results, used, n_graded):
             star = " ⭐"
         L.append(f"| {name}{star} | {len(results[name])} | {wr:.0f}% | {mean:+.1f}% | {med:+.1f}% |")
     L += ["", "⭐ = avg net/trade at least +2pp better than the current same-day-close exit.",
-          "", "_Not investment advice. Exploratory; see HYPOTHESES.md for the forward-validation rule._"]
+          "",
+          "**Read the median, not just the mean.** When a rule's avg net is far above its "
+          "median (e.g. trailing stops), the average is carried by a few outlier runners — the "
+          "*typical* trade is the median, which may still be negative. Such rules are high-"
+          "variance and unreliable at this N.",
+          "",
+          "**Slippage caveat:** target/stop/trailing fills are assumed exactly at the level. On "
+          "thin low-float names, gaps blow through stops and you rarely fill a target cleanly, so "
+          "real-world results for stop/trailing rules would be **worse** than shown here. The 2% "
+          "haircut does not capture gap-through slippage.",
+          "",
+          "_Not investment advice. In-sample/exploratory; a rule must be pre-registered "
+          "(HYPOTHESES.md) and validated on post-registration picks before it means anything._"]
     os.makedirs(os.path.join(HERE, "reports"), exist_ok=True)
     out = os.path.join(HERE, "reports", "exit-study-LATEST.md")
     with open(out, "w") as fh:
