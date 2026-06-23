@@ -25,6 +25,11 @@ without shrinking the sample to uselessness.
 | **H-F4** | tier A or B (hot) | Finding A: hottest momentum = deepest drawdown | already holds out-of-sample |
 | **H-CLEAN** | any of F1–F4 | combined "only the clean setups" filter | — |
 
+## Open question (no pre-set direction)
+| id | question | why two-sided | data status |
+|----|----------|---------------|-------------|
+| **H-SI** | does short interest ≥20% separate winners from losers? | high SI is squeeze-prone — violent *both* ways, so neither direction is assumed | short-interest capture began 2026-06-16; **no graded pick carries it yet** (all 65 graded predate capture). Tracked in the weekly report; evaluate once enough SI-bearing picks have graded. |
+
 ## Exit-rule hypothesis
 - **H-EX1 (pending):** the exit study (`exit_sim.py` → `reports/exit-study-LATEST.md`)
   explores profit-target / stop / trailing rules in-sample. **Do not adopt a rule from the

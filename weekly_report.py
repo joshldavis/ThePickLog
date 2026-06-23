@@ -247,6 +247,27 @@ def main():
         p_n, p_w, p_m = fmt(arm(fid, True))
         w(f"| {labels[fid]} | {a_n} | {a_w} | {a_m} | {p_n} | {p_w} | {p_m} |")
     w("")
+    # short-interest cut (H-SI) — two-sided; squeeze-prone both ways. Capture began
+    # 2026-06-16, so this populates only as those (and later) picks reach grading.
+    si_rows = []
+    for o in outs:
+        p = by_id.get(o["pick_id"]); r = col(o, "ret_open_close_net")
+        si = _f((p or {}).get("short_interest_pct"))
+        if p and r is not None and si is not None:
+            si_rows.append((si, r, int(o["win"]) if o.get("win") not in (None, "") else (1 if r > 0 else 0)))
+
+    def f2(k):
+        return (f"n={len(k)}, win {pct(sum(wv for _, wv in k), len(k)):.0f}%, avg {mean([r for r, _ in k]):+.1f}%"
+                if k else "n=0")
+    w("**H-SI — short-interest cut (open question, two-sided):**")
+    if si_rows:
+        hi = [(r, wv) for si, r, wv in si_rows if si >= 20]
+        lo = [(r, wv) for si, r, wv in si_rows if si < 20]
+        w(f"- SI ≥ 20%: {f2(hi)}   ·   SI < 20%: {f2(lo)}  (graded picks carrying short interest: {len(si_rows)})")
+    else:
+        w("- 0 graded picks carry short interest yet — capture began 2026-06-16; this fills in as "
+          "those picks reach the 5-day grade (first ones land ~this week).")
+    w("")
     w("_Exit-rule study: see reports/exit-study-LATEST.md (in-sample, exploratory)._")
     w("")
 
