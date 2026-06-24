@@ -217,6 +217,49 @@ async function main(){
     </tbody></table></div>
     <div class="note">Rule: +10% limit over the 5-day hold → +8% net if hit, else 5-day close. All-time is in-sample context, <b>not</b> the test. Fills assumed exactly at +10% — real thin-float slippage is worse. See <a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX1.</div></div>`);
 
+  /* ---- H-EX2 pre-registered exit rule (target + stop) — replayed from paths.csv ---- */
+  const EX2REG="2026-06-24";
+  // Mirror exit_sim.py exactly: fills at level, conservative same-day tie (STOP first), 2% haircut.
+  const _exPct=(px,e)=>(px-e)/e*100;
+  const _net=(e,bars,kind)=>{ const last=num(bars[bars.length-1].close);
+    if(kind==="t10"){ for(const b of bars){ if(num(b.high)>=e*1.10) return 8.0; } return _exPct(last,e)-2; }
+    /* ts = +10% target / -20% stop */
+    for(const b of bars){ const hs=num(b.low)<=e*0.80, ht=num(b.high)>=e*1.10;
+      if(hs) return -22.0; if(ht) return 8.0; } return _exPct(last,e)-2; };
+  const exRows=parseCSV(pathsTxt);
+  const exByPid={};
+  for(const r of exRows){ (exByPid[r.pick_id]=exByPid[r.pick_id]||[]).push(r); }
+  for(const k in exByPid) exByPid[k].sort((a,b)=>(+a.session_idx)-(+b.session_idx));
+  const ex2Arms=(post)=>{ const base=[],e1=[],e2=[];
+    for(const o of graded){ const p=byId[o.pick_id]; if(!p) continue;
+      if(post && !(p.trading_date>EX2REG)) continue;
+      const bars=exByPid[o.pick_id]; const bv=num(o.ret_open_close_net);
+      const e0=(bars&&bars.length>=2)?num(bars[0].open):null;
+      if(e0==null||bv==null) continue;
+      base.push(bv); e1.push(_net(e0,bars,"t10")); e2.push(_net(e0,bars,"ts")); }
+    return {base,e1,e2}; };
+  add(`<h2>H-EX2 — pre-registered exit rule: does a stop add value? <span class="flag">judge the out-of-sample column</span></h2>`);
+  const aA=ex2Arms(false), aP=ex2Arms(true);
+  if(!aA.base.length){
+    add(`<div class="panel note">⏳ <b>Pending</b> — a target+stop needs the touch <i>order</i>, so it's replayed from
+      <code>paths.csv</code> (forward-only). No graded pick carries a committed path yet; this table fills in as
+      picks logged from ~2026-06-22 reach their 5-day grade. The in-sample grid is in the exit-rule study below;
+      §4e of <a href="reports/LATEST.md">the weekly report</a> is the canonical judge. See
+      <a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX2.</div>`);
+  } else {
+    const dP = aP.e2.length?(mean(aP.e2)-mean(aP.e1)):null;
+    add(`<div class="panel"><div class="scroll"><table>
+      <thead><tr><th>arm — n / win% / avg net</th><th>all-time, path-bearing (context)</th><th>post-${EX2REG} (OOS test)</th></tr></thead><tbody>
+      <tr><td>Same-day close (baseline)</td><td>${exCell(aA.base)}</td><td>${exCell(aP.base)}</td></tr>
+      <tr><td>H-EX1: +10% target only</td><td>${exCell(aA.e1)}</td><td>${exCell(aP.e1)}</td></tr>
+      <tr><td>H-EX2: +10% target / −20% stop</td><td>${exCell(aA.e2)}</td><td>${exCell(aP.e2)}</td></tr>
+      </tbody></table></div>
+      <div class="note">Replayed from the committed daily path, conservative same-day tie (stop fills first), 2% haircut.
+      The test is H-EX2 vs <b>H-EX1</b>: ${dP==null?"awaiting post-registration grades":`OOS delta (H-EX2 − H-EX1) <span class="${cls(dP)}">${fmtPct(dP)}</span> on n=${aP.e2.length}`} —
+      positive means the stop earns its keep; a null keeps H-EX1 stop-less. Thin-float names <b>gap through stops</b>,
+      so realized results are worse than shown. See <a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX2.</div></div>`);
+  }
+
   /* ---- charts ---- */
   add(`<h2>Equity curve & return distribution (took every pick, equal weight)</h2>`);
   const two=$(`<div class="grid two"></div>`);
