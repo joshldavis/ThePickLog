@@ -157,6 +157,22 @@ async function main(){
       <tr><td>SI ≥ 20%</td><td>${s(h)}</td></tr><tr><td>SI &lt; 20%</td><td>${s(l)}</td></tr></tbody></table></div>`);
   } else add(`<div class="panel note">No graded pick carries short interest yet — capture began 2026-06-16; fills in as those picks grade.</div>`);
 
+  /* ---- H-EX1 pre-registered exit rule ---- */
+  const EXREG="2026-06-23";
+  const exArm=(post)=>{const rs=[];for(const o of graded){const p=byId[o.pick_id];if(!p)continue;
+    if(post&&!(p.trading_date>EXREG))continue;const mfe=num(o.mfe_5d),c5=num(o.ret_open_5dclose_net);
+    if(mfe==null||c5==null)continue;rs.push(mfe>=10?8.0:c5);}return rs;};
+  const baseArm=(post)=>{const rs=[];for(const o of graded){const p=byId[o.pick_id];if(!p)continue;
+    if(post&&!(p.trading_date>EXREG))continue;const r=num(o.ret_open_close_net);if(r!=null)rs.push(r);}return rs;};
+  const exCell=(rs)=> rs.length?`${rs.length} / ${pct(rs.filter(x=>x>0).length,rs.length).toFixed(0)}% / <span class="${cls(mean(rs))}">${fmtPct(mean(rs))}</span>`:"n=0";
+  add(`<h2>H-EX1 — pre-registered exit rule <span class="flag">judge the out-of-sample column</span></h2>`);
+  add(`<div class="panel"><div class="scroll"><table>
+    <thead><tr><th>arm — n / win% / avg net</th><th>all-time (context)</th><th>post-${EXREG} (OOS test)</th></tr></thead><tbody>
+    <tr><td>Same-day close (baseline)</td><td>${exCell(baseArm(false))}</td><td>${exCell(baseArm(true))}</td></tr>
+    <tr><td>H-EX1: +10% / else 5d close</td><td>${exCell(exArm(false))}</td><td>${exCell(exArm(true))}</td></tr>
+    </tbody></table></div>
+    <div class="note">Rule: +10% limit over the 5-day hold → +8% net if hit, else 5-day close. All-time is in-sample context, <b>not</b> the test. Fills assumed exactly at +10% — real thin-float slippage is worse. See <a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX1.</div></div>`);
+
   /* ---- charts ---- */
   add(`<h2>Equity curve & return distribution (took every pick, equal weight)</h2>`);
   const two=$(`<div class="grid two"></div>`);

@@ -31,10 +31,33 @@ without shrinking the sample to uselessness.
 | **H-SI** | does short interest ≥20% separate winners from losers? | high SI is squeeze-prone — violent *both* ways, so neither direction is assumed | short-interest capture began 2026-06-16; **no graded pick carries it yet** (all 65 graded predate capture). Tracked in the weekly report; evaluate once enough SI-bearing picks have graded. |
 
 ## Exit-rule hypothesis
-- **H-EX1 (pending):** the exit study (`exit_sim.py` → `reports/exit-study-LATEST.md`)
-  explores profit-target / stop / trailing rules in-sample. **Do not adopt a rule from the
-  study directly.** Pick one candidate, register it here with a date, then judge it only on
-  post-registration picks — same discipline as the filters.
+
+**H-EX1 — registered 2026-06-23.** *The screen's edge is in the exit, not the selection.*
+
+The in-sample evidence (first 65 graded picks) is that these names **spike then fade**:
+82% touch +5% intraday within the 5-day window, 63% touch +10%, 54% touch +15%; the
+typical pick reaches **+16.4%** max-favorable (median MFE) while the current same-day-close
+exit realizes **−2.8%** avg. The hypothesis is that a disciplined profit target monetizes
+the spike the screen is genuinely good at finding.
+
+- **Rule (frozen):** rest a **+10% limit** over the 5-trading-day hold. If the 5-day high
+  (`mfe_5d`) reaches +10%, the order fills → realized **+8% net** (target −2% cost haircut).
+  Otherwise exit at the 5-day close (`ret_open_5dclose_net`). Deterministic from the forward
+  log; no discretion.
+- **Baseline to beat:** the **current** exit = same-day open→close, net (avg **−2.8%**,
+  median −3.6%, win 40% at registration).
+- **Pass criterion:** on **post-2026-06-23** graded picks, the H-EX1 arm's **avg net/trade
+  (expectancy)** must exceed the same-day-close baseline, with the direction stable across
+  weekly snapshots. Median and win% are secondary readouts.
+- **In-sample signal at registration (not the test):** +10% target → 63% win, **+8.0%
+  median**, −1.6% avg vs −2.8% same-day-close — i.e. **+1.2pp expectancy, +11.6pp median.**
+- **Slippage caveat (must stay attached to every report):** fills are assumed exactly at
+  +10%. On thin low-float names, limits gap through and fill quality is poor, so **real-world
+  results will be worse than the proxy.** The 2% haircut does not capture gap-through. This
+  is why H-EX1 is a *hypothesis to be falsified forward*, not a result.
+- **Tracked by:** `weekly_report.py` §4d (all-time + post-registration), alongside the
+  exit study (`exit_sim.py` → `reports/exit-study-LATEST.md`) which walks the daily path
+  as the rigorous cross-check.
 
 ## Success / kill criteria
 - **Evaluate** once there are **≥ 30 post-registration graded picks** per arm (directional

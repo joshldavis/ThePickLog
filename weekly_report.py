@@ -271,6 +271,73 @@ def main():
     w("_Exit-rule study: see reports/exit-study-LATEST.md (in-sample, exploratory)._")
     w("")
 
+    # ---- 4d. pre-registered exit rule (H-EX1) ----
+    EX_REG = "2026-06-23"          # H-EX1 registration date — only later picks are the test
+    EX_TARGET = 10.0
+    EX_FILL_NET = EX_TARGET - 2.0  # +10% target minus the 2% cost haircut = +8% net realized
+    w("## 4d. Pre-registered exit rule — H-EX1 (the candidate edge)")
+    w("")
+    w(f"Registered {EX_REG}. The screen finds names that **spike then fade**; H-EX1 tests "
+      f"whether a disciplined target monetizes the spike. Rule: rest a **+{EX_TARGET:.0f}% "
+      f"limit** over the 5-day hold — if the 5-day high reaches it, realize **+{EX_FILL_NET:.0f}% "
+      f"net**, else exit at the 5-day close. Judged on **avg net/trade** vs the current "
+      f"same-day-close exit, on **post-{EX_REG}** picks. Median/win% secondary.")
+    w("")
+
+    def _ex_filter(post_only):
+        rows = []
+        for o in outs:
+            p = by_id.get(o["pick_id"])
+            if not p:
+                continue
+            if post_only and not (p.get("trading_date", "") > EX_REG):
+                continue
+            rows.append((p, o))
+        return rows
+
+    def ex_arm(post_only):
+        rs = []
+        for _, o in _ex_filter(post_only):
+            mfe, c5 = col(o, "mfe_5d"), col(o, "ret_open_5dclose_net")
+            if mfe is None or c5 is None:
+                continue
+            rs.append(EX_FILL_NET if mfe >= EX_TARGET else c5)
+        return rs
+
+    def base_arm(post_only):
+        return [r for _, o in _ex_filter(post_only)
+                if (r := col(o, "ret_open_close_net")) is not None]
+
+    def exline(name, rs):
+        if not rs:
+            w(f"| {name} | n=0 | — | — | — |"); return
+        wr = pct(sum(1 for r in rs if r > 0), len(rs))
+        w(f"| {name} | n={len(rs)} | {wr:.0f}% | {mean(rs):+.1f}% | {med(rs):+.1f}% |")
+
+    w("| arm | n | win% | avg net | median |")
+    w("|---|---|---|---|---|")
+    w("| _all-time (in-sample context, NOT the test)_ |  |  |  |  |")
+    exline("Same-day close (baseline)", base_arm(False))
+    exline("H-EX1 +10% target", ex_arm(False))
+    w("| _post-registration (the honest test)_ |  |  |  |  |")
+    exline("Same-day close (baseline)", base_arm(True))
+    exline("H-EX1 +10% target", ex_arm(True))
+    w("")
+    post_b, post_e = base_arm(True), ex_arm(True)
+    if post_e and post_b:
+        dp = mean(post_e) - mean(post_b)
+        tail = " Directional only until n≥30 per arm." if len(post_e) < 30 else ""
+        w(f"- Post-registration expectancy delta (H-EX1 − baseline): **{dp:+.1f}pp** on "
+          f"n={len(post_e)}.{tail}")
+    else:
+        w(f"- No post-{EX_REG} graded picks yet — fills in as picks logged after registration "
+          "reach the 5-day grade (first ones land ~next week). The all-time row is in-sample "
+          "context, **not** the test.")
+    w("- ⚠️ Fills assumed exactly at +10%; thin-float gap-through means real fills are worse "
+      "(see HYPOTHESES.md H-EX1 slippage caveat). `exit_sim.py` walks the daily path as the "
+      "rigorous cross-check.")
+    w("")
+
     # ---- 5. integrity ----
     w("## 5. Integrity checks (verifiability standard)")
     w("")
