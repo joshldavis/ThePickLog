@@ -28,6 +28,15 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPORTS = os.path.join(HERE, "reports")
 RUG = -30.0
 
+# Reuse the audited exit-rule core so §4e (H-EX2) can't diverge from exit_sim.py.
+# exit_sim imports only stdlib at module level (yfinance is lazy), so this stays
+# stdlib-only and never touches the network on import.
+try:
+    from exit_sim import net as exit_net, load_paths as _load_paths
+except Exception:  # pragma: no cover — report must run even if exit_sim is unavailable
+    exit_net = None
+    _load_paths = None
+
 
 def _read(path):
     if not os.path.exists(path):
@@ -336,6 +345,88 @@ def main():
     w("- ⚠️ Fills assumed exactly at +10%; thin-float gap-through means real fills are worse "
       "(see HYPOTHESES.md H-EX1 slippage caveat). `exit_sim.py` walks the daily path as the "
       "rigorous cross-check.")
+    w("")
+
+    # ---- 4e. pre-registered exit rule #2 (H-EX2 — does a stop add value?) ----
+    EX2_REG = "2026-06-24"          # H-EX2 registration date — only later picks are the test
+    EX2_RULE = {"type": "target_stop", "target": 10, "stop": 20}
+    EX1_RULE = {"type": "target", "target": 10}
+    w("## 4e. Pre-registered exit rule — H-EX2 (does a stop add value?)")
+    w("")
+    w(f"Registered {EX2_REG}. H-EX1 monetizes the spike but ignores the fat left tail "
+      "(median MAE ≈ −16%, 17% rug rate). H-EX2 pairs the **+10% target with a −20% disaster "
+      "stop** (first level the daily path touches wins; conservative same-day tie → stop "
+      "first). Judged on **avg net/trade vs H-EX1 (target alone)** on **post-"
+      f"{EX2_REG}** path-bearing picks; same-day-close is the secondary baseline.")
+    w("")
+
+    # A target+stop rule needs the ORDER of touches, so it can only be evaluated from the
+    # committed daily path (paths.csv), not from mfe/mae magnitudes. paths.csv is
+    # forward-only, so the path-bearing sample starts ~empty and accumulates honestly.
+    paths = _load_paths() if _load_paths else {}
+
+    def ex2_rows(post_only):
+        """(ret_baseline, ret_h_ex1, ret_h_ex2) per graded pick that HAS a daily path,
+        all net of the 2% haircut and computed on the same subset for apples-to-apples."""
+        out_rows = []
+        if exit_net is None:
+            return out_rows
+        for o in outs:
+            p = by_id.get(o.get("pick_id"))
+            if not p:
+                continue
+            if post_only and not (p.get("trading_date", "") > EX2_REG):
+                continue
+            entry = col(o, "entry_open")
+            bars = paths.get(o.get("pick_id"))
+            base = col(o, "ret_open_close_net")
+            if entry is None or not bars or base is None:
+                continue
+            out_rows.append((base, exit_net(entry, bars, EX1_RULE),
+                             exit_net(entry, bars, EX2_RULE)))
+        return out_rows
+
+    def ex2line(name, vals):
+        if not vals:
+            w(f"| {name} | n=0 | — | — | — |"); return
+        wr = pct(sum(1 for v in vals if v > 0), len(vals))
+        w(f"| {name} | n={len(vals)} | {wr:.0f}% | {mean(vals):+.1f}% | {med(vals):+.1f}% |")
+
+    all_rows, post_rows = ex2_rows(False), ex2_rows(True)
+    if not all_rows:
+        if exit_net is None or _load_paths is None:
+            w("- ⏳ **Pending** — exit-rule core (`exit_sim.py`) unavailable to this run; "
+              "the in-sample cross-check still lives in `reports/exit-study-LATEST.md`.")
+        else:
+            w("- ⏳ **Pending** — no graded pick carries a committed daily path yet "
+              "(`paths.csv` is forward-only, capture began ~2026-06-22). H-EX2 needs the "
+              "touch *order* a target+stop implies, so it can't be back-filled from "
+              "mfe/mae. The post-registration sample fills in as path-bearing picks grade. "
+              "In-sample context meanwhile: `reports/exit-study-LATEST.md`.")
+    else:
+        w("| arm | n | win% | avg net | median |")
+        w("|---|---|---|---|---|")
+        w("| _all-time, path-bearing (in-sample context, NOT the test)_ |  |  |  |  |")
+        ex2line("Same-day close (baseline)", [r[0] for r in all_rows])
+        ex2line("H-EX1 +10% target", [r[1] for r in all_rows])
+        ex2line("H-EX2 +10% target / −20% stop", [r[2] for r in all_rows])
+        w("| _post-registration, path-bearing (the honest test)_ |  |  |  |  |")
+        ex2line("Same-day close (baseline)", [r[0] for r in post_rows])
+        ex2line("H-EX1 +10% target", [r[1] for r in post_rows])
+        ex2line("H-EX2 +10% target / −20% stop", [r[2] for r in post_rows])
+        w("")
+        if post_rows:
+            dp = mean([r[2] for r in post_rows]) - mean([r[1] for r in post_rows])
+            tail = " Directional only until n≥30." if len(post_rows) < 30 else ""
+            w(f"- Post-registration expectancy delta (H-EX2 − H-EX1): **{dp:+.1f}pp** on "
+              f"n={len(post_rows)} path-bearing picks. Positive ⇒ the stop earns its keep; "
+              f"a null/negative keeps H-EX1 stop-less.{tail}")
+        else:
+            w(f"- No post-{EX2_REG} path-bearing graded picks yet — the all-time row is "
+              "in-sample context, **not** the test.")
+    w("- ⚠️ Thin-float names **gap through stops**; the 2% haircut doesn't model gap-through, "
+      "so realized H-EX2 (esp. the stop arm) would be **worse** than shown (HYPOTHESES.md "
+      "H-EX2 caveat).")
     w("")
 
     # ---- 5. integrity ----

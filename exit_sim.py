@@ -91,6 +91,7 @@ RULES = [
     {"name": "Target +30%", "type": "target", "target": 30},
     {"name": "Stop -10%", "type": "stop", "stop": 10},
     {"name": "Stop -15%", "type": "stop", "stop": 15},
+    {"name": "H-EX2 +10% target / -20% stop [registered 2026-06-24]", "type": "target_stop", "target": 10, "stop": 20},
     {"name": "Target +20% / Stop -10%", "type": "target_stop", "target": 20, "stop": 10},
     {"name": "Target +15% / Stop -10%", "type": "target_stop", "target": 15, "stop": 10},
     {"name": "Target +20% / Stop -15%", "type": "target_stop", "target": 20, "stop": 15},

@@ -38,6 +38,20 @@
   .flag{font-size:11px;padding:1px 6px;border-radius:6px;background:#3a2418;color:var(--amber);border:1px solid #5a3a22}
   code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
   .err{background:#3a1c22;border:1px solid #5a2a33;color:#ffb3c0;padding:12px;border-radius:10px}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid var(--line)}
+  .badge.lown{color:var(--amber);border-color:#5a3a22;background:#2a1d10}
+  .badge.midn{color:var(--blue);border-color:#24405a;background:#10202e}
+  .badge.okn{color:var(--green);border-color:#1d4a37;background:#0f241b}
+  .dlbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9px;font-size:13px;font-weight:600;
+       text-decoration:none;color:var(--tx);background:var(--panel2);border:1px solid var(--line);cursor:pointer}
+  .btn:hover{border-color:var(--a);color:#fff}
+  .btn .sz{color:var(--dim);font-weight:400;font-size:11px}
+  .paths{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+  .pcard{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:7px 8px 6px}
+  .pcard .t{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px}
+  .pcard .mfe{font-size:11px}
+  .pcard canvas{display:block}
 </style>
 </head>
 <body>
@@ -45,10 +59,23 @@
   <header>
     <h1>Ignition<span class="dot">Scan</span> · Model Validation</h1>
     <span class="sub" id="updated">loading live data…</span>
+    <span class="badge" id="confidence">sizing sample…</span>
   </header>
-  <div class="sub">Computed live in your browser from the immutable log —
-    <a href="picks.csv">picks.csv</a> · <a href="outcomes.csv">outcomes.csv</a>.
-    Personal / unlisted. Not investment advice.</div>
+  <div class="sub">Computed live in your browser from the immutable log. Verify every number yourself:
+    download the raw record and re-run the math.</div>
+
+  <div class="panel" style="margin-top:10px">
+    <div class="dlbar">
+      <span class="sub" style="margin-right:2px">Raw record:</span>
+      <a class="btn" href="picks.csv" download>⬇ picks.csv <span class="sz" id="szp"></span></a>
+      <a class="btn" href="outcomes.csv" download>⬇ outcomes.csv <span class="sz" id="szo"></span></a>
+      <a class="btn" id="dlpaths" href="paths.csv" download style="display:none">⬇ paths.csv <span class="sz" id="szpa"></span></a>
+      <a class="btn" href="HYPOTHESES.md" target="_blank">📄 HYPOTHESES.md</a>
+    </div>
+    <div class="note">The pick log is append-only and immutable — picks are stamped before the outcome
+      is known, graded at 5 trading days, never edited. <code>paths.csv</code> is the grade-time daily
+      OHLC of each pick (forward-only, so exit rules are reproducible). Nothing here is a prediction.</div>
+  </div>
 
   <div id="root"></div>
 </div>
@@ -77,12 +104,13 @@ const mean=(a)=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const pct=(n,d)=>d?100*n/d:null;
 
 async function main(){
-  let picksTxt, outsTxt, exitMd="";
+  let picksTxt, outsTxt, pathsTxt="", exitMd="";
   try{
     [picksTxt,outsTxt] = await Promise.all([
       fetch("picks.csv",{cache:"no-store"}).then(r=>r.text()),
       fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
     ]);
+    pathsTxt = await fetch("paths.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
     exitMd = await fetch("reports/exit-study-LATEST.md",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
   }catch(e){ document.getElementById("root").innerHTML='<div class="err">Could not load live data: '+e+'</div>'; return; }
 
@@ -90,6 +118,22 @@ async function main(){
   const outs  = parseCSV(outsTxt);
   const byId = Object.fromEntries(picks.map(p=>[p.pick_id,p]));
   const graded = outs.filter(o=>num(o.ret_open_close_net)!=null);
+
+  /* ---- download sizes + paths availability ---- */
+  const kb=(t)=> t?(t.length<1024?t.length+" B":(t.length/1024).toFixed(0)+" KB"):"";
+  const setTxt=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  setTxt("szp",kb(picksTxt)); setTxt("szo",kb(outsTxt));
+  if(pathsTxt){const b=document.getElementById("dlpaths");if(b)b.style.display="";setTxt("szpa",kb(pathsTxt));}
+
+  /* ---- sample-size / confidence badge (don't let anyone over-read small N) ---- */
+  const n=graded.length, badge=document.getElementById("confidence");
+  if(badge){
+    let klass,txt;
+    if(n<30){klass="lown";txt=`N=${n} graded · small sample — directional only`;}
+    else if(n<60){klass="midn";txt=`N=${n} graded · firming up — read with caution`;}
+    else{klass="okn";txt=`N=${n} graded · sample maturing`;}
+    badge.className="badge "+klass; badge.textContent="⚖ "+txt;
+  }
 
   const dates=[...new Set(picks.map(p=>p.trading_date))].sort();
   const span = dates.length?dates[0]+" → "+dates[dates.length-1]:"—";
@@ -196,6 +240,55 @@ async function main(){
   if(exitMd){
     add(`<h2>Exit-rule study (in-sample, exploratory)</h2>`);
     const p=$(`<div class="panel"></div>`); p.innerHTML=mdToHtml(exitMd); root.appendChild(p);
+  }
+
+  /* ---- per-pick paths: eyeball the "spike then fade" ---- */
+  add(`<h2>Per-pick paths — the “spike then fade”, one tile per pick</h2>`);
+  const prows = parseCSV(pathsTxt);
+  if(prows.length){
+    const byPid={};
+    for(const r of prows){ (byPid[r.pick_id]=byPid[r.pick_id]||[]).push(r); }
+    // most-recent graded picks that carry a committed path
+    const withPath = graded
+      .filter(o=>byPid[o.pick_id] && byPid[o.pick_id].length>=2)
+      .sort((a,b)=>(byId[b.pick_id]?.trading_date||"").localeCompare(byId[a.pick_id]?.trading_date||""))
+      .slice(0,24);
+    if(withPath.length){
+      const wrap=$(`<div class="panel"><div class="paths" id="pathgrid"></div>
+        <div class="note">Each tile is one pick's daily close, in % from the entry open, over the 5-day hold;
+        the dot marks the intraday peak (max-favorable). The screen reliably <b>spikes</b> early, then often
+        <b>fades</b> into the close — the visual case for H-EX1/H-EX2 (exit on the spike). Newest ${withPath.length} path-bearing picks.</div></div>`);
+      root.appendChild(wrap);
+      const grid=wrap.querySelector("#pathgrid");
+      withPath.forEach(o=>{
+        const bars=byPid[o.pick_id].slice().sort((a,b)=>(+a.session_idx)-(+b.session_idx));
+        const entry=num(bars[0].open); if(!entry)return;
+        const closes=bars.map(b=>+(((num(b.close)-entry)/entry*100)).toFixed(1));
+        const highs=bars.map(b=>((num(b.high)-entry)/entry*100));
+        const mfe=Math.max(...highs), endv=closes[closes.length-1];
+        const peakIdx=highs.indexOf(mfe);
+        const col=endv>=0?"#2ec27e":"#f0506e";
+        const card=$(`<div class="pcard">
+          <div class="t"><span>${o.ticker}</span><span class="${cls(endv)}">${fmtPct(endv,0)}</span></div>
+          <canvas height="44"></canvas>
+          <div class="mfe muted">peak <span class="pos">${fmtPct(mfe,0)}</span></div></div>`);
+        grid.appendChild(card);
+        new Chart(card.querySelector("canvas"),{type:"line",
+          data:{labels:closes.map((_,i)=>i),datasets:[
+            {data:closes,borderColor:col,borderWidth:1.5,pointRadius:0,fill:false,tension:.2},
+            {data:closes.map((v,i)=>i===peakIdx?mfe:null),borderColor:"transparent",
+             pointRadius:closes.map((_,i)=>i===peakIdx?3:0),pointBackgroundColor:"#f5b14c",spanGaps:false}
+          ]},
+          options:{animation:false,plugins:{legend:{display:false},tooltip:{enabled:false}},
+            scales:{x:{display:false},y:{display:false,grid:{display:false},
+              suggestedMin:Math.min(0,...closes)-3,suggestedMax:Math.max(mfe,...closes)+3}},
+            elements:{line:{borderJoinStyle:"round"}}}});
+      });
+    } else add(`<div class="panel note">Path tiles populate as graded picks carry a committed daily path.</div>`);
+  } else {
+    add(`<div class="panel note">⏳ No <code>paths.csv</code> yet — grade-time path capture is <b>forward-only</b>
+      (so exit rules stay reproducible and can't be back-filled). Tiles appear here as picks logged from
+      ~2026-06-22 onward reach their 5-day grade.</div>`);
   }
 
   /* ---- integrity ---- */

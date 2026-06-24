@@ -59,6 +59,44 @@ the spike the screen is genuinely good at finding.
   exit study (`exit_sim.py` → `reports/exit-study-LATEST.md`) which walks the daily path
   as the rigorous cross-check.
 
+## Exit-rule hypothesis #2 — does a stop add value?
+
+**H-EX2 — registered 2026-06-24.** *A profit target without a stop ignores the fat left
+tail.* H-EX1 monetizes the spike but says nothing about the downside; the live log shows a
+brutal left tail (median 5-day MAE ≈ −16%, worst −50%, **17% catastrophic-rug rate** with
+MAE < −30%). H-EX2 asks whether pairing H-EX1's target with a disaster stop **improves
+expectancy** versus the target alone.
+
+- **Rule (frozen):** over the 5-trading-day hold, rest a **+10% limit AND a −20% stop**.
+  Whichever level the daily path touches first exits the trade; if neither is touched, exit
+  at the 5-day close. **Conservative same-day-collision convention: if a single session's
+  range spans BOTH levels, assume the STOP filled first** (results can't be optimistically
+  inflated). Fills assumed exactly at the level; same 2% cost haircut. Deterministic from
+  the committed daily path (`paths.csv`); no discretion.
+- **Why −20% (and not tighter):** the median pick already dips ≈ −16%, so a stop inside that
+  would book a loss on the *typical* wobble and shred the spike H-EX1 is trying to catch.
+  −20% sits **beyond** the median drawdown — it is a *disaster* stop aimed only at the
+  −30%-and-worse rug tail, not a tight trade-management stop. (Frozen, not tuned; OOS judges.)
+- **Baselines to beat (two):** primary = **H-EX1 (+10% target alone)** — does adding the stop
+  raise avg net/trade? secondary = the current same-day-close exit. All three arms are
+  computed on the **same path-bearing subset** so the comparison is apples-to-apples.
+- **Pass criterion:** on **post-2026-06-24** graded, path-bearing picks, H-EX2's **avg
+  net/trade (expectancy)** must exceed H-EX1's, with the direction stable across weekly
+  snapshots. A null (the stop costs more in booked losses than it saves in avoided rugs) is a
+  fully valid, expected outcome and would *keep H-EX1 stop-less*.
+- **Data dependency / honesty note:** unlike H-EX1 (evaluable from `mfe_5d`), a target+stop
+  rule needs the **order** of touches, which only the daily path resolves. `paths.csv` is
+  **forward-only** (capture began ~2026-06-22), so the post-registration, path-bearing sample
+  starts near zero and accumulates — exactly like H-SI. Until it does, §4e reports *pending*,
+  not a result.
+- **Slippage caveat (must stay attached):** thin low-float names **gap through stops** — a
+  −20% stop can fill far below −20% on a halt-and-reopen. The 2% haircut does **not** capture
+  gap-through, so realized H-EX2 results will be **worse** than this proxy, and worse for the
+  stop arm specifically. This is why H-EX2 is a hypothesis to be **falsified forward**.
+- **Tracked by:** `weekly_report.py` §4e (all-time context + post-registration test), with
+  `exit_sim.py` (rule *"H-EX2 +10% target / −20% stop"*) walking the full daily path as the
+  in-sample cross-check.
+
 ## Success / kill criteria
 - **Evaluate** once there are **≥ 30 post-registration graded picks** per arm (directional
   before that).
