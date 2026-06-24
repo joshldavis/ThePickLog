@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>IgnitionScan — Model Validation</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#ff6a3d;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .wrap{max-width:1100px;margin:0 auto;padding:18px 14px 60px}
+  header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:4px}
+  h1{font-size:20px;margin:0;letter-spacing:.2px}
+  h1 .dot{color:var(--a)}
+  .sub{color:var(--dim);font-size:13px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:26px 0 10px;font-weight:600}
+  .grid{display:grid;gap:12px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .kpi .v{font-size:26px;font-weight:700;letter-spacing:-.5px}
+  .kpi .l{color:var(--dim);font-size:12px;margin-top:2px}
+  .kpi .s{font-size:12px;margin-top:4px;color:var(--dim)}
+  .pos{color:var(--green)} .neg{color:var(--red)} .warn{color:var(--amber)} .muted{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  thead th{color:var(--dim);font-weight:600;border-bottom:1px solid var(--line)}
+  .scroll{overflow-x:auto}
+  .chip{display:inline-block;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:600;border:1px solid var(--line)}
+  .chip.ok{color:var(--green);border-color:#234} .chip.bad{color:var(--red)}
+  .note{color:var(--dim);font-size:12px;margin-top:8px}
+  .two{grid-template-columns:1fr 1fr}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+  a{color:var(--blue)}
+  .flag{font-size:11px;padding:1px 6px;border-radius:6px;background:#3a2418;color:var(--amber);border:1px solid #5a3a22}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
+  .err{background:#3a1c22;border:1px solid #5a2a33;color:#ffb3c0;padding:12px;border-radius:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Ignition<span class="dot">Scan</span> · Model Validation</h1>
+    <span class="sub" id="updated">loading live data…</span>
+  </header>
+  <div class="sub">Computed live in your browser from the immutable log —
+    <a href="picks.csv">picks.csv</a> · <a href="outcomes.csv">outcomes.csv</a>.
+    Personal / unlisted. Not investment advice.</div>
+
+  <div id="root"></div>
+</div>
+
+<script>
+const REG = "2026-06-22";                 // filter pre-registration date (HYPOTHESES.md)
+const HAIRCUT_NOTE = "net of 2% cost haircut";
+const $ = (h)=>{const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstChild;};
+const fmtPct = (x,d=1)=> (x==null||isNaN(x))?"—":(x>=0?"+":"")+x.toFixed(d)+"%";
+const cls = (x)=> x==null||isNaN(x)?"muted":x>0?"pos":x<0?"neg":"muted";
+
+function parseCSV(text){
+  const rows=[]; let i=0,f="",row=[],q=false;
+  while(i<text.length){const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false;} else f+=c; }
+    else { if(c==='"')q=true; else if(c===','){row.push(f);f="";} else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n')i++; if(f.length||row.length){row.push(f);rows.push(row);row=[];f="";} } else f+=c; }
+    i++;
+  }
+  if(f.length||row.length){row.push(f);rows.push(row);}
+  const head=rows.shift()||[];
+  return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(head.map((h,j)=>[h,r[j]])));
+}
+const num=(x)=>{const v=parseFloat(x);return isFinite(v)?v:null;};
+const med=(a)=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+const mean=(a)=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const pct=(n,d)=>d?100*n/d:null;
+
+async function main(){
+  let picksTxt, outsTxt, exitMd="";
+  try{
+    [picksTxt,outsTxt] = await Promise.all([
+      fetch("picks.csv",{cache:"no-store"}).then(r=>r.text()),
+      fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
+    ]);
+    exitMd = await fetch("reports/exit-study-LATEST.md",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
+  }catch(e){ document.getElementById("root").innerHTML='<div class="err">Could not load live data: '+e+'</div>'; return; }
+
+  const picks = parseCSV(picksTxt);
+  const outs  = parseCSV(outsTxt);
+  const byId = Object.fromEntries(picks.map(p=>[p.pick_id,p]));
+  const graded = outs.filter(o=>num(o.ret_open_close_net)!=null);
+
+  const dates=[...new Set(picks.map(p=>p.trading_date))].sort();
+  const span = dates.length?dates[0]+" → "+dates[dates.length-1]:"—";
+  const weeks = dates.length>1?((new Date(dates[dates.length-1])-new Date(dates[0]))/6048e5):0;
+  document.getElementById("updated").textContent =
+    "live · "+picks.length+" picks · "+graded.length+" graded · "+new Date().toISOString().slice(0,16).replace("T"," ")+"Z";
+
+  const oc = graded.map(o=>num(o.ret_open_close_net));
+  const r5 = graded.map(o=>num(o.ret_open_5dclose_net)).filter(x=>x!=null);
+  const mae= graded.map(o=>num(o.mae_5d)).filter(x=>x!=null);
+  const wins = graded.filter(o=>num(o.ret_open_close_net)>0).length;
+  const root=document.getElementById("root");
+  const add=(h)=>root.appendChild($(h));
+
+  /* ---- KPIs ---- */
+  const winRate = pct(wins,graded.length);
+  add(`<h2>Headline (${HAIRCUT_NOTE})</h2>`);
+  const kpi=(v,l,s,c)=>`<div class="panel kpi"><div class="v ${c||''}">${v}</div><div class="l">${l}</div>${s?`<div class="s">${s}</div>`:""}</div>`;
+  add(`<div class="grid kpis">
+    ${kpi((winRate==null?"—":winRate.toFixed(0)+"%"),"Win rate (open→close)",wins+"/"+graded.length+" positive")}
+    ${kpi(fmtPct(mean(oc)),"Avg net / trade","expectancy — the real target",cls(mean(oc)))}
+    ${kpi(fmtPct(med(oc)),"Median net","the typical trade",cls(med(oc)))}
+    ${kpi(fmtPct(mean(r5)),"5-day hold avg",(pct(r5.filter(x=>x>0).length,r5.length)||0).toFixed(0)+"% win",cls(mean(r5)))}
+    ${kpi(fmtPct(med(mae)),"Median worst-dip (MAE)","downside you'd sit through","neg")}
+    ${kpi((pct(mae.filter(x=>x<-30).length,mae.length)||0).toFixed(0)+"%","Catastrophic-rug rate","MAE < −30%","warn")}
+  </div>`);
+  add(`<div class="note">Maturation: ${picks.length} picks over ${dates.length} scan days (${span}), ~${weeks.toFixed(1)} wks. ${graded.length} graded, ${picks.length-graded.length} pending (grades at 5 trading days).</div>`);
+
+  /* ---- Finding A ---- */
+  const tierMae=(ts)=>graded.filter(o=>ts.includes((byId[o.pick_id]||{}).tier)).map(o=>num(o.mae_5d)).filter(x=>x!=null);
+  const tierWin=(ts)=>{const g=graded.filter(o=>ts.includes((byId[o.pick_id]||{}).tier));return pct(g.filter(o=>num(o.ret_open_close_net)>0).length,g.length);};
+  const hi=tierMae(["A","B"]), lo=tierMae(["C","D"]);
+  const holds = med(hi)!=null&&med(lo)!=null&&med(hi)<med(lo);
+  add(`<h2>Finding A — does hotter momentum = deeper drawdown?</h2>`);
+  add(`<div class="panel"><div class="scroll"><table>
+    <thead><tr><th>tier group</th><th>n</th><th>median MAE</th><th>rug&lt;−30%</th><th>win%</th></tr></thead>
+    <tbody>
+    <tr><td>A+B (hot)</td><td>${hi.length}</td><td class="neg">${fmtPct(med(hi),0)}</td><td>${(pct(hi.filter(x=>x<-30).length,hi.length)||0).toFixed(0)}%</td><td>${(tierWin(["A","B"])||0).toFixed(0)}%</td></tr>
+    <tr><td>C+D</td><td>${lo.length}</td><td class="neg">${fmtPct(med(lo),0)}</td><td>${(pct(lo.filter(x=>x<-30).length,lo.length)||0).toFixed(0)}%</td><td>${(tierWin(["C","D"])||0).toFixed(0)}%</td></tr>
+    </tbody></table></div>
+    <div class="note">${holds?'<span class="chip ok">HOLDS</span> A/B draw down deeper — the hottest names are the most likely to gut you. Treat a top score as a downside warning, not a buy signal.':'<span class="chip">flat so far</span> not separating yet (small N).'}</div></div>`);
+
+  /* ---- Pre-registered filters ---- */
+  const keep=(p,fid)=>{const pr=num(p.price_at_screen),fl=num(p.float_shares),gp=num(p.gap_pct),t=p.tier;
+    if(fid==="F1")return pr==null||pr>=1; if(fid==="F2")return fl==null||fl<3e6;
+    if(fid==="F3")return gp==null||gp<20; if(fid==="F4")return t!=="A"&&t!=="B";
+    if(fid==="CLEAN")return ["F1","F2","F3","F4"].every(x=>keep(p,x)); return true;};
+  const arm=(fid,postOnly)=>{const k=[];for(const o of graded){const p=byId[o.pick_id];if(!p)continue;
+    if(postOnly&&!(p.trading_date>REG))continue; if(fid==="ALL"||keep(p,fid))k.push(num(o.ret_open_close_net));}return k;};
+  const cell=(k)=> k.length?`${k.length} / ${(pct(k.filter(x=>x>0).length,k.length)).toFixed(0)}% / <span class="${cls(mean(k))}">${fmtPct(mean(k))}</span>`:"n=0";
+  const labels={ALL:"Baseline (all)",F1:"H-F1 skip &lt;$1",F2:"H-F2 skip float≥3M",F3:"H-F3 skip gap≥+20%",F4:"H-F4 skip A/B (Finding A)",CLEAN:"H-CLEAN (all filters)"};
+  let frows="";
+  for(const fid of ["ALL","F1","F2","F3","F4","CLEAN"]) frows+=`<tr><td>${labels[fid]}</td><td>${cell(arm(fid,false))}</td><td>${cell(arm(fid,true))}</td></tr>`;
+  add(`<h2>Pre-registered filters — n / win% / avg net <span class="flag">judge the out-of-sample column</span></h2>`);
+  add(`<div class="panel"><div class="scroll"><table>
+    <thead><tr><th>filter (skip rule)</th><th>all-time</th><th>post-${REG} (OOS)</th></tr></thead><tbody>${frows}</tbody></table></div>
+    <div class="note">Registered ${REG} from an in-sample cut; only post-registration picks are the honest test. See <a href="HYPOTHESES.md">HYPOTHESES.md</a>. A filter earns its place only if its OOS kept-subset beats the OOS baseline on avg net.</div></div>`);
+
+  /* ---- H-SI ---- */
+  const si = graded.map(o=>({si:num((byId[o.pick_id]||{}).short_interest_pct),r:num(o.ret_open_close_net)})).filter(x=>x.si!=null&&x.r!=null);
+  add(`<h2>H-SI — short-interest cut (open, two-sided)</h2>`);
+  if(si.length){const h=si.filter(x=>x.si>=20),l=si.filter(x=>x.si<20);
+    const s=(a)=>a.length?`${a.length} picks · ${(pct(a.filter(x=>x.r>0).length,a.length)).toFixed(0)}% win · ${fmtPct(mean(a.map(x=>x.r)))}`:"n=0";
+    add(`<div class="panel"><table><tbody>
+      <tr><td>SI ≥ 20%</td><td>${s(h)}</td></tr><tr><td>SI &lt; 20%</td><td>${s(l)}</td></tr></tbody></table></div>`);
+  } else add(`<div class="panel note">No graded pick carries short interest yet — capture began 2026-06-16; fills in as those picks grade.</div>`);
+
+  /* ---- charts ---- */
+  add(`<h2>Equity curve & return distribution (took every pick, equal weight)</h2>`);
+  const two=$(`<div class="grid two"></div>`);
+  const c1=$(`<div class="panel"><canvas id="eq" height="190"></canvas></div>`);
+  const c2=$(`<div class="panel"><canvas id="hist" height="190"></canvas></div>`);
+  two.appendChild(c1);two.appendChild(c2);root.appendChild(two);
+  const ordered=[...graded].sort((a,b)=> (byId[a.pick_id]?.trading_date||"").localeCompare(byId[b.pick_id]?.trading_date||"") || (a.graded_at||"").localeCompare(b.graded_at||""));
+  let cum=0; const eq=ordered.map(o=>{cum+=num(o.ret_open_close_net)||0;return +cum.toFixed(1);});
+  const gridc="#2a3240", dimc="#8b98a8";
+  new Chart(c1.querySelector("canvas"),{type:"line",
+    data:{labels:eq.map((_,i)=>i+1),datasets:[{data:eq,borderColor:eq[eq.length-1]>=0?"#2ec27e":"#f0506e",borderWidth:2,pointRadius:0,fill:false,tension:.15}]},
+    options:{plugins:{legend:{display:false},title:{display:true,text:"Cumulative net % (open→close)",color:dimc}},scales:{x:{ticks:{color:dimc},grid:{color:gridc}},y:{ticks:{color:dimc},grid:{color:gridc}}}}});
+  const bins=[-100,-50,-30,-20,-10,0,10,20,30,50,200],labels2=["<−50","−50/−30","−30/−20","−20/−10","−10/0","0/10","10/20","20/30","30/50",">50"];
+  const counts=new Array(labels2.length).fill(0);
+  oc.forEach(v=>{for(let b=0;b<labels2.length;b++){if(v>=bins[b]&&v<bins[b+1]){counts[b]++;break;}}});
+  new Chart(c2.querySelector("canvas"),{type:"bar",
+    data:{labels:labels2,datasets:[{data:counts,backgroundColor:labels2.map((_,b)=>bins[b]>=0?"#2ec27e":"#f0506e")}]},
+    options:{plugins:{legend:{display:false},title:{display:true,text:"Net return distribution (%)",color:dimc}},scales:{x:{ticks:{color:dimc,maxRotation:60,minRotation:60},grid:{display:false}},y:{ticks:{color:dimc},grid:{color:gridc}}}}});
+
+  /* ---- exit study ---- */
+  if(exitMd){
+    add(`<h2>Exit-rule study (in-sample, exploratory)</h2>`);
+    const p=$(`<div class="panel"></div>`); p.innerHTML=mdToHtml(exitMd); root.appendChild(p);
+  }
+
+  /* ---- integrity ---- */
+  add(`<h2>Integrity (verifiability)</h2>`);
+  const ids=picks.map(p=>p.pick_id); const dup=ids.length-new Set(ids).size;
+  const orphans=outs.filter(o=>o.pick_id&&!byId[o.pick_id]).length;
+  let badWin=0; graded.forEach(o=>{const r=num(o.ret_open_close_net);if(r!=null&&o.win!=="" &&o.win!=null){if((r>0)!==(o.win==="1"))badWin++;}});
+  const checks=[["No duplicate pick_ids",dup===0,dup+" dups"],["No orphan outcomes",orphans===0,orphans+" orphans"],
+    ["WIN flag matches return sign",badWin===0,badWin+" mismatches"]];
+  add(`<div class="panel">${checks.map(([l,ok,bad])=>`<div>${ok?'<span class="chip ok">PASS</span>':'<span class="chip bad">FAIL</span>'} ${l}${ok?"":" — "+bad}</div>`).join("")}</div>`);
+}
+
+function mdToHtml(md){
+  const lines=md.split("\n"); let html="",inTbl=false;
+  const esc=(s)=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
+  for(const ln of lines){
+    if(/^\s*\|/.test(ln)){
+      const cells=ln.split("|").slice(1,-1).map(c=>c.trim());
+      if(cells.every(c=>/^:?-+:?$/.test(c))){continue;}
+      if(!inTbl){html+='<div class="scroll"><table><tbody>';inTbl=true;}
+      html+="<tr>"+cells.map(c=>`<td>${esc(c)}</td>`).join("")+"</tr>";
+    } else { if(inTbl){html+="</tbody></table></div>";inTbl=false;}
+      if(/^#/.test(ln)) continue;
+      if(ln.trim()) html+=`<div class="note">${esc(ln)}</div>`;
+    }
+  }
+  if(inTbl)html+="</tbody></table></div>";
+  return html;
+}
+main();
+</script>
+</body>
+</html>
