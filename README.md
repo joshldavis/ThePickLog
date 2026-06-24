@@ -2,6 +2,11 @@
 
 A personal, paper-trading tool. Logs picks before the open and grades them honestly after 5 trading days. **Data source: Yahoo Finance (`yfinance`) — no API key needed.** It covers low-float / small-cap names (FMP's free tier does not).
 
+> **Governing standard:** *"Can a stranger pull the raw data and verify that every claim is true?"*
+> Every number here is meant to be re-derivable from the committed CSVs. The rules behind that
+> are in **[`PRINCIPLES.md`](PRINCIPLES.md)** (read first); a map of all docs is in
+> **[`DOCS.md`](DOCS.md)**.
+
 ## You don't have to run anything — it's automated
 This repo includes a GitHub Action (`.github/workflows/ignitionscan.yml`) that runs on GitHub's servers:
 - **scan** every weekday morning (~7:30am ET)
@@ -32,5 +37,13 @@ Entry assumed at the regular-session **open** of the pick day, exited same-day c
 - **Short interest / catalyst / dilution** columns are captured-but-blank — instrument now, score later.
 - Trading-day math ignores market holidays (fine for v0).
 - **Yahoo is an unofficial source** and can occasionally throttle a cloud run, so a day may be skipped now and then. For a real product, move to a paid feed (FMP Starter / Polygon) — see the blueprint.
+
+## Documentation
+- **[`PRINCIPLES.md`](PRINCIPLES.md)** — the validity principles (canonical; read first).
+- **[`DOCS.md`](DOCS.md)** — map of every doc and where it fits.
+- **[`ROADMAP.md`](ROADMAP.md)** — what's done, next, and parked.
+- **[`VALIDATION-PLAN.md`](VALIDATION-PLAN.md)** — pick-log spec, grading rule, validation bar.
+- **[`HYPOTHESES.md`](HYPOTHESES.md)** — pre-registered, dated rules judged out-of-sample.
+- **[`AUDIT_LOG.md`](AUDIT_LOG.md)** — dated weekly verifiability audits (claims == data).
 
 This is a personal research tool, not investment advice. The model is unvalidated until `report` clears the bar in VALIDATION-PLAN.md.
