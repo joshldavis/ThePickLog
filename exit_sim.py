@@ -116,6 +116,27 @@ def _f(x):
         return None
 
 
+def load_paths():
+    """Grade-time daily paths persisted by the grader (paths.csv). These are the
+    REPRODUCIBLE source — captured from the same fetch that produced the outcome, so they
+    can't drift like a re-fetch can. Returns {pick_id: [bar, …]} sorted by session_idx."""
+    rows = _read(os.path.join(HERE, "paths.csv"))
+    by_pid = {}
+    for r in rows:
+        pid = r.get("pick_id")
+        b = {"i": int(r["session_idx"]),
+             "o": _f(r["open"]), "h": _f(r["high"]), "l": _f(r["low"]), "c": _f(r["close"])}
+        if None in (b["o"], b["h"], b["l"], b["c"]):
+            continue
+        by_pid.setdefault(pid, []).append(b)
+    out = {}
+    for pid, bars in by_pid.items():
+        bars.sort(key=lambda x: x["i"])
+        if len(bars) >= WINDOW + 1:
+            out[pid] = [{"o": b["o"], "h": b["h"], "l": b["l"], "c": b["c"]} for b in bars[:WINDOW + 1]]
+    return out
+
+
 def fetch_bars(ticker, start):
     """Daily OHLC window: entry session + WINDOW sessions (<= WINDOW+1 bars)."""
     import yfinance as yf
@@ -148,22 +169,26 @@ def main():
     outs = _read(os.path.join(HERE, "outcomes.csv"))
     graded = [o for o in outs if _f(o.get("entry_open")) and _f(o.get("ret_open_close_net")) is not None]
 
+    paths = load_paths()  # pick_id -> grade-time bars (the reproducible source)
     results = {r["name"]: [] for r in RULES}
-    used = 0
+    used = from_record = 0
     for o in graded:
         entry = _f(o.get("entry_open"))
-        bars = None
-        try:
-            bars = fetch_bars(o["ticker"], o["trading_date"])
-        except Exception as e:
-            print(f"  fetch skip {o['ticker']} {o['trading_date']}: {type(e).__name__}")
+        bars = paths.get(o.get("pick_id"))
+        if bars:
+            from_record += 1
+        else:
+            try:
+                bars = fetch_bars(o["ticker"], o["trading_date"])
+            except Exception as e:
+                print(f"  fetch skip {o['ticker']} {o['trading_date']}: {type(e).__name__}")
         if not bars:
             continue
         used += 1
         for r in RULES:
             results[r["name"]].append(net(entry, bars, r))
 
-    _write_report(results, used, len(graded))
+    _write_report(results, used, len(graded), from_record)
 
 
 def _agg(xs):
@@ -173,12 +198,18 @@ def _agg(xs):
     return (wr, st.mean(xs), st.median(xs))
 
 
-def _write_report(results, used, n_graded):
+def _write_report(results, used, n_graded, from_record=0):
     from datetime import datetime
+    fetched = used - from_record
+    prov = (f"{from_record} from the immutable grade-time record (paths.csv), {fetched} "
+            "re-fetched (picks that predate path capture)")
     L = ["# IgnitionScan — exit-rule study · " + datetime.utcnow().date().isoformat(), "",
          f"Daily-resolution replay of **{used}** graded picks (of {n_graded}). Conservative "
          "same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / "
          "exploratory** — a chosen rule must be pre-registered and validated forward.", "",
+         f"_Bar provenance: {prov}. Grade-time paths are reproducible from committed data; "
+         "re-fetched bars can drift if Yahoo revises history, so they converge to the "
+         "immutable source as the record matures._", "",
          "| exit rule | n | win% | avg net/trade | median |", "|---|---|---|---|---|"]
     base = None
     rows = []

@@ -33,6 +33,7 @@ MODEL_VERSION = "v0.2-yf"
 HERE = os.path.dirname(os.path.abspath(__file__))
 PICKS_CSV    = os.path.join(HERE, "picks.csv")
 OUTCOMES_CSV = os.path.join(HERE, "outcomes.csv")
+PATHS_CSV    = os.path.join(HERE, "paths.csv")
 
 CONFIG = {
     "UNIVERSE": ["BJDX","MASK","SUGP","GCDT","CODX","VMAR","PW","NCT","HKIT",
@@ -54,6 +55,15 @@ OUTCOME_FIELDS = [
     "pick_id","ticker","trading_date","graded_at",
     "entry_open","same_day_close",
     "ret_open_close_net","ret_open_5dclose_net","mfe_5d","mae_5d","win","note",
+]
+# Immutable daily-OHLC path of each graded pick (entry session + 5 sessions). Captured at
+# grade time so the exit-rule study (exit_sim.py) is reproducible from COMMITTED data rather
+# than re-fetching Yahoo (which can silently revise history) — i.e. so a stranger can verify
+# the exit numbers from the record alone. Daily (not intraday) on purpose: intraday history
+# expires ~60 days on Yahoo and isn't reproducible, which would break the verifiability standard.
+PATH_FIELDS = [
+    "pick_id","ticker","trading_date","session_idx","bar_date",
+    "open","high","low","close","volume",
 ]
 
 def clamp(x, lo, hi): return max(lo, min(hi, x))
@@ -263,10 +273,34 @@ def cmd_grade():
                 "mfe_5d":round((hi-o)/o*100,2), "mae_5d":round((lo-o)/o*100,2),
                 "win": "1" if roc>0 else "0", "note":"",
             })
+            persist_path(p, window)   # immutable daily path for reproducible exit study
             graded += 1
         except Exception as e:
             print(f"  grade error {p['ticker']} {p['trading_date']}: {type(e).__name__} {str(e)[:80]}")
     print(f"Graded {graded} picks -> {OUTCOMES_CSV}")
+
+def persist_path(p, window):
+    """Append the daily-OHLC path of a graded pick to paths.csv. Purely additive and
+    NON-FATAL: any failure here must never block grading or alter the outcome record.
+    `window` is the entry session + GRADE sessions slice already fetched by the grader."""
+    try:
+        if os.path.exists(PATHS_CSV):
+            have = {r["pick_id"] for r in read_rows(PATHS_CSV)}
+            if p["pick_id"] in have:
+                return  # already captured — keep it immutable, never rewrite
+        for idx in range(len(window)):
+            bar = window.iloc[idx]
+            append_row(PATHS_CSV, PATH_FIELDS, {
+                "pick_id": p["pick_id"], "ticker": p["ticker"],
+                "trading_date": p["trading_date"], "session_idx": idx,
+                "bar_date": str(bar["Date"])[:10],
+                "open": round(float(bar["Open"]), 4), "high": round(float(bar["High"]), 4),
+                "low": round(float(bar["Low"]), 4), "close": round(float(bar["Close"]), 4),
+                "volume": int(bar["Volume"]) if bar["Volume"] == bar["Volume"] else "",
+            })
+    except Exception as e:
+        print(f"  path-persist warn {p['ticker']} {p['trading_date']}: {type(e).__name__} {str(e)[:60]}")
+
 
 def append_outcome(p, note):
     append_row(OUTCOMES_CSV, OUTCOME_FIELDS, {
