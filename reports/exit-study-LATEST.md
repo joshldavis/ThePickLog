@@ -1,22 +1,25 @@
-# IgnitionScan — exit-rule study · 2026-06-23
+# IgnitionScan — exit-rule study · 2026-06-27
 
-Daily-resolution replay of **65** graded picks (of 65). Conservative same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / exploratory** — a chosen rule must be pre-registered and validated forward.
+Daily-resolution replay of **106** graded picks (of 106). Conservative same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / exploratory** — a chosen rule must be pre-registered and validated forward.
+
+_Bar provenance: 41 from the immutable grade-time record (paths.csv), 65 re-fetched (picks that predate path capture). Grade-time paths are reproducible from committed data; re-fetched bars can drift if Yahoo revises history, so they converge to the immutable source as the record matures._
 
 | exit rule | n | win% | avg net/trade | median |
 |---|---|---|---|---|
-| Same-day close (current) | 65 | 40% | -2.8% | -3.6% |
-| Hold to 5d close | 65 | 28% | -3.2% | -9.3% |
-| Target +10% | 65 | 63% | -1.8% | +8.0% |
-| Target +15% | 65 | 54% | -1.2% | +13.0% |
-| Target +20% ⭐ | 65 | 46% | -0.7% | -2.1% |
-| Target +30% ⭐ | 65 | 42% | +0.1% | -5.8% |
-| Stop -10% | 65 | 18% | -3.3% | -12.0% |
-| Stop -15% | 65 | 23% | -4.0% | -17.0% |
-| Target +20% / Stop -10% | 65 | 26% | -3.5% | -12.0% |
-| Target +15% / Stop -10% | 65 | 32% | -3.6% | -12.0% |
-| Target +20% / Stop -15% | 65 | 34% | -3.2% | -12.9% |
-| Trailing 15% ⭐ | 65 | 32% | +20.5% | -10.0% |
-| Trailing 20% ⭐ | 65 | 31% | +17.5% | -7.5% |
+| Same-day close (current) | 106 | 37% | -2.8% | -3.0% |
+| Hold to 5d close | 106 | 26% | -6.2% | -9.5% |
+| Target +10% | 106 | 62% | -2.8% | +8.0% |
+| Target +15% | 106 | 50% | -3.3% | +1.3% |
+| Target +20% | 106 | 44% | -2.7% | -5.8% |
+| Target +30% | 106 | 36% | -3.2% | -7.2% |
+| Stop -10% | 106 | 17% | -5.3% | -12.0% |
+| Stop -15% | 106 | 21% | -6.5% | -17.0% |
+| H-EX2 +10% target / -20% stop [registered 2026-06-24] | 106 | 56% | -4.0% | +8.0% |
+| Target +20% / Stop -10% | 106 | 28% | -3.3% | -12.0% |
+| Target +15% / Stop -10% | 106 | 33% | -3.6% | -12.0% |
+| Target +20% / Stop -15% | 106 | 34% | -4.0% | -16.6% |
+| Trailing 15% ⭐ | 106 | 30% | +12.2% | -7.8% |
+| Trailing 20% ⭐ | 106 | 29% | +9.0% | -10.1% |
 
 ⭐ = avg net/trade at least +2pp better than the current same-day-close exit.
 
