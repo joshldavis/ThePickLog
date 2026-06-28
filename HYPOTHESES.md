@@ -29,6 +29,20 @@ without shrinking the sample to uselessness.
 | id | question | why two-sided | data status |
 |----|----------|---------------|-------------|
 | **H-SI** | does short interest ≥20% separate winners from losers? | high SI is squeeze-prone — violent *both* ways, so neither direction is assumed | short-interest capture began 2026-06-16; **no graded pick carries it yet** (all 65 graded predate capture). Tracked in the weekly report; evaluate once enough SI-bearing picks have graded. |
+| **H-DIL** | does an active offering/shelf (`dilution_flag` = offering/shelf) separate winners from losers? | dilution caps a squeeze (new supply at the top) → plausibly *worse* forward returns, **but** an offering is also the very catalyst that ignites these names, so direction is not assumed | `dilution_flag` + `catalyst_type` capture began **2026-06-28** via free SEC EDGAR (`edgar_lens.py`); **no graded pick carries it yet**. Forward-only. Evaluate once enough dilution-bearing picks have graded. |
+
+**Data note — `catalyst_type` is a filing proxy, not a news classifier.** It is derived only from
+SEC filings (`offering` = 424B* in 7d · `8K` = recent 8-K · `filing` = other recent filing · `none`),
+because a true news/PR catalyst is not reliably in EDGAR. Per the roadmap guardrail "don't half-build
+a lever off an unreliable source," only the EDGAR-truthful part is captured, and it is labelled as such.
+
+**Finding B (quality → shallower drawdown) is now testable forward.** Phase-1 (in-sample, as-of
+grader) was a **NULL** after removing look-ahead. The blocker to a forward test was that quality was
+never logged at screen time. As of **2026-06-28** the Quality-Lens grade (overall/label/classification
++ 7 category scores) is snapshotted per pick into the forward-only sidecar `edgar_snapshot.csv`
+(point-in-time via `asof_grader.grade_asof`, so no Yahoo-style revision drift). This does **not**
+re-open Finding B as a claim — it merely preserves the *option* to test it OOS later. Still
+recommended-skip unless a real reason to sharpen the score emerges.
 
 ## Exit-rule hypothesis
 

@@ -45,6 +45,7 @@ jobs:
           [ -f picks.csv ] && git add picks.csv || true
           [ -f outcomes.csv ] && git add outcomes.csv || true
           [ -f paths.csv ] && git add paths.csv || true
+          [ -f edgar_snapshot.csv ] && git add edgar_snapshot.csv || true
           [ -f reports/brief-LATEST.md ] && git add reports/brief-LATEST.md || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."

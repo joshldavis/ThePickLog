@@ -70,6 +70,7 @@
       <a class="btn" href="picks.csv" download>⬇ picks.csv <span class="sz" id="szp"></span></a>
       <a class="btn" href="outcomes.csv" download>⬇ outcomes.csv <span class="sz" id="szo"></span></a>
       <a class="btn" id="dlpaths" href="paths.csv" download style="display:none">⬇ paths.csv <span class="sz" id="szpa"></span></a>
+      <a class="btn" id="dledgar" href="edgar_snapshot.csv" download style="display:none">⬇ edgar_snapshot.csv <span class="sz" id="szed"></span></a>
       <a class="btn" href="HYPOTHESES.md" target="_blank">📄 HYPOTHESES.md</a>
     </div>
     <div class="note">The pick log is append-only and immutable — picks are stamped before the outcome
@@ -104,13 +105,14 @@ const mean=(a)=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const pct=(n,d)=>d?100*n/d:null;
 
 async function main(){
-  let picksTxt, outsTxt, pathsTxt="", exitMd="";
+  let picksTxt, outsTxt, pathsTxt="", edgarTxt="", exitMd="";
   try{
     [picksTxt,outsTxt] = await Promise.all([
       fetch("picks.csv",{cache:"no-store"}).then(r=>r.text()),
       fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
     ]);
     pathsTxt = await fetch("paths.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
+    edgarTxt = await fetch("edgar_snapshot.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
     exitMd = await fetch("reports/exit-study-LATEST.md",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
   }catch(e){ document.getElementById("root").innerHTML='<div class="err">Could not load live data: '+e+'</div>'; return; }
 
@@ -124,6 +126,7 @@ async function main(){
   const setTxt=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   setTxt("szp",kb(picksTxt)); setTxt("szo",kb(outsTxt));
   if(pathsTxt){const b=document.getElementById("dlpaths");if(b)b.style.display="";setTxt("szpa",kb(pathsTxt));}
+  if(edgarTxt){const b=document.getElementById("dledgar");if(b)b.style.display="";setTxt("szed",kb(edgarTxt));}
 
   /* ---- sample-size / confidence badge (don't let anyone over-read small N) ---- */
   const n=graded.length, badge=document.getElementById("confidence");

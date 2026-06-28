@@ -34,6 +34,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PICKS_CSV    = os.path.join(HERE, "picks.csv")
 OUTCOMES_CSV = os.path.join(HERE, "outcomes.csv")
 PATHS_CSV    = os.path.join(HERE, "paths.csv")
+EDGAR_SNAPSHOT_CSV = os.path.join(HERE, "edgar_snapshot.csv")  # forward-only Group-B + quality sidecar
 
 CONFIG = {
     "UNIVERSE": ["BJDX","MASK","SUGP","GCDT","CODX","VMAR","PW","NCT","HKIT",
@@ -43,6 +44,7 @@ CONFIG = {
     "WATCH_LEVEL_PCT": 0.20,
     "COST_HAIRCUT_PCT": 2.0,
     "GRADE_AFTER_DAYS": 5,
+    "CAPTURE_EDGAR": True,   # forward-only SEC-EDGAR Group-B + quality snapshot (non-fatal)
 }
 
 PICK_FIELDS = [
@@ -208,13 +210,35 @@ def cmd_scan(sample=False):
     rows = [s for s in rows if (s["ticker"], today) not in already]
     if skipped:
         print(f"Dedupe guard: skipped {len(skipped)} already-logged picks for {today}: {', '.join(skipped)}")
+    # Forward-only SEC-EDGAR enrichment: dilution_flag/catalyst_type (into the existing
+    # picks.csv columns, like short_interest did) + a quality snapshot into a sidecar so
+    # Finding B stays testable OOS. NON-FATAL: if edgar_lens or SEC is unavailable, every
+    # field degrades to blank and picks still log exactly as before.
+    edgar_mod = None
+    if CONFIG.get("CAPTURE_EDGAR", True):
+        try:
+            import edgar_lens as edgar_mod
+        except Exception as e:
+            print(f"  edgar_lens unavailable — Group-B capture skipped: {type(e).__name__} {str(e)[:60]}")
+
     for s in rows:
+        pid = str(uuid.uuid4())
+        snap = {}
+        if edgar_mod:
+            try:
+                snap = edgar_mod.snapshot(s["ticker"], today)
+            except Exception as e:
+                snap = {"snapshot_note": f"{type(e).__name__}:{str(e)[:40]}"}
         append_row(PICKS_CSV, PICK_FIELDS, {
-            "pick_id":str(uuid.uuid4()), "published_at":now_iso, "trading_date":today,
+            "pick_id":pid, "published_at":now_iso, "trading_date":today,
             "model_version":MODEL_VERSION, **s,
-            "catalyst_type":"", "dilution_flag":"",
+            "catalyst_type": snap.get("catalyst_type", ""), "dilution_flag": snap.get("dilution_flag", ""),
             "short_interest_pct": si_by_sym.get(s["ticker"], ""), "market_regime":regime,
         })
+        if snap and edgar_mod:
+            row = {k: snap.get(k, "") for k in edgar_mod.SNAPSHOT_FIELDS}
+            row.update({"pick_id":pid, "ticker":s["ticker"], "trading_date":today, "captured_at":now_iso})
+            append_row(EDGAR_SNAPSHOT_CSV, edgar_mod.SNAPSHOT_FIELDS, row)
     print(f"\nLogged {len(rows)} picks -> {PICKS_CSV}")
 
 def _trading_days_since(date_str):

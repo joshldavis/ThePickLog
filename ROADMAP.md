@@ -35,10 +35,14 @@ validation layer Josh can trust before risking attention or money.
    out-of-sample columns fill (filters **and now H-EX1**), whichever rule beats its OOS
    baseline gets wired into the brief as a real rule. The payoff loop — patience, not code.
    First post-registration H-EX1 grades land ~next week.
-2. **Capture the last two blank Group-B variables** — `catalyst_type` and `dilution_flag`.
-   ⚠️ Unlike short interest, these are **not** in the free yfinance feed (see ignitionscan.py
-   note) — needs a data-source decision first (which feed, API budget). **Deferred pending
-   Josh's call**; don't half-build a lever off an unreliable source.
+2. ~~**Capture the last two blank Group-B variables** — `catalyst_type` and `dilution_flag`.~~
+   ✅ **DONE 2026-06-28** via free **SEC EDGAR** (`edgar_lens.py`) — no paid feed needed after all.
+   `dilution_flag` (offering/shelf/none from 424B*/S-3* filings) + `catalyst_type` (filing proxy:
+   offering/8K/filing/none) now populate the formerly-blank picks.csv columns going forward, and a
+   **Quality-Lens snapshot** (point-in-time, look-ahead-safe) writes to the forward-only sidecar
+   `edgar_snapshot.csv` — which also re-opens the *option* to test Finding B out-of-sample. All
+   capture is non-fatal (SEC down ⇒ blanks, picks still log). Registered as **H-DIL** (HYPOTHESES.md,
+   two-sided). Next: let it accumulate, then evaluate H-DIL like H-SI once enough picks carry it.
 3. **Phase 2 — full-market, point-in-time test of Finding B** (PHASE2-SCOPE.md). Gated on a
    paid historical-float feed. **Recommended: skip** unless deciding to actively sharpen the
    score — low leverage, and a backtest can't back a personal-confidence claim anyway.
