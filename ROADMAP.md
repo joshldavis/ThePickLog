@@ -54,6 +54,20 @@ validation layer Josh can trust before risking attention or money.
   personal-tool framing (no public scoreboard). Revisit only if the project ever goes public,
   and only with legal review.
 
+## Parked — productization only (moot under personal-tool framing)
+Resurrect *only* if Josh re-decides to build this for an audience. All from the synthesis/strategy
+thread (SYNTHESIS.md · IMPROVEMENTS-v0.3.md · STRATEGY-advancing.md).
+- **Public-trust features** — A4 mean-net-return by tier on the site; A5 self-serve "re-derive it
+  yourself" CSV download; A6 per-pick permalink + daily hash-of-picks.csv proof. (Verifiability-for-
+  strangers; no value for a private tool.)
+- **Morning brief → live site** (B1 is built as a local generator only) — publishing it shifts the
+  posture to "recommending specific setups to all subscribers"; needs **G4 securities-counsel** review
+  of copy/Terms/disclaimers first.
+- **Marketing / growth** (STRATEGY §3, IMPROVEMENTS D1–D5) — transparency content flywheel, position
+  vs. category fakery, free-vs-paid funnel, genuine-scarcity cohort, disclosure-as-feature.
+- **Legal gates** — G4 securities review + IP review ("Buffett-style" name use) before any charging
+  or public launch.
+
 ## Reference docs
 STRATEGY-advancing.md · VALIDATION-PLAN.md · SYNTHESIS.md · TEST-PLAN-quality-downside.md ·
 PHASE2-SCOPE.md · HYPOTHESES.md · QA_REPORT.md · IMPROVEMENTS-v0.3.md · REQUIREMENTS.md
