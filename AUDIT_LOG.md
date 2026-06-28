@@ -1,5 +1,47 @@
 # IgnitionScan — Audit Log
 
+## 2026-06-28 — Resolution of the 06-27 finding (Juneteenth phantom cohort) — **✅ Fixed**
+
+The market-holiday issue flagged below is resolved before the affected rows could grade (~06-29).
+
+**Verified phantom:** all **14** picks dated **2026-06-19** (Friday, Juneteenth, NYSE closed) carry
+`price_at_screen` **byte-identical to the 2026-06-22 session** (and *not* to the true prior session
+06-18). Confirmed stale/duplicate quotes — not a real screen. None had graded yet (0/14).
+
+**Fix 1 — voided the cohort (immutability-respecting).** Rather than delete the immutable picks
+rows (they stay as evidence the scanner misfired), appended a terminal **VOID** outcome for each of
+the 14: blank returns/win + an explanatory `note`. Effect: they are now "resolved" (the grader skips
+them — 0 of the 06-19 cohort remain pending, so the ~06-29 run cannot grade them off a bogus open),
+and every performance stat already filters on non-empty return, so they are **excluded from all
+metrics**. `weekly_report.py` §1 now reports them as a separate **voided** count (106 graded / 74
+pending / 14 voided). Integrity checks still pass.
+
+**Fix 2 — scanner guard (so it can't recur).** `ignitionscan.py` `cmd_scan` now (a) skips known
+**NYSE_HOLIDAYS** as a clean no-op (logs nothing, exit 0), and (b) has a source-agnostic
+**stale/duplicate-quote backstop**: if ≥80% of the day's quotes are byte-identical to the most
+recent logged session (the closed-market/frozen-feed signature), it fails loudly and logs nothing.
+The backstop is what catches anything the calendar misses (future years, half-days, feed outages).
+Both tested offline.
+
+---
+
+## 2026-06-27 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+Every claim the live site *displays* verifies exactly against the raw CSVs. One data-hygiene issue: a scan ran on a market holiday. Audit ran clean via Chrome (last week's tooling block is resolved).
+
+**✅ What verified**
+- **Data served:** `/picks.csv` and `/outcomes.csv` both HTTP 200, non-empty — 194 picks, 106 graded rows.
+- **Real log, not sample:** Track record renders "Pulled live from the public pick log — 194 picks across 14 trading days (2026-06-09 → 2026-06-26)" with real WIN/MISS/pending rows. No sample fallback.
+- **Claims == data (all match):** picks 194 ✓ · graded 106 ✓ · win rate 37% (recomputed 36.8%) ✓ · median net −3.0% (−2.96) ✓ · mean net −2.8% (−2.81) ✓ · avg worst dip −18.0% (−17.96) ✓ · avg 5d swing −5.4% (−5.35) ✓ · Best Net +20% (best same-day 19.9%) ✓.
+- **Win-rate by tier — exact:** A 33% (n=9) · B 56% (n=9) · C 41% (n=41) · D 30% (n=47).
+- **Honest grading:** 106/106 graded rows reproduce from entry=pick-day open, (close−open)/open − 2% cost; win = positive net. 0 sign mismatches, 0 duplicate pick_ids, 0 missing entry_open.
+- **Disclaimers present:** educational/informational, not advice, not a broker-dealer, not affiliated with Buffett — all on Overview and Track record.
+
+**⚠️ Issue — scan ran on a market holiday (2026-06-19, Juneteenth, NYSE closed)**
+No trading weekday is *missing* (all 14 in 06-09→06-26 present). But 2026-06-19 is Juneteenth — NYSE was closed — yet 14 picks are logged that day, and their `price_at_screen` values are **byte-identical to the 06-22 session** (stale/duplicate quotes). The scan did not fail loudly on a closed market; it produced a phantom screen. These rows are still **pending** (ungraded), so no displayed performance stat is corrupted *yet* — but they will hit the 5-day grading mark ~06-29 and would grade off a bogus 06-19 "open." **Fix before then:** void/remove the 06-19 cohort, and add a US-market-holiday skip (or a "fail loudly on stale/duplicate quote" guard) to the scanner so a closed day produces no log rather than a copy of the next session.
+
+**Grading in the coming week:** graded through the 06-18 cohort. Reaching the 5-trading-day mark next: **06-19 cohort ~06-29** (the anomalous rows — void first), **06-22 ~06-30**, **06-23 ~07-01**.
+
 ## 2026-06-22 — Weekly verifiability audit — **⚠️ COULD NOT RUN (tooling, not site)**
 
 The audit could not be completed this week because the live site was unreachable from the audit environment. This is an environment/tooling failure — **it is NOT evidence that the site is broken.** No live check (CSV fetch, Track-record render, claims==data, grading) could be performed, so nothing is certified this week.

@@ -162,6 +162,44 @@ def read_rows(path):
     with open(path,newline="") as f: return list(csv.DictReader(f))
 
 # ----------------------------------------------------------------------------- commands
+# NYSE full-day closures. Weekends are already excluded by the cron (Mon-Fri); this catches
+# weekday holidays. A PRE-MARKET scan can't infer "is the market open" from a daily bar (today's
+# bar doesn't exist yet at 7:30am ET), so an explicit list is needed. The stale/duplicate-quote
+# guard below is the SOURCE-AGNOSTIC backstop for anything this list misses (future years, half
+# days, feed outages): on a closed market the feed returns the prior session's quotes unchanged —
+# exactly the bug that logged a phantom 2026-06-19 (Juneteenth) cohort identical to the 06-22 session.
+NYSE_HOLIDAYS = {
+    "2026-01-01","2026-01-19","2026-02-16","2026-04-03","2026-05-25","2026-06-19",
+    "2026-07-03","2026-09-07","2026-11-26","2026-12-25",
+    "2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18",
+    "2027-07-05","2027-09-06","2027-11-25","2027-12-24",
+}
+
+
+def _is_stale_duplicate_scan(today, rows):
+    """Phantom-scan detector. A closed market / frozen feed returns the previous session's
+    quotes unchanged, so if today's screen is a near-exact price clone of the most recently
+    logged session, it is not a real scan. Returns (is_stale: bool, detail: str)."""
+    prior = read_rows(PICKS_CSV)
+    dates = [r["trading_date"] for r in prior if r.get("trading_date") and r["trading_date"] < today]
+    if not dates:
+        return False, ""
+    last_date = max(dates)
+    last_px = {r["ticker"]: r["price_at_screen"] for r in prior if r["trading_date"] == last_date}
+    overlap = [s for s in rows if s["ticker"] in last_px]
+    if len(overlap) < 3:
+        return False, ""
+    def same(a, b):
+        try:
+            return abs(float(a) - float(b)) < 1e-9
+        except (TypeError, ValueError):
+            return False
+    ident = [s["ticker"] for s in overlap if same(s["price_at_screen"], last_px[s["ticker"]])]
+    if len(ident) / len(overlap) >= 0.8:
+        return True, f"{len(ident)}/{len(overlap)} quotes byte-identical to last session {last_date}"
+    return False, ""
+
+
 def cmd_scan(sample=False):
     today = datetime.now().strftime("%Y-%m-%d")
     now_iso = datetime.now(timezone.utc).isoformat()
@@ -173,6 +211,11 @@ def cmd_scan(sample=False):
             s = score_inputs(q["price"], q["prev"], q["vol"], q["avg"], q["float_shares"])
             s["ticker"] = q["symbol"]; rows.append(s)
     else:
+        if today in NYSE_HOLIDAYS:
+            # Known market closure: clean no-op (exit 0), not a failure. Logging nothing is
+            # correct — a closed day must NOT produce a screen (cf. the 2026-06-19 phantom bug).
+            print(f"Market holiday ({today}) — NYSE closed. No scan; nothing logged.")
+            return
         yf = _yf()
         regime = market_regime(yf)
         fetched = 0
@@ -203,6 +246,14 @@ def cmd_scan(sample=False):
 
     if sample:
         print("\n(SAMPLE mode — nothing written.)"); return
+    # Phantom-scan backstop: if the feed handed back the prior session's quotes unchanged
+    # (closed market not in NYSE_HOLIDAYS, or a frozen data source), fail LOUDLY and log
+    # nothing rather than recording a fake screen. This would have caught the 06-19 cohort.
+    stale, detail = _is_stale_duplicate_scan(today, rows)
+    if stale:
+        sys.exit(f"ERROR: stale/duplicate feed — {detail}. Likely a market holiday or frozen "
+                 f"data source. No picks logged for {today}; run flagged failed so it is caught. "
+                 "(If this is a known closure, add the date to NYSE_HOLIDAYS.)")
     # Dedupe guard: never log the same ticker twice for the same trading date
     # (e.g. a manual run after the scheduled run must not double-count picks).
     already = {(r["ticker"], r["trading_date"]) for r in read_rows(PICKS_CSV)}

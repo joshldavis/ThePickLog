@@ -107,9 +107,14 @@ def main():
     span = f"{pick_dates[0]} → {pick_dates[-1]}" if pick_dates else "—"
     n_days = len(pick_dates)
     weeks_live = ((pick_dates[-1] - pick_dates[0]).days / 7.0) if len(pick_dates) > 1 else 0
+    # A "void" outcome (e.g. a phantom market-holiday scan) is resolved but carries no return,
+    # so it must NOT count as a real grade. Real grades have a non-empty open→close return.
+    n_void = sum(1 for o in outs if (o.get("note") or "").startswith("VOID"))
+    n_real = sum(1 for o in outs if (o.get("ret_open_close_net") or "") != "")
     w(f"- **{len(picks)} picks** logged across **{n_days} scan days** ({span}); ~{weeks_live:.1f} weeks live.")
-    w(f"- **{len(outs)} graded**, **{len(picks) - len(graded_ids)} pending** "
-      f"(grading runs at 5 trading days).")
+    w(f"- **{n_real} graded**, **{len(picks) - len(graded_ids)} pending**"
+      + (f", **{n_void} voided** (phantom/holiday rows — excluded from every stat below)" if n_void else "")
+      + " (grading runs at 5 trading days).")
     # gate context: strategy wants a 6-8 week graded record before charging
     target_weeks = 8
     w(f"- Toward the pre-billing gate (~{target_weeks} wks of graded record): "
