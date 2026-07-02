@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>IgnitionScan — Exit-Rule Scenario Calculator</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#ff6a3d;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .wrap{max-width:900px;margin:0 auto;padding:18px 14px 60px}
+  header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:4px}
+  h1{font-size:20px;margin:0;letter-spacing:.2px}
+  h1 .dot{color:var(--a)}
+  .sub{color:var(--dim);font-size:13px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:26px 0 10px;font-weight:600}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .grid{display:grid;gap:12px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .kpi .v{font-size:24px;font-weight:700;letter-spacing:-.5px}
+  .kpi .l{color:var(--dim);font-size:12px;margin-top:2px}
+  .pos{color:var(--green)} .neg{color:var(--red)} .warn{color:var(--amber)} .muted{color:var(--dim)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  thead th{color:var(--dim);font-weight:600}
+  .note{color:var(--dim);font-size:12px;margin-top:8px}
+  .scroll{overflow-x:auto}
+  a{color:var(--blue)}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
+  .err{background:#3a1c22;border:1px solid #5a2a33;color:#ffb3c0;padding:12px;border-radius:10px}
+  .ctrl{margin:14px 0}
+  .ctrl label{display:flex;justify-content:space-between;font-size:13px;color:var(--dim);margin-bottom:4px}
+  .ctrl label b{color:var(--tx);font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%;accent-color:var(--a)}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:9px;font-size:12.5px;font-weight:600;
+       text-decoration:none;color:var(--tx);background:var(--panel2);border:1px solid var(--line);cursor:pointer}
+  .btn:hover{border-color:var(--a);color:#fff}
+  .btn.active{border-color:var(--a);color:var(--a)}
+  .verdict{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:13.5px;border:1px solid var(--line);background:var(--panel2)}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:12px 0 2px;cursor:pointer;user-select:none}
+  .two{grid-template-columns:1fr 1fr}
+  @media(max-width:700px){.two{grid-template-columns:1fr}}
+  .bmarks{position:relative;height:14px;margin-top:-4px}
+  .bmark{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--amber);white-space:nowrap}
+  .caveat{background:#2a1d10;border:1px solid #5a3a22;color:var(--amber);padding:10px 12px;border-radius:10px;font-size:12.5px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Ignition<span class="dot">Scan</span> · Exit-Rule Scenario Calculator</h1>
+    <span class="sub" id="updated">loading live data…</span>
+  </header>
+  <div class="sub">"What could the +10%-target exit (H-EX1) earn <i>if</i> it works?" Every input below is
+    recomputed live in your browser from the raw log — <a href="outcomes.csv" download>outcomes.csv</a> —
+    using the same plug-in convention as <a href="reports/bayes-h-ex1-LATEST.md">the Bayesian read-out</a>.
+    This is a scenario tool, not a forecast: the honest OOS test lives in
+    <a href="reports/LATEST.md">the weekly report §4d</a>.</div>
+
+  <div id="root"></div>
+
+  <div class="caveat">⚠️ <b>Read before dreaming:</b> fills are assumed exactly at +10% (net +8% after the
+    2% cost haircut). On thin low-float names, limit orders gap through and fill quality is poor, so
+    <b>real-world results will be worse than every number on this page</b>. The all-time window includes the
+    in-sample picks that suggested H-EX1, so it flatters the rule. No compounding, taxes, borrowing, or
+    liquidity limits are modeled. Nothing here is investment advice — it's arithmetic on a public log
+    (<a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX1).</div>
+
+  <div class="note" style="margin-top:14px"><a href="index.html">← IgnitionScan</a> ·
+    <a href="dashboard.html">Model validation dashboard</a></div>
+</div>
+
+<script>
+const REG="2026-06-23";           // H-EX1 registration date (HYPOTHESES.md)
+const TARGET_NET=8.0;             // +10% touch realizes +8% net (2% haircut)
+const STOP_NET=-22.0;             // -20% disaster stop realizes -22% net (same haircut convention, H-EX2)
+const $=(h)=>{const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstChild;};
+const fmtPct=(x,d=1)=>(x==null||isNaN(x))?"—":(x>=0?"+":"")+x.toFixed(d)+"%";
+const fmtUsd=(x)=>(x==null||isNaN(x))?"—":(x<0?"−$":"$")+Math.abs(x).toLocaleString(undefined,{maximumFractionDigits:0});
+const cls=(x)=>x==null||isNaN(x)?"muted":x>0?"pos":x<0?"neg":"muted";
+const mean=(a)=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const num=(x)=>{const v=parseFloat(x);return isFinite(v)?v:null;};
+
+function parseCSV(text){
+  const rows=[];let i=0,f="",row=[],q=false;
+  while(i<text.length){const c=text[i];
+    if(q){ if(c==='"'){ if(text[i+1]==='"'){f+='"';i++;} else q=false;} else f+=c; }
+    else { if(c==='"')q=true; else if(c===','){row.push(f);f="";} else if(c==='\n'||c==='\r'){ if(c==='\r'&&text[i+1]==='\n')i++; if(f.length||row.length){row.push(f);rows.push(row);row=[];f="";} } else f+=c; }
+    i++;
+  }
+  if(f.length||row.length){row.push(f);rows.push(row);}
+  const head=rows.shift()||[];
+  return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(head.map((h,j)=>[h,r[j]])));
+}
+
+// Window stats — identical plug-in convention to bayes_h_ex1.py:
+// evaluable = graded rows with numeric mfe_5d AND ret_open_5dclose_net;
+// hit = mfe_5d >= 10; m = mean 5d-close net of MISSES; baseline = mean same-day open->close net.
+function windowStats(rows){
+  const ev=rows.filter(r=>num(r.mfe_5d)!=null&&num(r.ret_open_5dclose_net)!=null);
+  const hits=ev.filter(r=>num(r.mfe_5d)>=10);
+  const misses=ev.filter(r=>num(r.mfe_5d)<10);
+  const m=mean(misses.map(r=>num(r.ret_open_5dclose_net)));
+  const mStop=mean(misses.map(r=>Math.max(num(r.ret_open_5dclose_net),STOP_NET)));
+  const base=mean(ev.map(r=>num(r.ret_open_close_net)).filter(v=>v!=null));
+  return {n:ev.length,hits:hits.length,p:ev.length?100*hits.length/ev.length:null,m,mStop,base};
+}
+const EV=(p,m)=>(p/100)*TARGET_NET+(1-p/100)*m;                 // % per trade
+const pStar=(m,thresh)=>100*(thresh-m)/(TARGET_NET-m);          // touch % needed to reach `thresh` EV
+
+let S={all:null,oos:null,touch:55,bank:25000,perDay:3,stop:false,preset:null};
+
+function verdictText(ev,pAbs,pBeat){
+  if(S.touch<pBeat) return ['neg','Below both breakevens — in this scenario the exit rule loses money and doesn\'t even beat the current same-day-close baseline.'];
+  if(S.touch<pAbs)  return ['warn','Beats the baseline but still loses money in absolute terms. "Less bad" isn\'t an income.'];
+  if(ev<1)          return ['warn','Marginally profitable on paper — thin-float slippage alone could erase this.'];
+  return ['pos','Profitable in this scenario — but only if the OOS touch rate actually lands here. Check §4d weekly; the log decides, not the slider.'];
+}
+
+function render(){
+  const root=document.getElementById("root");root.innerHTML="";
+  const w=S.all, oos=S.oos;
+  const mUse=S.stop?w.mStop:w.m;
+  const ev=EV(S.touch,mUse);
+  const pAbs=pStar(mUse,0), pBeat=pStar(mUse,w.base);
+  const pos=S.bank/(S.perDay*5);                      // 5-day hold -> bank fully cycles over 5 slots/day
+  const perTrade=pos*ev/100;
+  const tradesYr=S.perDay*250;
+  const yr=perTrade*tradesYr, wk=perTrade*S.perDay*5;
+  const annPct=100*yr/S.bank;
+
+  root.appendChild($(`<h2>1 · What the log says today (live)</h2>`));
+  root.appendChild($(`<div class="panel"><div class="scroll"><table>
+    <thead><tr><th>window</th><th>n</th><th>touch +10%</th><th>miss avg (5d close, net)</th><th>baseline EV</th><th>plug-in EV/trade</th></tr></thead>
+    <tbody>
+      <tr><td>All-time <span class="muted">(in-sample context, NOT the test)</span></td><td>${w.n}</td><td>${w.p.toFixed(1)}%</td>
+        <td class="${cls(w.m)}">${fmtPct(w.m)}</td><td class="${cls(w.base)}">${fmtPct(w.base)}</td>
+        <td class="${cls(EV(w.p,w.m))}"><b>${fmtPct(EV(w.p,w.m),2)}</b></td></tr>
+      <tr><td>Post-${REG} <span class="muted">(the honest OOS test)</span></td><td>${oos.n}</td><td>${oos.n?oos.p.toFixed(1)+"%":"—"}</td>
+        <td class="${cls(oos.m)}">${fmtPct(oos.m)}</td><td class="${cls(oos.base)}">${fmtPct(oos.base)}</td>
+        <td class="${cls(oos.n?EV(oos.p,oos.m):null)}"><b>${oos.n?fmtPct(EV(oos.p,oos.m),2):"—"}</b></td></tr>
+    </tbody></table></div>
+    <div class="note">Plug-in EV = p·(+8%) + (1−p)·(miss avg). Same convention as
+    <code>bayes_h_ex1.py</code>. Yes — at today's touch rate the rule <b>loses money</b>. The whole
+    "if it works" question is whether the true OOS touch rate is far above today's estimate.</div></div>`));
+
+  root.appendChild($(`<h2>2 · Scenario — "if it works"</h2>`));
+  const panel=$(`<div class="panel"></div>`);
+
+  const presets=[
+    ["Current evidence",()=>{S.touch=Math.round(w.p*10)/10;S.stop=false;}],
+    ["OOS so far",()=>{if(oos.n){S.touch=Math.round(oos.p*10)/10;}S.stop=false;}],
+    ["Breakeven",()=>{S.stop=false;S.touch=Math.round(pStar(w.m,0)*10)/10;}],
+    ["It works (75%)",()=>{S.touch=75;S.stop=false;}],
+    ["Works + stop (75%)",()=>{S.touch=75;S.stop=true;}],
+  ];
+  const pr=$(`<div class="presets"></div>`);
+  presets.forEach(([name,fn],i)=>{const b=$(`<button class="btn${S.preset===i?" active":""}">${name}</button>`);
+    b.onclick=()=>{fn();S.preset=i;render();};pr.appendChild(b);});
+  panel.appendChild(pr);
+
+  const mkSlider=(label,val,min,max,step,fmt,set)=>{
+    const c=$(`<div class="ctrl"><label><span>${label}</span><b>${fmt(val)}</b></label>
+      <input type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`);
+    const inp=c.querySelector("input");
+    inp.oninput=(e)=>{c.querySelector("label b").textContent=fmt(parseFloat(e.target.value));}; // live label while dragging
+    inp.onchange=(e)=>{set(parseFloat(e.target.value));S.preset=null;render();};               // recompute on release
+    return c;
+  };
+  panel.appendChild(mkSlider(`Assumed OOS touch rate (today's estimate: ${w.p.toFixed(1)}%)`,S.touch,30,90,0.5,v=>v.toFixed(1)+"%",v=>S.touch=v));
+  panel.appendChild($(`<div class="bmarks">
+    <span class="bmark" style="left:${100*(pBeat-30)/60}%">▲ beats baseline ${pBeat.toFixed(1)}%</span>
+    <span class="bmark" style="left:${100*(pAbs-30)/60}%">▲ profitable ${pAbs.toFixed(1)}%</span></div>`));
+  panel.appendChild(mkSlider("Bankroll",S.bank,1000,200000,1000,v=>"$"+v.toLocaleString(),v=>S.bank=v));
+  panel.appendChild(mkSlider("New picks traded per day",S.perDay,1,10,1,v=>v+" /day",v=>S.perDay=v));
+  const tg=$(`<label class="toggle"><input type="checkbox" ${S.stop?"checked":""}>
+    Add the −20% disaster stop (H-EX2) — caps each miss at −22% net; miss avg improves
+    ${fmtPct(w.m)} → ${fmtPct(w.mStop)} on the logged data</label>`);
+  tg.querySelector("input").onchange=(e)=>{S.stop=e.target.checked;S.preset=null;render();};
+  panel.appendChild(tg);
+  panel.appendChild($(`<div class="note">Position size is derived: with a 5-trading-day hold, ${S.perDay}/day
+    means ~${S.perDay*5} positions open at once → <b>${fmtUsd(pos)}</b> per position to keep the bankroll fully
+    deployed. 250 trading days/yr → ${tradesYr.toLocaleString()} trades/yr.</div>`));
+  root.appendChild(panel);
+
+  root.appendChild($(`<h2>3 · What that scenario pays</h2>`));
+  const [vc,vt]=verdictText(ev,pAbs,pBeat);
+  root.appendChild($(`<div class="panel">
+    <div class="grid kpis">
+      <div class="kpi"><div class="v ${cls(ev)}">${fmtPct(ev,2)}</div><div class="l">EV per trade</div></div>
+      <div class="kpi"><div class="v ${cls(perTrade)}">${fmtUsd(perTrade)}</div><div class="l">per trade (${fmtUsd(pos)} position)</div></div>
+      <div class="kpi"><div class="v ${cls(wk)}">${fmtUsd(wk)}</div><div class="l">per week (${S.perDay*5} trades)</div></div>
+      <div class="kpi"><div class="v ${cls(yr)}">${fmtUsd(yr)}</div><div class="l">per year (${tradesYr.toLocaleString()} trades)</div></div>
+      <div class="kpi"><div class="v ${cls(annPct)}">${fmtPct(annPct,1)}</div><div class="l">annual return on bankroll</div></div>
+    </div>
+    <div class="verdict ${vc}">${vt}</div>
+    <div class="note">Expectancy math only — the realized path swings hard around it (misses average
+    ${fmtPct(S.stop?w.mStop:w.m)}; the log's worst 5-day outcome is a rug). A losing streak that would
+    force you to stop trading is not modeled.</div></div>`));
+}
+
+async function main(){
+  try{
+    const txt=await fetch("outcomes.csv",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("outcomes.csv "+r.status);return r.text();});
+    const rows=parseCSV(txt);
+    S.all=windowStats(rows);
+    S.oos=windowStats(rows.filter(r=>(r.trading_date||"")>REG));
+    S.touch=Math.round(S.all.p*10)/10;S.preset=0;
+    document.getElementById("updated").textContent=`live from outcomes.csv · ${S.all.n} evaluable graded picks`;
+    render();
+  }catch(e){
+    document.getElementById("root").innerHTML=`<div class="err">Couldn't load the live log (${e.message}). Nothing to calculate without the raw record — that's the point.</div>`;
+  }
+}
+main();
+</script>
+</body>
+</html>
