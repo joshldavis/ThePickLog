@@ -399,6 +399,43 @@
       <div id="dashQuality"><div class="dim" style="font-size:13px;padding:6px 2px">Scoring today's top movers…</div></div>
     </div>
 
+    <!-- ============ PLAIN-ENGLISH EXPLAINER ============ -->
+    <div class="panel" style="margin-top:26px">
+      <h2 style="margin-top:0">What is this, in plain english?</h2>
+      <p style="font-size:14px">IgnitionScan watches the market's tiniest stocks — <b>"low-float"</b> names with very
+        few shares available to trade. Because so few shares exist, when buyers show up these stocks can spike
+        20%, 50%, even 100% in a day. They can also collapse just as fast. Every morning the app finds the ones
+        showing early signs of ignition — unusual volume, a price gap, a small float — and ranks them with a
+        simple, published score.</p>
+
+      <h2 style="margin-top:22px">What makes it different</h2>
+      <p style="font-size:14px;margin-bottom:10px">Most stock-picking tools show you their winners and quietly
+        forget their losers. IgnitionScan is built the opposite way — so it <i>can't</i> lie:</p>
+      <div class="readrow">
+        <div class="ri"><b>Every pick is logged before the outcome is known.</b> A cloud job runs the scan each
+          weekday morning and appends the picks to a permanent log. No cherry-picking, no deleting the
+          embarrassing ones — the log is never edited, only added to.</div>
+        <div class="ri"><b>Every pick is graded automatically 5 trading days later.</b> Did it go up or down, how
+          high did it spike, how hard did it crash — measured at prices you could actually get, net of a 2%
+          friction haircut, with the worst drawdown shown alongside every result. Also untouched by human hands.</div>
+        <div class="ri"><b>Rules have to be called in advance.</b> Before any rule is tested ("skip stocks under
+          $1", "sell at +10%"), it's written down with a date — then judged only on picks logged <i>after</i>
+          that date. The same discipline scientists use to avoid fooling themselves with hindsight.</div>
+      </div>
+
+      <h2 style="margin-top:22px">What the record shows so far</h2>
+      <p style="font-size:14px">Honest answer: bought at the open and held for a week, the picks as a group have
+        <b>lost money</b> so far. But the log revealed something interesting — most picks <b>spike before they
+        fade</b>, touching a meaningful gain within days and then bleeding out. So the live question isn't
+        "which stocks to buy" but "<b>when to sell</b>": does taking a quick gain and walking away change the
+        picture? That rule was registered in advance and is being tested right now, on new picks only. The
+        <a href="#" onclick="go('performance');return false" style="color:var(--a)">Track record</a> tab has the
+        live numbers — every one re-derivable from the public pick log.</p>
+
+      <p class="muted" style="font-size:13px;margin-bottom:0">Runs fully unattended in the cloud. Paper-trading
+        only (fake money). A personal research tool — not investment advice.</p>
+    </div>
+
     <div class="grid price-cards">
       <div class="panel price-card">
         <h3>Free</h3>
@@ -614,6 +651,22 @@
     <p class="lead">No "proprietary AI." IgnitionScan runs <b>two</b> transparent, deterministic models on
       every name. Neither is a buy signal — together they help you separate <i>"this is moving"</i> from
       <i>"this is actually worth the risk."</i> Below is what every number means and how to use it.</p>
+
+    <!-- plain-english methodology -->
+    <div class="panel" style="margin-top:18px">
+      <h2 style="margin-top:0">The whole methodology, in plain english</h2>
+      <p style="font-size:14px">Each pre-market, the scanner ranks tiny low-float stocks by four observable facts:
+        how few shares exist, how unusual today's volume is, how far the price has gapped, and the share price
+        itself. A second, independent check reads the company's actual financial statements to ask whether
+        there's a real business behind the ticker. Then the honesty machinery takes over: every pick is written
+        to a permanent, append-only log <b>before the market opens</b>, and graded automatically five trading
+        days later at prices you could realistically get — including how badly it fell, not just how high it
+        spiked. Any new rule must be registered with a date in advance and proves itself only on future picks.
+        In one sentence: <i>a robot that picks volatile stocks every morning and grades its own homework a week
+        later, in a log it can't edit.</i></p>
+      <p class="muted" style="font-size:13px;margin-bottom:0">Everything below is the technical detail of those
+        two models — the exact formulas, weights, and what each metric means.</p>
+    </div>
 
     <!-- the two models -->
     <div class="grid two" style="margin-top:18px">
