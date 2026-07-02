@@ -342,6 +342,45 @@
   .lb-table tr.me{background:rgba(90,150,255,.10)}
   .tbtn.star{background:transparent;border:1px solid var(--line,#333);color:#e8c95a}
   .tbtn.star.on{background:rgba(232,201,90,.15)}
+  /* ===== mobile ===== */
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;
+    align-items:center;gap:7px;white-space:nowrap}
+  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;
+    box-shadow:0 18px 40px #000a;max-height:calc(100vh - 60px);overflow-y:auto}
+  #mobileMenu.open{display:block}
+  #mobileMenu button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--text);
+    font:inherit;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px;cursor:pointer}
+  #mobileMenu button:hover{background:#ffffff08}
+  #mobileMenu button.active{color:var(--a);background:var(--a-soft)}
+  #mobileMenu button .ext{color:var(--dim);font-weight:400;font-size:12px}
+  .grid>*{min-width:0}           /* let grid items shrink below content min-width */
+  .risk-grid>div{min-width:0}
+  .risk-grid input{width:100%}
+  #dashQuality{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #dashQuality table{min-width:460px}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tscroll>#wlTable{min-width:940px}
+  .tscroll>#perfTable{min-width:780px}
+  .tscroll>#posTable,.tscroll>#ordTable,.tscroll>#histTable{min-width:620px}
+  .tscroll>.lb-table{min-width:520px}
+  @media(max-width:880px){
+    nav.tabs{display:none}
+    .menu-btn{display:flex}
+  }
+  @media(max-width:640px){
+    .top-cta .badge-proto{display:none}
+    .kpis{grid-template-columns:1fr}
+    .hero{padding:26px 0 6px}
+    .hero h1{font-size:26px}
+    .cat-row .cl{width:112px}
+    .wt .lbl{width:112px}
+    .toast{left:14px;right:14px;max-width:none}
+    /* 16px inputs prevent iOS focus-zoom */
+    .chat-input textarea,.tk-in,.config input,.is-modal input{font-size:16px}
+  }
 </style>
 <!-- Supabase JS client (multiplayer demo layer) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -371,7 +410,20 @@
     <div class="top-cta">
       <span id="isAuthBar"></span>
       <span class="badge-proto">PROTOTYPE</span>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"
+        onclick="toggleMenu()">☰ Menu</button>
     </div>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <button data-view="landing" class="active">Overview</button>
+    <button data-view="watchlist">Watchlist</button>
+    <button data-view="performance">Track record</button>
+    <button onclick="window.open('dashboard.html','_blank','noopener')">Validation <span class="ext">new tab ↗</span></button>
+    <button onclick="window.open('calculator.html','_blank','noopener')">Calculator <span class="ext">new tab ↗</span></button>
+    <button data-view="scoring">Guide</button>
+    <button data-view="portfolio">Portfolio</button>
+    <button data-view="compete">Compete</button>
+    <button data-view="assistant">Assistant</button>
   </div>
   <div class="wrap"><div id="srcBanner"></div></div>
 </header>
@@ -485,7 +537,7 @@
 
     <div class="grid stat-row" id="wlStats" style="margin:18px 0"></div>
 
-    <div class="panel" style="padding:6px 6px 0">
+    <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="wlTable" class="sortable">
         <thead><tr>
           <th>#</th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
@@ -568,7 +620,7 @@
     <div class="grid stat-row" id="pfStats" style="margin:18px 0"></div>
 
     <h2>Positions</h2>
-    <div class="panel" style="padding:6px 6px 0">
+    <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="posTable" class="sortable">
         <thead><tr>
           <th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th class="num">Qty <span class="info" data-info="qty" role="button" tabindex="0">i</span></th><th class="num">Avg entry <span class="info" data-info="avg-entry" role="button" tabindex="0">i</span></th>
@@ -581,7 +633,7 @@
     <p class="dim" id="posEmpty" style="font-size:13px;margin:10px 2px;display:none">No open positions.</p>
 
     <h2>Open orders</h2>
-    <div class="panel" style="padding:6px 6px 0">
+    <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="ordTable" class="sortable">
         <thead><tr>
           <th>Submitted <span class="info" data-info="submitted" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Side <span class="info" data-info="side" role="button" tabindex="0">i</span></th><th class="num">Qty <span class="info" data-info="qty" role="button" tabindex="0">i</span></th>
@@ -593,7 +645,7 @@
     <p class="dim" id="ordEmpty" style="font-size:13px;margin:10px 2px;display:none">No open orders.</p>
 
     <h2>Recent orders</h2>
-    <div class="panel" style="padding:6px 6px 0">
+    <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="histTable" class="sortable">
         <thead><tr>
           <th>Submitted <span class="info" data-info="submitted" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Side <span class="info" data-info="side" role="button" tabindex="0">i</span></th><th class="num">Qty <span class="info" data-info="qty" role="button" tabindex="0">i</span></th>
@@ -628,7 +680,7 @@
     <div id="isCompeteSignedIn" style="display:none">
       <div class="grid stat-row" id="isMyStats" style="margin:18px 0"></div>
       <h2>Leaderboard</h2>
-      <div class="panel" style="padding:6px 12px">
+      <div class="panel tscroll" style="padding:6px 12px">
         <table class="lb-table">
           <thead><tr><th>#</th><th>Player</th><th class="num">Equity</th><th class="num">Return</th><th class="num">Positions</th></tr></thead>
           <tbody id="lbBody"></tbody>
@@ -880,7 +932,7 @@
     </div>
 
     <h2>Every logged pick</h2>
-    <div class="panel" style="padding:6px 6px 0">
+    <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="perfTable" class="sortable">
         <thead><tr>
           <th>Date <span class="info" data-info="date" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
@@ -1604,7 +1656,7 @@ tier        : A≥75  B≥60  C≥45  D<45`;
 function go(v){
   document.querySelectorAll(".view").forEach(s=>s.classList.remove("active"));
   document.getElementById("view-"+v).classList.add("active");
-  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
+  document.querySelectorAll("#tabs button, #mobileMenu button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
   window.scrollTo(0,0);
   if(v==="portfolio"){
     if(window.IS_SIM && IS_SIM.active){ loadPortfolio(); }       // sim: refresh each open
@@ -1614,6 +1666,20 @@ function go(v){
 }
 document.getElementById("tabs").addEventListener("click",e=>{
   if(e.target.dataset.view) go(e.target.dataset.view);
+});
+
+/* mobile hamburger menu */
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open);
+  b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+document.getElementById("mobileMenu").addEventListener("click",e=>{
+  const btn=e.target.closest("button"); if(!btn) return;
+  if(btn.dataset.view) go(btn.dataset.view);
+  toggleMenu(false);
 });
 
 /* ---------- KEY HANDLING ---------- */

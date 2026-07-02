@@ -27,6 +27,20 @@
   nav.tabs a.active{color:var(--tx);background:#ff6a3d1f}
   .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;
     padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  /* ===== mobile menu ===== */
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);
+    border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;
+    align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;
+    box-shadow:0 18px 40px #000a;max-height:calc(100vh - 56px);overflow-y:auto}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;
+    padding:13px 12px;border-radius:10px}
+  #mobileMenu a:hover{background:#ffffff08}
+  #mobileMenu a.active{color:var(--a);background:#ff6a3d1f}
+  @media(max-width:880px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
   .wrap{max-width:1100px;margin:0 auto;padding:18px 14px 60px}
   header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:4px}
   h1{font-size:20px;margin:0;letter-spacing:.2px}
@@ -86,8 +100,29 @@
       <a href="index.html#assistant">Assistant</a>
     </nav>
     <span class="proto">PROTOTYPE</span>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"
+      onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="index.html#watchlist">Watchlist</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="dashboard.html" class="active">Validation</a>
+    <a href="calculator.html">Calculator</a>
+    <a href="index.html#scoring">Guide</a>
+    <a href="index.html#portfolio">Portfolio</a>
+    <a href="index.html#compete">Compete</a>
+    <a href="index.html#assistant">Assistant</a>
   </div>
 </div>
+<script>
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open); b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+</script>
 <div class="wrap">
   <header>
     <h1>Ignition<span class="dot">Scan</span> · Model Validation</h1>
