@@ -22,6 +22,14 @@
 
 const BASE = "https://financialmodelingprep.com/stable/";
 const cache = new Map(); // path -> { at, data }
+// [QA M2] Bound the per-warm-instance cache so it can't grow without limit.
+// Map preserves insertion order, so evicting the first key is FIFO — good
+// enough here since the working set (screened symbols × 5 endpoints) is tiny.
+const CACHE_MAX = 500;
+function cachePut(key, val) {
+  if (cache.size >= CACHE_MAX) cache.delete(cache.keys().next().value);
+  cache.set(key, val);
+}
 const TTL_PRICE = 5 * 60 * 1000;  // 5 min — pre-market screen doesn't need finer; protects the free-tier daily cap
 const TTL_FUND = 12 * 60 * 60 * 1000;
 const SHORT_TTL = new Set(["profile", "quote"]); // price-bearing → refresh often
@@ -79,7 +87,7 @@ export default async function handler(req, res) {
     }
     if (!r.ok || (data && data["Error Message"]))
       return res.status(r.ok ? 502 : r.status).json({ error: "FMP upstream error", detail: data });
-    cache.set(path, { at: Date.now(), data });
+    cachePut(path, { at: Date.now(), data });
     res.setHeader("x-cache", "MISS");
     return res.status(200).json(data);
   } catch (e) {

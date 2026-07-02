@@ -16,6 +16,9 @@ const UA = { "User-Agent": "IgnitionScan/1.0 (research tool; contact davis1163@g
 const TICKERS_URL = "https://www.sec.gov/files/company_tickers.json";
 const factsCache = new Map();         // cik -> { at, data }
 const FACTS_TTL = 12 * 60 * 60 * 1000;
+// [QA M2] Companyfacts payloads are large (100s of KB each) — bound the
+// per-warm-instance cache (FIFO eviction; Map preserves insertion order).
+const FACTS_MAX = 100;
 let tickerMap = null, tickerAt = 0;
 const TICKER_TTL = 24 * 60 * 60 * 1000;
 
@@ -40,6 +43,7 @@ async function getFacts(cik) {
   if (r.status === 404) throw new Error("no XBRL facts for CIK " + cik);
   if (!r.ok) throw new Error("companyfacts HTTP " + r.status);
   const data = await r.json();
+  if (factsCache.size >= FACTS_MAX) factsCache.delete(factsCache.keys().next().value);
   factsCache.set(cik, { at: Date.now(), data });
   return data;
 }

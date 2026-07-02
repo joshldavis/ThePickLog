@@ -8,6 +8,8 @@
      ALPACA_KEY_ID       your Alpaca API key id
      ALPACA_SECRET_KEY   your Alpaca API secret
      ALPACA_PAPER        "true" (default) for paper, "false" for live money
+     ALPACA_UI_TOKEN     owner-only gate — required before ANY action works;
+                         the same value goes in the Watchlist → Alpaca panel
 
    Frontend calls this with POST JSON, e.g.
      { "action": "account" }
@@ -15,9 +17,35 @@
      { "action": "order", "symbol": "BJDX", "qty": 10, "side": "buy" }
    ===================================================================== */
 
+import { timingSafeEqual } from "crypto";
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed. Use POST." });
+  }
+
+  // ---- Owner gate [QA 2026-07-02 B2] -------------------------------------
+  // This proxy fronts the OWNER'S personal Alpaca paper account. Without a
+  // gate, any visitor to the public URL could place (paper) orders and read
+  // balances/positions. Set ALPACA_UI_TOKEN in Vercel; the owner enters the
+  // same token once in the Watchlist → Alpaca panel (stored in their own
+  // browser's localStorage, sent as the x-owner-token header). Everyone else
+  // is pointed to Compete mode (per-user $100k sim via Supabase).
+  const OWNER_TOKEN = process.env.ALPACA_UI_TOKEN || "";
+  if (!OWNER_TOKEN) {
+    return res.status(403).json({
+      error:
+        "Alpaca access is owner-only and not armed: set ALPACA_UI_TOKEN in Vercel env vars, then enter the same token in the Watchlist → Alpaca panel. Visitors: sign in on the Compete tab to trade with play money.",
+    });
+  }
+  const given = Buffer.from(String(req.headers["x-owner-token"] || ""));
+  const expected = Buffer.from(OWNER_TOKEN);
+  const tokenOk = given.length === expected.length && timingSafeEqual(given, expected);
+  if (!tokenOk) {
+    return res.status(401).json({
+      error:
+        "Owner token required — this Alpaca paper account belongs to the site owner. Sign in on the Compete tab to trade with $100,000 in play money instead.",
+    });
   }
 
   // Accept the proxy's own names plus Alpaca's native names (APCA_*) and a few

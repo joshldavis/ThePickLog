@@ -496,26 +496,28 @@
     </div>
 
     <div class="grid price-cards">
-      <div class="panel price-card">
-        <h3>Free</h3>
-        <div class="p">$0</div>
-        <p class="muted" style="font-size:13px">Yesterday's screen + full public track record.</p>
-        <ul class="feat-list"><li>Delayed watchlist</li><li>Complete performance history</li><li>Scoring methodology</li></ul>
-      </div>
       <div class="panel price-card feat">
-        <h3>Early access</h3>
-        <div class="p">$99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
-        <p class="muted" style="font-size:13px">Today's screen at 7:30am ET. First 500 members.</p>
-        <ul class="feat-list"><li>Daily pre-market watchlist</li><li>Email + Discord delivery</li><li>Per-ticker scoring detail</li><li>Lock in $99 before public launch</li></ul>
-        <button class="btn" style="width:100%;margin-top:14px" onclick="go('landing')">Join waitlist</button>
+        <h3>Pre-launch <span class="is-pill">OPEN NOW</span></h3>
+        <div class="p">Free</div>
+        <p class="muted" style="font-size:13px">Everything the site does, free while it proves itself in public.</p>
+        <ul class="feat-list"><li>Today's full screen + scoring detail</li><li>Complete public track record &amp; validation dashboard</li><li><b>Compete:</b> $100,000 in play money, live prices, leaderboard</li><li>Built-in assistant to learn the metrics</li></ul>
+        <button class="btn" style="width:100%;margin-top:14px" onclick="go('compete');window.IS_SIM&&IS_SIM.openAuth()">Create a free account →</button>
       </div>
-      <div class="panel price-card">
-        <h3>Public launch</h3>
+      <div class="panel price-card" style="opacity:.65">
+        <h3>Early access <span class="badge-proto">COMING SOON</span></h3>
+        <div class="p">$99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
+        <p class="muted" style="font-size:13px">Planned — only if the edge survives its out-of-sample test. Nothing is for sale today.</p>
+        <ul class="feat-list"><li>Daily pre-market watchlist</li><li>Email + Discord delivery</li><li>Per-ticker scoring detail</li></ul>
+      </div>
+      <div class="panel price-card" style="opacity:.65">
+        <h3>Public launch <span class="badge-proto">COMING SOON</span></h3>
         <div class="p">$199<span style="font-size:14px;color:var(--muted)">/mo</span></div>
-        <p class="muted" style="font-size:13px">Standard price after early-access cohort fills.</p>
+        <p class="muted" style="font-size:13px">Planned standard price after any early-access cohort fills.</p>
         <ul class="feat-list"><li>Everything in Early access</li><li>Priority support</li></ul>
       </div>
     </div>
+    <p class="muted" style="font-size:12.5px;margin-top:10px">Paid tiers are shown for transparency about where this <i>could</i> go — they are not available, and won't be unless the
+      pre-registered edge validates out-of-sample and legal review clears. Until then everything is free.</p>
 
     <p class="disclaimer">
       <b>Educational / informational use only.</b> IgnitionScan publishes an impersonal, objectively-screened
@@ -569,15 +571,21 @@
     </div>
 
     <div class="config panel" style="margin-top:18px">
-      <label>Alpaca trading <span class="badge-proto">PAPER MODE</span></label>
+      <label>Alpaca trading <span class="badge-proto">PAPER MODE</span> <span class="dim" style="font-weight:400">— owner only</span></label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
         <button class="btn ghost" onclick="checkAlpaca()">Test connection</button>
         <span id="tradeStatus" class="dim">Click to verify your Alpaca paper account is connected.</span>
       </div>
-      <p class="note">Orders route through a server-side proxy (<code>/api/alpaca</code>) — your Alpaca
-        keys live in Vercel env vars and never reach the browser. Buy/Sell places a <b>market</b> order,
-        <b>day</b> time-in-force, for the share quantity in each row. Flip <code>ALPACA_PAPER</code> to
-        <code>false</code> in Vercel to trade live. Educational tool — you are responsible for every order placed.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px">
+        <input id="ownerTok" class="tk-in" type="password" placeholder="Owner token" autocomplete="off" style="max-width:220px" />
+        <button class="btn ghost" onclick="saveOwnerToken()">Save token</button>
+        <span class="dim" id="ownerTokMsg" style="font-size:12.5px"></span>
+      </div>
+      <p class="note"><b>Owner-only.</b> This panel drives the site owner's Alpaca paper account; every request
+        must carry the owner token (matching <code>ALPACA_UI_TOKEN</code> in Vercel), which is saved only in the
+        owner's browser. Everyone else: sign in on the <b>Compete</b> tab and trade with <b>$100,000</b> in play
+        money instead. Orders route through a server-side proxy (<code>/api/alpaca</code>) — Alpaca keys never
+        reach the browser. Educational tool — the owner is responsible for every order placed.</p>
     </div>
 
     <div class="config panel" style="margin-top:18px">
@@ -1514,13 +1522,19 @@ const _median=a=>{ if(!a.length)return null; const s=[...a].sort((x,y)=>x-y); co
   return s.length%2? s[m] : (s[m-1]+s[m])/2; };
 function aggregateReal(picks, outcomes){
   const byId={}; outcomes.forEach(o=>{ byId[o.pick_id]=o; });
-  const graded=picks.filter(p=>byId[p.pick_id]);
-  const wins=graded.filter(p=>byId[p.pick_id].win==="1").length;
+  // GRADED = outcome row with a numeric realizable return. VOIDED rows (blank
+  // returns — e.g. the 2026-06-19 phantom-holiday cohort) are excluded from
+  // every stat, matching weekly_report.py §1. WIN is DERIVED from the return
+  // (net > 0), never trusted from the CSV's win column, so the page stays
+  // re-derivable from raw data even if a row were ever hand-edited. [QA M3]
+  const _rc=p=>parseFloat(byId[p.pick_id].ret_open_close_net);
+  const graded=picks.filter(p=>byId[p.pick_id] && isFinite(_rc(p)));
+  const wins=graded.filter(p=>_rc(p)>0).length;
   const rets=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_close_net)).filter(isFinite);  // realizable open→close (matches WIN)
   const r5=graded.map(p=>parseFloat(byId[p.pick_id].ret_open_5dclose_net)).filter(isFinite);   // 5-day swing
   const maes=graded.map(p=>parseFloat(byId[p.pick_id].mae_5d)).filter(isFinite);               // worst drawdown — the downside the brief promises to show
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
-  graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(byId[p.pick_id].win==="1") byTier[t][1]++; } });
+  graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(_rc(p)>0) byTier[t][1]++; } });
   // Calibration: % positive by score band — the validity curve (SYNTHESIS 1.3).
   const bands=[[0,45],[45,55],[55,65],[65,75],[75,85],[85,101]];
   const calib=bands.map(([lo,hi])=>{
@@ -1613,11 +1627,16 @@ async function renderPerformance(){
     const o=g.byId[p.pick_id];
     const px=parseFloat(p.price_at_screen), watch=parseFloat(p.watch_level), sc=parseFloat(p.score);
     let gainCell, dipCell, resCell;
-    if(o){ const rc=parseFloat(o.ret_open_close_net);   // realizable open→close, same basis as WIN
+    if(o){ const rc=parseFloat(o.ret_open_close_net);   // realizable open→close — WIN is derived from this [QA M3]
       const mae=parseFloat(o.mae_5d);                   // worst drawdown over the 5-day window
-      gainCell=`<td class="num ${rc>=0?'pos':'neg'}">${isFinite(rc)?(rc>=0?'+':'')+rc.toFixed(1)+'%':'—'}</td>`;
-      dipCell=`<td class="num ${isFinite(mae)&&mae<0?'neg':'dim'}">${isFinite(mae)?mae.toFixed(1)+'%':'—'}</td>`;
-      resCell= o.win==="1"? '<span class="win">WIN</span>' : '<span class="miss">MISS</span>';
+      if(isFinite(rc)){
+        gainCell=`<td class="num ${rc>=0?'pos':'neg'}">${(rc>=0?'+':'')+rc.toFixed(1)+'%'}</td>`;
+        dipCell=`<td class="num ${isFinite(mae)&&mae<0?'neg':'dim'}">${isFinite(mae)?mae.toFixed(1)+'%':'—'}</td>`;
+        resCell= rc>0? '<span class="win">WIN</span>' : '<span class="miss">MISS</span>';
+      } else { // voided row (e.g. phantom holiday scan) — excluded from all stats
+        gainCell=`<td class="num dim">—</td>`; dipCell=`<td class="num dim">—</td>`;
+        resCell=`<span class="dim" title="${(o.note||'voided — excluded from all stats').replace(/"/g,'&quot;')}">VOID</span>`;
+      }
     } else { gainCell=`<td class="num dim">pending</td>`; dipCell=`<td class="num dim">—</td>`; resCell=`<span class="dim">pending</span>`; }
     body.innerHTML+=`<tr>
       <td class="dim">${p.trading_date}</td><td class="tick">${p.ticker}</td>
@@ -1692,6 +1711,17 @@ function applyKey(){
 /* ---------- ALPACA TRADING ---------- */
 const ALPACA_API = "/api/alpaca";
 
+/* Owner gate [QA B2] — the Alpaca tab drives the OWNER'S paper account, so the
+   proxy requires a token (ALPACA_UI_TOKEN in Vercel). Stored per-browser;
+   guests are routed to Compete (per-user $100k sim) instead. */
+function ownerToken(){ try{ return localStorage.getItem("is_owner_token")||""; }catch(e){ return ""; } }
+function saveOwnerToken(){
+  const el=document.getElementById("ownerTok"); const v=(el&&el.value.trim())||"";
+  try{ if(v) localStorage.setItem("is_owner_token",v); else localStorage.removeItem("is_owner_token"); }catch(e){}
+  const m=document.getElementById("ownerTokMsg");
+  if(m) m.textContent = v ? "Saved in this browser." : "Cleared — Alpaca actions disabled here.";
+}
+
 function toast(msg, kind){
   let t=document.createElement("div");
   t.className="toast "+(kind||"info");
@@ -1702,9 +1732,11 @@ function toast(msg, kind){
 }
 
 async function callAlpaca(payload){
+  const headers={"Content-Type":"application/json"};
+  const tok=ownerToken(); if(tok) headers["x-owner-token"]=tok;
   const r=await fetch(ALPACA_API,{
     method:"POST",
-    headers:{"Content-Type":"application/json"},
+    headers,
     body:JSON.stringify(payload)
   });
   let j; try{ j=await r.json(); }catch{ j={error:"Bad response from proxy ("+r.status+")"}; }
@@ -1731,6 +1763,11 @@ async function checkAlpaca(){
 
 async function placeOrder(symbol, side){
   if(window.IS_SIM && IS_SIM.active){ return IS_SIM.placeOrderFromRow(symbol, side); }
+  if(!ownerToken()){ // guests never touch the owner's Alpaca account [QA B2]
+    toast("Trading here uses the site owner's Alpaca paper account.<br><b>Sign in on the Compete tab</b> to trade with $100,000 in play money.","bad");
+    if(window.IS_SIM) IS_SIM.openAuth();
+    return;
+  }
   const input=document.getElementById("qty-"+symbol);
   const qty=parseInt(input&&input.value,10);
   if(!(qty>0)){ toast("Enter a share quantity greater than 0 for "+symbol+".","bad"); return; }
@@ -1925,6 +1962,10 @@ async function submitTicket(){
     if(!(q>0)){ err.textContent="Enter a share quantity greater than 0."; return; }
     const okSim=await IS_SIM.trade(ticket.symbol, ticket.side, q, ticket.price);
     if(okSim){ closeTicket(); }
+    return;
+  }
+  if(!ownerToken()){ // guests never touch the owner's Alpaca account [QA B2]
+    err.textContent="This route uses the site owner's Alpaca paper account. Sign in on the Compete tab to trade with $100,000 in play money.";
     return;
   }
   const qty=parseInt(document.getElementById("tkQty").value,10);
