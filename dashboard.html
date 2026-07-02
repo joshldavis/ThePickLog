@@ -263,6 +263,73 @@ async function main(){
       so realized results are worse than shown. See <a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX2.</div></div>`);
   }
 
+  /* ---- Exit batch #2 (H-EX3..H-EX9) — registered 2026-07-02 ---- */
+  const B2REG="2026-07-02";
+  // Generic rule replay — mirrors exit_sim.py simulate() exactly: fills at level,
+  // conservative same-day tie (stop first), trail from PRIOR sessions' peak only, 2% haircut.
+  const _b2sim=(e,bars,rule)=>{ const T=rule.target,S=rule.stop,TR=rule.trail;
+    const hi=T?e*(1+T/100):null, lo=S?e*(1-S/100):null;
+    const last=num(bars[bars.length-1].close), R=(px)=>(px-e)/e*100;
+    switch(rule.type){
+      case "close0": return R(num(bars[0].close));
+      case "target": for(const b of bars){ if(num(b.high)>=hi) return R(hi); } return R(last);
+      case "target_stop": for(const b of bars){ if(num(b.low)<=lo) return R(lo); if(num(b.high)>=hi) return R(hi); } return R(last);
+      case "closeN": return R(num(bars[Math.min(rule.day,bars.length-1)].close));
+      case "target_timestop": for(const b of bars.slice(0,rule.day+1)){ if(num(b.high)>=hi) return R(hi); }
+        return R(num(bars[Math.min(rule.day,bars.length-1)].close));
+      case "target_trail": { let armed=false, peak=e;
+        for(const b of bars){ const tl=peak*(1-TR/100);
+          if(armed && num(b.low)<=tl) return R(tl);
+          if(num(b.high)>=hi) armed=true;
+          peak=Math.max(peak,num(b.high)); }
+        return R(last); }
+    } };
+  const b2net=(e,bars,rule)=>_b2sim(e,bars,rule)-2.0;
+  // (i) arms evaluable from the graded log alone (target fills read off mfe_5d; +L% fill = L−2 net)
+  const b2oArm=(fn,post)=>{ const rs=[];
+    for(const o of graded){ const p=byId[o.pick_id]; if(!p) continue;
+      if(post && !(p.trading_date>B2REG)) continue;
+      const mfe=num(o.mfe_5d),c5=num(o.ret_open_5dclose_net),c0=num(o.ret_open_close_net);
+      if(mfe==null||c5==null||c0==null) continue; rs.push(fn(p,mfe,c5,c0)); } return rs; };
+  const b2t=(L)=>(p,mfe,c5,c0)=>mfe>=L?L-2.0:c5;
+  const B2O=[["Same-day close (baseline)",(p,m,c5,c0)=>c0],["5-day close (baseline)",(p,m,c5,c0)=>c5],
+    ["H-EX1 +10% target (reference)",b2t(10)],["H-EX3 +5% target",b2t(5)],["H-EX3 +15% target",b2t(15)],
+    ["H-EX3 +20% target",b2t(20)],
+    ["H-EX6 half at +10%, half to 5d close",(p,m,c5,c0)=>m>=10?0.5*8.0+0.5*c5:c5],
+    ["H-EX8 tier target (A/B +20%, C/D +10%)",(p,m,c5,c0)=>(p.tier==="A"||p.tier==="B")?(m>=20?18.0:c5):(m>=10?8.0:c5)]];
+  // (ii) arms needing touch order — replayed from the committed daily path (paths.csv)
+  const b2pArm=(rule,post)=>{ const rs=[];
+    for(const o of graded){ const p=byId[o.pick_id]; if(!p) continue;
+      if(post && !(p.trading_date>B2REG)) continue;
+      const bars=exByPid[o.pick_id]; if(!bars||bars.length<2) continue;
+      const e0=num(bars[0].open); if(e0==null) continue;
+      rs.push(b2net(e0,bars,rule)); } return rs; };
+  const B2P=[["Same-day close (baseline)",{type:"close0"}],["H-EX1 +10% target (reference)",{type:"target",target:10}],
+    ["H-EX2 +10% / −20% stop (reference)",{type:"target_stop",target:10,stop:20}],
+    ["H-EX4 +10% target, day-2 time stop",{type:"target_timestop",target:10,day:2}],
+    ["H-EX5a day-1 close",{type:"closeN",day:1}],["H-EX5b day-2 close",{type:"closeN",day:2}],
+    ["H-EX7 trail 15% after +10% touch",{type:"target_trail",target:10,trail:15}],
+    ["H-EX9a +10% / −10% stop",{type:"target_stop",target:10,stop:10}],
+    ["H-EX9b +10% / −30% stop",{type:"target_stop",target:10,stop:30}]];
+  add(`<h2>Exit batch #2 — H-EX3..H-EX9 <span class="flag">judge the out-of-sample column</span></h2>`);
+  let b2r1=""; for(const [nm,fn] of B2O) b2r1+=`<tr><td>${nm}</td><td>${exCell(b2oArm(fn,false))}</td><td>${exCell(b2oArm(fn,true))}</td></tr>`;
+  let b2r2=""; for(const [nm,rl] of B2P) b2r2+=`<tr><td>${nm}</td><td>${exCell(b2pArm(rl,false))}</td><td>${exCell(b2pArm(rl,true))}</td></tr>`;
+  add(`<div class="panel">
+    <div class="note"><b>Family-wise honesty note:</b> seven hypotheses registered together (${B2REG}) — with this
+    many arms, one can beat baseline <b>by luck</b>. This is a <i>ranked screen</i>, not seven claims: a winner must
+    beat its baseline on avg net, hold direction across ≥3 weekly snapshots, and survive as n grows; prefer the
+    simplest rule among ties. Directional until n≥30 per arm. See <a href="HYPOTHESES.md">HYPOTHESES.md</a> §Exit-rule batch #2.</div>
+    <div class="scroll"><table>
+    <thead><tr><th>(i) from graded log — n / win% / avg net</th><th>all-time (context)</th><th>post-${B2REG} (OOS test)</th></tr></thead>
+    <tbody>${b2r1}</tbody></table></div>
+    <div class="scroll"><table>
+    <thead><tr><th>(ii) from committed daily path — n / win% / avg net</th><th>all-time, path-bearing (context)</th><th>post-${B2REG} (OOS test)</th></tr></thead>
+    <tbody>${b2r2}</tbody></table></div>
+    <div class="note">Same conventions as H-EX1/H-EX2: fills assumed exactly at level, conservative same-day tie
+    (stop first), trail ratchets off <i>prior</i> sessions' highs only, 2% haircut. Thin floats gap through
+    levels — realized results are worse; any edge &lt;~+1pp is noise. §4f of
+    <a href="reports/LATEST.md">the weekly report</a> is the canonical judge.</div></div>`);
+
   /* ---- charts ---- */
   add(`<h2>Equity curve & return distribution (took every pick, equal weight)</h2>`);
   const two=$(`<div class="grid two"></div>`);
