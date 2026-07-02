@@ -434,6 +434,118 @@ def main():
       "H-EX2 caveat).")
     w("")
 
+    # ---- 4f. pre-registered exit batch #2 (H-EX3..H-EX9) ----
+    B2_REG = "2026-07-02"
+    w("## 4f. Pre-registered exit batch #2 — H-EX3..H-EX9")
+    w("")
+    w(f"Registered {B2_REG} (HYPOTHESES.md, seven hypotheses frozen together). **Family-wise "
+      "honesty note: with this many arms, one can beat baseline by luck.** The batch is a "
+      "*ranked screen*, not seven independent claims — a winner must beat its baseline on avg "
+      "net/trade, hold direction across ≥3 consecutive weekly snapshots, and survive as n "
+      f"grows; prefer the simplest rule among ties. Only **post-{B2_REG}** picks are the "
+      "test; directional until n≥30 per arm. Slippage caveat as H-EX1/H-EX2 (fills assumed "
+      "at level; thin floats gap through — any edge <~+1pp is noise).")
+    w("")
+
+    def b2_rows(post_only):
+        rows = []
+        for o in outs:
+            p = by_id.get(o.get("pick_id"))
+            if not p:
+                continue
+            if post_only and not (p.get("trading_date", "") > B2_REG):
+                continue
+            rows.append((p, o))
+        return rows
+
+    def b2fmt(rs):
+        if not rs:
+            return "n=0", "—", "—"
+        wr = pct(sum(1 for r in rs if r > 0), len(rs))
+        return f"n={len(rs)}", f"{wr:.0f}%", f"{mean(rs):+.1f}%"
+
+    # (i) arms evaluable from the graded log alone (mfe_5d + closes). A +L% target that
+    # fills realizes net (L − 2)%; unfilled exits at the 5-day close (already net).
+    def _tgt(level):
+        return lambda p, mfe, c5, c0: (level - 2.0) if mfe >= level else c5
+
+    B2_OUTCOME_ARMS = [
+        ("Same-day close (baseline)", lambda p, mfe, c5, c0: c0),
+        ("5-day close (baseline)", lambda p, mfe, c5, c0: c5),
+        ("H-EX1 +10% target (reference)", _tgt(10)),
+        ("H-EX3 +5% target", _tgt(5)),
+        ("H-EX3 +15% target", _tgt(15)),
+        ("H-EX3 +20% target", _tgt(20)),
+        ("H-EX6 half at +10%, half to 5d close",
+         lambda p, mfe, c5, c0: 0.5 * 8.0 + 0.5 * c5 if mfe >= 10 else c5),
+        ("H-EX8 tier target (A/B +20%, C/D +10%)",
+         lambda p, mfe, c5, c0: ((18.0 if mfe >= 20 else c5) if p.get("tier") in ("A", "B")
+                                 else (8.0 if mfe >= 10 else c5))),
+    ]
+
+    def b2_outcome_arm(fn, post_only):
+        rs = []
+        for p, o in b2_rows(post_only):
+            mfe, c5, c0 = col(o, "mfe_5d"), col(o, "ret_open_5dclose_net"), col(o, "ret_open_close_net")
+            if mfe is None or c5 is None or c0 is None:
+                continue
+            rs.append(fn(p, mfe, c5, c0))
+        return rs
+
+    w("**(i) Arms evaluable from the graded log (target fills read off `mfe_5d`):**")
+    w("")
+    w("| arm | all-time | | | post-reg (the test) | | |")
+    w("|---|---|---|---|---|---|---|")
+    w("| | n | win% | avg net | n | win% | avg net |")
+    for name, fn in B2_OUTCOME_ARMS:
+        a_n, a_w, a_m = b2fmt(b2_outcome_arm(fn, False))
+        p_n, p_w, p_m = b2fmt(b2_outcome_arm(fn, True))
+        w(f"| {name} | {a_n} | {a_w} | {a_m} | {p_n} | {p_w} | {p_m} |")
+    w("")
+
+    # (ii) arms needing the ORDER of touches -> only scorable from the committed daily
+    # path (paths.csv, forward-only). Reuses the audited exit_sim core (same as §4e).
+    B2_PATH_ARMS = [
+        ("Same-day close (baseline)", {"type": "close0"}),
+        ("H-EX1 +10% target (reference)", {"type": "target", "target": 10}),
+        ("H-EX2 +10% / −20% stop (reference)", {"type": "target_stop", "target": 10, "stop": 20}),
+        ("H-EX4 +10% target, day-2 time stop", {"type": "target_timestop", "target": 10, "day": 2}),
+        ("H-EX5a day-1 close", {"type": "closeN", "day": 1}),
+        ("H-EX5b day-2 close", {"type": "closeN", "day": 2}),
+        ("H-EX7 trail 15% after +10% touch", {"type": "target_trail", "target": 10, "trail": 15}),
+        ("H-EX9a +10% / −10% stop", {"type": "target_stop", "target": 10, "stop": 10}),
+        ("H-EX9b +10% / −30% stop", {"type": "target_stop", "target": 10, "stop": 30}),
+    ]
+
+    def b2_path_arm(rule, post_only):
+        rs = []
+        if exit_net is None:
+            return rs
+        for p, o in b2_rows(post_only):
+            entry = col(o, "entry_open")
+            bars = paths.get(o.get("pick_id"))
+            if entry is None or not bars:
+                continue
+            rs.append(exit_net(entry, bars, rule))
+        return rs
+
+    w("**(ii) Arms needing touch order (scored from the committed daily path, `paths.csv`):**")
+    w("")
+    if exit_net is None:
+        w("- ⏳ **Pending** — exit-rule core (`exit_sim.py`) unavailable to this run.")
+    else:
+        w("| arm | all-time path-bearing | | | post-reg (the test) | | |")
+        w("|---|---|---|---|---|---|---|")
+        w("| | n | win% | avg net | n | win% | avg net |")
+        for name, rule in B2_PATH_ARMS:
+            a_n, a_w, a_m = b2fmt(b2_path_arm(rule, False))
+            p_n, p_w, p_m = b2fmt(b2_path_arm(rule, True))
+            w(f"| {name} | {a_n} | {a_w} | {a_m} | {p_n} | {p_w} | {p_m} |")
+    w("")
+    w("_All-time columns are in-sample context, NOT the test. Post-reg columns fill as picks "
+      f"logged after {B2_REG} reach the 5-day grade (first land ~2026-07-10)._")
+    w("")
+
     # ---- 5. integrity ----
     w("## 5. Integrity checks (verifiability standard)")
     w("")

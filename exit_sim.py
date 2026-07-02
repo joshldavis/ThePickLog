@@ -75,6 +75,32 @@ def simulate(entry, bars, rule):
                 return _ret(entry, trail_lvl)
             peak = max(peak, b["h"])              # today's high only arms tomorrow's stop
         return _ret(entry, last_c)
+    # --- batch #2 rule types (H-EX3..H-EX9, registered 2026-07-02) ---
+    if typ == "closeN":                      # H-EX5: exit at day-N close (bars[0] = entry day)
+        n = rule["day"]
+        return _ret(entry, bars[min(n, len(bars) - 1)]["c"])
+    if typ == "target_timestop":             # H-EX4: target live through day-N only; unfilled -> day-N close
+        n = rule["day"]
+        for b in bars[:n + 1]:
+            if b["h"] >= hi:
+                return _ret(entry, hi)
+        return _ret(entry, bars[min(n, len(bars) - 1)]["c"])
+    if typ == "partial":                     # H-EX6: half fills at target, half rides to last close
+        for b in bars:
+            if b["h"] >= hi:
+                return 0.5 * _ret(entry, hi) + 0.5 * _ret(entry, last_c)
+        return _ret(entry, last_c)
+    if typ == "target_trail":                # H-EX7: trail arms only AFTER a +target touch;
+        armed = False                        # trail level from PRIOR sessions' peak only
+        peak = entry                         # (no same-day ratchet; touch day can't exit on the trail)
+        for b in bars:
+            trail_lvl = peak * (1 - TR / 100.0)
+            if armed and b["l"] <= trail_lvl:
+                return _ret(entry, trail_lvl)
+            if b["h"] >= hi:
+                armed = True                 # arms starting the NEXT session
+            peak = max(peak, b["h"])
+        return _ret(entry, last_c)
     raise ValueError("unknown rule type " + typ)
 
 
@@ -97,7 +123,26 @@ RULES = [
     {"name": "Target +20% / Stop -15%", "type": "target_stop", "target": 20, "stop": 15},
     {"name": "Trailing 15%", "type": "trail", "trail": 15},
     {"name": "Trailing 20%", "type": "trail", "trail": 20},
+    # --- batch #2, registered 2026-07-02 (HYPOTHESES.md "Exit-rule batch #2") ---
+    {"name": "H-EX3 Target +5% [registered 2026-07-02]", "type": "target", "target": 5},
+    {"name": "H-EX4 +10% target / day-2 time stop [registered 2026-07-02]", "type": "target_timestop", "target": 10, "day": 2},
+    {"name": "H-EX5a Day-1 close [registered 2026-07-02]", "type": "closeN", "day": 1},
+    {"name": "H-EX5b Day-2 close [registered 2026-07-02]", "type": "closeN", "day": 2},
+    {"name": "H-EX6 half at +10%, half to 5d close [registered 2026-07-02]", "type": "partial", "target": 10},
+    {"name": "H-EX7 trail 15% after +10% touch [registered 2026-07-02]", "type": "target_trail", "target": 10, "trail": 15},
+    {"name": "H-EX8 tier target A/B +20%, C/D +10% [registered 2026-07-02]", "type": "tier_target", "targets": {"AB": 20, "CD": 10}},
+    {"name": "H-EX9a +10% target / -10% stop [registered 2026-07-02]", "type": "target_stop", "target": 10, "stop": 10},
+    {"name": "H-EX9b +10% target / -30% stop [registered 2026-07-02]", "type": "target_stop", "target": 10, "stop": 30},
 ]
+
+
+def resolve_rule(rule, tier):
+    """H-EX8 is the one pick-dependent rule: the target level depends on the pick's tier.
+    Resolve it to a concrete uniform rule; all other rules pass through unchanged."""
+    if rule["type"] == "tier_target":
+        t = rule["targets"]["AB" if tier in ("A", "B") else "CD"]
+        return {"type": "target", "target": t}
+    return rule
 
 
 # ---------------------------------------------------------------------------
@@ -186,8 +231,9 @@ def main():
         if not bars:
             continue
         used += 1
+        tier = (picks.get(o.get("pick_id")) or {}).get("tier", "")
         for r in RULES:
-            results[r["name"]].append(net(entry, bars, r))
+            results[r["name"]].append(net(entry, bars, resolve_rule(r, tier)))
 
     _write_report(results, used, len(graded), from_record)
 
@@ -266,8 +312,31 @@ def _selftest():
     # trailing 15% (peak known entering each session): day0 trail=85, low95>85 keep, peak->112;
     # day1 trail=95.2, low104>95.2 keep, peak->120; day2 trail=102, low85<=102 -> exit 102 -> +2.0
     assert g({"type": "trail", "trail": 15}) == 2.0, g({"type": "trail", "trail": 15})
+    # --- batch #2 rule types ---
+    # closeN: day-1 close 118 -> +18 ; day-2 close 90 -> -10
+    assert g({"type": "closeN", "day": 1}) == 18.0
+    assert g({"type": "closeN", "day": 2}) == -10.0
+    # target_timestop: +25% target never touched by day-1 (h112, h120 < 125) -> exit day-1 close +18
+    # (plain +25% target would have filled day2 at 130>=125 -> the time stop is what changed the result)
+    assert g({"type": "target_timestop", "target": 25, "day": 1}) == 18.0
+    # target_timestop: +10% target touched day0 (112>=110) -> +10, time stop never reached
+    assert g({"type": "target_timestop", "target": 10, "day": 2}) == 10.0
+    # partial: half fills at +10 (day0), half rides to last close (-10) -> 0.0
+    assert g({"type": "partial", "target": 10}) == 0.0
+    # target_trail 15% after +10% touch: day0 h112>=110 arms (no same-day exit), peak->112;
+    # day1 trail=95.2, low104 holds, peak->120; day2 trail=102, low85<=102 -> exit 102 -> +2.0
+    assert g({"type": "target_trail", "target": 10, "trail": 15}) == 2.0
+    # target_trail never armed: +40% target never touched -> 5d close -10
+    assert g({"type": "target_trail", "target": 40, "trail": 15}) == -10.0
+    # resolve_rule: tier A -> +20 target, tier D -> +10 target
+    r8 = {"type": "tier_target", "targets": {"AB": 20, "CD": 10}}
+    assert resolve_rule(r8, "A") == {"type": "target", "target": 20}
+    assert resolve_rule(r8, "D") == {"type": "target", "target": 10}
+    assert g(resolve_rule(r8, "A")) == 20.0   # day1 h120 >= 120
+    assert g(resolve_rule(r8, "D")) == 10.0   # day0 h112 >= 110
     print("exit_sim selftest PASS — all rule paths exit where expected")
     print("  (target+stop collision correctly resolves to the stop — conservative)")
+    print("  (batch #2: closeN / target_timestop / partial / target_trail / tier_target verified)")
 
 
 if __name__ == "__main__":
