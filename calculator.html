@@ -32,21 +32,34 @@
   code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
   .err{background:#3a1c22;border:1px solid #5a2a33;color:#ffb3c0;padding:12px;border-radius:10px}
   .ctrl{margin:14px 0}
-  .ctrl label{display:flex;justify-content:space-between;font-size:13px;color:var(--dim);margin-bottom:4px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:13px;color:var(--dim);margin-bottom:4px;gap:8px}
   .ctrl label b{color:var(--tx);font-variant-numeric:tabular-nums}
   input[type=range]{width:100%;accent-color:var(--a)}
-  .presets{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 2px;align-items:center}
   .btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:9px;font-size:12.5px;font-weight:600;
        text-decoration:none;color:var(--tx);background:var(--panel2);border:1px solid var(--line);cursor:pointer}
   .btn:hover{border-color:var(--a);color:#fff}
   .btn.active{border-color:var(--a);color:var(--a)}
   .verdict{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:13.5px;border:1px solid var(--line);background:var(--panel2)}
-  .toggle{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:12px 0 2px;cursor:pointer;user-select:none}
-  .two{grid-template-columns:1fr 1fr}
-  @media(max-width:700px){.two{grid-template-columns:1fr}}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:12px 0 2px;cursor:pointer;user-select:none;flex-wrap:wrap}
   .bmarks{position:relative;height:14px;margin-top:-4px}
   .bmark{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--amber);white-space:nowrap}
   .caveat{background:#2a1d10;border:1px solid #5a3a22;color:var(--amber);padding:10px 12px;border-radius:10px;font-size:12.5px;margin-top:14px}
+  .ib{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;
+      border:1px solid var(--dim);color:var(--dim);background:none;font-size:10.5px;font-weight:700;font-style:italic;
+      font-family:Georgia,serif;cursor:pointer;vertical-align:1px;margin-left:5px;padding:0;line-height:1}
+  .ib:hover,.ib.on{border-color:var(--blue);color:var(--blue)}
+  .info-box{background:#10202e;border:1px solid #24405a;border-left:3px solid var(--blue);border-radius:8px;
+            padding:10px 12px;font-size:12.5px;color:var(--tx);margin-top:10px;line-height:1.55}
+  .info-box b.t{color:var(--blue)}
+  .info-box .f{display:block;background:#0a0d12;border:1px solid var(--line);border-radius:6px;padding:6px 9px;
+               margin:7px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap}
+  details.method{margin-top:22px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 16px 6px}
+  details.method summary{cursor:pointer;font-size:13px;font-weight:600;padding:10px 0;color:var(--blue)}
+  details.method h3{font-size:13px;margin:14px 0 4px;color:var(--tx)}
+  details.method p,details.method li{font-size:12.5px;color:var(--dim);margin:4px 0}
+  details.method .f{display:block;background:#0a0d12;border:1px solid var(--line);border-radius:6px;padding:6px 9px;
+               margin:7px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--tx);white-space:pre-wrap}
 </style>
 </head>
 <body>
@@ -59,7 +72,8 @@
     recomputed live in your browser from the raw log — <a href="outcomes.csv" download>outcomes.csv</a> —
     using the same plug-in convention as <a href="reports/bayes-h-ex1-LATEST.md">the Bayesian read-out</a>.
     This is a scenario tool, not a forecast: the honest OOS test lives in
-    <a href="reports/LATEST.md">the weekly report §4d</a>.</div>
+    <a href="reports/LATEST.md">the weekly report §4d</a>. Click any <button class="ib" style="cursor:default">i</button>
+    for the exact definition, formula, and data lineage of that number.</div>
 
   <div id="root"></div>
 
@@ -69,6 +83,59 @@
     in-sample picks that suggested H-EX1, so it flatters the rule. No compounding, taxes, borrowing, or
     liquidity limits are modeled. Nothing here is investment advice — it's arithmetic on a public log
     (<a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX1).</div>
+
+  <details class="method" id="method">
+    <summary>Full methodology — every formula, assumption, and data source on this page</summary>
+
+    <h3>Where the data comes from (lineage)</h3>
+    <p>1. The scanner stamps each pick into <code>picks.csv</code> <b>before the outcome is known</b> (append-only, never edited).
+       2. Five trading days later the grader writes one row per pick to <code>outcomes.csv</code> with the entry open,
+       same-day close, 5-day close, and the 5-day max-favorable / max-adverse excursions (<code>mfe_5d</code> / <code>mae_5d</code>),
+       all net of a 2% round-trip cost haircut on return columns. 3. This page fetches <code>outcomes.csv</code> raw and
+       recomputes everything in your browser — download it and check any number yourself.</p>
+
+    <h3>The exit rule being modeled (H-EX1, frozen 2026-06-23)</h3>
+    <p>Rest a +10% limit order over the 5-trading-day hold. If the 5-day high (<code>mfe_5d</code>) reaches +10%, the order
+       is assumed to fill → realized <b>+8% net</b> (10% minus the 2% haircut). Otherwise exit at the 5-day close
+       (<code>ret_open_5dclose_net</code>). Deterministic from the log; no discretion.</p>
+
+    <h3>The three numbers that determine everything</h3>
+    <span class="f">p  = touch rate      = share of evaluable picks with mfe_5d ≥ 10
+m  = miss average    = mean ret_open_5dclose_net of picks with mfe_5d &lt; 10
+EV = expectancy      = p × (+8%) + (1 − p) × m     ["plug-in" convention]</span>
+    <p>"Evaluable" = graded rows where both <code>mfe_5d</code> and <code>ret_open_5dclose_net</code> are numeric (voided/pending
+       rows are excluded). "Plug-in" means point estimates are plugged into the formula — the uncertainty of m and
+       the baseline is <b>not</b> propagated (same convention, and same limitation, as <code>bayes_h_ex1.py</code>, roadmap R3).</p>
+
+    <h3>Breakeven touch rates</h3>
+    <span class="f">p*(threshold) = (threshold − m) / (8 − m)
+beats-baseline p* uses threshold = baseline EV (mean same-day open→close net)
+absolute p*       uses threshold = 0</span>
+
+    <h3>The optional −20% disaster stop (H-EX2 convention)</h3>
+    <p>Adds a −20% stop alongside the target → a stopped miss realizes −22% net. Modeled here <b>mechanically</b>:
+       each miss's 5-day-close return is floored at −22%. This is optimistic — it ignores touch order within the
+       window and gap-through on the stop itself. The registered H-EX2 test (weekly report §4e) replays the actual
+       daily path from <code>paths.csv</code> with a conservative same-day-collision rule; that is the honest version.</p>
+
+    <h3>Dollar scaling</h3>
+    <span class="f">position size   = bankroll ÷ (picks/day × 5)          [5-day hold ⇒ that many open at once]
+$ per trade     = position size × EV
+$ per year      = $ per trade × picks/day × 250
+annual return % = $ per year ÷ bankroll</span>
+    <p>This is expectancy × turnover, <b>not</b> a compounded equity curve. It ignores taxes, borrowing, partial fills,
+       liquidity limits (these are thin low-float names — size moves them), and sequencing risk: a losing streak that
+       forces you to stop is not modeled. A negative annual figure below −100% simply means the expected bleed
+       exceeds the bankroll within the year — you'd be broke before December.</p>
+
+    <h3>Known biases, in the honest direction</h3>
+    <p>• Fill assumption (+10% exactly) is optimistic on thin floats → real results worse.<br>
+       • All-time window contains the picks that inspired the rule → flatters it (selection-on-the-data).<br>
+       • The mechanical stop floor is optimistic vs the path-replay version.<br>
+       • The only unbiased read is the post-2026-06-23 OOS column as n grows — judged in
+         <a href="reports/LATEST.md">weekly report §4d</a>, with a peeking-immune Bayesian read-out in
+         <a href="reports/bayes-h-ex1-LATEST.md">bayes-h-ex1-LATEST.md</a>.</p>
+  </details>
 
   <div class="note" style="margin-top:14px"><a href="index.html">← IgnitionScan</a> ·
     <a href="dashboard.html">Model validation dashboard</a></div>
@@ -83,6 +150,7 @@ const fmtPct=(x,d=1)=>(x==null||isNaN(x))?"—":(x>=0?"+":"")+x.toFixed(d)+"%";
 const fmtUsd=(x)=>(x==null||isNaN(x))?"—":(x<0?"−$":"$")+Math.abs(x).toLocaleString(undefined,{maximumFractionDigits:0});
 const cls=(x)=>x==null||isNaN(x)?"muted":x>0?"pos":x<0?"neg":"muted";
 const mean=(a)=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const med=(a)=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;};
 const num=(x)=>{const v=parseFloat(x);return isFinite(v)?v:null;};
 
 function parseCSV(text){
@@ -107,18 +175,109 @@ function windowStats(rows){
   const m=mean(misses.map(r=>num(r.ret_open_5dclose_net)));
   const mStop=mean(misses.map(r=>Math.max(num(r.ret_open_5dclose_net),STOP_NET)));
   const base=mean(ev.map(r=>num(r.ret_open_close_net)).filter(v=>v!=null));
-  return {n:ev.length,hits:hits.length,p:ev.length?100*hits.length/ev.length:null,m,mStop,base};
+  const maes=ev.map(r=>num(r.mae_5d)).filter(v=>v!=null);
+  const medMAE=med(maes);
+  const rug=maes.length?100*maes.filter(v=>v<-30).length/maes.length:null;
+  return {n:ev.length,hits:hits.length,p:ev.length?100*hits.length/ev.length:null,m,mStop,base,medMAE,rug};
 }
 const EV=(p,m)=>(p/100)*TARGET_NET+(1-p/100)*m;                 // % per trade
 const pStar=(m,thresh)=>100*(thresh-m)/(TARGET_NET-m);          // touch % needed to reach `thresh` EV
+const ci90=(p,n)=>{const se=Math.sqrt(p*(100-p)/n);return [Math.max(0,p-1.645*se),Math.min(100,p+1.645*se)];}; // normal approx
 
-let S={all:null,oos:null,touch:55,bank:25000,perDay:3,stop:false,preset:null};
+let S={all:null,oos:null,touch:55,bank:25000,perDay:3,stop:false,preset:null,open:{}};
 
 function verdictText(ev,pAbs,pBeat){
   if(S.touch<pBeat) return ['neg','Below both breakevens — in this scenario the exit rule loses money and doesn\'t even beat the current same-day-close baseline.'];
   if(S.touch<pAbs)  return ['warn','Beats the baseline but still loses money in absolute terms. "Less bad" isn\'t an income.'];
   if(ev<1)          return ['warn','Marginally profitable on paper — thin-float slippage alone could erase this.'];
   return ['pos','Profitable in this scenario — but only if the OOS touch rate actually lands here. Check §4d weekly; the log decides, not the slider.'];
+}
+
+// ⓘ info content. Built per-render so it can quote the live numbers.
+function buildInfo(w,oos,mUse,pAbs,pBeat,pos,tradesYr){
+  const [lo,hi]=ci90(w.p,w.n);
+  return {
+  touch:{t:"Touch rate (p)",b:`The share of evaluable graded picks whose 5-day <b>max favorable excursion</b>
+    (<code>mfe_5d</code> in outcomes.csv — the highest the price got vs the entry open within 5 trading days, net basis)
+    reached at least +10%. Right now: <b>${w.hits} of ${w.n}</b> all-time = ${w.p.toFixed(1)}%
+    (rough 90% range ${lo.toFixed(1)}–${hi.toFixed(1)}% from sampling noise alone; the
+    <a href="reports/bayes-h-ex1-LATEST.md">Bayesian read-out</a> is the careful version).
+    This is the single number the whole hypothesis lives or dies on.`},
+  missavg:{t:"Miss average (m)",b:`Among picks that <b>never</b> touched +10%, the average net return from entry open to the
+    5th-day close (<code>ret_open_5dclose_net</code>, after the 2% cost haircut). Currently <b>${fmtPct(w.m)}</b> all-time.
+    This is what you eat when the target doesn't fill — and it's brutal because misses are dominated by the fat left
+    tail: median 5-day MAE across evaluable picks is ${fmtPct(w.medMAE)}, and ${w.rug==null?"—":w.rug.toFixed(0)+"%"} are
+    "rugs" (MAE worse than −30%). The asymmetry — win +8, lose ${fmtPct(w.m)} — is why a ${w.p.toFixed(0)}% win rate still loses money.`},
+  baseline:{t:"Baseline EV",b:`The exit rule the site currently uses: buy at the open, sell at the <b>same day's close</b>.
+    Its average net return per trade (<code>ret_open_close_net</code>) is the bar H-EX1 must clear to be worth switching to.
+    Currently <b>${fmtPct(w.base)}</b> all-time. Note the baseline itself loses money — beating it is necessary,
+    not sufficient.`},
+  ev:{t:"Plug-in EV per trade",b:`Expectancy if the rule is followed on every pick:
+    <span class="f">EV = p × (+8%) + (1 − p) × m
+   = ${w.p.toFixed(1)}% × 8 + ${(100-w.p).toFixed(1)}% × ${w.m.toFixed(1)} = ${EV(w.p,w.m).toFixed(2)}% (all-time)</span>
+    +8% = the +10% target minus the 2% cost haircut, assuming a perfect fill. "Plug-in" means point estimates go
+    straight into the formula; their sampling noise is not propagated (same convention as <code>bayes_h_ex1.py</code>).`},
+  windows:{t:"All-time vs post-registration",b:`<b>All-time</b> includes the very picks whose spike-then-fade pattern
+    <i>suggested</i> H-EX1 in the first place — testing a rule on the data that inspired it flatters the rule
+    (selection bias). <b>Post-${REG}</b> contains only picks logged after the rule was frozen in
+    <a href="HYPOTHESES.md">HYPOTHESES.md</a>: nothing about them was known when the rule was written, so that column
+    is the only honest test. It's small (n=${oos.n}) and fills as picks grade; verdict needs n≥30 with a stable direction.`},
+  slider:{t:"Assumed OOS touch rate",b:`The scenario knob. You are answering: "suppose the <i>true</i> long-run touch
+    rate turns out to be X — what would the rule pay?" The all-time estimate is ${w.p.toFixed(1)}%, the young OOS window
+    says ${oos.n?oos.p.toFixed(1)+"%":"—"} (n=${oos.n}, very noisy). Everything else on this page updates from your
+    choice, but note what does NOT move: the miss average stays pinned at the logged value (${fmtPct(mUse)}) — if you
+    believe the touch rate will be much higher, you're implicitly claiming the log so far is unrepresentative,
+    and the same claim would apply to the miss average too. This tool varies one thing at a time, honestly.`},
+  breakeven:{t:"The two breakeven lines",b:`Solve EV = threshold for p:
+    <span class="f">p* = (threshold − m) / (8 − m)
+beats baseline: p* = (${w.base.toFixed(2)} − ${mUse.toFixed(2)}) / (8 − ${mUse.toFixed(2)}) = ${pBeat.toFixed(1)}%
+absolute profit: p* = (0 − ${mUse.toFixed(2)}) / (8 − ${mUse.toFixed(2)}) = ${pAbs.toFixed(1)}%</span>
+    Below ${pBeat.toFixed(1)}%: worse than the current same-day-close exit. Between the lines: better than the baseline
+    but still bleeding. Above ${pAbs.toFixed(1)}%: actually profitable (pre-slippage). Today's estimate sits
+    ${(pAbs-S.all.p).toFixed(1)}pp below the profit line — that gap is the whole bet.`},
+  presets:{t:"What the preset buttons mean",b:`<b>Current evidence</b> — the all-time touch rate (${S.all.p.toFixed(1)}%): what the log
+    says today, flattered by in-sample picks. <b>OOS so far</b> — the post-${REG} touch rate (${oos.n?oos.p.toFixed(1)+"%":"—"},
+    n=${oos.n}): the honest window, but far too small to conclude. <b>Breakeven</b> — the touch rate where EV = $0 exactly.
+    <b>It works (75%)</b> — an optimistic scenario a few points above the profit line; there is currently <b>no evidence</b>
+    for it, it's here to show what success would look like. <b>Works + stop</b> — same 75% but with the −20% disaster
+    stop soaking up part of the left tail.`},
+  stop:{t:"The −20% disaster stop (H-EX2)",b:`Pairs the +10% target with a −20% stop → a stopped trade books −22% net.
+    Modeled here <b>mechanically</b>: each miss's 5-day-close return is floored at −22%, improving the miss average
+    ${fmtPct(S.all.m)} → ${fmtPct(S.all.mStop)}. Two honesty notes: (1) this floor ignores <i>touch order</i> — a real
+    path can hit the stop before the target on the same trip; the registered H-EX2 test (weekly report §4e) replays
+    actual daily paths from <code>paths.csv</code> with a conservative collision rule, and is the version that counts.
+    (2) The stop sits beyond the median dip (median MAE ${fmtPct(S.all.medMAE)}) so it only clips the −30%-and-worse
+    rug tail (${S.all.rug==null?"—":S.all.rug.toFixed(0)+"%"} of picks) — a tighter stop would shred the very spikes the target monetizes.`},
+  sizing:{t:"Position sizing & turnover",b:`<span class="f">position = bankroll ÷ (picks/day × 5) = ${fmtUsd(S.bank)} ÷ ${S.perDay*5} = ${fmtUsd(pos)}
+trades/yr = picks/day × 250 trading days = ${tradesYr.toLocaleString()}</span>
+    With a 5-trading-day hold, trading ${S.perDay}/day means ~${S.perDay*5} positions open at any moment, so the bankroll
+    is split that many ways to stay fully deployed. Real-world frictions not modeled: these are thin low-float names,
+    so at larger position sizes <i>your own order</i> moves the price; assume the math degrades as size grows.`},
+  evtrade:{t:"EV per trade",b:`The scenario expectancy: EV = p × (+8%) + (1 − p) × (${fmtPct(mUse)}) at your chosen
+    touch rate. This is a long-run <i>average</i> — individual trades land near +8% or scattered across the miss
+    distribution (median MAE ${fmtPct(S.all.medMAE)}, worst logged outcomes are rugs). Averages hide the ride.`},
+  peryear:{t:"Per week / per year",b:`Straight multiplication: $ per trade × number of trades
+    (${S.perDay*5}/week, ${tradesYr.toLocaleString()}/year at 250 trading days). <b>Not compounded</b> — it assumes the same position
+    size all year regardless of wins or losses. Reality diverges in both directions: compounding helps a winner, but a
+    drawdown early on shrinks what you can deploy (or ends the experiment). Variance around this expectation is huge
+    at these trade counts and loss sizes.`},
+  annual:{t:"Annual return on bankroll",b:`$ per year ÷ bankroll. Because each dollar recycles ~50 times a year
+    (5-day holds), even a small per-trade edge multiplies into a large annual figure — and a small per-trade bleed
+    multiplies into ruin. A figure below −100% means the expected loss exceeds the whole bankroll: you would be
+    broke before the year ends, which is itself a scenario result worth taking seriously.`},
+  verdict:{t:"How the verdict is decided",b:`Pure threshold logic, no judgment calls:
+    <span class="f">touch &lt; ${pBeat.toFixed(1)}%            → loses AND worse than baseline
+${pBeat.toFixed(1)}% ≤ touch &lt; ${pAbs.toFixed(1)}%  → beats baseline, still unprofitable
+EV between 0 and +1%      → "marginal" (slippage-sized)
+EV ≥ +1%                  → profitable in-scenario</span>
+    The +1% marginal band exists because the fill assumption is optimistic by roughly that order on thin floats.`}
+  };
+}
+
+const iBtn=(k)=>`<button class="ib${S.open[k]?" on":""}" data-i="${k}" aria-label="explain">i</button>`;
+function ibox(INFO,...keys){
+  return keys.filter(k=>S.open[k]&&INFO[k]).map(k=>
+    `<div class="info-box"><b class="t">${INFO[k].t}</b> — ${INFO[k].b}</div>`).join("");
 }
 
 function render(){
@@ -132,10 +291,12 @@ function render(){
   const tradesYr=S.perDay*250;
   const yr=perTrade*tradesYr, wk=perTrade*S.perDay*5;
   const annPct=100*yr/S.bank;
+  const INFO=buildInfo(w,oos,mUse,pAbs,pBeat,pos,tradesYr);
 
   root.appendChild($(`<h2>1 · What the log says today (live)</h2>`));
   root.appendChild($(`<div class="panel"><div class="scroll"><table>
-    <thead><tr><th>window</th><th>n</th><th>touch +10%</th><th>miss avg (5d close, net)</th><th>baseline EV</th><th>plug-in EV/trade</th></tr></thead>
+    <thead><tr><th>window ${iBtn("windows")}</th><th>n</th><th>touch +10% ${iBtn("touch")}</th>
+      <th>miss avg ${iBtn("missavg")}</th><th>baseline EV ${iBtn("baseline")}</th><th>plug-in EV/trade ${iBtn("ev")}</th></tr></thead>
     <tbody>
       <tr><td>All-time <span class="muted">(in-sample context, NOT the test)</span></td><td>${w.n}</td><td>${w.p.toFixed(1)}%</td>
         <td class="${cls(w.m)}">${fmtPct(w.m)}</td><td class="${cls(w.base)}">${fmtPct(w.base)}</td>
@@ -144,6 +305,7 @@ function render(){
         <td class="${cls(oos.m)}">${fmtPct(oos.m)}</td><td class="${cls(oos.base)}">${fmtPct(oos.base)}</td>
         <td class="${cls(oos.n?EV(oos.p,oos.m):null)}"><b>${oos.n?fmtPct(EV(oos.p,oos.m),2):"—"}</b></td></tr>
     </tbody></table></div>
+    ${ibox(INFO,"windows","touch","missavg","baseline","ev")}
     <div class="note">Plug-in EV = p·(+8%) + (1−p)·(miss avg). Same convention as
     <code>bayes_h_ex1.py</code>. Yes — at today's touch rate the rule <b>loses money</b>. The whole
     "if it works" question is whether the true OOS touch rate is far above today's estimate.</div></div>`));
@@ -161,46 +323,58 @@ function render(){
   const pr=$(`<div class="presets"></div>`);
   presets.forEach(([name,fn],i)=>{const b=$(`<button class="btn${S.preset===i?" active":""}">${name}</button>`);
     b.onclick=()=>{fn();S.preset=i;render();};pr.appendChild(b);});
+  pr.appendChild($(`<span>${iBtn("presets")}</span>`));
   panel.appendChild(pr);
+  const prBox=$(`<div>${ibox(INFO,"presets")||""}</div>`);panel.appendChild(prBox);
 
-  const mkSlider=(label,val,min,max,step,fmt,set)=>{
-    const c=$(`<div class="ctrl"><label><span>${label}</span><b>${fmt(val)}</b></label>
+  const mkSlider=(label,val,min,max,step,fmt,set,ikey)=>{
+    const c=$(`<div class="ctrl"><label><span>${label}${ikey?" "+iBtn(ikey):""}</span><b>${fmt(val)}</b></label>
       <input type="range" min="${min}" max="${max}" step="${step}" value="${val}"></div>`);
     const inp=c.querySelector("input");
     inp.oninput=(e)=>{c.querySelector("label b").textContent=fmt(parseFloat(e.target.value));}; // live label while dragging
     inp.onchange=(e)=>{set(parseFloat(e.target.value));S.preset=null;render();};               // recompute on release
     return c;
   };
-  panel.appendChild(mkSlider(`Assumed OOS touch rate (today's estimate: ${w.p.toFixed(1)}%)`,S.touch,30,90,0.5,v=>v.toFixed(1)+"%",v=>S.touch=v));
+  panel.appendChild(mkSlider(`Assumed OOS touch rate (today's estimate: ${w.p.toFixed(1)}%)`,S.touch,30,90,0.5,v=>v.toFixed(1)+"%",v=>S.touch=v,"slider"));
   panel.appendChild($(`<div class="bmarks">
-    <span class="bmark" style="left:${100*(pBeat-30)/60}%">▲ beats baseline ${pBeat.toFixed(1)}%</span>
+    <span class="bmark" style="left:${100*(pBeat-30)/60}%">▲ beats baseline ${pBeat.toFixed(1)}% ${iBtn("breakeven")}</span>
     <span class="bmark" style="left:${100*(pAbs-30)/60}%">▲ profitable ${pAbs.toFixed(1)}%</span></div>`));
+  const sBox=$(`<div>${ibox(INFO,"slider","breakeven")||""}</div>`);panel.appendChild(sBox);
   panel.appendChild(mkSlider("Bankroll",S.bank,1000,200000,1000,v=>"$"+v.toLocaleString(),v=>S.bank=v));
   panel.appendChild(mkSlider("New picks traded per day",S.perDay,1,10,1,v=>v+" /day",v=>S.perDay=v));
   const tg=$(`<label class="toggle"><input type="checkbox" ${S.stop?"checked":""}>
-    Add the −20% disaster stop (H-EX2) — caps each miss at −22% net; miss avg improves
-    ${fmtPct(w.m)} → ${fmtPct(w.mStop)} on the logged data</label>`);
+    <span>Add the −20% disaster stop (H-EX2) — caps each miss at −22% net; miss avg improves
+    ${fmtPct(w.m)} → ${fmtPct(w.mStop)} on the logged data ${iBtn("stop")}</span></label>`);
   tg.querySelector("input").onchange=(e)=>{S.stop=e.target.checked;S.preset=null;render();};
   panel.appendChild(tg);
+  panel.appendChild($(`<div>${ibox(INFO,"stop")||""}</div>`));
   panel.appendChild($(`<div class="note">Position size is derived: with a 5-trading-day hold, ${S.perDay}/day
     means ~${S.perDay*5} positions open at once → <b>${fmtUsd(pos)}</b> per position to keep the bankroll fully
-    deployed. 250 trading days/yr → ${tradesYr.toLocaleString()} trades/yr.</div>`));
+    deployed. 250 trading days/yr → ${tradesYr.toLocaleString()} trades/yr. ${iBtn("sizing")}</div>`));
+  panel.appendChild($(`<div>${ibox(INFO,"sizing")||""}</div>`));
   root.appendChild(panel);
 
   root.appendChild($(`<h2>3 · What that scenario pays</h2>`));
   const [vc,vt]=verdictText(ev,pAbs,pBeat);
   root.appendChild($(`<div class="panel">
     <div class="grid kpis">
-      <div class="kpi"><div class="v ${cls(ev)}">${fmtPct(ev,2)}</div><div class="l">EV per trade</div></div>
+      <div class="kpi"><div class="v ${cls(ev)}">${fmtPct(ev,2)}</div><div class="l">EV per trade ${iBtn("evtrade")}</div></div>
       <div class="kpi"><div class="v ${cls(perTrade)}">${fmtUsd(perTrade)}</div><div class="l">per trade (${fmtUsd(pos)} position)</div></div>
       <div class="kpi"><div class="v ${cls(wk)}">${fmtUsd(wk)}</div><div class="l">per week (${S.perDay*5} trades)</div></div>
-      <div class="kpi"><div class="v ${cls(yr)}">${fmtUsd(yr)}</div><div class="l">per year (${tradesYr.toLocaleString()} trades)</div></div>
-      <div class="kpi"><div class="v ${cls(annPct)}">${fmtPct(annPct,1)}</div><div class="l">annual return on bankroll</div></div>
+      <div class="kpi"><div class="v ${cls(yr)}">${fmtUsd(yr)}</div><div class="l">per year (${tradesYr.toLocaleString()} trades) ${iBtn("peryear")}</div></div>
+      <div class="kpi"><div class="v ${cls(annPct)}">${fmtPct(annPct,1)}</div><div class="l">annual return on bankroll ${iBtn("annual")}</div></div>
     </div>
-    <div class="verdict ${vc}">${vt}</div>
+    ${ibox(INFO,"evtrade","peryear","annual")}
+    <div class="verdict ${vc}">${vt} ${iBtn("verdict")}</div>
+    ${ibox(INFO,"verdict")}
     <div class="note">Expectancy math only — the realized path swings hard around it (misses average
     ${fmtPct(S.stop?w.mStop:w.m)}; the log's worst 5-day outcome is a rug). A losing streak that would
     force you to stop trading is not modeled.</div></div>`));
+
+  // one delegated handler for every ⓘ button
+  root.querySelectorAll(".ib").forEach(b=>{
+    b.onclick=(e)=>{e.preventDefault();e.stopPropagation();const k=b.dataset.i;S.open[k]=!S.open[k];render();};
+  });
 }
 
 async function main(){
