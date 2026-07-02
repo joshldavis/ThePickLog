@@ -111,6 +111,45 @@ expectancy** versus the target alone.
   `exit_sim.py` (rule *"H-EX2 +10% target / −20% stop"*) walking the full daily path as the
   in-sample cross-check.
 
+## Exit-rule batch #2 — registered 2026-07-02
+
+Seven further exit hypotheses, frozen together on this date. All follow the H-EX1/H-EX2
+conventions unless stated: 2% cost haircut, fills assumed exactly at the level, conservative
+same-day-collision rules (ambiguity resolves against the strategy), deterministic from
+outcomes.csv / paths.csv, no discretion. **Judged on post-2026-07-02 graded picks only.**
+
+**⚠️ Family-wise honesty note (must stay attached):** registering seven rules at once means
+one may beat baseline **by luck**. No single arm from this batch is "validated" merely by
+winning its own comparison — the batch is a *ranked screen*. Any winner must (a) beat its
+baseline on avg net/trade, (b) hold direction across ≥3 consecutive weekly snapshots, and
+(c) remain the winner while the sample keeps growing. Prefer the simplest rule among
+statistical ties.
+
+| id | rule (frozen) | baseline to beat | data needed |
+|----|---------------|------------------|-------------|
+| **H-EX3** | **Target sweep:** as H-EX1 but at **+5%** (net +3%), **+15%** (net +13%), **+20%** (net +18%); unfilled → 5-day close | H-EX1 (+10%) and same-day close | outcomes.csv (`mfe_5d`) |
+| **H-EX4** | **Time stop:** +10% limit; if unfilled by the **day-2 close**, exit at day-2 close (don't wait out days 3–5) | H-EX1 | paths.csv (touch day + day-2 close) |
+| **H-EX5** | **Hold-length baselines:** no target — exit at **day-1 close** (arm a) or **day-2 close** (arm b) | same-day close AND 5-day close | paths.csv |
+| **H-EX6** | **Partial exit:** sell **half** at +10% (net +8%), half rides to the 5-day close | H-EX1 (does keeping half the tail beat full exit?) | outcomes.csv |
+| **H-EX7** | **Trail after target:** once a daily high touches +10%, arm a trailing stop **15% below the running max daily high** (trail level computed from *prior* days' highs only — no same-day ratchet); exit when a day's low touches it; never armed → 5-day close | H-EX1 | paths.csv |
+| **H-EX8** | **Tier-conditioned target:** tier A/B → **+20%** target, tier C/D → **+10%**; unfilled → 5-day close | H-EX1 (uniform +10%) | outcomes.csv + picks.csv tier |
+| **H-EX9** | **Stop sweep:** as H-EX2 but with **−10%** and **−30%** stops (same stop-first collision convention) | H-EX2 (−20%) and H-EX1 (no stop) | paths.csv |
+
+Registration rationale (in-sample context, not the test): most picks touch +5% (82%) and
++10% (63%) but finish negative (median 5-day −7.9%); MFE clusters early in the window;
+the return distribution is fat-tailed right (a few +100%+ runs) and fat-tailed left
+(≈16% rug rate) — so target level, exit timing, tail participation, and disaster stops
+are the four levers worth sweeping. Prior expectations, stated for honesty: H-EX9 tighter
+stops likely **hurt** (gap-through), H-EX5 short holds likely **beat** 5-day hold, H-EX7
+trailing is the most slippage-fragile arm in the batch.
+
+- **Slippage caveat (inherited from H-EX1/H-EX2, applies to every arm):** thin floats gap
+  through limits and stops; real fills are worse than the proxy. Any edge under ~+1%/trade
+  is treated as noise.
+- **Tracked by:** wiring into `exit_sim.py` / `weekly_report.py` is a follow-up; **the
+  registration date above governs the out-of-sample window, not the code date.** Until
+  wired, arms are computable by hand from the committed CSVs.
+
 ## Success / kill criteria
 - **Evaluate** once there are **≥ 30 post-registration graded picks** per arm (directional
   before that).
