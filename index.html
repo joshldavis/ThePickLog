@@ -309,7 +309,7 @@
   .steps li:not(:last-child):after{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line)}
   /* ===== info tooltips (metric explainers) ===== */
   .info{font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:9px;line-height:0;
-    vertical-align:super;margin-left:1px;color:var(--a);cursor:help;user-select:none}
+    vertical-align:super;margin-left:1px;padding:5px 4px;color:var(--a);cursor:help;user-select:none}
   .info:hover{color:var(--text)}
   th .info,.cat-row .info,.da-mos .info,.stat .info{text-transform:none;letter-spacing:normal}
   #infopop{position:fixed;z-index:90;max-width:300px;background:var(--panel);border:1px solid var(--line);
@@ -1328,23 +1328,42 @@ const INFO={
   netcash:{t:"Net cash",d:"Cash minus total debt. Positive means more cash than debt — a balance-sheet cushion."}
 };
 function infoBtn(key){ return INFO[key]? `<span class="info" data-info="${key}" role="button" tabindex="0" aria-label="What is this metric?">i</span>` : ""; }
+let infoHideTimer=null, infoShownAt=0;
 function showInfo(key, anchor){
   const pop=document.getElementById("infopop"), e=INFO[key]; if(!pop||!e) return;
+  clearTimeout(infoHideTimer);
+  if(pop.dataset.k!==key || !pop.classList.contains("show")) infoShownAt=Date.now();
   pop.innerHTML=`<b>${e.t}</b>${e.d}`; pop.dataset.k=key; pop.classList.add("show");
   const r=anchor.getBoundingClientRect(), pw=pop.offsetWidth, ph=pop.offsetHeight;
   let left=Math.max(8, Math.min(r.left, window.innerWidth-pw-12));
   let top=r.bottom+8; if(top+ph>window.innerHeight-8) top=Math.max(8, r.top-ph-8);
   pop.style.left=left+"px"; pop.style.top=top+"px";
 }
-function closeInfo(){ const p=document.getElementById("infopop"); if(p) p.classList.remove("show"); }
-// hover (and keyboard-focus) to reveal; tap still works on touch
-document.addEventListener("mouseover",e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) showInfo(t.getAttribute("data-info"),t); });
-document.addEventListener("mouseout", e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) closeInfo(); });
-document.addEventListener("focusin", e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) showInfo(t.getAttribute("data-info"),t); });
-document.addEventListener("focusout",e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) closeInfo(); });
-document.addEventListener("click",e=>{   // touch / click support
+function closeInfo(){ clearTimeout(infoHideTimer); const p=document.getElementById("infopop"); if(p) p.classList.remove("show"); }
+function closeInfoSoon(){ clearTimeout(infoHideTimer); infoHideTimer=setTimeout(closeInfo,300); }  // grace period so the popover is reachable/readable
+// hover (and keyboard-focus) to reveal; popover stays while the cursor is over it; tap still works on touch
+document.addEventListener("mouseover",e=>{
   const t=e.target.closest&&e.target.closest(".info[data-info]");
-  if(t){ e.stopPropagation(); showInfo(t.getAttribute("data-info"),t); return; }
+  if(t){ showInfo(t.getAttribute("data-info"),t); return; }
+  if(e.target.closest&&e.target.closest("#infopop")) clearTimeout(infoHideTimer);   // reading the tooltip keeps it open
+});
+document.addEventListener("mouseout", e=>{
+  if(!(e.target.closest&&e.target.closest(".info[data-info],#infopop"))) return;
+  const to=e.relatedTarget;
+  if(to&&to.closest&&to.closest(".info[data-info],#infopop")) return;               // moving between icon and popover
+  closeInfoSoon();
+});
+document.addEventListener("focusin", e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) showInfo(t.getAttribute("data-info"),t); });
+document.addEventListener("focusout",e=>{ const t=e.target.closest&&e.target.closest(".info[data-info]"); if(t) closeInfoSoon(); });
+document.addEventListener("click",e=>{   // touch / click support — a second click/tap on the same icon closes it
+  const t=e.target.closest&&e.target.closest(".info[data-info]");
+  if(t){
+    e.stopPropagation();
+    const pop=document.getElementById("infopop"), key=t.getAttribute("data-info");
+    if(pop&&pop.classList.contains("show")&&pop.dataset.k===key&&Date.now()-infoShownAt>450) closeInfo();
+    else showInfo(key,t);
+    return;
+  }
   if(!(e.target.closest&&e.target.closest("#infopop"))) closeInfo();
 });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeInfo(); });
