@@ -1339,8 +1339,11 @@ function showInfo(key, anchor){
   let top=r.bottom+8; if(top+ph>window.innerHeight-8) top=Math.max(8, r.top-ph-8);
   pop.style.left=left+"px"; pop.style.top=top+"px";
 }
-function closeInfo(){ clearTimeout(infoHideTimer); const p=document.getElementById("infopop"); if(p) p.classList.remove("show"); }
-function closeInfoSoon(){ clearTimeout(infoHideTimer); infoHideTimer=setTimeout(closeInfo,300); }  // grace period so the popover is reachable/readable
+/* NOTE: named closeInfoPop (not closeInfo) — closeInfo() is the ticker drawer's
+   close function further down; the old duplicate name meant tooltip cleanup was
+   silently closing the drawer instead, and tooltips never closed at all. */
+function closeInfoPop(){ clearTimeout(infoHideTimer); const p=document.getElementById("infopop"); if(p) p.classList.remove("show"); }
+function closeInfoSoon(){ clearTimeout(infoHideTimer); infoHideTimer=setTimeout(closeInfoPop,300); }  // grace period so the popover is reachable/readable
 // hover (and keyboard-focus) to reveal; popover stays while the cursor is over it; tap still works on touch
 document.addEventListener("mouseover",e=>{
   const t=e.target.closest&&e.target.closest(".info[data-info]");
@@ -1360,14 +1363,14 @@ document.addEventListener("click",e=>{   // touch / click support — a second c
   if(t){
     e.stopPropagation();
     const pop=document.getElementById("infopop"), key=t.getAttribute("data-info");
-    if(pop&&pop.classList.contains("show")&&pop.dataset.k===key&&Date.now()-infoShownAt>450) closeInfo();
+    if(pop&&pop.classList.contains("show")&&pop.dataset.k===key&&Date.now()-infoShownAt>450) closeInfoPop();
     else showInfo(key,t);
     return;
   }
-  if(!(e.target.closest&&e.target.closest("#infopop"))) closeInfo();
+  if(!(e.target.closest&&e.target.closest("#infopop"))) closeInfoPop();
 });
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeInfo(); });
-window.addEventListener("scroll",closeInfo,true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeInfoPop(); if(typeof closeInfo==="function") closeInfo(); } });  // Esc closes tooltip + drawer
+window.addEventListener("scroll",closeInfoPop,true);
 
 /* ===== click-a-header to sort any table.sortable ===== */
 function cellVal(td){
