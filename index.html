@@ -358,6 +358,7 @@
       <button data-view="portfolio">Portfolio</button>
       <button data-view="scoring">Guide</button>
       <button data-view="performance">Track record</button>
+      <button onclick="location.href='dashboard.html'" title="Model validation — every pre-registered hypothesis tracked out-of-sample, recomputed in your browser from the raw CSVs">Validation ↗</button>
       <button data-view="compete">Compete</button>
       <button data-view="assistant">Assistant</button>
     </nav>
@@ -833,6 +834,10 @@
     <h1>Track record</h1>
     <p class="lead">Every pick logged before the open, graded after 5 trading days — <b>all of them</b>,
       winners and losers. This is the page most scanners won't show you.</p>
+    <p class="muted" style="font-size:13px;margin:.4em 0 0">Want the deeper cut? The
+      <a href="dashboard.html" style="color:var(--a)">model validation dashboard</a> tracks every
+      pre-registered hypothesis (exit rules, filters, a Bayesian read-out) out-of-sample — recomputed
+      live in your browser from the same raw CSVs, so nothing here has to be taken on faith.</p>
     <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
 
     <div class="grid stat-row" id="perfStats" style="margin:18px 0"></div>
