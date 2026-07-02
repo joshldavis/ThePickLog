@@ -20,7 +20,7 @@ Project → Settings → Environment Variables:
 | Variable | Value | Required |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | your Anthropic API key | **yes** — assistant is dark without it |
-| `AGENT_MODEL` | model id (default `claude-3-5-haiku-latest`) | optional — set to `claude-sonnet-4-6` for stronger answers at higher cost |
+| `AGENT_MODEL` | model id (default `claude-haiku-4-5`) | optional — set to `claude-sonnet-5` for stronger answers at higher cost |
 
 The key lives server-side only (`/api/agent`), same model as the FMP/Alpaca
 proxies — the browser never sees it. Until it's set, the ticker drawer works

@@ -8,8 +8,8 @@
    Required env var (Vercel → Project → Settings → Environment Variables):
      ANTHROPIC_API_KEY   your Anthropic API key
    Optional:
-     AGENT_MODEL         model id (default: claude-3-5-haiku-latest).
-                         Set to "claude-sonnet-4-6" for stronger answers
+     AGENT_MODEL         model id (default: claude-haiku-4-5).
+                         Set to "claude-sonnet-5" for stronger answers
                          at higher cost.
 
    Frontend POSTs JSON:
@@ -28,7 +28,7 @@
    ===================================================================== */
 
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
-const MODEL = process.env.AGENT_MODEL || "claude-3-5-haiku-latest";
+const MODEL = process.env.AGENT_MODEL || "claude-haiku-4-5";
 
 const MAX_TURNS = 24;          // cap conversation length
 const MAX_CHARS = 6000;        // per-message cap
