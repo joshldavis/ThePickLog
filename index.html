@@ -2850,6 +2850,12 @@ go=function(v){ _go(v); if(v==="assistant" && !go._greeted){ go._greeted=true;
   updateChatCtx(); } };
 
 boot();
+
+/* deep-links: index.html#watchlist etc. — used by the sub-page (Validation/Calculator) nav */
+function goHash(){ const h=location.hash.replace("#","");
+  if(["landing","watchlist","performance","scoring","portfolio","compete","assistant"].includes(h)) go(h); }
+goHash();
+window.addEventListener("hashchange",goHash);
 </script>
 
 <!-- ===================================================================
