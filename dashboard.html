@@ -220,6 +220,108 @@ async function main(){
     </tbody></table></div>
     <div class="note">Rule: +10% limit over the 5-day hold → +8% net if hit, else 5-day close. All-time is in-sample context, <b>not</b> the test. Fills assumed exactly at +10% — real thin-float slippage is worse. See <a href="HYPOTHESES.md">HYPOTHESES.md</a> §H-EX1.</div></div>`);
 
+  /* ---- Bayesian read-out on H-EX1 — parity with bayes_h_ex1.py (priors frozen 2026-07-02) ---- */
+  // Exact Beta machinery (Numerical Recipes 6.1/6.4), mirrored from bayes_h_ex1.py.
+  function lgamma(x){const g=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];
+    let y=x,tmp=x+5.5;tmp-=(x+0.5)*Math.log(tmp);let ser=1.000000000190015;
+    for(let j=0;j<6;j++)ser+=g[j]/++y;return -tmp+Math.log(2.5066282746310005*ser/x);}
+  function betacf(a,b,x){const MAXIT=300,EPS=3e-14,FPMIN=1e-300;const qab=a+b,qap=a+1,qam=a-1;
+    let c=1,d=1-qab*x/qap;if(Math.abs(d)<FPMIN)d=FPMIN;d=1/d;let h=d;
+    for(let m=1;m<=MAXIT;m++){const m2=2*m;
+      let aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<FPMIN)d=FPMIN;c=1+aa/c;if(Math.abs(c)<FPMIN)c=FPMIN;d=1/d;h*=d*c;
+      aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<FPMIN)d=FPMIN;c=1+aa/c;if(Math.abs(c)<FPMIN)c=FPMIN;d=1/d;
+      const del=d*c;h*=del;if(Math.abs(del-1)<EPS)return h;}
+    return h;}
+  function betaCdf(x,a,b){if(x<=0)return 0;if(x>=1)return 1;
+    const bt=Math.exp(lgamma(a+b)-lgamma(a)-lgamma(b)+a*Math.log(x)+b*Math.log(1-x));
+    return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+  function betaPpf(q,a,b){let lo=0,hi=1;for(let i=0;i<100;i++){const mid=(lo+hi)/2;if(betaCdf(mid,a,b)<q)lo=mid;else hi=mid;}return (lo+hi)/2;}
+  const bEvl=(post)=>{const rs=[];for(const o of graded){const p=byId[o.pick_id];if(!p)continue;
+    if(post&&!(p.trading_date>EXREG))continue;
+    const mfe=num(o.mfe_5d),c5=num(o.ret_open_5dclose_net),c0=num(o.ret_open_close_net);
+    if(mfe==null||c5==null||c0==null)continue;
+    rs.push({d:p.trading_date,g:o.graded_at||"",hit:mfe>=10,c5,c0});}
+    rs.sort((x,y)=>x.d.localeCompare(y.d)||x.g.localeCompare(y.g));return rs;};
+  const bWin=(rows)=>{const n=rows.length,k=rows.filter(r=>r.hit).length;
+    const miss=rows.filter(r=>!r.hit).map(r=>r.c5);const m=miss.length?mean(miss):null;
+    const evb=n?mean(rows.map(r=>r.c0)):null;let pb=null,pz=null;
+    if(m!=null&&m<8){pz=-m/(8-m);if(evb!=null)pb=(evb-m)/(8-m);}return {n,k,m,evb,pb,pz};};
+  const bSum=(wn,a0,b0)=>{const a=a0+wn.k,b=b0+(wn.n-wn.k);
+    const clamp=(p)=>Math.min(Math.max(p,0),1);
+    return {a,b,mean:a/(a+b),lo:betaPpf(.05,a,b),hi:betaPpf(.95,a,b),
+      pGtBase:wn.pb==null?null:1-betaCdf(clamp(wn.pb),a,b),
+      pGtZero:wn.pz==null?null:1-betaCdf(clamp(wn.pz),a,b)};};
+  const bAll=bEvl(false), bOos=bEvl(true);
+  const wAll=bWin(bAll), wOos=bWin(bOos);
+  const fpr=(x,d=0)=>x==null?"—":(100*x).toFixed(d)+"%";
+  add(`<h2>H-EX1 Bayesian read-out — how sure does the log let anyone be? <span class="flag">judge the out-of-sample row</span></h2>`);
+  {
+    const rowHtml=(name,wn)=>{if(!wn.n)return `<tr><td>${name}</td><td colspan="5">n=0 — fills in as picks grade</td></tr>`;
+      const s=bSum(wn,1,1);
+      return `<tr><td>${name}</td><td>${wn.n} (${wn.k} hits)</td>
+        <td>${fpr(s.mean,1)} <span class="muted">[${fpr(s.lo,1)}–${fpr(s.hi,1)}]</span></td>
+        <td>${fpr(wn.pb,1)} / ${fpr(wn.pz,1)}</td>
+        <td class="${s.pGtBase==null?"muted":s.pGtBase>.5?"pos":"neg"}">${fpr(s.pGtBase,1)}</td>
+        <td class="${s.pGtZero==null?"muted":s.pGtZero>.5?"pos":"neg"}">${fpr(s.pGtZero,1)}</td></tr>`;};
+    const sens=wOos.n?["Jeffreys(0.5,0.5)","skeptical(10,10)"].map((nm,i)=>{
+      const s=bSum(wOos,i?10:0.5,i?10:0.5);return `${nm} → P(beats baseline) ${fpr(s.pGtBase,1)}`;}).join(" · "):"";
+    add(`<div class="panel"><div class="scroll"><table>
+      <thead><tr><th>window</th><th>n (hits ≥ +10%)</th><th>posterior touch rate [90% CrI]</th><th>breakeven p* (beat base / abs. profit)</th><th>P(beats baseline)</th><th>P(profitable)</th></tr></thead><tbody>
+      ${rowHtml("all-time (in-sample context)",wAll)}
+      ${rowHtml(`post-${EXREG} (OOS test)`,wOos)}
+      </tbody></table></div>
+      <div class="note">Beta-Binomial posterior on the +10% touch rate, flat Beta(1,1) prior (frozen 2026-07-02;
+      sensitivity${sens?": "+sens:" — pending"}). Breakevens are <b>plug-in</b> translations (m = mean 5-day-close net of
+      the misses; their own noise is not propagated). Sequential Bayesian updating has no peeking problem — this stays
+      honest under daily checking. Read-out only: the registered H-EX1 judge remains
+      <a href="reports/LATEST.md">the weekly report</a> §4d; canonical numbers in
+      <a href="reports/bayes-h-ex1-LATEST.md">bayes-h-ex1-LATEST.md</a> (browser recomputes independently — parity-tested).
+      Verify by hand: posterior mean = (1+hits)/(2+n). Slippage caveat applies (HYPOTHESES.md).</div></div>`);
+  }
+  if(bAll.length){
+    const two=$(`<div class="grid two"></div>`);
+    const cA=$(`<div class="panel"><canvas id="bpdf" height="190"></canvas></div>`);
+    const cB=$(`<div class="panel"><canvas id="bseq" height="190"></canvas></div>`);
+    two.appendChild(cA);two.appendChild(cB);root.appendChild(two);
+    const gridc="#2a3240", dimc="#8b98a8";
+    // posterior densities over p (flat prior), with the OOS beat-baseline breakeven marked
+    const xs=[];for(let p=0.5;p<100;p+=0.5)xs.push(p);
+    const pdf=(wn)=>{if(!wn.n)return xs.map(()=>null);const a=1+wn.k,b=1+wn.n-wn.k;
+      const lnB=lgamma(a)+lgamma(b)-lgamma(a+b);
+      return xs.map(p=>{const x=p/100;return Math.exp((a-1)*Math.log(x)+(b-1)*Math.log(1-x)-lnB);});};
+    const pbLine=wOos.pb!=null?wOos.pb:wAll.pb;
+    const yMax=Math.max(...pdf(wAll).filter(v=>v!=null),...pdf(wOos).filter(v=>v!=null),1);
+    new Chart(cA.querySelector("canvas"),{type:"line",
+      data:{labels:xs.map(p=>p.toFixed(1)),datasets:[
+        {label:"all-time",data:pdf(wAll),borderColor:"#8b98a8",borderWidth:1.5,pointRadius:0,fill:false,tension:.2},
+        {label:"post-reg (OOS)",data:pdf(wOos),borderColor:"#f5b14c",borderWidth:2,pointRadius:0,fill:false,tension:.2},
+        {label:"OOS breakeven p*",data:xs.map(p=>pbLine!=null&&Math.abs(p-100*pbLine)<0.25?yMax:null),
+         borderColor:"#f0506e",backgroundColor:"#f0506e",pointRadius:0,borderWidth:0,type:"bar",barThickness:2}
+      ]},
+      options:{plugins:{legend:{labels:{color:dimc}},title:{display:true,text:"Posterior density of the +10% touch rate (%)",color:dimc}},
+        scales:{x:{ticks:{color:dimc,maxTicksLimit:11,callback:(v,i)=>xs[i]%10===0?xs[i]:""},grid:{color:gridc}},
+                y:{display:false}}}});
+    // sequential posterior mean ± 90% CrI as each pick graded (flat prior), OOS picks highlighted
+    const seqM=[],seqLo=[],seqHi=[],seqOos=[];let k=0;
+    bAll.forEach((r,i)=>{if(r.hit)k++;const a=1+k,b=1+(i+1)-k;
+      seqM.push(+(100*a/(a+b)).toFixed(2));
+      seqLo.push(+(100*betaPpf(.05,a,b)).toFixed(2));
+      seqHi.push(+(100*betaPpf(.95,a,b)).toFixed(2));
+      seqOos.push(r.d>EXREG);});
+    new Chart(cB.querySelector("canvas"),{type:"line",
+      data:{labels:seqM.map((_,i)=>i+1),datasets:[
+        {label:"90% CrI",data:seqHi,borderColor:"transparent",backgroundColor:"rgba(139,152,168,.15)",pointRadius:0,fill:"+1"},
+        {label:"",data:seqLo,borderColor:"transparent",pointRadius:0,fill:false},
+        {label:"posterior mean",data:seqM,borderColor:"#f5b14c",borderWidth:2,pointRadius:seqOos.map(o=>o?2:0),
+         pointBackgroundColor:"#2ec27e",fill:false,tension:.15},
+        {label:"OOS breakeven p*",data:seqM.map(()=>pbLine!=null?+(100*pbLine).toFixed(2):null),
+         borderColor:"#f0506e",borderWidth:1,borderDash:[5,4],pointRadius:0,fill:false}
+      ]},
+      options:{plugins:{legend:{labels:{color:dimc,filter:(it)=>it.text!==""}},
+          title:{display:true,text:"Posterior touch rate, updated pick by pick (green dots = OOS)",color:dimc}},
+        scales:{x:{ticks:{color:dimc},grid:{color:gridc}},y:{ticks:{color:dimc,callback:(v)=>v+"%"},grid:{color:gridc}}}}});
+  }
+
   /* ---- H-EX2 pre-registered exit rule (target + stop) — replayed from paths.csv ---- */
   const EX2REG="2026-06-24";
   // Mirror exit_sim.py exactly: fills at level, conservative same-day tie (STOP first), 2% haircut.

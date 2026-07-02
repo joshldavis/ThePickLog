@@ -72,6 +72,15 @@ the spike the screen is genuinely good at finding.
 - **Tracked by:** `weekly_report.py` §4d (all-time + post-registration), alongside the
   exit study (`exit_sim.py` → `reports/exit-study-LATEST.md`) which walks the daily path
   as the rigorous cross-check.
+- **Bayesian read-out (added 2026-07-02, priors frozen that date):** `bayes_h_ex1.py`
+  maintains a Beta-Binomial posterior on the +10% touch rate (headline flat Beta(1,1);
+  Jeffreys(0.5,0.5) and skeptical Beta(10,10) as sensitivity), reporting P(touch rate >
+  breakeven) for both the beat-baseline and absolute-profit lines →
+  `reports/bayes-h-ex1-LATEST.md` + a live dashboard panel (browser recomputes
+  independently from the CSVs; parity-tested). This is a *read-out* of how much the log
+  has learned, not a new pass/fail criterion — §4d expectancy vs baseline stays the
+  registered judge, and the breakeven lines are plug-in translations whose own noise is
+  not propagated (see BAYESIAN-ROADMAP.md R3).
 
 ## Exit-rule hypothesis #2 — does a stop add value?
 

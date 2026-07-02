@@ -1,0 +1,46 @@
+# Bayesian read-out — H-EX1 +10% touch rate
+
+_Generated 2026-07-02 05:12Z by `bayes_h_ex1.py` (selftest passed). Priors frozen 2026-07-02 — see the
+script docstring. This is a read-out, **not** the registered pass/fail judge —
+that remains `reports/LATEST.md` §4d. Slippage caveat (HYPOTHESES.md H-EX1) applies._
+
+**The question:** what fraction p of picks touch +10% intraday within the 5-day
+hold? H-EX1 realizes +8% net on a touch, else the 5-day close (avg shown below as
+_m_). The posterior on p updates with every graded pick; the breakeven columns
+translate p into economics via plug-in estimates (their own noise is *not*
+propagated — roadmap R3).
+
+## all-time (in-sample context)
+
+n = **150** evaluable graded picks, hits (mfe_5d ≥ 10) = **82** (54.7%). Plug-ins:
+m (mean 5d-close net of misses) = **-20.62%**, baseline EV (same-day close) = **-3.03%**.
+Breakeven touch rates: beat-baseline p\* = **61.5%** · absolute-profit p\* = **72.0%**.
+
+| prior | posterior mean | 90% credible interval | P(p > beat-baseline p\*) | P(p > absolute p\*) |
+|---|---|---|---|---|
+| flat Beta(1,1) — headline | 54.6% | 47.9% – 61.2% | 4.4% | 0.0% |
+| Jeffreys Beta(0.5,0.5) | 54.6% | 48.0% – 61.2% | 4.5% | 0.0% |
+| skeptical Beta(10,10) | 54.1% | 47.8% – 60.4% | 2.6% | 0.0% |
+
+## post-2026-06-23 (the honest OOS test)
+
+n = **15** evaluable graded picks, hits (mfe_5d ≥ 10) = **6** (40.0%). Plug-ins:
+m (mean 5d-close net of misses) = **-18.45%**, baseline EV (same-day close) = **-5.09%**.
+Breakeven touch rates: beat-baseline p\* = **50.5%** · absolute-profit p\* = **69.8%**.
+
+| prior | posterior mean | 90% credible interval | P(p > beat-baseline p\*) | P(p > absolute p\*) |
+|---|---|---|---|---|
+| flat Beta(1,1) — headline | 41.2% | 22.7% – 60.9% | 21.5% | 0.8% |
+| Jeffreys Beta(0.5,0.5) | 40.6% | 21.7% – 60.9% | 20.8% | 0.8% |
+| skeptical Beta(10,10) | 45.7% | 32.2% – 59.5% | 28.3% | 0.2% |
+
+**How to read it.** P(p > p\*) near 50% = the log genuinely doesn't know yet;
+near 0% or 100% = the log is speaking. If the three priors disagree materially,
+the sample is still doing less work than the prior — wait. The all-time window
+includes the in-sample picks that *suggested* H-EX1, so it flatters the rule;
+judge on the post-registration window as it grows.
+
+**Verify by hand:** flat-prior posterior mean = (1+hits)/(2+n) from the committed
+`outcomes.csv`; intervals/probabilities are Beta(1+hits, 1+n−hits) quantiles/tails
+(scipy `beta.ppf`/`beta.cdf`, or any stats package). The dashboard recomputes all
+of this independently in the browser from the same CSVs (parity-tested).

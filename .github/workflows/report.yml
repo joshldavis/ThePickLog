@@ -21,6 +21,8 @@ jobs:
           python-version: "3.11"
       - name: Generate forward-log report
         run: python weekly_report.py
+      - name: Bayesian read-out (H-EX1 posterior)   # stdlib-only, deterministic; selftests abort on failure
+        run: python bayes_h_ex1.py
       - name: Install deps for exit study
         run: pip install yfinance
       - name: Run exit-rule study (daily-resolution, in-sample)
