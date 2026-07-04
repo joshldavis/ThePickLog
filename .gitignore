@@ -12,3 +12,4 @@ backtest_quality_asof.csv
 
 # Generated brief (review locally; publishing needs G4 legal review)
 brief.md
+.vercel
