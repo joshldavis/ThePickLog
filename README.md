@@ -1,4 +1,4 @@
-# IgnitionScan logger/grader — how it runs
+# ThePickLog logger/grader — how it runs
 
 A personal, paper-trading tool. Logs picks before the open and grades them honestly after 5 trading days. **Data source: Yahoo Finance (`yfinance`) — no API key needed.** It covers low-float / small-cap names (FMP's free tier does not).
 
@@ -14,7 +14,7 @@ This repo includes a GitHub Action (`.github/workflows/ignitionscan.yml`) that r
 
 It commits the results (`picks.csv`, `outcomes.csv`) straight back into the repo. Your computer doesn't need to be on, and there's no key or secret to manage.
 
-You can also trigger a run by hand: repo → **Actions** tab → **IgnitionScan daily** → **Run workflow** (pick `scan` or `grade`).
+You can also trigger a run by hand: repo → **Actions** tab → **ThePickLog daily** → **Run workflow** (pick `scan` or `grade`).
 
 ## Running it locally (optional)
 ```bash

@@ -1,4 +1,4 @@
-# IgnitionScan — v0.3 Improvement Spec
+# ThePickLog — v0.3 Improvement Spec
 
 **Owner:** Josh
 **Date:** June 15, 2026

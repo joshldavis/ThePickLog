@@ -1,4 +1,4 @@
-# IgnitionScan — Validity Principles
+# ThePickLog — Validity Principles
 
 **The single source of truth for *why this project is allowed to claim anything.***
 Updated 2026-06-24. Framing: personal research instrument (no subscribers, no billing).

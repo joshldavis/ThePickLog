@@ -1,4 +1,4 @@
-# Bayesian roadmap — IgnitionScan
+# Bayesian roadmap — ThePickLog
 
 **Written 2026-07-02.** R1 shipped this date; R2–R5 are planned, in priority order.
 The motivation for all of it: the project's core problem is drawing honest conclusions

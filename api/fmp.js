@@ -1,5 +1,5 @@
 /* =====================================================================
-   IgnitionScan — Financial Modeling Prep proxy (Vercel serverless)
+   ThePickLog — Financial Modeling Prep proxy (Vercel serverless)
    ---------------------------------------------------------------------
    The browser NEVER sees your FMP key. It lives as a Vercel environment
    variable and is only used here, server-side — same security model as

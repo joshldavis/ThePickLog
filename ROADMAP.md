@@ -1,4 +1,4 @@
-# IgnitionScan — Roadmap
+# ThePickLog — Roadmap
 
 **Updated:** 2026-07-02 (rev 3) · **Framing:** personal instrument (not a product — no subscribers,
 no billing, no public marketing). The job: a screener + an honest self-grading record + a
@@ -18,7 +18,7 @@ validation layer Josh can trust before risking attention or money.
 - Exit-rule study (`exit_sim.py`) → `reports/exit-study-LATEST.md`, weekly.
 - Pre-registered filters (HYPOTHESES.md) tracked all-time + out-of-sample in the report.
 - Short-interest capture (live since 2026-06-16) + H-SI tracking.
-- Model validation dashboard → https://ignitionscan.vercel.app/dashboard.html — live, and as of
+- Model validation dashboard → https://thepicklog.vercel.app/dashboard.html — live, and as of
   **2026-07-02 linked from the main site** (nav "Validation" tab + Track-record cross-link). It was
   unlisted; surfacing it was the one cheap, on-brand take from the 2026-07-02 external feedback
   review (below).
@@ -75,7 +75,7 @@ thread (SYNTHESIS.md · IMPROVEMENTS-v0.3.md · STRATEGY-advancing.md).
   of copy/Terms/disclaimers first.
 - **Marketing / growth** (STRATEGY §3, IMPROVEMENTS D1–D5) — transparency content flywheel, position
   vs. category fakery, free-vs-paid funnel, genuine-scarcity cohort, disclosure-as-feature.
-- **Legal gates** — G4 securities review + IP review ("Buffett-style" name use) before any charging
+- **Legal gates** — G4 securities review + IP review (branding) before any charging
   or public launch.
 
 ## External feedback review — 2026-07-02 (decisions on record)

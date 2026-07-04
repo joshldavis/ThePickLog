@@ -1,4 +1,4 @@
-# IgnitionScan — QA review · 2026-06-22
+# ThePickLog — QA review · 2026-06-22
 
 Full review/QA pass over the analysis + automation code (the parts the "don't fool
 yourself" standard depends on). Scope, method, findings, fixes, and what was verified

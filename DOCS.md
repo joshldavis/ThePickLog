@@ -1,4 +1,4 @@
-# IgnitionScan — Documentation Map
+# ThePickLog — Documentation Map
 
 Where everything lives and what it's for. **Start here**, then follow the arrow.
 

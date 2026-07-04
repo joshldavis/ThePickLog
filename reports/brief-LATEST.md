@@ -1,4 +1,4 @@
-# IgnitionScan — Morning Brief · 2026-07-02
+# ThePickLog — Morning Brief · 2026-07-02
 
 _Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 

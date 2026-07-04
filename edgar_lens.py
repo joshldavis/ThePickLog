@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-edgar_lens.py — screen-time SEC-EDGAR snapshot for IgnitionScan's Group-B variables.
+edgar_lens.py — screen-time SEC-EDGAR snapshot for ThePickLog's Group-B variables.
 
 Closes two data gaps the roadmap flagged, using ONLY free SEC EDGAR (no paid feed):
 

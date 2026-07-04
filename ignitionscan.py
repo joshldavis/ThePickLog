@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-IgnitionScan — daily logger / grader (v0.2, personal paper-trading tool)
+ThePickLog — daily logger / grader (v0.2, personal paper-trading tool)
 =======================================================================
 Implements Part 1 (pick log) and Part 2 (cost-honest grading) of
 VALIDATION-PLAN.md.
@@ -495,7 +495,7 @@ def cmd_brief():
         return c
 
     L = []
-    L.append(f"# IgnitionScan — Morning Brief · {latest}")
+    L.append(f"# ThePickLog — Morning Brief · {latest}")
     L.append("")
     L.append(f"_Impersonal, educational watchlist — identical for all readers. Market regime: **{regime}**. "
              f"Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, "
@@ -556,7 +556,7 @@ SAMPLE_QUOTES = [
 ]
 
 def main():
-    ap = argparse.ArgumentParser(description="IgnitionScan logger/grader (v0.2, Yahoo Finance)")
+    ap = argparse.ArgumentParser(description="ThePickLog logger/grader (v0.2, Yahoo Finance)")
     ap.add_argument("command", choices=["scan","grade","report","brief","demo"])
     args = ap.parse_args()
     if   args.command=="scan":   cmd_scan()

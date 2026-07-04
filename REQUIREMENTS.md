@@ -1,4 +1,4 @@
-# IgnitionScan — Requirements Document (for developer hand-off)
+# ThePickLog — Requirements Document (for developer hand-off)
 
 **Owner:** Josh
 **Date:** June 3, 2026
@@ -51,7 +51,7 @@ A daily pre-market screener that ranks low-float, high-volatility US equities by
 ### 3.1 Universe & screening
 - **FR-1** Each trading morning, screen the full US small-/micro-cap universe, filtering to: price within `[$0.50, $10]` (configurable) and public float `< 50M shares` (configurable).
 - **FR-2** Compute the four scoring inputs per ticker: float, RVOL (today/pre-market volume ÷ average volume), gap % (vs prior close), price-band fit.
-- **FR-3** Compute the 0–100 IgnitionScan score and tier (A≥75, B≥60, C≥45, D<45) using the exact formula in the prototype (`scoreQuote()` in `index.html`). Weights are config-driven and must sum to 1.
+- **FR-3** Compute the 0–100 ThePickLog score and tier (A≥75, B≥60, C≥45, D<45) using the exact formula in the prototype (`scoreQuote()` in `index.html`). Weights are config-driven and must sum to 1.
 - **FR-4** Assign each pick a **watch level** = screen price × (1 + 0.20), configurable.
 - **FR-5** Persist every pick at scan time with: date, ticker, score, tier, all four raw inputs, all four component sub-scores, screen price, watch level. **Picks are immutable once written** (see FR-12).
 

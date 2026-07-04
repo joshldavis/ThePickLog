@@ -1,4 +1,4 @@
-# IgnitionScan — Audit Log
+# ThePickLog — Audit Log
 
 ## 2026-06-28 — Resolution of the 06-27 finding (Juneteenth phantom cohort) — **✅ Fixed**
 

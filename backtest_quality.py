@@ -105,7 +105,7 @@ def main():
     block("Safe (Green+Yellow)", safe)
     block("Risky (Red+Black)", risky)
 
-    print("\nBy Buffett classification:")
+    print("\nBy quality classification:")
     for c in ["Investable", "Speculative", "Too Hard", "Ungraded"]:
         block(c, by_class.get(c, []))
 

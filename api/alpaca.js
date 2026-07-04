@@ -1,5 +1,5 @@
 /* =====================================================================
-   IgnitionScan — Alpaca trading proxy (Vercel serverless function)
+   ThePickLog — Alpaca trading proxy (Vercel serverless function)
    ---------------------------------------------------------------------
    The browser NEVER sees your Alpaca keys. They live as Vercel
    environment variables and are only used here, server-side.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-IgnitionScan — BACKTEST harness (two-track model, exploratory ONLY)
+ThePickLog — BACKTEST harness (two-track model, exploratory ONLY)
 ===================================================================
 This is the *fast* track from SYNTHESIS.md §1.2 and VALIDATION-PLAN.md.
 It runs the SAME deterministic score (imported from ignitionscan.py — single
@@ -187,7 +187,7 @@ def cmd_report():
 
 
 def main():
-    ap = argparse.ArgumentParser(description="IgnitionScan backtest harness (exploratory, in-sample)")
+    ap = argparse.ArgumentParser(description="ThePickLog backtest harness (exploratory, in-sample)")
     sub = ap.add_subparsers(dest="command", required=True)
     r = sub.add_parser("run"); r.add_argument("--period", default="2y")
     sub.add_parser("report")

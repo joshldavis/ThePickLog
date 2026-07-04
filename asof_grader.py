@@ -30,7 +30,7 @@ from datetime import date
 from quality_lens import assemble_fundamentals, compute_quality
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-UA = "IgnitionScan/1.0 (research tool; contact davis1163@gmail.com)"
+UA = "ThePickLog/1.0 (research tool; contact davis1163@gmail.com)"
 ANNUAL_FORMS = ("10-K", "20-F", "40-F")  # same annual-report set as api/edgar.js
 
 # us-gaap tag priority lists — mirror api/edgar.js fyMap() exactly (single source of truth).

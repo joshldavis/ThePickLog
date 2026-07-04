@@ -48,7 +48,7 @@ window). The genuinely hard/sensitive parts:
 1. `calls.csv` schema — `call_id, source_name, source_url, published_date, ticker,
    direction, stated_date, captured_by, captured_at`. Immutable, append-only, like picks.csv.
 2. A grader that reuses the existing window/haircut to produce `call_outcomes.csv`.
-3. A *self-only* proof: grade IgnitionScan's OWN past public statements with it, to
+3. A *self-only* proof: grade ThePickLog's OWN past public statements with it, to
    prove the method works and is fair — zero third-party risk.
 
 **Must NOT do without review:**

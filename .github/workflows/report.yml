@@ -1,7 +1,7 @@
-# IgnitionScan — weekly forward-log report. Runs on GitHub's servers (no Mac/wifi).
+# ThePickLog — weekly forward-log report. Runs on GitHub's servers (no Mac/wifi).
 # Summarizes the immutable pick log into reports/forward-YYYY-MM-DD.md + reports/LATEST.md
 # so progress is trackable from a phone via GitHub while Josh is away. No API key needed.
-name: IgnitionScan weekly report
+name: ThePickLog weekly report
 
 on:
   workflow_dispatch:          # allow manual run any time

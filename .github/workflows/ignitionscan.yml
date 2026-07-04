@@ -1,6 +1,6 @@
-# IgnitionScan — automated daily scan + grade. Runs on GitHub's servers.
+# ThePickLog — automated daily scan + grade. Runs on GitHub's servers.
 # Data source: Yahoo Finance via yfinance — NO API key or secret needed.
-name: IgnitionScan daily
+name: ThePickLog daily
 
 on:
   workflow_dispatch:

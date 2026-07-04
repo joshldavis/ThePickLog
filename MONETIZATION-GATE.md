@@ -1,4 +1,4 @@
-# IgnitionScan — Monetization Go/No-Go
+# ThePickLog — Monetization Go/No-Go
 
 **Drafted:** 2026-06-25 · **Framing:** decision framework only. Default remains personal tool
 (ROADMAP.md). This file says *what would have to be true* to revisit that, and in what order.

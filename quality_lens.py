@@ -1,9 +1,9 @@
 """
-quality_lens.py — faithful Python port of the IgnitionScan Quality Lens.
+quality_lens.py — faithful Python port of the ThePickLog Quality Lens.
 
 Ports computeQuality() + its helpers (band, cagr, avgDefined) and the
 EDGAR/profile -> normalized-fundamentals assembly from index.html
-(fetchFundamentals / computeQuality), so the SAME Buffett-style grade
+(fetchFundamentals / computeQuality), so the SAME quality grade
 (Green / Yellow / Red / Black + 0-100 score + Investable/Speculative/Too Hard)
 can be computed offline and joined onto the backtest.
 

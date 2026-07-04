@@ -250,7 +250,7 @@ def _write_report(results, used, n_graded, from_record=0):
     fetched = used - from_record
     prov = (f"{from_record} from the immutable grade-time record (paths.csv), {fetched} "
             "re-fetched (picks that predate path capture)")
-    L = ["# IgnitionScan — exit-rule study · " + datetime.utcnow().date().isoformat(), "",
+    L = ["# ThePickLog — exit-rule study · " + datetime.utcnow().date().isoformat(), "",
          f"Daily-resolution replay of **{used}** graded picks (of {n_graded}). Conservative "
          "same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / "
          "exploratory** — a chosen rule must be pre-registered and validated forward.", "",

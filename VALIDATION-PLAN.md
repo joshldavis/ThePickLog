@@ -1,4 +1,4 @@
-# IgnitionScan — Validation Plan & Pick-Log Spec
+# ThePickLog — Validation Plan & Pick-Log Spec
 
 **Purpose:** Convert the prototype + the review feedback into something executable. This defines (1) exactly what to log on every pick, (2) a grading rule that measures something a real subscriber could actually capture, and (3) the validation tables that must be filled — and the bar they must clear — *before* you charge for access.
 

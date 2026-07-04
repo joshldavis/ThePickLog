@@ -1,4 +1,4 @@
-# IgnitionScan — Advancing the Model, Product & Marketing
+# ThePickLog — Advancing the Model, Product & Marketing
 
 **Owner:** Josh
 **Date:** June 15, 2026
@@ -110,7 +110,7 @@ high-momentum names aren't survivable, they're where the rugs concentrate. **Ban
 direction; useful for messaging** ("the hottest movers are the most likely to gut you").
 
 ### Finding B — The Quality Lens did NOT show a protective edge here (and the test is too weak to trust)
-Joined the actual **Buffett-style Quality Lens** grade (ported faithfully to Python in
+Joined the actual **Quality Lens** grade (ported faithfully to Python in
 `quality_lens.py`, graded off the same SEC EDGAR filings the live site uses; see
 `fundamentals_cache.json`) onto every pick and grouped by risk label:
 

@@ -1,4 +1,4 @@
-# IgnitionScan — Synthesis: JTBD × Influence × Messick
+# ThePickLog — Synthesis: JTBD × Influence × Messick
 
 **Owner:** Josh
 **Date:** June 15, 2026
@@ -40,7 +40,7 @@ Either way you ship something honest. The discipline JTBD adds: **decide this fo
 ### 1.3 Anxieties = the claims you must let people verify
 Every anxiety in the hiring decision is a job the product must visibly do:
 
-- *"Is this just another pump?"* → the Quality Lens (Buffett risk label) on the watchlist row.
+- *"Is this just another pump?"* → the Quality Lens (risk label) on the watchlist row.
 - *"Will I actually get filled at that price?"* → grading on the **realizable open→close**, not the pre-market print.
 - *"How far does it drop before it works?"* → **MAE / worst-dip** now shown on the Track record page.
 - *"Are you cherry-picking?"* → blended stats including every miss; immutable log.

@@ -1,4 +1,4 @@
-# IgnitionScan AI Assistant — setup
+# ThePickLog AI Assistant — setup
 
 Adds three things, all built on the data sources the app already uses (so every
 claim stays verifiable):
@@ -7,7 +7,7 @@ claim stays verifiable):
    Google Finance / Yahoo / Finviz / SEC links, live quote + screen metrics,
    detailed fundamentals (SEC EDGAR → FMP fallback), and trending-news links.
    *No API key, no LLM — fully deterministic.*
-2. **Q&A assistant** — new **Assistant** tab + floating "🔥 Ask" button. Chat
+2. **Q&A assistant** — new **Assistant** tab + floating "⛓ Ask" button. Chat
    that answers from the live screen data + published method only.
 3. **Decision walkthrough** — same assistant; e.g. "I have $1,000 — walk me
    through how to think about it" runs an educational, step-by-step framework.

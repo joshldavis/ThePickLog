@@ -1,4 +1,4 @@
-# IgnitionScan → Alpaca paper trading — setup
+# ThePickLog → Alpaca paper trading — setup
 
 This adds in-app **Buy/Sell** to the scanner. Orders go through a tiny server-side
 proxy (`api/alpaca.js`) so your Alpaca keys live in Vercel and never touch the browser.

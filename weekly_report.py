@@ -85,7 +85,7 @@ def main():
     L = []
     w = L.append
 
-    w(f"# IgnitionScan — forward-log report · {today}")
+    w(f"# ThePickLog — forward-log report · {today}")
     w("")
     w("Auto-generated weekly from the immutable pick log (picks.csv / outcomes.csv). "
       "No predictions; this is the public record summarized. Not investment advice.")

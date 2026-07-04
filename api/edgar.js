@@ -1,5 +1,5 @@
 /* =====================================================================
-   IgnitionScan — SEC EDGAR fundamentals proxy (Vercel serverless)
+   ThePickLog — SEC EDGAR fundamentals proxy (Vercel serverless)
    ---------------------------------------------------------------------
    Free, official fundamentals for ANY SEC filer — including the micro/
    small-caps that FMP's free tier paywalls. Maps ticker -> CIK, pulls the
@@ -12,7 +12,7 @@
    Frontend: /api/edgar?symbol=CODX
    ===================================================================== */
 
-const UA = { "User-Agent": "IgnitionScan/1.0 (research tool; contact davis1163@gmail.com)" };
+const UA = { "User-Agent": "ThePickLog/1.0 (research tool; contact davis1163@gmail.com)" };
 const TICKERS_URL = "https://www.sec.gov/files/company_tickers.json";
 const factsCache = new Map();         // cik -> { at, data }
 const FACTS_TTL = 12 * 60 * 60 * 1000;

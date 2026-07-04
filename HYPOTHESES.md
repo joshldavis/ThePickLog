@@ -1,4 +1,4 @@
-# Pre-registered hypotheses — IgnitionScan
+# Pre-registered hypotheses — ThePickLog
 
 **Registered:** 2026-06-22 · **Why this file exists:** these filters were spotted in an
 *in-sample* cut of the first 52 graded picks. In-sample patterns overfit. To be honest,
