@@ -37,6 +37,19 @@ except Exception:  # pragma: no cover — report must run even if exit_sim is un
     exit_net = None
     _load_paths = None
 
+# Single source of truth for the pre-registered hypothesis math (§4c filters, §4d
+# exit): delegate to hypo_eval so weekly_report and the Compete→Test leaderboard
+# can never diverge. Stdlib-only, no network. Falls back to the inline definitions
+# below if hypo_eval/registry are unavailable, so the report always runs.
+try:
+    import json as _json
+    from hypo_eval import _keeps as _hp_keeps, _exit_return as _hp_exit
+    _REG = _json.load(open(os.path.join(HERE, "hypotheses", "registry.json")))
+    _SEL = {h["id"]: h["selection"] for h in _REG["hypotheses"] if h.get("kind") == "filter"}
+except Exception:  # pragma: no cover
+    _hp_keeps = _hp_exit = None
+    _SEL = {}
+
 
 def _read(path):
     if not os.path.exists(path):
@@ -223,7 +236,13 @@ def main():
       f"honest test. Both windows shown; judge on the post-registration column as it grows.")
     w("")
 
+    _FIDMAP = {"F1": "H-F1", "F2": "H-F2", "F3": "H-F3", "F4": "H-F4", "CLEAN": "H-CLEAN"}
+
     def keep(p, fid):
+        # Delegate to hypo_eval (the registry is the single source of truth). The
+        # inline block is a byte-identical fallback if hypo_eval is unavailable.
+        if _hp_keeps and _FIDMAP.get(fid) in _SEL:
+            return _hp_keeps(p, _SEL[_FIDMAP[fid]])
         pr, fl, gp, t = _f(p.get("price_at_screen")), _f(p.get("float_shares")), _f(p.get("gap_pct")), p.get("tier")
         if fid == "F1":    return pr is None or pr >= 1.0
         if fid == "F2":    return fl is None or fl < 3e6
@@ -312,6 +331,12 @@ def main():
     def ex_arm(post_only):
         rs = []
         for _, o in _ex_filter(post_only):
+            if _hp_exit:  # single source of truth (target_10 == +10% limit, +8% net)
+                r = _hp_exit(o, "target_10")
+                if r is None:
+                    continue
+                rs.append(r)
+                continue
             mfe, c5 = col(o, "mfe_5d"), col(o, "ret_open_5dclose_net")
             if mfe is None or c5 is None:
                 continue

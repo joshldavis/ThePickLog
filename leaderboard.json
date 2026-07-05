@@ -1,0 +1,173 @@
+{
+  "generated_at": "2026-07-05",
+  "log": {
+    "picks": 253,
+    "graded": 179
+  },
+  "baseline": {
+    "n_post": 45,
+    "win_post": 40,
+    "avg_post": -2.8,
+    "since": "2026-06-22"
+  },
+  "summary": {
+    "n_live": 6,
+    "n_positive_point": 3,
+    "n_significant": 0,
+    "expected_positive_by_chance": 3.0,
+    "note": "under the null each rule has ~50% chance of a positive point estimate; clearing the 95% CI is the real bar"
+  },
+  "rows": [
+    {
+      "id": "H-EX1",
+      "title": "+10% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-06-23",
+      "kind": "exit",
+      "rule_str": "exit: mfe_5d ≥ +10% → +8% net, else 5d close",
+      "n_post": 30,
+      "win_post": 60,
+      "avg_post": -2.4,
+      "median_post": 5.3,
+      "baseline_avg_post": -4.1,
+      "delta_post": 1.7,
+      "ci95": [
+        -3.2,
+        5.8
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "unknown",
+      "weeks_live": 1.7,
+      "caveats": [
+        "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
+      ],
+      "rank": 1
+    },
+    {
+      "id": "H-F1",
+      "title": "skip sub-$1 names",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "rule_str": "keep: price_at_screen ≥ 1.0",
+      "n_post": 36,
+      "win_post": 42,
+      "avg_post": -2.6,
+      "median_post": -0.9,
+      "baseline_avg_post": -2.8,
+      "delta_post": 0.2,
+      "ci95": [
+        -2.8,
+        3.4
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "unknown",
+      "weeks_live": 1.9,
+      "caveats": [],
+      "kept_n_all": 135,
+      "rank": 2
+    },
+    {
+      "id": "H-F2",
+      "title": "skip float ≥ 3M shares",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "rule_str": "keep: float_shares < 3,000,000",
+      "n_post": 39,
+      "win_post": 41,
+      "avg_post": -2.7,
+      "median_post": -1.0,
+      "baseline_avg_post": -2.8,
+      "delta_post": 0.1,
+      "ci95": [
+        -2.7,
+        2.9
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "unknown",
+      "weeks_live": 1.9,
+      "caveats": [],
+      "kept_n_all": 141,
+      "rank": 3
+    },
+    {
+      "id": "H-F3",
+      "title": "skip gap ≥ +20%",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "rule_str": "keep: gap_pct < 20",
+      "n_post": 44,
+      "win_post": 39,
+      "avg_post": -3.0,
+      "median_post": -1.4,
+      "baseline_avg_post": -2.8,
+      "delta_post": -0.2,
+      "ci95": [
+        -3.0,
+        2.7
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "unknown",
+      "weeks_live": 1.9,
+      "caveats": [],
+      "kept_n_all": 158,
+      "rank": 4
+    },
+    {
+      "id": "H-F4",
+      "title": "skip hot tiers A/B (Finding A)",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "rule_str": "keep: tier ∉ {A, B}",
+      "n_post": 40,
+      "win_post": 35,
+      "avg_post": -3.6,
+      "median_post": -1.8,
+      "baseline_avg_post": -2.8,
+      "delta_post": -0.8,
+      "ci95": [
+        -3.8,
+        2.2
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "unknown",
+      "weeks_live": 1.9,
+      "caveats": [],
+      "kept_n_all": 139,
+      "rank": 5
+    },
+    {
+      "id": "H-CLEAN",
+      "title": "all four filters combined",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "rule_str": "keep: price_at_screen ≥ 1.0 ∧ float_shares < 3,000,000 ∧ gap_pct < 20 ∧ tier ∉ {A, B}",
+      "n_post": 29,
+      "win_post": 34,
+      "avg_post": -3.7,
+      "median_post": -1.7,
+      "baseline_avg_post": -2.8,
+      "delta_post": -0.9,
+      "ci95": [
+        -4.0,
+        2.2
+      ],
+      "significant": false,
+      "state": "maturing",
+      "stability": "unknown",
+      "weeks_live": 1.9,
+      "caveats": [],
+      "kept_n_all": 103,
+      "rank": null
+    }
+  ]
+}

@@ -674,6 +674,13 @@
       <h1 style="margin:.2em 0">Compete <span class="is-pill">SIM</span></h1>
       <button class="btn ghost" style="margin-left:auto" onclick="IS_SIM&&IS_SIM.refreshLeaderboard()">↻ Refresh</button>
     </div>
+
+    <div class="pt-modes" role="tablist" aria-label="Compete mode">
+      <button id="modeTradeBtn" class="pt-mode active" role="tab" onclick="setCompeteMode('trade')">Trade<span class="pt-mode-sub">play-money sim</span></button>
+      <button id="modeTestBtn" class="pt-mode" role="tab" onclick="setCompeteMode('test')">Test<span class="pt-mode-sub">hypothesis leaderboard</span></button>
+    </div>
+
+    <div id="competeTrade">
     <p class="lead">Each player starts with <b>$100,000</b> in simulated cash. Buy and sell the screened
       names from the Watchlist tab at live prices — your portfolio and everyone else's are ranked below by total return.</p>
 
@@ -706,6 +713,99 @@
     </div>
     <p class="disclaimer">Educational / informational only — not investment advice. The Compete mode is a
       simulation with play money; no real orders are placed.</p>
+    </div><!-- /competeTrade -->
+
+    <style>
+      .pt-modes{display:inline-flex;gap:4px;background:#ffffff08;border:1px solid var(--line,#2a3240);border-radius:12px;padding:4px;margin:16px 0 4px}
+      .pt-mode{background:none;border:0;color:var(--muted,#8b98a8);font:inherit;font-weight:700;font-size:14px;padding:8px 16px;border-radius:9px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+      .pt-mode.active{background:var(--a,#1f6f6b);color:#fff}
+      .pt-mode-sub{font-size:11px;font-weight:400;opacity:.85;margin-top:1px}
+      .pt-how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+      .pt-step .n{color:var(--a,#1f6f6b);font-weight:700;font-size:12px;letter-spacing:.04em}
+      .pt-step p{margin:6px 0 0;font-size:13px;color:var(--muted,#8b98a8)}
+      .pt-banner{background:#2a1d10;border:1px solid #5a3a22;border-radius:12px;padding:13px 16px;margin:16px 0;font-size:13.5px}
+      .pt-banner b{color:#f5b14c}
+      .pt-table td,.pt-table th{vertical-align:top}
+      .pt-chip{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid #2a3240;font-weight:600;white-space:nowrap}
+      .pt-chip.ranked{color:#5aa0ff;border-color:#24405a;background:#10202e}
+      .pt-chip.maturing{color:#f5b14c;border-color:#5a3a22;background:#2a1d10}
+      .pt-rule{font-size:12px;color:var(--muted,#8b98a8)}
+      .pt-ci{color:var(--muted,#8b98a8);font-size:11.5px}
+      .pt-flag{font-size:10.5px;padding:1px 6px;border-radius:6px;background:#1c2230;color:var(--muted,#8b98a8);border:1px solid #2a3240}
+      .pt-pos{color:#2ec27e}.pt-neg{color:#f0506e}.pt-dim{color:var(--muted,#8b98a8)}
+      @media(max-width:680px){.pt-how{grid-template-columns:1fr}}
+    </style>
+    <div id="competeTest" style="display:none">
+      <p class="lead">Register a rule, freeze it with a timestamp, and watch it get graded <b>out-of-sample</b>
+        against the same immutable pick log the site runs on. No trading &mdash; you're testing whether an idea
+        actually holds up. Whoever's frozen hypotheses survive the forward test, rises.</p>
+      <div class="pt-how">
+        <div class="panel pt-step"><div class="n">1 &middot; REGISTER</div><p>Build a rule from screen-time fields (price, float, tier, regime&hellip;) plus an exit. No code, no future data.</p></div>
+        <div class="panel pt-step"><div class="n">2 &middot; FREEZE</div><p>Timestamped and immutable &mdash; can't be edited, deleted, or backdated. Only picks logged <i>after</i> registration count.</p></div>
+        <div class="panel pt-step"><div class="n">3 &middot; GRADE</div><p>The shared forward log scores it automatically. Beat the same-day-close baseline on expectancy, out-of-sample, and rank.</p></div>
+      </div>
+      <div class="pt-banner" id="ptBanner">Loading&hellip;</div>
+      <h2>Leaderboard &mdash; out-of-sample, ranked by expectancy delta</h2>
+      <div class="panel tscroll" style="padding:6px 12px">
+        <table class="lb-table pt-table">
+          <thead><tr>
+            <th class="l">#</th><th class="l">Hypothesis</th><th>State</th><th class="num">n</th>
+            <th class="num">Win%</th><th class="num">Avg net</th><th class="num">&Delta; vs baseline</th><th class="num">Live</th><th></th>
+          </tr></thead>
+          <tbody id="ptRows"></tbody>
+        </table>
+      </div>
+      <div class="note" style="margin-top:12px">
+        <b>How to read this.</b> <span class="pt-chip ranked">ranked</span> = enough out-of-sample picks (n &ge; 30) to place;
+        <span class="pt-chip maturing">maturing</span> = still filling in. <b>&Delta; vs baseline</b> is the expectancy edge
+        over the shared same-day-close baseline, on <i>post-registration picks only</i>;
+        <span class="pt-flag">ns</span> means the 95% interval still spans zero &mdash; directional, not proven.
+        Exit fills assumed exact at +10%; thin floats gap through, so live results run worse.
+      </div>
+      <div class="note pt-dim" id="ptProv" style="font-size:11.5px;border-top:1px solid var(--line,#2a3240);padding-top:12px;margin-top:14px"></div>
+    </div>
+
+    <script>
+    (function(){
+      var FALLBACK = {"generated_at":"2026-07-05","log":{"picks":253,"graded":179},
+        "baseline":{"n_post":45,"win_post":40,"avg_post":-2.8,"since":"2026-06-22"},
+        "summary":{"n_live":6,"n_positive_point":3,"n_significant":0,"expected_positive_by_chance":3.0},
+        "rows":[
+          {"id":"H-EX1","title":"+10% limit over 5-day hold","author":"house","registered_at":"2026-06-23","rule_str":"exit: mfe_5d ≥ +10% → +8% net, else 5d close","n_post":30,"win_post":60,"avg_post":-2.4,"delta_post":1.7,"ci95":[-3.2,5.8],"significant":false,"state":"ranked","weeks_live":1.7,"rank":1},
+          {"id":"H-F1","title":"skip sub-$1 names","author":"house","registered_at":"2026-06-22","rule_str":"keep: price_at_screen ≥ 1.0","n_post":36,"win_post":42,"avg_post":-2.6,"delta_post":0.2,"ci95":[-2.8,3.4],"significant":false,"state":"ranked","weeks_live":1.9,"rank":2},
+          {"id":"H-F2","title":"skip float ≥ 3M shares","author":"house","registered_at":"2026-06-22","rule_str":"keep: float_shares < 3,000,000","n_post":39,"win_post":41,"avg_post":-2.7,"delta_post":0.1,"ci95":[-2.7,2.9],"significant":false,"state":"ranked","weeks_live":1.9,"rank":3},
+          {"id":"H-F3","title":"skip gap ≥ +20%","author":"house","registered_at":"2026-06-22","rule_str":"keep: gap_pct < 20","n_post":44,"win_post":39,"avg_post":-3.0,"delta_post":-0.2,"ci95":[-3.0,2.7],"significant":false,"state":"ranked","weeks_live":1.9,"rank":4},
+          {"id":"H-F4","title":"skip hot tiers A/B (Finding A)","author":"house","registered_at":"2026-06-22","rule_str":"keep: tier ∉ {A, B}","n_post":40,"win_post":35,"avg_post":-3.6,"delta_post":-0.8,"ci95":[-3.8,2.2],"significant":false,"state":"ranked","weeks_live":1.9,"rank":5},
+          {"id":"H-CLEAN","title":"all four filters combined","author":"house","registered_at":"2026-06-22","rule_str":"keep: F1 ∧ F2 ∧ F3 ∧ F4","n_post":29,"win_post":34,"avg_post":-3.7,"delta_post":-0.9,"ci95":[-4.0,2.2],"significant":false,"state":"maturing","weeks_live":1.9,"rank":null}
+        ]};
+      var loaded=false;
+      window.setCompeteMode=function(m){
+        var test=(m==='test');
+        var tr=document.getElementById('competeTrade'),te=document.getElementById('competeTest'),rb=document.getElementById('competeRefreshBtn');
+        if(tr)tr.style.display=test?'none':'';
+        if(te)te.style.display=test?'':'none';
+        if(rb)rb.style.display=test?'none':'';
+        document.getElementById('modeTradeBtn').classList.toggle('active',!test);
+        document.getElementById('modeTestBtn').classList.toggle('active',test);
+        if(test&&!loaded){loaded=true;load();}
+      };
+      function fp(x){return x==null?'—':(x>0?'+':'')+Number(x).toFixed(1)+'%';}
+      function cls(x){return x>0?'pt-pos':(x<0?'pt-neg':'pt-dim');}
+      function render(d){
+        var s=d.summary,b=d.baseline;
+        document.getElementById('ptBanner').innerHTML='<b>⚠ Honesty check.</b> <b>'+s.n_live+'</b> hypotheses are live. <b>'+s.n_positive_point+'</b> show a positive point estimate — but <b>'+s.n_significant+'</b> clear the noise bar (every edge’s 95% interval still includes zero). At these sample sizes, roughly <b>'+s.expected_positive_by_chance+'</b> positive deltas are expected from chance alone. Nothing here is an edge yet; these are <i>maturing</i>, and that’s the point.';
+        var h='<tr style="color:var(--muted,#8b98a8)"><td></td><td class="l">Baseline — all picks, same-day open→close (net 2% haircut)</td><td>—</td><td class="num">'+b.n_post+'</td><td class="num">'+b.win_post+'%</td><td class="num">'+fp(b.avg_post)+'</td><td class="num pt-dim">reference</td><td class="num"></td><td></td></tr>';
+        d.rows.forEach(function(r){
+          var ci=r.ci95?('CI ['+(r.ci95[0]>0?'+':'')+r.ci95[0]+', '+(r.ci95[1]>0?'+':'')+r.ci95[1]+']'):'';
+          var flag=r.significant?'':(r.state==='maturing'?'<span class="pt-flag">n&lt;30</span>':'<span class="pt-flag">ns</span>');
+          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l"><b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span></td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="dashboard.html" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
+        });
+        document.getElementById('ptRows').innerHTML=h;
+        document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Self-only preview — user registration opens behind the soft-launch invite.';
+      }
+      function load(){fetch('leaderboard.json').then(function(r){return r.ok?r.json():Promise.reject();}).then(render).catch(function(){render(FALLBACK);});}
+    })();
+    </script>
   </div>
 </section>
 

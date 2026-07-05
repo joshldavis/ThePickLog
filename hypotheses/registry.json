@@ -1,0 +1,80 @@
+{
+  "_note": "Frozen, append-only registry of pre-registered hypotheses — the machine-readable analog of HYPOTHESES.md. Rules must never be edited or deleted, only retired. Only picks logged AFTER registered_at count toward the out-of-sample score. Seeded with the site's own house rules (self-only preview); user rules append here in Phase 1.",
+  "schema_version": 1,
+  "config": { "min_n": 30, "min_keep_frac": 0.15, "boot_iters": 4000, "seed": 7 },
+  "hypotheses": [
+    {
+      "id": "H-F1",
+      "title": "skip sub-$1 names",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "selection": { "op": "and", "predicates": [
+        { "field": "price_at_screen", "cmp": ">=", "value": 1.0 }
+      ]},
+      "exit": "same_day_close",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-F2",
+      "title": "skip float ≥ 3M shares",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "selection": { "op": "and", "predicates": [
+        { "field": "float_shares", "cmp": "<", "value": 3000000 }
+      ]},
+      "exit": "same_day_close",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-F3",
+      "title": "skip gap ≥ +20%",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "selection": { "op": "and", "predicates": [
+        { "field": "gap_pct", "cmp": "<", "value": 20 }
+      ]},
+      "exit": "same_day_close",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-F4",
+      "title": "skip hot tiers A/B (Finding A)",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "selection": { "op": "and", "predicates": [
+        { "field": "tier", "cmp": "not_in", "value": ["A", "B"] }
+      ]},
+      "exit": "same_day_close",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-CLEAN",
+      "title": "all four filters combined",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "selection": { "op": "and", "predicates": [
+        { "field": "price_at_screen", "cmp": ">=", "value": 1.0 },
+        { "field": "float_shares", "cmp": "<", "value": 3000000 },
+        { "field": "gap_pct", "cmp": "<", "value": 20 },
+        { "field": "tier", "cmp": "not_in", "value": ["A", "B"] }
+      ]},
+      "exit": "same_day_close",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-EX1",
+      "title": "+10% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-06-23",
+      "kind": "exit",
+      "selection": { "op": "and", "predicates": [] },
+      "exit": "target_10",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    }
+  ]
+}

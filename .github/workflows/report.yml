@@ -23,6 +23,8 @@ jobs:
         run: python weekly_report.py
       - name: Bayesian read-out (H-EX1 posterior)   # stdlib-only, deterministic; selftests abort on failure
         run: python bayes_h_ex1.py
+      - name: Compete Test-mode leaderboard         # stdlib-only, deterministic; self-test aborts on parity drift
+        run: python hypo_eval.py   # writes leaderboard.json from hypotheses/registry.json
       - name: Install deps for exit study
         run: pip install yfinance
       - name: Run exit-rule study (daily-resolution, in-sample)
@@ -33,7 +35,7 @@ jobs:
           # Author as the repo owner so Vercel authorizes the auto-deploy.
           git config user.name "joshldavis"
           git config user.email "davis1163@gmail.com"
-          git add reports/
+          git add reports/ leaderboard.json
           if git diff --cached --quiet; then
             echo "No report changes."
           else
