@@ -850,7 +850,7 @@
         d.rows.forEach(function(r){
           var ci=r.ci95?('CI ['+(r.ci95[0]>0?'+':'')+r.ci95[0]+', '+(r.ci95[1]>0?'+':'')+r.ci95[1]+']'):'';
           var flag=r.significant?'':(r.state==='maturing'?'<span class="pt-flag">n&lt;30</span>':'<span class="pt-flag">ns</span>');
-          var stab=r.stability&&r.stability!=='unknown'?('<div class="pt-ci">sign: '+r.stability+'</div>'):'';
+          var stab=(r.stability==='stable'||r.stability==='mixed')?('<div class="pt-ci">sign: '+r.stability+'</div>'):'';
           var qchip=r.kind==='question'?'<span class="pt-flag" style="color:#c99bff;border-color:#4a3a6a">question</span> ':'';
           // Per-rule verify: pass the machine-readable spec so dashboard.html re-derives
           // THIS rule from the raw CSVs. Falls back to the dashboard if spec is absent.
