@@ -36,6 +36,18 @@ jobs:
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
       - name: Refresh Finding-A-aware brief
         run: python ignitionscan.py brief || true
+      - name: Rebuild Test-mode leaderboard (house + user rules)
+        # Daily refresh so a newly registered hypothesis reaches the board within a
+        # day (not just the weekly report). Non-fatal: hypo_eval's self-test aborts
+        # only on genuine parity drift, and must never block the picks/outcomes commit.
+        run: |
+          python fetch_user_rules.py || true
+          USER_RULES_PATH=hypotheses/user_rules.json python hypo_eval.py || echo "leaderboard rebuild skipped (non-fatal)"
+      - name: Seal integrity ledger (tamper-evident hash chain)
+        # Records SHA-256 of picks/outcomes/paths into integrity_ledger.csv, chained
+        # to the prior row so any later edit to a past entry is provable. Non-fatal:
+        # a hashing hiccup must never block the data commit.
+        run: python log_integrity.py --event=${{ steps.cmd.outputs.cmd }} || echo "integrity seal skipped (non-fatal)"
       - name: Commit data
         id: commit
         run: |
@@ -47,6 +59,8 @@ jobs:
           [ -f outcomes.csv ] && git add outcomes.csv || true
           [ -f paths.csv ] && git add paths.csv || true
           [ -f edgar_snapshot.csv ] && git add edgar_snapshot.csv || true
+          [ -f leaderboard.json ] && git add leaderboard.json || true
+          [ -f integrity_ledger.csv ] && git add integrity_ledger.csv || true
           [ -f reports/brief-LATEST.md ] && git add reports/brief-LATEST.md || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."

@@ -810,6 +810,7 @@
         over the shared same-day-close baseline, on <i>post-registration picks only</i>;
         <span class="pt-flag">ns</span> means the 95% interval still spans zero &mdash; directional, not proven.
         Exit fills assumed exact at +10%; thin floats gap through, so live results run worse.
+        Each row's <b>verify ↗</b> re-derives that rule from the raw CSVs. <a href="method.html" style="color:var(--a,#5aa0ff)">Full scoring method →</a>
       </div>
       <div class="note pt-dim" id="ptProv" style="font-size:11.5px;border-top:1px solid var(--line,#2a3240);padding-top:12px;margin-top:14px"></div>
     </div>
@@ -848,7 +849,13 @@
         d.rows.forEach(function(r){
           var ci=r.ci95?('CI ['+(r.ci95[0]>0?'+':'')+r.ci95[0]+', '+(r.ci95[1]>0?'+':'')+r.ci95[1]+']'):'';
           var flag=r.significant?'':(r.state==='maturing'?'<span class="pt-flag">n&lt;30</span>':'<span class="pt-flag">ns</span>');
-          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l"><b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span></td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="dashboard.html" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
+          // Per-rule verify: pass the machine-readable spec so dashboard.html re-derives
+          // THIS rule from the raw CSVs. Falls back to the dashboard if spec is absent.
+          var vurl='dashboard.html';
+          if(r.rule_spec){ try{ vurl='dashboard.html#verify='+encodeURIComponent(JSON.stringify(
+            {id:r.id,title:r.title,author:r.author,rule_str:r.rule_str,kind:r.rule_spec.kind,
+             exit:r.rule_spec.exit,registered_at:r.rule_spec.registered_at,predicates:r.rule_spec.predicates})); }catch(e){} }
+          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l"><b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span></td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
         document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';

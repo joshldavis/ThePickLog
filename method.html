@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ThePickLog — How hypotheses are scored</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.active{color:var(--tx);background:#1f6f6b1f}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  #mobileMenu a:hover{background:#ffffff08}
+  @media(max-width:880px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 70px}
+  h1{font-size:26px;margin:.2em 0 .1em;letter-spacing:-.01em}
+  h1 .dot{color:var(--a)}
+  .lead{color:var(--dim);font-size:15px;margin:0 0 6px}
+  h2{font-size:16px;margin:30px 0 8px;letter-spacing:.1px}
+  h2 .n{color:var(--a);font-weight:800;margin-right:8px}
+  p{margin:8px 0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+  .muted{color:var(--dim)} .pos{color:var(--green)} .neg{color:var(--red)} .warn{color:var(--amber)}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12.5px}
+  a{color:var(--blue)}
+  ul{margin:8px 0;padding-left:20px} li{margin:5px 0}
+  .kbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+  .kbar a{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:9px;font-size:13px;font-weight:600;text-decoration:none;color:var(--tx);background:var(--panel2);border:1px solid var(--line)}
+  .kbar a:hover{border-color:var(--a)}
+  .callout{border-left:3px solid var(--amber);padding:4px 0 4px 12px;color:var(--dim);font-size:14px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{color:var(--dim);font-weight:600}
+  .foot{color:var(--dim);font-size:12px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="index.html#watchlist">Watchlist</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="dashboard.html">Validation</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="index.html#scoring">Guide</a>
+      <a href="index.html#compete">Compete</a>
+      <a href="index.html#assistant">Assistant</a>
+    </nav>
+    <span class="proto">PROTOTYPE</span>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="index.html#watchlist">Watchlist</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="dashboard.html">Validation</a>
+    <a href="calculator.html">Calculator</a>
+    <a href="index.html#scoring">Guide</a>
+    <a href="index.html#compete">Compete</a>
+    <a href="index.html#assistant">Assistant</a>
+  </div>
+</div>
+<script>
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open); b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+</script>
+
+<div class="wrap">
+  <h1>How a hypothesis is scored</h1>
+  <p class="lead">The method, published in full <b>before</b> any verdict — so a stranger can check every number, not take it on trust. House rules and rules you register in <a href="index.html#compete">Compete → Test</a> run through the <i>same</i> evaluator, applied evenhandedly.</p>
+
+  <div class="kbar">
+    <a href="picks.csv" download>⬇ picks.csv</a>
+    <a href="outcomes.csv" download>⬇ outcomes.csv</a>
+    <a href="dashboard.html">Validation dashboard ↗</a>
+    <a href="index.html#compete">Test-mode leaderboard ↗</a>
+  </div>
+
+  <h2><span class="n">1</span>The pick log is the only judge</h2>
+  <p>Every screened name is written to <code>picks.csv</code> <b>before the outcome is known</b>, with a timestamp. The log is <b>append-only and immutable</b> — rows are never edited or deleted. Grading writes to a separate <code>outcomes.csv</code> keyed by <code>pick_id</code>. If a claim isn't reproducible from these two public files, it isn't evidence. Backtests are used only to <i>choose</i> what to test — never as a performance claim.</p>
+
+  <h2><span class="n">2</span>The return we measure is one you could actually get</h2>
+  <p>Five trading days after a pick is logged, it's graded on the <b>regular-session open → close</b> return — enter at the day's open (not the pre-market print nobody can be filled at), exit at that day's close — <b>net of a 2% round-trip cost haircut</b> for wide low-float spreads. That net figure is the headline.</p>
+  <ul>
+    <li><b>Worst drawdown (MAE)</b> over the 5-day window is shown next to every result — the downside you'd have had to sit through.</li>
+    <li><b>Best-case excursion (MFE)</b> is recorded but always labelled <i>not an achievable return</i> — "it touched +20% intraday" measures volatility, not a return.</li>
+    <li>A <b>WIN</b> means the net open→close return was positive — derived from the return itself, never trusted from a stored flag, so the record stays re-derivable even if a row were ever tampered with.</li>
+  </ul>
+
+  <h2><span class="n">3</span>Exit rules</h2>
+  <p>A hypothesis is scored under one exit:</p>
+  <table>
+    <thead><tr><th>Exit</th><th>Return recorded per pick</th></tr></thead>
+    <tbody>
+    <tr><td><code>same_day_close</code></td><td>The open→close net return above (the default baseline exit).</td></tr>
+    <tr><td><code>target_T</code> (+5/10/15/20%)</td><td>If the 5-day MFE reached <code>+T%</code>, take <code>+(T−2)%</code> net (the target minus the 2% haircut); otherwise fall back to the 5-day close return.</td></tr>
+    </tbody>
+  </table>
+  <p class="callout"><b>Slippage is real.</b> Target exits assume the +T% limit fills exactly. On thin floats limits gap through, so live results run <b>worse</b> than the proxy. This is stated on every exit-rule readout.</p>
+
+  <h2><span class="n">4</span>Pre-registration &amp; the out-of-sample window</h2>
+  <p>A rule is frozen with a <b>registration date</b>. Only picks whose <code>trading_date</code> is <b>after</b> that date count toward its score — that's the out-of-sample (OOS) test. A pattern spotted in data already seen overfits by construction; the date stamp is what turns it into a genuine test. Registered rules can't be edited, deleted, or backdated — only <i>retired</i>. Because the log is append-only, a rule frozen today has nothing pre-existing to fit against: it starts at zero picks and earns its record as new picks accumulate.</p>
+
+  <h2><span class="n">5</span>The number on the board: expectancy delta vs baseline</h2>
+  <p>Each rule is compared to a shared <b>same-day-close baseline</b> over the post-registration window. The headline <b>Δ vs baseline</b> is the difference in mean net return per trade (in percentage points). For a <b>filter</b> it's the kept picks' mean minus all picks' mean; for an <b>exit</b> it's the paired per-pick difference (same picks, its exit vs the close). We report the full distribution — mean, median, % positive, and MAE — never a lone win rate, which is the easiest number to game.</p>
+
+  <h2><span class="n">6</span>Honesty about noise is the whole point</h2>
+  <ul>
+    <li><b>95% confidence interval</b> on the delta, by bootstrap resampling (4,000 iterations, fixed seed for determinism). If the interval still spans zero, the rule is flagged <code>ns</code> — <i>directional, not proven</i>.</li>
+    <li><b>Multiple comparisons</b> are surfaced, not hidden: under pure chance about half of any set of rules will show a positive point estimate, so the board states how many positives to expect from luck alone. Clearing the interval — not merely being positive — is the bar.</li>
+    <li><b>Sample gates:</b> a rule is <code>ranked</code> only past <b>n ≥ 30</b> post-registration picks (and keeping at least 15% of the log); below that it's <code>maturing</code>. Until the data clears the bar the model is treated as <b>unvalidated</b>.</li>
+  </ul>
+
+  <h2><span class="n">7</span>What you can register (pick-time fields only)</h2>
+  <p>A rule may only reference fields that are known <b>at the moment the pick is logged</b> — <code>price_at_screen</code>, <code>float_shares</code>, <code>gap_pct</code>, <code>rvol</code>, <code>short_interest_pct</code>, <code>tier</code> — plus an exit from the fixed set above. Outcome columns are rejected, so no rule can reference the future. This whitelist is enforced both in the browser and again on the server at registration.</p>
+
+  <h2><span class="n">8</span>Reproducible by anyone</h2>
+  <p>One evaluator (<code>hypo_eval.py</code>, standard-library only, deterministic) scores house and user rules identically, and a self-test aborts the build if its numbers ever drift from the weekly report's hand-computed figures. Every value on the leaderboard re-derives from the public <a href="picks.csv" download>picks.csv</a> × <a href="outcomes.csv" download>outcomes.csv</a>. The <a href="dashboard.html">Validation dashboard</a> recomputes the house hypotheses live in your browser from those same files.</p>
+
+  <p class="foot"><b>Educational / informational only — not investment advice.</b> ThePickLog is a personal research instrument. The model is unvalidated until the sample and out-of-sample bars above are cleared. Low-float, low-priced stocks are highly volatile and carry substantial risk of loss. Past performance does not predict future results. <i>(Prototype — sample copy pending legal review.)</i></p>
+</div>
+</body>
+</html>

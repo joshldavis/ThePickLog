@@ -181,6 +181,14 @@ def _card(rule, arm, base_post, delta, ci, cfg, asof, kind):
         "stability": "unknown",     # set once weekly snapshot history exists
         "weeks_live": _weeks(rule["registered_at"], asof),
         "caveats": [],
+        # Machine-readable spec so the browser can re-derive THIS rule from the raw
+        # CSVs on the verify page (dashboard.html#verify=...). Pick-time fields only.
+        "rule_spec": {
+            "kind": kind,
+            "exit": rule.get("exit", "same_day_close"),
+            "registered_at": rule["registered_at"],
+            "predicates": (rule.get("selection") or {}).get("predicates", []),
+        },
     }
 
 _CMP_STR = {">=": "≥", ">": ">", "<=": "≤", "<": "<", "==": "=", "!=": "≠",

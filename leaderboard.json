@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-05",
+  "generated_at": "2026-07-06",
   "log": {
     "picks": 253,
     "graded": 179
@@ -38,10 +38,16 @@
       "significant": false,
       "state": "ranked",
       "stability": "unknown",
-      "weeks_live": 1.7,
+      "weeks_live": 1.9,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
+      "rule_spec": {
+        "kind": "exit",
+        "exit": "target_10",
+        "registered_at": "2026-06-23",
+        "predicates": []
+      },
       "rank": 1
     },
     {
@@ -64,8 +70,20 @@
       "significant": false,
       "state": "ranked",
       "stability": "unknown",
-      "weeks_live": 1.9,
+      "weeks_live": 2.0,
       "caveats": [],
+      "rule_spec": {
+        "kind": "filter",
+        "exit": "same_day_close",
+        "registered_at": "2026-06-22",
+        "predicates": [
+          {
+            "field": "price_at_screen",
+            "cmp": ">=",
+            "value": 1.0
+          }
+        ]
+      },
       "kept_n_all": 135,
       "rank": 2
     },
@@ -89,8 +107,20 @@
       "significant": false,
       "state": "ranked",
       "stability": "unknown",
-      "weeks_live": 1.9,
+      "weeks_live": 2.0,
       "caveats": [],
+      "rule_spec": {
+        "kind": "filter",
+        "exit": "same_day_close",
+        "registered_at": "2026-06-22",
+        "predicates": [
+          {
+            "field": "float_shares",
+            "cmp": "<",
+            "value": 3000000
+          }
+        ]
+      },
       "kept_n_all": 141,
       "rank": 3
     },
@@ -114,8 +144,20 @@
       "significant": false,
       "state": "ranked",
       "stability": "unknown",
-      "weeks_live": 1.9,
+      "weeks_live": 2.0,
       "caveats": [],
+      "rule_spec": {
+        "kind": "filter",
+        "exit": "same_day_close",
+        "registered_at": "2026-06-22",
+        "predicates": [
+          {
+            "field": "gap_pct",
+            "cmp": "<",
+            "value": 20
+          }
+        ]
+      },
       "kept_n_all": 158,
       "rank": 4
     },
@@ -139,8 +181,23 @@
       "significant": false,
       "state": "ranked",
       "stability": "unknown",
-      "weeks_live": 1.9,
+      "weeks_live": 2.0,
       "caveats": [],
+      "rule_spec": {
+        "kind": "filter",
+        "exit": "same_day_close",
+        "registered_at": "2026-06-22",
+        "predicates": [
+          {
+            "field": "tier",
+            "cmp": "not_in",
+            "value": [
+              "A",
+              "B"
+            ]
+          }
+        ]
+      },
       "kept_n_all": 139,
       "rank": 5
     },
@@ -164,8 +221,38 @@
       "significant": false,
       "state": "maturing",
       "stability": "unknown",
-      "weeks_live": 1.9,
+      "weeks_live": 2.0,
       "caveats": [],
+      "rule_spec": {
+        "kind": "filter",
+        "exit": "same_day_close",
+        "registered_at": "2026-06-22",
+        "predicates": [
+          {
+            "field": "price_at_screen",
+            "cmp": ">=",
+            "value": 1.0
+          },
+          {
+            "field": "float_shares",
+            "cmp": "<",
+            "value": 3000000
+          },
+          {
+            "field": "gap_pct",
+            "cmp": "<",
+            "value": 20
+          },
+          {
+            "field": "tier",
+            "cmp": "not_in",
+            "value": [
+              "A",
+              "B"
+            ]
+          }
+        ]
+      },
       "kept_n_all": 103,
       "rank": null
     }

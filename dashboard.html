@@ -219,6 +219,74 @@ async function main(){
   const root=document.getElementById("root");
   const add=(h)=>root.appendChild($(h));
 
+  /* ---- Single-rule verify panel (opened from the Test-mode board's "verify" link) ----
+     Re-derives ONE hypothesis from the raw CSVs, mirroring hypo_eval.py's keep/exit/post
+     logic, so a stranger can see exactly which post-registration picks produced the number. */
+  (function verifyPanel(){
+    const hash = location.hash || "";
+    if(hash.indexOf("#verify=")!==0) return;
+    let spec=null; try{ spec=JSON.parse(decodeURIComponent(hash.slice(8))); }catch(e){}
+    if(!spec) return;
+    const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+    const reg = spec.registered_at || "1900-01-01";
+    const keepP=(p,preds)=>(preds||[]).every(function(pr){
+      const raw=p[pr.field], c=pr.cmp, v=pr.value;
+      if([">=",">","<=","<"].indexOf(c)>=0){ const x=num(raw); if(x==null) return true;   // missing ⇒ passes
+        return c===">="?x>=v:c===">"?x>v:c==="<="?x<=v:x<v; }
+      const s=(raw==null?"":String(raw)).trim();
+      if(c==="==")return s===String(v); if(c==="!=")return s!==String(v);
+      if(c==="in")return (v||[]).map(String).indexOf(s)>=0;
+      if(c==="not_in")return (v||[]).map(String).indexOf(s)<0;
+      return true;
+    });
+    const exitRet=(o,ex)=>{ const scc=num(o.ret_open_close_net);
+      if(ex==="same_day_close") return scc;
+      if(ex && ex.indexOf("target_")===0){ const T=parseFloat(ex.split("_")[1]);
+        const c5=num(o.ret_open_5dclose_net), mfe=num(o.mfe_5d);
+        if(mfe==null||c5==null) return null; return mfe>=T ? (T-2.0) : c5; }
+      return null; };
+    const kept=[], base=[], pairs=[], arm=[], rows=[];
+    outs.forEach(function(o){ const p=byId[o.pick_id]; if(!p) return;
+      if(!(p.trading_date>reg)) return;                       // out-of-sample only
+      if(spec.kind==="exit"){ const alt=exitRet(o,spec.exit), bas=exitRet(o,"same_day_close");
+        if(alt==null||bas==null) return; arm.push(alt); base.push(bas); pairs.push(alt-bas);
+        rows.push({d:p.trading_date,t:p.ticker,tier:p.tier,base:bas,val:alt,keep:true}); }
+      else { const r=exitRet(o, spec.exit||"same_day_close"); if(r==null) return; base.push(r);
+        const k=keepP(p, spec.predicates); if(k) kept.push(r);
+        rows.push({d:p.trading_date,t:p.ticker,tier:p.tier,val:r,keep:k}); }
+    });
+    const isExit=spec.kind==="exit", armArr=isExit?arm:kept;
+    const n=armArr.length;
+    const avg=n?(+mean(armArr).toFixed(1)):null;
+    const win=n?Math.round(100*armArr.filter(x=>x>0).length/n):null;
+    const baseAvg=base.length?(+mean(base).toFixed(1)):null;
+    const delta = n&&base.length ? (isExit ? +mean(pairs).toFixed(1) : +(mean(kept)-mean(base)).toFixed(1)) : null;
+    const stat=(l,v,c)=>`<div style="min-width:120px"><div style="font-size:22px;font-weight:700" class="${c||''}">${v}</div><div class="muted" style="font-size:12px">${l}</div></div>`;
+    let body;
+    if(!n){
+      body=`<p class="muted">No out-of-sample picks yet. This rule was registered on <b>${esc(reg)}</b>, and it's scored only on picks logged <b>after</b> that date — so it starts at zero and earns a record as new picks are logged and graded. That's the point of pre-registration.</p>`;
+    } else {
+      const trs=rows.map(r=>`<tr><td>${esc(r.d)}</td><td>${esc(r.t)}</td><td>${esc(r.tier||"")}</td>`+
+        (isExit?`<td class="${cls(r.base)}">${fmtPct(r.base)}</td><td class="${cls(r.val)}">${fmtPct(r.val)}</td>`
+               :`<td>${r.keep?'<span class="pos">kept</span>':'<span class="muted">skipped</span>'}</td><td class="${cls(r.val)}">${fmtPct(r.val)}</td>`)+`</tr>`).join("");
+      const head=isExit?`<tr><th>Date</th><th>Ticker</th><th>Tier</th><th>Same-day close</th><th>This exit</th></tr>`
+                       :`<tr><th>Date</th><th>Ticker</th><th>Tier</th><th>Kept?</th><th>Net (open→close)</th></tr>`;
+      body=`<div style="display:flex;gap:22px;flex-wrap:wrap;margin:12px 0">`+
+        stat("Out-of-sample picks", n)+stat("Mean net", fmtPct(avg), cls(avg))+
+        stat("Win %", win+"%")+stat("Δ vs baseline",(delta>=0?"+":"")+delta+"pp", cls(delta))+`</div>`+
+        `<div class="muted" style="font-size:12.5px">Baseline — all ${base.length} post-registration picks at same-day close: <b>${fmtPct(baseAvg)}</b>. `+
+        (isExit?`This exit's per-pick return is compared to that close, paired.`:`The kept subset's mean is compared to that baseline.`)+
+        ` Every figure recomputes in your browser from the raw CSVs and matches the leaderboard's Δ.</div>`+
+        `<div class="scroll" style="margin-top:10px"><table><thead>${head}</thead><tbody>${trs}</tbody></table></div>`+
+        (isExit && spec.exit!=="same_day_close" ? `<div class="note warn" style="margin-top:8px">⚠️ Target exits assume the +T% limit fills exactly; on thin floats limits gap through, so live results run worse.</div>` : "");
+    }
+    add(`<div class="panel" style="border-color:var(--a)">
+      <h2 style="margin:0 0 2px">Verify — ${esc(spec.id||"")} · ${esc(spec.title||"")}</h2>
+      <div class="muted" style="font-size:13px">${esc(spec.author||"")} · registered ${esc(reg)} · <code>${esc(spec.rule_str||"")}</code> · <a href="method.html">how this is scored →</a></div>
+      ${body}
+    </div>`);
+  })();
+
   /* ---- KPIs ---- */
   const winRate = pct(wins,graded.length);
   add(`<h2>Headline (${HAIRCUT_NOTE})</h2>`);
