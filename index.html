@@ -678,7 +678,7 @@
 
     <div class="pt-modes" role="tablist" aria-label="Compete mode">
       <button id="modeTradeBtn" class="pt-mode active" role="tab" onclick="setCompeteMode('trade')">Trade<span class="pt-mode-sub">play-money sim</span></button>
-      <button id="modeTestBtn" class="pt-mode" role="tab" onclick="setCompeteMode('test')">Test<span class="pt-mode-sub">hypothesis leaderboard</span></button>
+      <button id="modeTestBtn" class="pt-mode" role="tab" onclick="setCompeteMode('test')">Test<span class="pt-mode-sub">beat the baseline</span></button>
     </div>
 
     <div id="competeTrade">
@@ -746,19 +746,20 @@
       @media(max-width:680px){.pt-how{grid-template-columns:1fr}.ar-grid{grid-template-columns:1fr}.ar-pred{grid-template-columns:1fr 1fr;}}
     </style>
     <div id="competeTest" style="display:none">
-      <p class="lead">Register a rule, freeze it with a timestamp, and watch it get graded <b>out-of-sample</b>
-        against the same immutable pick log the site runs on. No trading &mdash; you're testing whether an idea
-        actually holds up. Whoever's frozen hypotheses survive the forward test, rises.</p>
+      <p class="lead"><b>Make a call the market can't let you take back.</b> Freeze a rule with today's timestamp
+        and it gets graded <b>out-of-sample</b> against the same immutable pick log the whole site runs on. You can't
+        edit it, delete it, or backdate it &mdash; only calls logged <i>after</i> you register count. Beat the baseline
+        and you climb. Whiff and everyone sees that too. That's the point.</p>
       <div class="pt-how">
-        <div class="panel pt-step"><div class="n">1 &middot; REGISTER</div><p>Build a rule from screen-time fields (price, float, tier, regime&hellip;) plus an exit. No code, no future data.</p></div>
-        <div class="panel pt-step"><div class="n">2 &middot; FREEZE</div><p>Timestamped and immutable &mdash; can't be edited, deleted, or backdated. Only picks logged <i>after</i> registration count.</p></div>
-        <div class="panel pt-step"><div class="n">3 &middot; GRADE</div><p>The shared forward log scores it automatically. Beat the same-day-close baseline on expectancy, out-of-sample, and rank.</p></div>
+        <div class="panel pt-step"><div class="n">1 &middot; CALL IT</div><p>Build your rule from pick-time fields only (price, float, tier, regime&hellip;) plus an exit. No code, no future data, no take-backs.</p></div>
+        <div class="panel pt-step"><div class="n">2 &middot; LOCK IT IN</div><p>Stamped and frozen &mdash; can't be edited, deleted, or backdated. That's what makes your score mean something.</p></div>
+        <div class="panel pt-step"><div class="n">3 &middot; GET GRADED</div><p>The public log scores you against the same-day open&rarr;close baseline, out-of-sample. Climb the board or eat the loss in the open.</p></div>
       </div>
 
       <!-- Phase 1: user hypothesis registration (invite-gated; viewing stays public) -->
       <div class="panel" id="arenaRegister" style="margin:14px 0">
         <div id="arenaSignedOut" class="note" style="margin:0">
-          <b>Register your own hypothesis.</b> Sign in on the <b>Trade</b> tab to freeze a rule against the shared pick log — it'll be graded out-of-sample right alongside the house rules.
+          <b>Put a call on the board.</b> Sign in on the <b>Trade</b> tab to freeze a rule against the shared pick log — it's graded out-of-sample right alongside the house rules, same log and same baseline. Nobody, including us, can touch your score once it's frozen.
           <div style="margin-top:8px"><button class="btn" onclick="IS_SIM&&IS_SIM.openAuth()">Sign in / Sign up</button></div>
         </div>
         <div id="arenaForm" style="display:none">
