@@ -495,27 +495,15 @@
 
     <div class="grid price-cards">
       <div class="panel price-card feat">
-        <h3>Pre-launch <span class="is-pill">OPEN NOW</span></h3>
+        <h3>Free &amp; open <span class="is-pill">OPEN NOW</span></h3>
         <div class="p">Free</div>
-        <p class="muted" style="font-size:13px">Everything the site does, free while it proves itself in public.</p>
+        <p class="muted" style="font-size:13px">This is a personal, transparent research project — not a product for sale. Everything it does is free and open while it proves itself in public.</p>
         <ul class="feat-list"><li>Today's full screen + scoring detail</li><li>Complete public track record &amp; validation dashboard</li><li><b>Compete:</b> $100,000 in play money, live prices, leaderboard</li><li>Built-in assistant to learn the metrics</li></ul>
         <button class="btn" style="width:100%;margin-top:14px" onclick="go('compete');window.IS_SIM&&IS_SIM.openAuth()">Create a free account →</button>
       </div>
-      <div class="panel price-card" style="opacity:.65">
-        <h3>Early access <span class="badge-proto">COMING SOON</span></h3>
-        <div class="p">$99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
-        <p class="muted" style="font-size:13px">Planned — only if the edge survives its out-of-sample test. Nothing is for sale today.</p>
-        <ul class="feat-list"><li>Daily pre-market watchlist</li><li>Email + Discord delivery</li><li>Per-ticker scoring detail</li></ul>
-      </div>
-      <div class="panel price-card" style="opacity:.65">
-        <h3>Public launch <span class="badge-proto">COMING SOON</span></h3>
-        <div class="p">$199<span style="font-size:14px;color:var(--muted)">/mo</span></div>
-        <p class="muted" style="font-size:13px">Planned standard price after any early-access cohort fills.</p>
-        <ul class="feat-list"><li>Everything in Early access</li><li>Priority support</li></ul>
-      </div>
     </div>
-    <p class="muted" style="font-size:12.5px;margin-top:10px">Paid tiers are shown for transparency about where this <i>could</i> go — they are not available, and won't be unless the
-      pre-registered edge validates out-of-sample and legal review clears. Until then everything is free.</p>
+    <p class="muted" style="font-size:12.5px;margin-top:10px">No paid tiers, no waitlist, nothing for sale. Paper-trading only. If this ever became a paid product it would be
+      because a pre-registered edge validated out-of-sample and legal review cleared — until then it's simply free.</p>
 
     <p class="disclaimer">
       <b>Educational / informational use only.</b> ThePickLog publishes an impersonal, objectively-screened
@@ -3086,10 +3074,27 @@ window.addEventListener("hashchange",goHash);
       return null;
     },
 
+    /* ---------- profile ---------- */
+    // [QA 2026-07-05 B3] Create/confirm the Compete profile row. Returns true on
+    // success. Retries once; on failure shows a visible toast + logs the error
+    // instead of failing silently. Every trade depends on this row existing.
+    async ensureProfile(displayName){
+      const name = displayName || (IS_SIM.user && (IS_SIM.user.email||"Trader").split("@")[0]) || "Trader";
+      for(let attempt=0; attempt<2; attempt++){
+        const {error}=await sb.rpc("is_ensure_profile",{p_display_name:name});
+        if(!error) return true;
+        console.error("is_ensure_profile failed (attempt "+(attempt+1)+"):", error);
+        if(attempt===1) toast("<b>Couldn't set up your Compete profile</b><br>"+(error.message||"unknown error")+" — try refreshing.","bad");
+      }
+      return false;
+    },
+
     /* ---------- trading ---------- */
     async trade(symbol, side, qty, price){
       symbol=String(symbol||"").toUpperCase();
       if(!IS_SIM.active){ toast("Sign in (Compete tab) to trade with play money.","bad"); IS_SIM.openAuth(); return false; }
+      // Self-heal: if the profile wasn't created at sign-in, create it now before trading.
+      if(!IS_SIM.profileReady){ IS_SIM.profileReady = await IS_SIM.ensureProfile(); if(!IS_SIM.profileReady) return false; }
       let px = price>0 ? Number(price) : await IS_SIM.markPrice(symbol);
       if(!(px>0)){ toast("No live price for "+symbol+" yet — open the Watchlist tab to load prices.","bad"); return false; }
       const {data,error}=await sb.rpc("is_execute_trade",{p_ticker:symbol,p_side:side,p_qty:qty,p_price:px});
@@ -3277,7 +3282,11 @@ window.addEventListener("hashchange",goHash);
     IS_SIM.session=session; IS_SIM.user=(session&&session.user)||null; IS_SIM.active=!!IS_SIM.user;
     if(IS_SIM.active){
       const name=(IS_SIM.user.user_metadata&&IS_SIM.user.user_metadata.display_name)||(IS_SIM.user.email||"Trader").split("@")[0];
-      try{ await sb.rpc("is_ensure_profile",{p_display_name:name}); }catch(e){}
+      // [QA 2026-07-05 B3] rpc() RETURNS errors (doesn't throw), so the old
+      // try/catch swallowed nothing and real failures were invisible — a signed-in
+      // user could end up with no profile row and cryptic trade failures. Check the
+      // returned error, retry once, and surface any failure so it's never silent.
+      IS_SIM.profileReady = await IS_SIM.ensureProfile(name);
       await IS_SIM.loadMyWatch();
     } else { IS_SIM._saved=new Set(); }
     IS_SIM.updateAuthBar(); IS_SIM.markStars();
