@@ -104,6 +104,12 @@ for dated results):
    from the raw CSVs to the value shown on the site.
 4. **Methodology spot-check:** entry = pick-day open, 2% haircut applied, win = positive net
    return (not "ever touched"), no duplicate/regraded `pick_id`s.
+5. **Validity-claim backing (six aspects):** for each of Messick's six aspects of construct
+   validity — content, substantive, structural, generalizability, external, consequential —
+   the claim the site makes is either backed by evidence a stranger can reproduce from the
+   CSVs, or it is explicitly labeled **unvalidated**. An aspect whose on-site claim can't be
+   reproduced fails the audit exactly as a bad headline number would. Verdicts are recorded
+   per-aspect in `AUDIT_LOG.md`; the standing rubric is the validity framework (see §4).
 
 A run that can't reach the live site is logged as **tooling failure, not certification** —
 it never counts as a pass. Silence is not proof.
@@ -127,6 +133,17 @@ principles above are the operational residue of all three:
 The one-line union: *publish a validity argument in the open, framed to the job the data
 actually supports, and let persuasion work only through the parts that survive a stranger's
 scrutiny.*
+
+**The Messick lens is now stood up in full.** `ThePickLog-Validity-Framework-Messick-2026-07-06.md`
+(committed in-repo) is the **standing validity argument**: it maps the
+project to all six aspects of construct validity, grades the current evidence per aspect, and carries
+a gap register keyed to the two Messick threats (construct underrepresentation, construct-irrelevant
+variance). Two companion artifacts discharge the P1/P2 content and structural gaps —
+`ThePickLog-Domain-Coverage-Spec-2026-07-06.md` (the written-down construct domain + coverage matrix)
+and `ThePickLog-Structural-Justification-2026-07-06.md` (weights/cutpoints of record + a reproducible
+monotonicity check showing the tiers order *heat/drawdown*, not return). Those verdicts are what §3
+item 5 audits each week. A Uniform Guidelines reach section stress-tests the same material against
+employment-selection law (by analogy only; not legally applicable).
 
 ---
 

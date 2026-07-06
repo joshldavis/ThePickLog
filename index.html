@@ -129,9 +129,11 @@
   th.num{text-align:right}
   .tier{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;
     font-weight:800;font-size:13px}
-  .tier.A{background:var(--green-soft);color:var(--green)}
-  .tier.B{background:#4c9ff522;color:var(--blue)}
-  .tier.C{background:#f5b14c22;color:var(--amber)}
+  /* Tier = momentum INTENSITY, not quality: single-hue teal heat ramp (A hottest -> D coolest).
+     Deliberately NOT green=good — the live log shows hotter tiers draw down deeper (Finding A). */
+  .tier.A{background:var(--a);color:#eafffb}
+  .tier.B{background:#1f6f6b88;color:#eafffb}
+  .tier.C{background:var(--a-soft);color:var(--a)}
   .tier.D{background:#ffffff10;color:var(--dim)}
   .pos{color:var(--green)} .neg{color:var(--red)}
   .pill{font-size:11px;padding:2px 8px;border-radius:999px;background:#ffffff0d;color:var(--muted)}
@@ -900,7 +902,9 @@
         <h2 style="margin-top:0">① Momentum score <span class="pill">0–100 · tiers A–D</span></h2>
         <p style="font-size:14px;margin-bottom:0">Answers <b>"is this moving right now?"</b> A weighted blend of
           four pre-market facts — float, relative volume, gap, and price. It's what ranks the Watchlist. High
-          score = the stock is unusually active for its size, nothing more.</p>
+          score = the stock is unusually active for its size, nothing more. Tiers A–D rank that intensity,
+          not quality: in the live log the hottest tiers (A/B) have shown the <i>deepest</i> drawdowns — not
+          better returns — so read a high tier as a downside flag, not a green light (Finding A).</p>
       </div>
       <div class="panel">
         <h2 style="margin-top:0">② Quality Lens <span class="pill">0–100 · Green→Black</span></h2>
@@ -916,7 +920,7 @@
       <div class="readrow">
         <div class="ri"><b>#</b> Rank, sorted by momentum score (highest first).</div>
         <div class="ri"><b>Ticker</b> The symbol — <b style="font-family:inherit;color:inherit">click it</b> to run the Quality Lens deep-analysis.</div>
-        <div class="ri"><b>Tier</b> Letter bucket of the momentum score: A ≥75, B ≥60, C ≥45, D below.</div>
+        <div class="ri"><b>Tier</b> Intensity band of the momentum score: A ≥75, B ≥60, C ≥45, D below — how <i>hot</i> the setup is, not how good. Hotter tiers have drawn down deeper in the live log (Finding A).</div>
         <div class="ri"><b>Score</b> The momentum score, 0–100. The bar is the same number, drawn.</div>
         <div class="ri"><b>Price</b> Latest / screen price per share.</div>
         <div class="ri"><b>Gap %</b> Move from yesterday's close into the pre-market. Green up, red down.</div>
@@ -948,7 +952,7 @@
           more attention and momentum; ~20% maxes the input.</p>
         <p style="font-size:14px"><b>Price band</b> — strategy targets roughly $0.50–$10. Outside the band is
           down-weighted, not auto-excluded.</p>
-        <div class="note">Tiers: <b>A</b> ≥ 75 · <b>B</b> ≥ 60 · <b>C</b> ≥ 45 · <b>D</b> below.
+        <div class="note">Tiers: <b>A</b> ≥ 75 · <b>B</b> ≥ 60 · <b>C</b> ≥ 45 · <b>D</b> below — an <i>intensity</i> ranking, not a quality grade; in the live log the hottest tiers show the deepest drawdowns (Finding A).
           Watch level = +20% from the screen price — a reference only. On the Track record page a pick is a <b>WIN</b> if its
           cost-adjusted <b>open→close</b> return (enter at the next open, exit that day's close, −2% costs) is positive — the realizable
           result, deliberately not "ever touched +20%".</div>
@@ -994,7 +998,7 @@
       <div class="gterm"><h4>RVOL <span class="u">relative volume</span></h4><p>Today's volume divided by the stock's own average volume.</p><span class="read"><b>Read it:</b> 1× is a normal day; 5×+ means unusual interest; very high RVOL on no news can be a pump.</span></div>
       <div class="gterm"><h4>Gap %</h4><p>The percentage move from the prior close into the pre-market / open.</p><span class="read"><b>Read it:</b> bigger gap = more overnight attention. Direction matters — chasing a huge gap is how you buy the top.</span></div>
       <div class="gterm"><h4>Price band</h4><p>The strategy's target range, roughly $0.50–$10 per share.</p><span class="read"><b>Read it:</b> inside the band scores full; outside is down-weighted, not banned.</span></div>
-      <div class="gterm"><h4>Tier</h4><p>A letter bucket of the momentum score: A ≥75, B ≥60, C ≥45, D below.</p><span class="read"><b>Read it:</b> a quick "how strong is the setup" shorthand — not a grade of the business.</span></div>
+      <div class="gterm"><h4>Tier</h4><p>An intensity band of the momentum score: A ≥75, B ≥60, C ≥45, D below.</p><span class="read"><b>Read it:</b> a "how hot is the setup" shorthand — not a grade of the business. The hottest tiers (A/B) have shown the <i>deepest</i> drawdowns in the live log (Finding A), so treat a high tier as a downside warning, not a buy.</span></div>
       <div class="gterm"><h4>Watch level</h4><p>A reference price set +20% above the screen price.</p><span class="read"><b>Read it:</b> a yardstick for grading the screen later — <b>not</b> a price target or a recommendation.</span></div>
     </div>
 
@@ -1444,7 +1448,7 @@ function renderWatchlist(rows){
   const tops=rows[0];
   document.getElementById("wlStats").innerHTML=`
     ${stat("Universe screened",rows.length)}
-    ${stat("Actionable (A/B)",actionable)}
+    ${stat("Hottest (A/B)",actionable)}
     ${stat("Top score",tops?tops.score.toFixed(1):"—")}
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
   document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data";
@@ -1492,8 +1496,8 @@ function renderWatchlist(rows){
 const INFO={
   rank:{t:"Rank",d:"Row position, sorted by the momentum score (highest first)."},
   ticker:{t:"Ticker",d:"The stock symbol. Click it to run the Quality Lens deep-analysis."},
-  tier:{t:"Tier",d:"Letter bucket of the momentum score — A ≥75, B ≥60, C ≥45, D below. A 'how strong is the setup' shorthand, not a grade of the business."},
-  momentumScore:{t:"Momentum score (0–100)",d:"Weighted blend of float, RVOL, gap and price. High = unusually active for its size. It ranks the screen — it is NOT a buy signal."},
+  tier:{t:"Tier",d:"Intensity band of the momentum score — A ≥75, B ≥60, C ≥45, D below. How HOT the setup is, not how good: in the live log the hottest tiers (A/B) show the deepest drawdowns (Finding A), so read a high tier as a downside flag, not a buy."},
+  momentumScore:{t:"Momentum score (0–100)",d:"Weighted blend of float, RVOL, gap and price. High = unusually active for its size. It ranks the screen — it is NOT a buy signal. Higher scores have historically drawn down deeper, not returned more (Finding A)."},
   price:{t:"Price",d:"Latest / screen price per share."},
   gap:{t:"Gap %",d:"Move from yesterday's close into the pre-market. Bigger = more attention; chasing a huge gap is how you buy the top."},
   rvol:{t:"RVOL — relative volume",d:"Today's volume ÷ the stock's own average. 1× is normal, 5×+ is unusual; very high on no news can signal a pump."},
@@ -1502,7 +1506,7 @@ const INFO={
   watch:{t:"Watch level",d:"A +20% reference price, used only to grade hits later. Not a target or a recommendation."},
   trade:{t:"Trade (paper)",d:"Places a simulated paper order — no real money. In Compete this fills against your $100k play-money account."},
   "universe-screened":{t:"Universe screened",d:"How many names from the seed universe were scored today."},
-  actionable:{t:"Actionable (A/B)",d:"Count of Tier A or B names (momentum ≥60) — the stronger setups."},
+  actionable:{t:"Hottest (A/B)",d:"Count of Tier A or B names (momentum ≥60) — the highest-intensity setups, which in the live log also carry the deepest drawdowns (Finding A). A heat count, not a buy list."},
   "top-score":{t:"Top score",d:"The highest momentum score in today's screen."},
   "top-ticker":{t:"Top ticker",d:"The single highest-scoring name today."},
   "picks-logged":{t:"Picks logged",d:"Total picks in the immutable public log (picks.csv), each recorded before the open."},
@@ -1637,7 +1641,7 @@ document.addEventListener("click",e=>{
 
 /* stat card — auto-appends a metric info button when the label is known */
 const STAT_INFO={
-  "Universe screened":"universe-screened","Actionable (A/B)":"actionable","Top score":"top-score","Top ticker":"top-ticker",
+  "Universe screened":"universe-screened","Hottest (A/B)":"actionable","Top score":"top-score","Top ticker":"top-ticker",
   "Picks logged":"picks-logged","Picks (sample)":"picks-logged","Total tracked":"picks-logged",
   "Blended win rate":"blended-win-rate","Win rate":"win-rate","Graded":"graded",
   "Best net":"best-net","Best call":"best-net","Best single call":"best-net","Trading days":"trading-days","Data":"data",

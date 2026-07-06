@@ -1,5 +1,40 @@
 # ThePickLog — Audit Log
 
+## 2026-07-06 — First six-aspect validity audit (Messick) — **⚠️ 1 fail, 5 partial/absent (all labeled)**
+
+New audit dimension per `PRINCIPLES.md §3 item 5`: each of Messick's six aspects of construct
+validity is either backed by stranger-reproducible evidence or explicitly labeled *unvalidated*.
+Standing rubric: `ThePickLog-Validity-Framework-Messick-2026-07-06.md`. This first run establishes the
+baseline verdicts; nothing here contradicts the North Star — every verdict below is reproducible from
+the committed CSVs and code.
+
+- **Content — Partial.** Domain now written down (`ThePickLog-Domain-Coverage-Spec-2026-07-06.md`):
+  the score samples 4 of ~15 domain drivers, all from 2 of 7 families. Momentum-only
+  **underrepresentation** is labeled, not hidden. Technical quality (point-in-time capture) solid.
+- **Substantive — Partial.** Process model (spike→fade) + `exit_sim.py` fills-fidelity check exist;
+  rival mechanisms not yet discriminated. No unvalidated claim on the site.
+- **Structural — FAIL for the quality interpretation (backed & reproducible).** Monotonicity check on
+  165 graded rows (`ThePickLog-Structural-Justification-2026-07-06.md`): tier ordering is
+  non-monotonic on return (top tier A worst mean net −4.59%; B best) and monotonic on drawdown the
+  wrong way (A −24.7% MAE deepest → C −16.2% shallowest — Finding A confirmed). **Action:** re-label
+  A–D as an intensity/heat scale, not a quality ranking. Also corrected: true tier cutpoints are
+  **75/60/45** (not the 90/75/50 an earlier inventory recorded) — verified against `tier_of()`.
+- **Generalizability — Partial.** Machinery Established (pre-registration, OOS windows, `paths.csv`,
+  haircut, min-n gates); evidence thin — single ~18-day regime. `market_regime` captured but not yet
+  a promotion gate. Model labeled *unvalidated* everywhere, so no over-claim.
+- **External — Absent-to-date (honestly labeled).** 0/6 hypotheses significant; H-EX1 Δ +1.7pp
+  (CI [−3.2,+5.8], n=30), Bayesian P(beat)≈4%. Criterion validity unsupported so far. Gate-1 verdict
+  fires **2026-07-27** and will be published either way.
+- **Consequential — Partial.** Safeguards active (unvalidated labels, no monetization pre-gate, null
+  publishing, haircut, gap-through warning, North Star). Pending: written intended-use/misuse +
+  cost-of-error note, and a **reflexivity monitor** (does publishing move the thin-float name?).
+
+**Net:** no aspect makes an unbacked on-site claim; the one hard **FAIL** (structural) is a labeling
+defect with a concrete, shippable fix. External validity remains the open question the whole project
+is gated on. Re-audit these six alongside the weekly verifiability run.
+
+---
+
 ## 2026-06-28 — Resolution of the 06-27 finding (Juneteenth phantom cohort) — **✅ Fixed**
 
 The market-holiday issue flagged below is resolved before the affected rows could grade (~06-29).
