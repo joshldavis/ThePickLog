@@ -734,7 +734,16 @@
       .pt-ci{color:var(--muted,#8b98a8);font-size:11.5px}
       .pt-flag{font-size:10.5px;padding:1px 6px;border-radius:6px;background:#1c2230;color:var(--muted,#8b98a8);border:1px solid #2a3240}
       .pt-pos{color:#2ec27e}.pt-neg{color:#f0506e}.pt-dim{color:var(--muted,#8b98a8)}
-      @media(max-width:680px){.pt-how{grid-template-columns:1fr}}
+      /* Phase 1 registration form */
+      .ar-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .ar-lab{display:block;font-size:12px;color:var(--muted,#8b98a8);font-weight:600}
+      .ar-lab input,.ar-lab select,.ar-pred select,.ar-pred input{width:100%;margin-top:4px;padding:8px 10px;border-radius:8px;
+        border:1px solid var(--line,#2a3240);background:var(--panel-2,#0e1420);color:var(--text,#e6edf3);font-size:14px}
+      .ar-pred{display:grid;grid-template-columns:1.2fr .9fr 1fr auto;gap:8px;align-items:center;margin-top:8px}
+      .ar-pred .ar-x{cursor:pointer;color:var(--muted,#8b98a8);border:1px solid var(--line,#2a3240);border-radius:8px;padding:8px 10px;background:none}
+      .ar-mine-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line,#2a3240);font-size:13px}
+      .ar-mine-row code{font-size:11.5px}
+      @media(max-width:680px){.pt-how{grid-template-columns:1fr}.ar-grid{grid-template-columns:1fr}.ar-pred{grid-template-columns:1fr 1fr;}}
     </style>
     <div id="competeTest" style="display:none">
       <p class="lead">Register a rule, freeze it with a timestamp, and watch it get graded <b>out-of-sample</b>
@@ -745,6 +754,45 @@
         <div class="panel pt-step"><div class="n">2 &middot; FREEZE</div><p>Timestamped and immutable &mdash; can't be edited, deleted, or backdated. Only picks logged <i>after</i> registration count.</p></div>
         <div class="panel pt-step"><div class="n">3 &middot; GRADE</div><p>The shared forward log scores it automatically. Beat the same-day-close baseline on expectancy, out-of-sample, and rank.</p></div>
       </div>
+
+      <!-- Phase 1: user hypothesis registration (invite-gated; viewing stays public) -->
+      <div class="panel" id="arenaRegister" style="margin:14px 0">
+        <div id="arenaSignedOut" class="note" style="margin:0">
+          <b>Register your own hypothesis.</b> Sign in on the <b>Trade</b> tab to freeze a rule against the shared pick log — it'll be graded out-of-sample right alongside the house rules.
+          <div style="margin-top:8px"><button class="btn" onclick="IS_SIM&&IS_SIM.openAuth()">Sign in / Sign up</button></div>
+        </div>
+        <div id="arenaForm" style="display:none">
+          <h3 style="margin:0 0 4px">Register a hypothesis</h3>
+          <p class="dim" style="font-size:13px;margin:0 0 12px">Build a rule from pick-time fields only — no future data. It freezes with today's date and is judged only on picks logged after that.</p>
+          <div class="ar-grid">
+            <label class="ar-lab">Name<input id="arTitle" maxlength="80" placeholder="e.g. skip sub-$1 microcaps" /></label>
+            <label class="ar-lab">Type
+              <select id="arKind" onchange="IS_SIM&&IS_SIM.arenaKindChange()">
+                <option value="filter">Filter — keep only some picks</option>
+                <option value="exit">Exit rule — when to sell</option>
+              </select>
+            </label>
+          </div>
+          <div id="arPredBlock">
+            <div class="ar-lab" style="margin-top:10px">Keep a pick only if <span class="dim">(all conditions must hold)</span></div>
+            <div id="arPreds"></div>
+            <button class="btn ghost" style="margin-top:8px" onclick="IS_SIM&&IS_SIM.arenaAddPred()">＋ condition</button>
+          </div>
+          <label class="ar-lab" style="margin-top:12px">Exit rule
+            <select id="arExit"></select>
+          </label>
+          <div class="note" style="margin-top:12px;border-left:3px solid var(--amber,#f5b14c);padding-left:10px">
+            ⛓ <b>This freezes permanently.</b> A registered rule can't be edited, deleted, or backdated — only <i>retired</i>. It's scored only on picks logged <b>after today</b>, so it starts at zero and earns its record over time.
+          </div>
+          <label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="arConfirm" style="margin-top:3px" /> I understand this is frozen and immutable once registered.
+          </label>
+          <div style="margin-top:12px"><button class="btn" onclick="IS_SIM&&IS_SIM.arenaSubmit()">Register hypothesis →</button></div>
+          <div id="arMsg" class="note" style="display:none;margin-top:10px"></div>
+          <div id="arMine" style="margin-top:16px"></div>
+        </div>
+      </div>
+
       <div class="pt-banner" id="ptBanner">Loading&hellip;</div>
       <h2>Leaderboard &mdash; out-of-sample, ranked by expectancy delta</h2>
       <div class="panel tscroll" style="padding:6px 12px">
@@ -789,6 +837,7 @@
         document.getElementById('modeTradeBtn').classList.toggle('active',!test);
         document.getElementById('modeTestBtn').classList.toggle('active',test);
         if(test&&!loaded){loaded=true;load();}
+        if(test){ setTimeout(function(){ window.IS_SIM&&IS_SIM.onArenaOpen&&IS_SIM.onArenaOpen(); },0); }
       };
       function fp(x){return x==null?'—':(x>0?'+':'')+Number(x).toFixed(1)+'%';}
       function cls(x){return x>0?'pt-pos':(x<0?'pt-neg':'pt-dim');}
@@ -802,7 +851,7 @@
           h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l"><b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span></td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="dashboard.html" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
-        document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Self-only preview — user registration opens behind the soft-launch invite.';
+        document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';
       }
       function load(){fetch('leaderboard.json').then(function(r){return r.ok?r.json():Promise.reject();}).then(render).catch(function(){render(FALLBACK);});}
     })();
@@ -3288,7 +3337,133 @@ window.addEventListener("hashchange",goHash);
       if(error){ err.textContent=error.message; return; }
       IS_SIM.closeAuth();
     },
-    async signOut(){ await sb.auth.signOut(); }
+    async signOut(){ await sb.auth.signOut(); },
+
+    /* ---------- Test/Arena: user hypothesis registration [Phase 1] ---------- */
+    // Pick-time fields only — MUST mirror the SQL register RPC + hypo_eval whitelist
+    // so the client can't build a future-referencing rule.
+    arenaFields: {
+      price_at_screen:{label:"Price ($)", kind:"num"},
+      float_shares:{label:"Float (shares)", kind:"num"},
+      gap_pct:{label:"Gap %", kind:"num"},
+      rvol:{label:"RVOL (×)", kind:"num"},
+      short_interest_pct:{label:"Short interest %", kind:"num"},
+      tier:{label:"Tier (A/B/C/D)", kind:"tier"}
+    },
+    arenaExits: [["same_day_close","Same-day close (default)"],["target_5","+5% target, else 5-day close"],
+      ["target_10","+10% target, else 5-day close"],["target_15","+15% target, else 5-day close"],
+      ["target_20","+20% target, else 5-day close"]],
+    onArenaOpen(){
+      const so=document.getElementById("arenaSignedOut"), fm=document.getElementById("arenaForm");
+      if(!so||!fm) return;
+      so.style.display=IS_SIM.active?"none":"block";
+      fm.style.display=IS_SIM.active?"block":"none";
+      if(IS_SIM.active){ if(!IS_SIM._arenaInit){ IS_SIM._arenaInit=true; IS_SIM.arenaInit(); } IS_SIM.loadMyHypotheses(); }
+    },
+    arenaInit(){
+      const ex=document.getElementById("arExit");
+      if(ex) ex.innerHTML=IS_SIM.arenaExits.map(e=>`<option value="${e[0]}">${e[1]}</option>`).join("");
+      IS_SIM.arenaKindChange();
+    },
+    arenaKindChange(){
+      const kind=(document.getElementById("arKind")||{}).value;
+      const block=document.getElementById("arPredBlock");
+      if(block) block.style.display=kind==="filter"?"block":"none";
+      if(kind==="filter" && !document.querySelector("#arPreds .ar-pred")) IS_SIM.arenaAddPred();
+    },
+    arenaAddPred(){
+      const i=IS_SIM._arenaPredN=(IS_SIM._arenaPredN||0)+1;
+      const fields=Object.keys(IS_SIM.arenaFields).map(f=>`<option value="${f}">${IS_SIM.arenaFields[f].label}</option>`).join("");
+      const div=document.createElement("div"); div.className="ar-pred"; div.setAttribute("data-i",i);
+      div.innerHTML=`<select class="ar-field" onchange="IS_SIM.arenaFieldChange(${i})">${fields}</select>`+
+        `<select class="ar-cmp"></select><input class="ar-val" /><button class="ar-x" title="remove" onclick="IS_SIM.arenaDelPred(${i})">✕</button>`;
+      document.getElementById("arPreds").appendChild(div);
+      IS_SIM.arenaFieldChange(i);
+    },
+    arenaDelPred(i){ const r=document.querySelector('#arPreds .ar-pred[data-i="'+i+'"]'); if(r) r.remove(); },
+    arenaFieldChange(i){
+      const row=document.querySelector('#arPreds .ar-pred[data-i="'+i+'"]'); if(!row) return;
+      const field=row.querySelector(".ar-field").value, fk=IS_SIM.arenaFields[field].kind;
+      const cmps= fk==="tier" ? [["in","is one of"],["not_in","is not one of"]]
+                              : [[">=","≥"],[">",">"],["<=","≤"],["<","<"]];
+      row.querySelector(".ar-cmp").innerHTML=cmps.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join("");
+      const v=row.querySelector(".ar-val");
+      if(fk==="tier"){ v.type="text"; v.placeholder="A,B"; }
+      else { v.type="number"; v.step="any"; v.placeholder= field==="float_shares"?"e.g. 3000000":(field==="price_at_screen"?"e.g. 1":"e.g. 20"); }
+      v.value="";
+    },
+    arenaMsg(msg,bad){
+      const el=document.getElementById("arMsg"); if(!el) return;
+      if(!msg){ el.style.display="none"; el.textContent=""; return; }
+      el.style.display="block"; el.innerHTML=msg; el.style.color= bad?"var(--red,#f0506e)":"var(--muted,#8b98a8)";
+    },
+    arenaBuild(){
+      const title=val("arTitle"), kind=(document.getElementById("arKind")||{}).value, exit=(document.getElementById("arExit")||{}).value;
+      if(!title) return {ok:false,err:"Give your hypothesis a name."};
+      const predicates=[];
+      if(kind==="filter"){
+        const rows=document.querySelectorAll("#arPreds .ar-pred");
+        if(!rows.length) return {ok:false,err:"Add at least one condition."};
+        for(const el of rows){
+          const field=el.querySelector(".ar-field").value, cmp=el.querySelector(".ar-cmp").value, raw=el.querySelector(".ar-val").value.trim();
+          if(!raw) return {ok:false,err:"Fill in every condition's value."};
+          if(IS_SIM.arenaFields[field].kind==="tier"){
+            const arr=raw.toUpperCase().split(/[,\s]+/).filter(Boolean);
+            if(!arr.every(t=>["A","B","C","D"].includes(t))) return {ok:false,err:"Tiers must be A, B, C or D (e.g. A,B)."};
+            predicates.push({field,cmp,value:arr});
+          } else {
+            const num=Number(raw);
+            if(!isFinite(num)) return {ok:false,err:IS_SIM.arenaFields[field].label+" needs a number."};
+            predicates.push({field,cmp,value:num});
+          }
+        }
+      }
+      const rule_json= kind==="filter" ? {op:"and",predicates} : {op:"and",predicates:[]};
+      const canon=JSON.stringify({k:kind,e:exit,p:predicates.map(p=>p.field+p.cmp+JSON.stringify(p.value)).sort()});
+      return {ok:true, title, kind, rule_json, exit_id:exit, spec_hash:IS_SIM.arenaHash(canon)};
+    },
+    arenaHash(s){ let h=5381; for(let i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))>>>0; } return "h"+h.toString(36); },
+    async arenaSubmit(){
+      if(!IS_SIM.active){ toast("Sign in on the Trade tab to register.","bad"); return; }
+      if(!(document.getElementById("arConfirm")||{}).checked){ IS_SIM.arenaMsg("Please confirm you understand the rule is frozen and immutable.",true); return; }
+      const b=IS_SIM.arenaBuild();
+      if(!b.ok){ IS_SIM.arenaMsg(b.err,true); return; }
+      IS_SIM.arenaMsg("Registering…",false);
+      const {data,error}=await sb.rpc("is_register_hypothesis",
+        {p_title:b.title, p_kind:b.kind, p_rule_json:b.rule_json, p_exit:b.exit_id, p_spec_hash:b.spec_hash});
+      if(error){
+        const dup=/duplicate|unique/i.test(error.message||"");
+        IS_SIM.arenaMsg("✕ "+(error.message||"Could not register")+(dup?" — you already registered an identical rule.":""),true); return;
+      }
+      const row=Array.isArray(data)?data[0]:data;
+      IS_SIM.arenaMsg("",false);
+      document.getElementById("arTitle").value=""; document.getElementById("arConfirm").checked=false;
+      toast("<b>✓ Hypothesis registered</b><br>frozen "+((row&&row.registered_at)||"today")+" — it joins the leaderboard at the next weekly evaluation, scored only on picks logged after today.","good");
+      IS_SIM.loadMyHypotheses();
+    },
+    async loadMyHypotheses(){
+      if(!IS_SIM.active){ return; }
+      const el=document.getElementById("arMine"); if(!el) return;
+      const {data,error}=await sb.from("is_hypotheses")
+        .select("id,title,kind,rule_json,exit_id,registered_at,status")
+        .eq("author_id",IS_SIM.user.id).order("created_at",{ascending:false});
+      if(error||!data||!data.length){ el.innerHTML=""; return; }
+      const ruleStr=r=> r.kind==="exit" ? ("exit: "+r.exit_id)
+        : ("keep: "+((r.rule_json&&r.rule_json.predicates)||[]).map(p=>p.field+" "+p.cmp+" "+(Array.isArray(p.value)?("{"+p.value.join(",")+"}"):p.value)).join(" ∧ "));
+      el.innerHTML='<div class="ar-lab" style="margin-top:4px">Your registered hypotheses</div>'+data.map(r=>{
+        const retired=r.status==="retired";
+        return '<div class="ar-mine-row"><div><b>'+escapeHtml(r.title)+'</b> '+
+          (retired?'<span class="pt-flag">retired</span>':'<span class="pt-chip ranked" style="opacity:.85">active</span>')+
+          '<div class="pt-rule">reg '+r.registered_at+' · <code>'+escapeHtml(ruleStr(r))+'</code></div></div>'+
+          (retired?'':'<button class="ar-x" onclick="IS_SIM.retireHypothesis(\''+r.id+'\')">Retire</button>')+'</div>';
+      }).join("");
+    },
+    async retireHypothesis(id){
+      if(!confirm("Retire this hypothesis? It stops accruing new grades but stays on the record. This can't be undone.")) return;
+      const {error}=await sb.rpc("is_retire_hypothesis",{p_id:id});
+      if(error){ toast("✕ "+(error.message||"Could not retire"),"bad"); return; }
+      toast("Hypothesis retired.","good"); IS_SIM.loadMyHypotheses();
+    }
   };
 
   function val(id){ const el=document.getElementById(id); return el?el.value.trim():""; }
@@ -3325,6 +3500,7 @@ window.addEventListener("hashchange",goHash);
       await IS_SIM.loadMyWatch();
     } else { IS_SIM._saved=new Set(); }
     IS_SIM.updateAuthBar(); IS_SIM.markStars();
+    if(IS_SIM.onArenaOpen) IS_SIM.onArenaOpen();   // refresh the Test-mode register form on sign-in/out
     if(document.getElementById("view-compete").classList.contains("active")) IS_SIM.onView();
     else { const so=document.getElementById("isCompeteSignedOut"), si=document.getElementById("isCompeteSignedIn");
            if(so&&si){ so.style.display=IS_SIM.active?"none":"block"; si.style.display=IS_SIM.active?"block":"none"; } }

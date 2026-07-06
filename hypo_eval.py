@@ -198,14 +198,67 @@ def rule_to_str(rule):
         parts.append(f"{p['field']} {_CMP_STR[p['cmp']]} {v}")
     return "keep: " + " ∧ ".join(parts)
 
+# ------------------------------------------------------------------ user rules (Phase 1)
+# Pick-time field whitelist (defence-in-depth; mirrors the SQL register RPC). A user
+# rule may only select on fields KNOWN AT PICK TIME — never outcome columns — so no
+# hypothesis can reference the future. Anything else is dropped, not trusted.
+_USER_FIELDS = {"price_at_screen", "float_shares", "gap_pct", "rvol", "short_interest_pct", "tier"}
+_USER_EXITS  = {"same_day_close", "target_5", "target_10", "target_15", "target_20"}
+
+def _map_user_rule(row):
+    """Map one Supabase is_hypotheses row to the evaluator's hypothesis shape, or
+    None if it fails validation (malformed, disallowed field/exit, retired)."""
+    try:
+        if row.get("status", "active") != "active":
+            return None
+        kind = row["kind"]
+        if kind not in ("filter", "exit"):
+            return None
+        exit_id = row.get("exit_id", "same_day_close")
+        if exit_id not in _USER_EXITS:
+            return None
+        sel = row.get("rule_json") or {"op": "and", "predicates": []}
+        preds = sel.get("predicates", []) if isinstance(sel, dict) else []
+        for p in preds:
+            if p.get("field") not in _USER_FIELDS:   # any bad field => reject whole rule
+                return None
+        if kind == "filter" and not preds:
+            return None
+        return {
+            "id": "U-" + str(row["id"])[:8],
+            "title": (row.get("title") or "untitled").strip()[:80],
+            "author": (row.get("author") or (row.get("is_profiles") or {}).get("display_name")
+                       or row.get("display_name") or "anon"),
+            "registered_at": str(row["registered_at"])[:10],
+            "kind": kind,
+            "selection": {"op": "and", "predicates": preds},
+            "exit": exit_id,
+            "claim": {"metric": "expectancy", "direction": "beats_baseline"},
+        }
+    except (KeyError, TypeError, AttributeError):
+        return None
+
+def load_user_hypotheses(path):
+    """Read a JSON array of Supabase is_hypotheses rows (as fetched by the Action)
+    and return validated evaluator-shape hypotheses. Missing/bad file => []."""
+    try:
+        raw = json.load(open(path))
+    except (FileNotFoundError, ValueError):
+        return []
+    if not isinstance(raw, list):
+        return []
+    return [h for h in (_map_user_rule(r) for r in raw) if h]
+
 # ------------------------------------------------------------------ registry
 def evaluate_registry(registry_path="hypotheses/registry.json",
-                      picks_path="picks.csv", outs_path="outcomes.csv", asof=None):
+                      picks_path="picks.csv", outs_path="outcomes.csv", asof=None,
+                      user_path=None):
     reg = json.load(open(registry_path))
     cfg = reg["config"]
     picks, outs = load_log(picks_path, outs_path)
     asof = asof or date.today()
-    rows = [evaluate(h, picks, outs, cfg, asof) for h in reg["hypotheses"]]
+    users = load_user_hypotheses(user_path) if user_path else []
+    rows = [evaluate(h, picks, outs, cfg, asof) for h in (reg["hypotheses"] + users)]
 
     # rank the ranked ones by delta desc; maturing/insufficient listed after, unranked
     ranked = sorted([r for r in rows if r["state"] == "ranked"],
@@ -267,9 +320,16 @@ def _selftest():
     print("hypo_eval self-test: PARITY OK (6/6 match, 0 significant)", file=sys.stderr)
 
 if __name__ == "__main__":
+    import os
     _selftest()
-    board = evaluate_registry(asof=date(2026, 7, 5))
+    # The Action writes fetched Supabase rows to this file (see report.yml); absent
+    # locally => house rules only. Never fatal: a bad/missing file yields no user rows.
+    user_path = os.environ.get("USER_RULES_PATH", "hypotheses/user_rules.json")
+    if not os.path.exists(user_path):
+        user_path = None
+    board = evaluate_registry(asof=date.today(), user_path=user_path)
     json.dump(board, open("leaderboard.json", "w"), indent=2, ensure_ascii=False)
-    print(f"wrote leaderboard.json — {board['summary']['n_live']} hypotheses, "
-          f"{board['summary']['n_significant']} significant, "
+    n_user = sum(1 for r in board["rows"] if str(r["id"]).startswith("U-"))
+    print(f"wrote leaderboard.json — {board['summary']['n_live']} hypotheses "
+          f"({n_user} user), {board['summary']['n_significant']} significant, "
           f"baseline {board['baseline']['avg_post']}% (n={board['baseline']['n_post']})")

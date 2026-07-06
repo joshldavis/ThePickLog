@@ -23,8 +23,22 @@ jobs:
         run: python weekly_report.py
       - name: Bayesian read-out (H-EX1 posterior)   # stdlib-only, deterministic; selftests abort on failure
         run: python bayes_h_ex1.py
+      - name: Fetch user-registered hypotheses (Phase 1)
+        # Public read of active user rules via the Supabase publishable key (already
+        # public in the frontend). Non-fatal: on any hiccup we write [] so the board
+        # still builds from the house rules. Author handle embedded from is_profiles.
+        run: |
+          KEY="sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3"
+          URL="https://qkdgijiotxxndrfagexr.supabase.co/rest/v1/is_hypotheses"
+          Q="status=eq.active&select=id,title,kind,rule_json,exit_id,registered_at,status,is_profiles(display_name)"
+          curl -fsS "$URL?$Q" -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+            > hypotheses/user_rules.json || echo '[]' > hypotheses/user_rules.json
+          python -c "import json;d=json.load(open('hypotheses/user_rules.json'));print('fetched',len(d),'user rules')" \
+            || echo '[]' > hypotheses/user_rules.json
       - name: Compete Test-mode leaderboard         # stdlib-only, deterministic; self-test aborts on parity drift
-        run: python hypo_eval.py   # writes leaderboard.json from hypotheses/registry.json
+        env:
+          USER_RULES_PATH: hypotheses/user_rules.json
+        run: python hypo_eval.py   # merges house registry.json + fetched user rules → leaderboard.json
       - name: Install deps for exit study
         run: pip install yfinance
       - name: Run exit-rule study (daily-resolution, in-sample)
