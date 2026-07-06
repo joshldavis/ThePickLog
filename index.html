@@ -607,7 +607,7 @@
       <h1 style="margin:.2em 0">Portfolio <span class="badge-proto">PAPER MODE</span></h1>
       <button class="btn ghost" style="margin-left:auto" onclick="loadPortfolio()">↻ Refresh</button>
     </div>
-    <p class="lead">Your live Alpaca paper account — balances, open positions, and working orders.</p>
+    <p class="lead" id="pfLead">Your simulated Compete portfolio — balances, open positions, and order history.</p>
 
     <div id="pfMsg" class="note" style="margin:12px 0">Click <b>Refresh</b> to load your account.</div>
 
@@ -2141,7 +2141,15 @@ function money(n){ return "$"+Number(n||0).toLocaleString(undefined,{minimumFrac
 function signed(n,suffix){ const v=Number(n||0); return (v>=0?"+":"")+v.toLocaleString(undefined,{maximumFractionDigits:2})+(suffix||""); }
 
 async function loadPortfolio(){
-  if(window.IS_SIM && IS_SIM.active){ return IS_SIM.renderPortfolio(); }
+  // [QA 2026-07-06] Portfolio is dual-purpose: signed-in Compete users see their
+  // play-money sim (NOT Alpaca); only the owner's Alpaca panel drives Alpaca. Keep
+  // the subtitle honest for each case so guests aren't told they have an Alpaca account.
+  const lead=document.getElementById("pfLead");
+  if(window.IS_SIM && IS_SIM.active){
+    if(lead) lead.textContent="Your simulated Compete portfolio — $100,000 in play money, live prices, no real orders.";
+    return IS_SIM.renderPortfolio();
+  }
+  if(lead) lead.textContent="Your live Alpaca paper account — balances, open positions, and working orders.";
   const msg=document.getElementById("pfMsg");
   msg.innerHTML="Loading account…";
   const [acct,pos,ord]=await Promise.all([
