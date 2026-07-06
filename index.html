@@ -769,12 +769,13 @@
             <label class="ar-lab">Type
               <select id="arKind" onchange="IS_SIM&&IS_SIM.arenaKindChange()">
                 <option value="filter">Filter — keep only some picks</option>
+                <option value="question">Question — does a trait help or hurt?</option>
                 <option value="exit">Exit rule — when to sell</option>
               </select>
             </label>
           </div>
           <div id="arPredBlock">
-            <div class="ar-lab" style="margin-top:10px">Keep a pick only if <span class="dim">(all conditions must hold)</span></div>
+            <div class="ar-lab" style="margin-top:10px" id="arPredLabel">Keep a pick only if <span class="dim">(all conditions must hold)</span></div>
             <div id="arPreds"></div>
             <button class="btn ghost" style="margin-top:8px" onclick="IS_SIM&&IS_SIM.arenaAddPred()">＋ condition</button>
           </div>
@@ -849,13 +850,15 @@
         d.rows.forEach(function(r){
           var ci=r.ci95?('CI ['+(r.ci95[0]>0?'+':'')+r.ci95[0]+', '+(r.ci95[1]>0?'+':'')+r.ci95[1]+']'):'';
           var flag=r.significant?'':(r.state==='maturing'?'<span class="pt-flag">n&lt;30</span>':'<span class="pt-flag">ns</span>');
+          var stab=r.stability&&r.stability!=='unknown'?('<div class="pt-ci">sign: '+r.stability+'</div>'):'';
+          var qchip=r.kind==='question'?'<span class="pt-flag" style="color:#c99bff;border-color:#4a3a6a">question</span> ':'';
           // Per-rule verify: pass the machine-readable spec so dashboard.html re-derives
           // THIS rule from the raw CSVs. Falls back to the dashboard if spec is absent.
           var vurl='dashboard.html';
           if(r.rule_spec){ try{ vurl='dashboard.html#verify='+encodeURIComponent(JSON.stringify(
             {id:r.id,title:r.title,author:r.author,rule_str:r.rule_str,kind:r.rule_spec.kind,
              exit:r.rule_spec.exit,registered_at:r.rule_spec.registered_at,predicates:r.rule_spec.predicates})); }catch(e){} }
-          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l"><b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span></td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
+          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
         document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';
@@ -3359,7 +3362,11 @@ window.addEventListener("hashchange",goHash);
     },
     arenaExits: [["same_day_close","Same-day close (default)"],["target_5","+5% target, else 5-day close"],
       ["target_10","+10% target, else 5-day close"],["target_15","+15% target, else 5-day close"],
-      ["target_20","+20% target, else 5-day close"]],
+      ["target_20","+20% target, else 5-day close"],
+      ["target_10_stop_10","+10% target / −10% stop, else 5-day close"],
+      ["target_10_stop_20","+10% target / −20% stop, else 5-day close"],
+      ["target_20_stop_10","+20% target / −10% stop, else 5-day close"],
+      ["target_20_stop_15","+20% target / −15% stop, else 5-day close"]],
     onArenaOpen(){
       const so=document.getElementById("arenaSignedOut"), fm=document.getElementById("arenaForm");
       if(!so||!fm) return;
@@ -3375,8 +3382,11 @@ window.addEventListener("hashchange",goHash);
     arenaKindChange(){
       const kind=(document.getElementById("arKind")||{}).value;
       const block=document.getElementById("arPredBlock");
-      if(block) block.style.display=kind==="filter"?"block":"none";
-      if(kind==="filter" && !document.querySelector("#arPreds .ar-pred")) IS_SIM.arenaAddPred();
+      const wantsPreds=(kind==="filter"||kind==="question");
+      if(block) block.style.display=wantsPreds?"block":"none";
+      const lbl=document.getElementById("arPredLabel");
+      if(lbl) lbl.innerHTML=(kind==="question"?"Ask whether keeping picks with":"Keep a pick only if")+' <span class="dim">(all conditions must hold)</span>';
+      if(wantsPreds && !document.querySelector("#arPreds .ar-pred")) IS_SIM.arenaAddPred();
     },
     arenaAddPred(){
       const i=IS_SIM._arenaPredN=(IS_SIM._arenaPredN||0)+1;
@@ -3408,7 +3418,7 @@ window.addEventListener("hashchange",goHash);
       const title=val("arTitle"), kind=(document.getElementById("arKind")||{}).value, exit=(document.getElementById("arExit")||{}).value;
       if(!title) return {ok:false,err:"Give your hypothesis a name."};
       const predicates=[];
-      if(kind==="filter"){
+      if(kind==="filter"||kind==="question"){
         const rows=document.querySelectorAll("#arPreds .ar-pred");
         if(!rows.length) return {ok:false,err:"Add at least one condition."};
         for(const el of rows){
@@ -3425,7 +3435,7 @@ window.addEventListener("hashchange",goHash);
           }
         }
       }
-      const rule_json= kind==="filter" ? {op:"and",predicates} : {op:"and",predicates:[]};
+      const rule_json= (kind==="filter"||kind==="question") ? {op:"and",predicates} : {op:"and",predicates:[]};
       const canon=JSON.stringify({k:kind,e:exit,p:predicates.map(p=>p.field+p.cmp+JSON.stringify(p.value)).sort()});
       return {ok:true, title, kind, rule_json, exit_id:exit, spec_hash:IS_SIM.arenaHash(canon)};
     },

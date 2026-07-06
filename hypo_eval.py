@@ -12,7 +12,7 @@ hypotheses run through — same code, same math, applied evenhandedly.
 
 Run directly:  python hypo_eval.py   -> writes leaderboard.json, runs self-tests.
 """
-import csv, json, random, statistics as st, sys
+import csv, json, random, re, statistics as st, sys
 from datetime import date
 
 # ------------------------------------------------------------------ log I/O
@@ -65,13 +65,28 @@ def _exit_return(o, exit_id):
     if exit_id == "same_day_close":
         return scc
     if exit_id.startswith("target_"):
-        T = 10.0 if exit_id == "target_10" else float(exit_id.split("_")[1])
         if mfe is None or c5 is None:
             return None
-        return (T - 2.0) if mfe >= T else c5   # +T limit, minus 2% cost haircut
+        parts = exit_id.split("_")            # target_T  or  target_T_stop_S
+        T = float(parts[1])
+        if len(parts) >= 4 and parts[2] == "stop":
+            S = float(parts[3])
+            mae = _f(o.get("mae_5d"))
+            if mae is None:
+                return None
+            # Path order is unknown from MFE/MAE alone. When BOTH the +T target and
+            # the -S stop are reached in the window, assume the STOP fired first —
+            # conservative, so a stop rule can never over-credit itself. 2% haircut.
+            if mae <= -S:
+                return -(S + 2.0)             # stopped out at -S, net of cost
+            if mfe >= T:
+                return T - 2.0                # +T limit, net of cost
+            return c5
+        return (T - 2.0) if mfe >= T else c5   # plain +T target, net of cost
     raise ValueError(f"unknown exit {exit_id!r}")
 
 _SLIP = "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
+_STOP_ORDER = "stop ordering unknown from MFE/MAE: when both the +T target and -S stop are reached, the stop is assumed to trigger first (conservative)"
 
 # ------------------------------------------------------------------ stats
 def _mean(xs):  return sum(xs) / len(xs)
@@ -157,7 +172,7 @@ def evaluate(rule, picks, outs, cfg, asof):
         ci = _paired_ci(pairs, iters, rng)
         delta = round(_mean(pairs), 1) if pairs else None
         card = _card(rule, arm_post, base_post, delta, ci, cfg, asof, kind)
-        card["caveats"] = [_SLIP]
+        card["caveats"] = [_SLIP] + ([_STOP_ORDER] if "_stop_" in rule["exit"] else [])
         return card
 
     raise ValueError(f"unknown kind {rule['kind']!r}")
@@ -194,24 +209,45 @@ def _card(rule, arm, base_post, delta, ci, cfg, asof, kind):
 _CMP_STR = {">=": "≥", ">": ">", "<=": "≤", "<": "<", "==": "=", "!=": "≠",
             "in": "∈", "not_in": "∉"}
 
+def exit_label(ex):
+    """Human-readable exit description (plain +T target and +T/-S stop-loss)."""
+    if ex == "same_day_close":
+        return "same-day close"
+    parts = ex.split("_")
+    if parts[0] == "target":
+        T = parts[1]
+        base = f"mfe_5d ≥ +{T}% → +{float(T)-2:g}% net"
+        if len(parts) >= 4 and parts[2] == "stop":
+            S = parts[3]
+            return f"{base}; else mae_5d ≤ −{S}% → −{float(S)+2:g}% net; else 5d close"
+        return f"{base}, else 5d close"
+    return ex
+
 def rule_to_str(rule):
     if rule["kind"] == "exit":
-        return {"target_10": "exit: mfe_5d ≥ +10% → +8% net, else 5d close"}.get(
-            rule["exit"], f"exit: {rule['exit']}")
+        return "exit: " + exit_label(rule["exit"])
     parts = []
     for p in rule["selection"]["predicates"]:
         v = p["value"]
         v = "{" + ", ".join(map(str, v)) + "}" if isinstance(v, list) else (
             f"{v:,.0f}" if isinstance(v, (int, float)) and v >= 1000 else v)
         parts.append(f"{p['field']} {_CMP_STR[p['cmp']]} {v}")
-    return "keep: " + " ∧ ".join(parts)
+    body = " ∧ ".join(parts)
+    if rule["kind"] == "question":
+        return f"ask: does keeping [{body}] help or hurt?"
+    return "keep: " + body
 
 # ------------------------------------------------------------------ user rules (Phase 1)
 # Pick-time field whitelist (defence-in-depth; mirrors the SQL register RPC). A user
 # rule may only select on fields KNOWN AT PICK TIME — never outcome columns — so no
 # hypothesis can reference the future. Anything else is dropped, not trusted.
 _USER_FIELDS = {"price_at_screen", "float_shares", "gap_pct", "rvol", "short_interest_pct", "tier"}
-_USER_EXITS  = {"same_day_close", "target_5", "target_10", "target_15", "target_20"}
+# same_day_close, target_T (T=1..50), or target_T_stop_S (S=1..90) — bounded so a rule
+# can't smuggle absurd thresholds. Mirrors the SQL register RPC's regex.
+_EXIT_RE = re.compile(r"^(same_day_close|target_([1-9]|[1-4][0-9]|50)(_stop_([1-9]|[1-8][0-9]|90))?)$")
+
+def _exit_ok(ex):
+    return bool(_EXIT_RE.match(ex or ""))
 
 def _map_user_rule(row):
     """Map one Supabase is_hypotheses row to the evaluator's hypothesis shape, or
@@ -220,17 +256,17 @@ def _map_user_rule(row):
         if row.get("status", "active") != "active":
             return None
         kind = row["kind"]
-        if kind not in ("filter", "exit"):
+        if kind not in ("filter", "exit", "question"):
             return None
         exit_id = row.get("exit_id", "same_day_close")
-        if exit_id not in _USER_EXITS:
+        if not _exit_ok(exit_id):
             return None
         sel = row.get("rule_json") or {"op": "and", "predicates": []}
         preds = sel.get("predicates", []) if isinstance(sel, dict) else []
         for p in preds:
             if p.get("field") not in _USER_FIELDS:   # any bad field => reject whole rule
                 return None
-        if kind == "filter" and not preds:
+        if kind in ("filter", "question") and not preds:   # both select a subset
             return None
         return {
             "id": "U-" + str(row["id"])[:8],
@@ -241,7 +277,9 @@ def _map_user_rule(row):
             "kind": kind,
             "selection": {"op": "and", "predicates": preds},
             "exit": exit_id,
-            "claim": {"metric": "expectancy", "direction": "beats_baseline"},
+            # A 'question' makes no directional claim — its honesty range (CI) is the answer.
+            "claim": {"metric": "expectancy",
+                      "direction": "two_sided" if kind == "question" else "beats_baseline"},
         }
     except (KeyError, TypeError, AttributeError):
         return None
@@ -257,10 +295,42 @@ def load_user_hypotheses(path):
         return []
     return [h for h in (_map_user_rule(r) for r in raw) if h]
 
+# ------------------------------------------------------------------ stability history
+# A weekly-only, append-only record of each rule's delta sign over time. Persisted so
+# "does the edge's sign hold?" (Gate 1) becomes a fact anyone can read, not a vibe.
+_STABILITY_MIN = 3   # weekly snapshots (incl. current) needed before judging stability
+
+def _load_snapshots(path):
+    try:
+        d = json.load(open(path))
+        return d if isinstance(d, list) else []
+    except (FileNotFoundError, ValueError):
+        return []
+
+def _stability(rule_id, cur_delta, snaps):
+    """stable = last ≥3 weekly deltas (incl. current) share one nonzero sign;
+    mixed = they don't; building = fewer than 3 data points yet."""
+    seq = [s.get("rules", {}).get(rule_id) for s in snaps]      # oldest→newest, past only
+    seq = [d for d in seq if d is not None] + ([cur_delta] if cur_delta is not None else [])
+    if len(seq) < _STABILITY_MIN:
+        return "building"
+    signs = [1 if d > 0 else (-1 if d < 0 else 0) for d in seq[-_STABILITY_MIN:]]
+    return "stable" if all(s == signs[0] and s != 0 for s in signs) else "mixed"
+
+def append_snapshot(rows, path, when):
+    """Append one weekly snapshot of every rule's delta_post (append-only, immutable).
+    Called ONLY by the weekly report (SNAPSHOT=1), never the daily rebuild."""
+    snaps = _load_snapshots(path)
+    if snaps and snaps[-1].get("date") == str(when):
+        return                                                  # idempotent per day
+    snaps.append({"date": str(when),
+                  "rules": {r["id"]: r["delta_post"] for r in rows}})
+    json.dump(snaps, open(path, "w"), indent=0, ensure_ascii=False)
+
 # ------------------------------------------------------------------ registry
 def evaluate_registry(registry_path="hypotheses/registry.json",
                       picks_path="picks.csv", outs_path="outcomes.csv", asof=None,
-                      user_path=None):
+                      user_path=None, snapshots_path="hypotheses/snapshots.json"):
     reg = json.load(open(registry_path))
     cfg = reg["config"]
     picks, outs = load_log(picks_path, outs_path)
@@ -268,13 +338,20 @@ def evaluate_registry(registry_path="hypotheses/registry.json",
     users = load_user_hypotheses(user_path) if user_path else []
     rows = [evaluate(h, picks, outs, cfg, asof) for h in (reg["hypotheses"] + users)]
 
-    # rank the ranked ones by delta desc; maturing/insufficient listed after, unranked
-    ranked = sorted([r for r in rows if r["state"] == "ranked"],
+    # Only claimed edges (filter/exit) get a rank; a 'question' makes no directional
+    # claim, so it's listed but never ranked as if higher were better.
+    ranked = sorted([r for r in rows if r["state"] == "ranked" and r.get("kind") != "question"],
                     key=lambda r: (r["delta_post"] is None, -(r["delta_post"] or 0)))
     for i, r in enumerate(ranked, 1):
         r["rank"] = i
     for r in rows:
         r.setdefault("rank", None)
+
+    # Stability: does each rule's delta sign hold across the weekly snapshots?
+    # (MONETIZATION-GATE Gate 1: "sign holds across ≥3 consecutive weekly snapshots".)
+    snaps = _load_snapshots(snapshots_path)
+    for r in rows:
+        r["stability"] = _stability(r["id"], r["delta_post"], snaps)
 
     n_live = len(rows)
     n_pos = sum(1 for r in rows if (r["delta_post"] or 0) > 0)
@@ -335,8 +412,14 @@ if __name__ == "__main__":
     user_path = os.environ.get("USER_RULES_PATH", "hypotheses/user_rules.json")
     if not os.path.exists(user_path):
         user_path = None
-    board = evaluate_registry(asof=date.today(), user_path=user_path)
+    asof = date.today()
+    board = evaluate_registry(asof=asof, user_path=user_path)
     json.dump(board, open("leaderboard.json", "w"), indent=2, ensure_ascii=False)
+    # Append a stability snapshot ONLY on the weekly report run (SNAPSHOT=1), so the
+    # history stays weekly (daily rebuilds recompute stability but don't add points).
+    if os.environ.get("SNAPSHOT") == "1":
+        append_snapshot(board["rows"], "hypotheses/snapshots.json", asof)
+        print("appended weekly stability snapshot", file=sys.stderr)
     n_user = sum(1 for r in board["rows"] if str(r["id"]).startswith("U-"))
     print(f"wrote leaderboard.json — {board['summary']['n_live']} hypotheses "
           f"({n_user} user), {board['summary']['n_significant']} significant, "

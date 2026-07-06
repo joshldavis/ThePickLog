@@ -116,21 +116,24 @@ function toggleMenu(force){
     <tbody>
     <tr><td><code>same_day_close</code></td><td>The open→close net return above (the default baseline exit).</td></tr>
     <tr><td><code>target_T</code> (+5/10/15/20%)</td><td>If the 5-day MFE reached <code>+T%</code>, take <code>+(T−2)%</code> net (the target minus the 2% haircut); otherwise fall back to the 5-day close return.</td></tr>
+    <tr><td><code>target_T_stop_S</code></td><td>Same target, plus a stop: if the 5-day MAE fell to <code>−S%</code>, take <code>−(S+2)%</code> net. When <b>both</b> the target and the stop are reached in the window, the stop is assumed to fire first (see caveat) — otherwise the 5-day close.</td></tr>
     </tbody>
   </table>
-  <p class="callout"><b>Slippage is real.</b> Target exits assume the +T% limit fills exactly. On thin floats limits gap through, so live results run <b>worse</b> than the proxy. This is stated on every exit-rule readout.</p>
+  <p class="callout"><b>Slippage is real.</b> Target exits assume the +T% limit fills exactly. On thin floats limits gap through, so live results run <b>worse</b> than the proxy. And because <code>outcomes.csv</code> records only the best (MFE) and worst (MAE) excursions — not their order — a stop-loss rule that hits both levels is scored <b>as if the stop triggered first</b> (conservative, so a stop can never over-credit itself). Both caveats appear on every affected readout.</p>
 
   <h2><span class="n">4</span>Pre-registration &amp; the out-of-sample window</h2>
   <p>A rule is frozen with a <b>registration date</b>. Only picks whose <code>trading_date</code> is <b>after</b> that date count toward its score — that's the out-of-sample (OOS) test. A pattern spotted in data already seen overfits by construction; the date stamp is what turns it into a genuine test. Registered rules can't be edited, deleted, or backdated — only <i>retired</i>. Because the log is append-only, a rule frozen today has nothing pre-existing to fit against: it starts at zero picks and earns its record as new picks accumulate.</p>
 
   <h2><span class="n">5</span>The number on the board: expectancy delta vs baseline</h2>
   <p>Each rule is compared to a shared <b>same-day-close baseline</b> over the post-registration window. The headline <b>Δ vs baseline</b> is the difference in mean net return per trade (in percentage points). For a <b>filter</b> it's the kept picks' mean minus all picks' mean; for an <b>exit</b> it's the paired per-pick difference (same picks, its exit vs the close). We report the full distribution — mean, median, % positive, and MAE — never a lone win rate, which is the easiest number to game.</p>
+  <p>A third kind, a <b>question</b>, is scored exactly like a filter but makes <i>no directional claim</i> — it asks "does this trait help or hurt?" and lets the confidence interval be the answer. Questions are shown on the board but never ranked as if higher were better, because there's no claim to rank.</p>
 
   <h2><span class="n">6</span>Honesty about noise is the whole point</h2>
   <ul>
     <li><b>95% confidence interval</b> on the delta, by bootstrap resampling (4,000 iterations, fixed seed for determinism). If the interval still spans zero, the rule is flagged <code>ns</code> — <i>directional, not proven</i>.</li>
     <li><b>Multiple comparisons</b> are surfaced, not hidden: under pure chance about half of any set of rules will show a positive point estimate, so the board states how many positives to expect from luck alone. Clearing the interval — not merely being positive — is the bar.</li>
     <li><b>Sample gates:</b> a rule is <code>ranked</code> only past <b>n ≥ 30</b> post-registration picks (and keeping at least 15% of the log); below that it's <code>maturing</code>. Until the data clears the bar the model is treated as <b>unvalidated</b>.</li>
+    <li><b>Stability:</b> each week the sign of every rule's delta is recorded to an append-only history. A rule reads <code>stable</code> only when its sign holds across the last <b>≥3 consecutive weekly snapshots</b>, <code>mixed</code> if it flips, and <code>building</code> until three weeks exist. A real edge should be stable, not a sign that flickers week to week.</li>
   </ul>
 
   <h2><span class="n">7</span>What you can register (pick-time fields only)</h2>

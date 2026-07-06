@@ -25,9 +25,13 @@ jobs:
         run: python bayes_h_ex1.py
       - name: Fetch user-registered hypotheses (Phase 1)
         run: python fetch_user_rules.py   # → hypotheses/user_rules.json (non-fatal, stdlib)
-      - name: Compete Test-mode leaderboard         # stdlib-only, deterministic; self-test aborts on parity drift
+      - name: Compete Test-mode leaderboard + weekly stability snapshot
+        # SNAPSHOT=1 appends one weekly point per rule to hypotheses/snapshots.json so
+        # the 'stability' field (sign-holds-across-≥3-weeks) has history. Weekly ONLY —
+        # the daily rebuild recomputes stability but never adds a point.
         env:
           USER_RULES_PATH: hypotheses/user_rules.json
+          SNAPSHOT: "1"
         run: python hypo_eval.py   # merges house registry.json + fetched user rules → leaderboard.json
       - name: Install deps for exit study
         run: pip install yfinance
@@ -43,6 +47,7 @@ jobs:
           git config user.name "joshldavis"
           git config user.email "davis1163@gmail.com"
           git add reports/ leaderboard.json
+          [ -f hypotheses/snapshots.json ] && git add hypotheses/snapshots.json || true
           [ -f integrity_ledger.csv ] && git add integrity_ledger.csv || true
           if git diff --cached --quiet; then
             echo "No report changes."

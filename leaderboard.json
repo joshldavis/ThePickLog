@@ -37,7 +37,7 @@
       ],
       "significant": false,
       "state": "ranked",
-      "stability": "unknown",
+      "stability": "building",
       "weeks_live": 1.9,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
@@ -69,7 +69,7 @@
       ],
       "significant": false,
       "state": "ranked",
-      "stability": "unknown",
+      "stability": "building",
       "weeks_live": 2.0,
       "caveats": [],
       "rule_spec": {
@@ -106,7 +106,7 @@
       ],
       "significant": false,
       "state": "ranked",
-      "stability": "unknown",
+      "stability": "building",
       "weeks_live": 2.0,
       "caveats": [],
       "rule_spec": {
@@ -143,7 +143,7 @@
       ],
       "significant": false,
       "state": "ranked",
-      "stability": "unknown",
+      "stability": "building",
       "weeks_live": 2.0,
       "caveats": [],
       "rule_spec": {
@@ -180,7 +180,7 @@
       ],
       "significant": false,
       "state": "ranked",
-      "stability": "unknown",
+      "stability": "building",
       "weeks_live": 2.0,
       "caveats": [],
       "rule_spec": {
@@ -220,7 +220,7 @@
       ],
       "significant": false,
       "state": "maturing",
-      "stability": "unknown",
+      "stability": "building",
       "weeks_live": 2.0,
       "caveats": [],
       "rule_spec": {
