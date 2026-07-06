@@ -3455,14 +3455,21 @@ window.addEventListener("hashchange",goHash);
         return '<div class="ar-mine-row"><div><b>'+escapeHtml(r.title)+'</b> '+
           (retired?'<span class="pt-flag">retired</span>':'<span class="pt-chip ranked" style="opacity:.85">active</span>')+
           '<div class="pt-rule">reg '+r.registered_at+' · <code>'+escapeHtml(ruleStr(r))+'</code></div></div>'+
-          (retired?'':'<button class="ar-x" onclick="IS_SIM.retireHypothesis(\''+r.id+'\')">Retire</button>')+'</div>';
+          (retired?'':'<button class="ar-x" data-confirm="0" onclick="IS_SIM.retireHypothesis(\''+r.id+'\', this)">Retire</button>')+'</div>';
       }).join("");
     },
-    async retireHypothesis(id){
-      if(!confirm("Retire this hypothesis? It stops accruing new grades but stays on the record. This can't be undone.")) return;
+    async retireHypothesis(id, btn){
+      // Two-click inline confirm (no blocking native dialog): first click arms, second retires.
+      if(btn && btn.dataset.confirm!=="1"){
+        document.querySelectorAll('#arMine .ar-x[data-confirm="1"]').forEach(b=>{ b.dataset.confirm="0"; b.textContent="Retire"; });
+        btn.dataset.confirm="1"; btn.textContent="Confirm retire?";
+        setTimeout(()=>{ if(btn&&btn.isConnected){ btn.dataset.confirm="0"; btn.textContent="Retire"; } }, 4000);
+        return;
+      }
       const {error}=await sb.rpc("is_retire_hypothesis",{p_id:id});
       if(error){ toast("✕ "+(error.message||"Could not retire"),"bad"); return; }
-      toast("Hypothesis retired.","good"); IS_SIM.loadMyHypotheses();
+      toast("Hypothesis retired — it stays on the record but stops accruing new grades.","good");
+      IS_SIM.loadMyHypotheses();
     }
   };
 

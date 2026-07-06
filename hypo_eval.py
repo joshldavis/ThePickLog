@@ -227,8 +227,8 @@ def _map_user_rule(row):
         return {
             "id": "U-" + str(row["id"])[:8],
             "title": (row.get("title") or "untitled").strip()[:80],
-            "author": (row.get("author") or (row.get("is_profiles") or {}).get("display_name")
-                       or row.get("display_name") or "anon"),
+            "author": (row.get("author_name") or row.get("author")
+                       or (row.get("is_profiles") or {}).get("display_name") or "anon"),
             "registered_at": str(row["registered_at"])[:10],
             "kind": kind,
             "selection": {"op": "and", "predicates": preds},
