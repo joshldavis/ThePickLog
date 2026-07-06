@@ -156,7 +156,8 @@
   ul.feat-list{list-style:none;padding:0;margin:12px 0 0;font-size:14px;color:var(--muted)}
   ul.feat-list li{padding:5px 0 5px 22px;position:relative}
   ul.feat-list li:before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
-  .kpis{grid-template-columns:repeat(3,1fr);margin-top:30px}
+  .kpis{grid-template-columns:repeat(4,1fr);margin-top:30px}
+  @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}}
   .formula{font-family:var(--mono);font-size:13px;background:var(--panel-2);border:1px solid var(--line);
     border-radius:10px;padding:14px 16px;color:var(--text);overflow-x:auto;white-space:pre}
   .wt{display:flex;align-items:center;gap:12px;margin:8px 0}
@@ -1368,9 +1369,9 @@ function renderBanner(){
     el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live data</b> — quotes pulled from Financial Modeling Prep for the seed universe. Float approximated from shares outstanding.`;
   }else if(DATA_MODE.startsWith("unavailable")||DATA_MODE.startsWith("error")){
     const reason=/429|rate/i.test(DATA_MODE)?"data feed rate limit reached":"live feed temporarily unavailable";
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data — ${reason}</b>. Showing bundled demo data; the live screen refreshes automatically once the feed recovers. <span class="dim">(The Quality Lens still uses live SEC filings.)</span>`;
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data — ${reason}</b>. This affects only <b>today's screen</b> (live quotes); the <b>Track record & model validation run on the committed pick log, not this feed</b>. The live screen refreshes automatically once the feed recovers. <span class="dim">(The Quality Lens still uses live SEC filings.)</span>`;
   }else{
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — add a free <code>FMP</code> API key on the Watchlist tab to pull live quotes for the seed universe.`;
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — add a free <code>FMP</code> API key on the Watchlist tab to pull live quotes for the seed universe. <span class="dim">(Affects only today's screen — the Track record runs on the committed pick log.)</span>`;
   }
 }
 
@@ -1664,12 +1665,17 @@ async function renderLandingKpis(){
   const el=document.getElementById("landingKpis"); if(!el) return;
   const tr=await getTrackRecord();
   if(!tr.real){ const g=gradeAll(SAMPLE_PICKS);
-    el.innerHTML=`${stat("Picks (sample)",g.total)}${stat("Blended win rate",g.winRate+"%")}${stat("Best single call","+"+g.best+"%")}`; return; }
+    el.innerHTML=`${stat("Picks (sample)",g.total)}${stat("Blended win rate",g.winRate+"%")}${stat("Data","sample")}`; return; }
   const g=aggregateReal(tr.picks,tr.outcomes);
+  // [Charter P4] Headline the honest distribution, never a lone win rate or a
+  // cherry-picked best call: pair win rate with median net return AND the average
+  // worst drawdown, so the front door is as truthful as the Track record page.
+  const pct=(v)=> v==null? "Grading soon" : (v>=0?"+":"")+v.toFixed(1)+"%";
   el.innerHTML=`
     ${stat("Picks logged", g.total)}
     ${stat("Blended win rate", g.winRate==null? "Grading soon" : g.winRate+"%")}
-    ${stat(g.best!=null?"Best net":"Trading days", g.best!=null? (g.best>=0?"+":"")+g.best.toFixed(0)+"%" : g.days.length)}`;
+    ${stat("Median net", pct(g.medianNet))}
+    ${stat("Avg worst dip", pct(g.meanMae))}`;
 }
 
 /* ---------- RENDER: Track record page ---------- */
@@ -1689,7 +1695,7 @@ async function renderPerformance(){
     return;
   }
   const g=aggregateReal(tr.picks,tr.outcomes);
-  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged, on cost-adjusted open→close returns.`;
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged, on cost-adjusted open→close returns. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a> — every number on this page re-derives from them.`;
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}
