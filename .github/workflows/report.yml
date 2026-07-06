@@ -33,6 +33,9 @@ jobs:
         run: pip install yfinance
       - name: Run exit-rule study (daily-resolution, in-sample)
         run: python exit_sim.py || true   # network/data hiccup must not block the report commit
+      - name: Seal integrity ledger (tamper-evident hash chain)
+        # Weekly seal of the forward log; chained to the daily seals. Non-fatal.
+        run: python log_integrity.py --event=report || echo "integrity seal skipped (non-fatal)"
       - name: Commit report
         id: commit
         run: |
@@ -40,6 +43,7 @@ jobs:
           git config user.name "joshldavis"
           git config user.email "davis1163@gmail.com"
           git add reports/ leaderboard.json
+          [ -f integrity_ledger.csv ] && git add integrity_ledger.csv || true
           if git diff --cached --quiet; then
             echo "No report changes."
           else
@@ -60,4 +64,25 @@ jobs:
             curl -fsS -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}" >/dev/null && echo "deploy hook fired"
           else
             echo "VERCEL_DEPLOY_HOOK secret not set — relying on the git webhook alone."
+          fi
+      - name: Offsite backup — upload log + ledger as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forward-log-report-${{ github.run_id }}
+          path: |
+            picks.csv
+            outcomes.csv
+            paths.csv
+            leaderboard.json
+            integrity_ledger.csv
+          if-no-files-found: warn
+          retention-days: 90
+      - name: Dead-man's-switch ping (healthchecks.io)
+        if: success()
+        run: |
+          if [ -n "${{ secrets.HEALTHCHECK_URL_WEEKLY }}" ]; then
+            curl -fsS -m 10 "${{ secrets.HEALTHCHECK_URL_WEEKLY }}" >/dev/null && echo "weekly healthcheck pinged"
+          else
+            echo "HEALTHCHECK_URL_WEEKLY secret not set — weekly dead-man's-switch inactive."
           fi

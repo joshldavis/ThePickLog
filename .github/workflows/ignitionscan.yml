@@ -87,3 +87,31 @@ jobs:
           else
             echo "VERCEL_DEPLOY_HOOK secret not set — relying on the git webhook alone."
           fi
+      # Offsite backup: a copy of the forward log + hash chain stored in GitHub's
+      # artifact store, INDEPENDENT of git history. If the repo is ever force-pushed
+      # or corrupted, these snapshots survive. Runs even if there was nothing to commit.
+      - name: Offsite backup — upload log + ledger as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: forward-log-${{ github.run_id }}
+          path: |
+            picks.csv
+            outcomes.csv
+            paths.csv
+            leaderboard.json
+            integrity_ledger.csv
+          if-no-files-found: warn
+          retention-days: 90
+      # Dead-man's-switch: ping a healthchecks.io monitor on success. If a run is
+      # ever skipped, disabled (GitHub auto-disables cron after 60 days of repo
+      # inactivity), or errors out, the ping stops and healthchecks.io emails Josh.
+      # Set HEALTHCHECK_URL in repo Settings → Secrets → Actions. See INTEGRITY.md.
+      - name: Dead-man's-switch ping (healthchecks.io)
+        if: success()
+        run: |
+          if [ -n "${{ secrets.HEALTHCHECK_URL }}" ]; then
+            curl -fsS -m 10 "${{ secrets.HEALTHCHECK_URL }}" >/dev/null && echo "healthcheck pinged"
+          else
+            echo "HEALTHCHECK_URL secret not set — dead-man's-switch inactive."
+          fi

@@ -1,0 +1,59 @@
+# ThePickLog — watchdog (dead-man's-switch). Runs on GitHub's servers.
+# Self-contained safety net: if the forward log stops updating, this opens a
+# GitHub issue so a silent failure of the daily job can't go unnoticed. Needs
+# no external service or secret — it uses the built-in GITHUB_TOKEN.
+# (For push-style email alerts, also set HEALTHCHECK_URL — see INTEGRITY.md.)
+name: ThePickLog watchdog
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 13 * * *"   # daily ~9am ET (UTC; shifts 1h in winter), after the scan window
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # need full history to read commit timestamps
+      - name: Check forward-log freshness
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Weekday scans mean the longest legitimate gap is Fri→Mon (3 days).
+          # Alert at 4 so a genuinely missed weekday run trips it the next morning.
+          STALE_DAYS: "4"
+        run: |
+          set -euo pipefail
+          LAST=$(git log -1 --format=%ct -- picks.csv outcomes.csv paths.csv 2>/dev/null || echo 0)
+          NOW=$(date -u +%s)
+          if [ "$LAST" -eq 0 ]; then AGE_DAYS=999; else AGE_DAYS=$(( (NOW - LAST) / 86400 )); fi
+          echo "Last forward-log commit was ${AGE_DAYS} day(s) ago (threshold ${STALE_DAYS})."
+
+          EXISTING=$(gh issue list --label watchdog --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+
+          if [ "$AGE_DAYS" -ge "$STALE_DAYS" ]; then
+            TITLE="⚠️ ThePickLog log is stale (${AGE_DAYS}d) — daily job may have stopped"
+            printf '%s\n' \
+              "The forward log (picks/outcomes/paths.csv) has not been updated in ${AGE_DAYS} days." \
+              "" \
+              "The daily scan/grade workflow may be failing or disabled. Note: GitHub auto-disables scheduled workflows after 60 days of repo inactivity — that is the most common silent cause. Check the **Actions** tab and re-enable / re-run if needed." \
+              "" \
+              "_Filed automatically by watchdog.yml._" > /tmp/wd_body.md
+            if [ -n "$EXISTING" ]; then
+              gh issue comment "$EXISTING" --body "Still stale: ${AGE_DAYS} days as of $(date -u +%F)."
+            else
+              gh label create watchdog --color B60205 --description "Automated staleness alerts" 2>/dev/null || true
+              gh issue create --title "$TITLE" --body-file /tmp/wd_body.md --label watchdog
+            fi
+          else
+            echo "Fresh — no alert."
+            if [ -n "$EXISTING" ]; then
+              gh issue comment "$EXISTING" --body "Resolved: log is fresh again as of $(date -u +%F). Closing."
+              gh issue close "$EXISTING"
+            fi
+          fi
