@@ -650,8 +650,8 @@
     </div>
     <p class="dim" id="histEmpty" style="font-size:13px;margin:10px 2px;display:none">No recent orders yet.</p>
 
-    <p class="disclaimer">Educational / informational only — not investment advice. Balances and orders
-      reflect your Alpaca paper account via the server-side proxy.</p>
+    <p class="disclaimer">Educational / informational only — not investment advice. Paper-trading only, no real money:
+      Compete portfolios are a $100,000 simulation; the owner's Alpaca paper account is separate and owner-only.</p>
   </div>
 </section>
 
@@ -1427,7 +1427,7 @@ const INFO={
   float:{t:"Float",d:"Shares actually available to trade. Smaller float = thinner supply = sharper moves; under ~5M is the strategy's sweet spot."},
   quality:{t:"Quality",d:"Risk label (Green/Yellow/Red/Black) + a 0–100 quality score from the financials. Click for the full scorecard. A Red/Black next to a hot mover is your 'don't get rugged' flag."},
   watch:{t:"Watch level",d:"A +20% reference price, used only to grade hits later. Not a target or a recommendation."},
-  trade:{t:"Trade (paper)",d:"Places a simulated order via your Alpaca paper account — no real money."},
+  trade:{t:"Trade (paper)",d:"Places a simulated paper order — no real money. In Compete this fills against your $100k play-money account."},
   "universe-screened":{t:"Universe screened",d:"How many names from the seed universe were scored today."},
   actionable:{t:"Actionable (A/B)",d:"Count of Tier A or B names (momentum ≥60) — the stronger setups."},
   "top-score":{t:"Top score",d:"The highest momentum score in today's screen."},
@@ -1443,7 +1443,7 @@ const INFO={
   "avg-quality":{t:"Avg quality score",d:"Average quality score (0–100) across those top movers."},
   "flagged-rb":{t:"Flagged Red / Black",d:"How many top movers earned a Red or Black risk label — the names momentum-only scanners would have you chasing."},
   fundamentals:{t:"Fundamentals source",d:"Where the financials behind the quality scores come from: SEC EDGAR (real filings), Live (FMP), or Sample."},
-  equity:{t:"Equity",d:"Total value of your Alpaca paper account — cash plus positions."},
+  equity:{t:"Equity",d:"Total value of your paper account — cash plus positions."},
   "buying-power":{t:"Buying power",d:"How much you can deploy (including margin) in the paper account."},
   cash:{t:"Cash",d:"Uninvested cash in the paper account."},
   "today-pl":{t:"Today P&L",d:"Change in account equity today vs. yesterday's close (paper)."},
