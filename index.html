@@ -2149,6 +2149,15 @@ async function loadPortfolio(){
     if(lead) lead.textContent="Your simulated Compete portfolio — $100,000 in play money, live prices, no real orders.";
     return IS_SIM.renderPortfolio();
   }
+  // Not a Compete sim user and no owner token → a guest, not the site owner.
+  // Point them to Compete instead of showing an owner-only Alpaca error.
+  if(!ownerToken()){
+    if(lead) lead.textContent="Your portfolio lives in Compete — sign in on the Compete tab for $100,000 in play money.";
+    const gmsg=document.getElementById("pfMsg");
+    if(gmsg){ gmsg.style.display="block"; gmsg.innerHTML='Sign in on the <b>Compete</b> tab to start your simulated portfolio.'; }
+    const gst=document.getElementById("pfStats"); if(gst) gst.innerHTML="";
+    return;
+  }
   if(lead) lead.textContent="Your live Alpaca paper account — balances, open positions, and working orders.";
   const msg=document.getElementById("pfMsg");
   msg.innerHTML="Loading account…";
