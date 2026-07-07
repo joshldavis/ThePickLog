@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-07-06",
+  "generated_at": "2026-07-07",
   "log": {
-    "picks": 269,
-    "graded": 179
+    "picks": 285,
+    "graded": 208
   },
   "baseline": {
-    "n_post": 45,
-    "win_post": 40,
-    "avg_post": -2.8,
+    "n_post": 74,
+    "win_post": 39,
+    "avg_post": -3.2,
     "since": "2026-06-22"
   },
   "summary": {
     "n_live": 6,
-    "n_positive_point": 3,
+    "n_positive_point": 1,
     "n_significant": 0,
     "expected_positive_by_chance": 3.0,
     "note": "under the null each rule has ~50% chance of a positive point estimate; clearing the 95% CI is the real bar"
@@ -25,20 +25,20 @@
       "registered_at": "2026-06-23",
       "kind": "exit",
       "rule_str": "exit: mfe_5d ≥ +10% → +8% net, else 5d close",
-      "n_post": 30,
-      "win_post": 60,
-      "avg_post": -2.4,
-      "median_post": 5.3,
-      "baseline_avg_post": -4.1,
-      "delta_post": 1.7,
+      "n_post": 59,
+      "win_post": 59,
+      "avg_post": -2.5,
+      "median_post": 8.0,
+      "baseline_avg_post": -3.9,
+      "delta_post": 1.3,
       "ci95": [
-        -3.2,
-        5.8
+        -2.3,
+        4.6
       ],
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 1.9,
+      "weeks_live": 2.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -46,46 +46,10 @@
         "kind": "exit",
         "exit": "target_10",
         "registered_at": "2026-06-23",
+        "op": "and",
         "predicates": []
       },
       "rank": 1
-    },
-    {
-      "id": "H-F1",
-      "title": "skip sub-$1 names",
-      "author": "house",
-      "registered_at": "2026-06-22",
-      "kind": "filter",
-      "rule_str": "keep: price_at_screen ≥ 1.0",
-      "n_post": 36,
-      "win_post": 42,
-      "avg_post": -2.6,
-      "median_post": -0.9,
-      "baseline_avg_post": -2.8,
-      "delta_post": 0.2,
-      "ci95": [
-        -2.8,
-        3.4
-      ],
-      "significant": false,
-      "state": "ranked",
-      "stability": "building",
-      "weeks_live": 2.0,
-      "caveats": [],
-      "rule_spec": {
-        "kind": "filter",
-        "exit": "same_day_close",
-        "registered_at": "2026-06-22",
-        "predicates": [
-          {
-            "field": "price_at_screen",
-            "cmp": ">=",
-            "value": 1.0
-          }
-        ]
-      },
-      "kept_n_all": 135,
-      "rank": 2
     },
     {
       "id": "H-F2",
@@ -94,25 +58,26 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: float_shares < 3,000,000",
-      "n_post": 39,
-      "win_post": 41,
-      "avg_post": -2.7,
+      "n_post": 64,
+      "win_post": 42,
+      "avg_post": -3.1,
       "median_post": -1.0,
-      "baseline_avg_post": -2.8,
-      "delta_post": 0.1,
+      "baseline_avg_post": -3.2,
+      "delta_post": 0.0,
       "ci95": [
-        -2.7,
-        2.9
+        -2.9,
+        2.8
       ],
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.0,
+      "weeks_live": 2.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
         "exit": "same_day_close",
         "registered_at": "2026-06-22",
+        "op": "and",
         "predicates": [
           {
             "field": "float_shares",
@@ -121,7 +86,45 @@
           }
         ]
       },
-      "kept_n_all": 141,
+      "kept_n_all": 166,
+      "rank": 2
+    },
+    {
+      "id": "H-F1",
+      "title": "skip sub-$1 names",
+      "author": "house",
+      "registered_at": "2026-06-22",
+      "kind": "filter",
+      "rule_str": "keep: price_at_screen ≥ 1.0",
+      "n_post": 59,
+      "win_post": 41,
+      "avg_post": -3.2,
+      "median_post": -1.0,
+      "baseline_avg_post": -3.2,
+      "delta_post": -0.1,
+      "ci95": [
+        -3.3,
+        2.9
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "building",
+      "weeks_live": 2.1,
+      "caveats": [],
+      "rule_spec": {
+        "kind": "filter",
+        "exit": "same_day_close",
+        "registered_at": "2026-06-22",
+        "op": "and",
+        "predicates": [
+          {
+            "field": "price_at_screen",
+            "cmp": ">=",
+            "value": 1.0
+          }
+        ]
+      },
+      "kept_n_all": 158,
       "rank": 3
     },
     {
@@ -131,25 +134,26 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: gap_pct < 20",
-      "n_post": 44,
-      "win_post": 39,
-      "avg_post": -3.0,
-      "median_post": -1.4,
-      "baseline_avg_post": -2.8,
-      "delta_post": -0.2,
+      "n_post": 73,
+      "win_post": 38,
+      "avg_post": -3.3,
+      "median_post": -1.2,
+      "baseline_avg_post": -3.2,
+      "delta_post": -0.1,
       "ci95": [
         -3.0,
-        2.7
+        2.6
       ],
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.0,
+      "weeks_live": 2.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
         "exit": "same_day_close",
         "registered_at": "2026-06-22",
+        "op": "and",
         "predicates": [
           {
             "field": "gap_pct",
@@ -158,7 +162,7 @@
           }
         ]
       },
-      "kept_n_all": 158,
+      "kept_n_all": 187,
       "rank": 4
     },
     {
@@ -168,25 +172,26 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: tier ∉ {A, B}",
-      "n_post": 40,
-      "win_post": 35,
+      "n_post": 69,
+      "win_post": 36,
       "avg_post": -3.6,
-      "median_post": -1.8,
-      "baseline_avg_post": -2.8,
-      "delta_post": -0.8,
+      "median_post": -1.7,
+      "baseline_avg_post": -3.2,
+      "delta_post": -0.5,
       "ci95": [
-        -3.8,
-        2.2
+        -3.3,
+        2.4
       ],
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.0,
+      "weeks_live": 2.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
         "exit": "same_day_close",
         "registered_at": "2026-06-22",
+        "op": "and",
         "predicates": [
           {
             "field": "tier",
@@ -198,7 +203,7 @@
           }
         ]
       },
-      "kept_n_all": 139,
+      "kept_n_all": 168,
       "rank": 5
     },
     {
@@ -208,25 +213,26 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: price_at_screen ≥ 1.0 ∧ float_shares < 3,000,000 ∧ gap_pct < 20 ∧ tier ∉ {A, B}",
-      "n_post": 29,
-      "win_post": 34,
-      "avg_post": -3.7,
-      "median_post": -1.7,
-      "baseline_avg_post": -2.8,
-      "delta_post": -0.9,
+      "n_post": 50,
+      "win_post": 38,
+      "avg_post": -3.9,
+      "median_post": -1.1,
+      "baseline_avg_post": -3.2,
+      "delta_post": -0.8,
       "ci95": [
-        -4.0,
-        2.2
+        -4.2,
+        2.4
       ],
       "significant": false,
-      "state": "maturing",
+      "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.0,
+      "weeks_live": 2.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
         "exit": "same_day_close",
         "registered_at": "2026-06-22",
+        "op": "and",
         "predicates": [
           {
             "field": "price_at_screen",
@@ -253,8 +259,8 @@
           }
         ]
       },
-      "kept_n_all": 103,
-      "rank": null
+      "kept_n_all": 124,
+      "rank": 6
     }
   ]
 }
