@@ -69,6 +69,13 @@ No rule gets promoted into the live score off a handful of picks. Sample bars ar
 most recent ~25% out-of-sample). Until the data clears the bar, **the model is labeled
 unvalidated** everywhere it appears.
 
+**Regime hold-out gate (added 2026-07-07).** A single regime is a single draw of the world.
+No rule graduates from "unvalidated" on a one-regime sample: an edge must hold across **≥2 of
+{risk-on, neutral, risk-off}** on post-registration picks. This is a generalizability guardrail —
+the screen's outcome is strongly regime-dependent (risk-on −5.49% vs −1.7% otherwise; see
+`ThePickLog-Generalizability-and-Consequential-2026-07-07.md`), so surviving one regime proves
+too little.
+
 *Why:* the most dangerous reader of these numbers is the person who made them. The sample
 bar is the guardrail against believing noise.
 

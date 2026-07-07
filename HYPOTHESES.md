@@ -170,5 +170,22 @@ trailing is the most slippage-fragile arm in the batch.
   drawdown. Never optimize win rate at the expense of expectancy.
 
 ---
+
+## Validity-study registrations (frozen 2026-07-07)
+
+Emerged from the empirical validity studies (`ThePickLog-Empirical-Validity-Studies-2026-07-07.md`).
+In-sample findings are diagnostics only; these are frozen here so only picks logged **after
+2026-07-07** count, and none changes the live model (P5).
+
+| id | test | direction / rationale |
+|----|------|-----------------------|
+| **H-SUB1** | does 5-day MFE (spike size) scale monotonically with rvol at screen time? | the unique prediction of the fade thesis; absence means the "spike" label is mis-specified |
+| **H-STR1** | does a **float-only** score reproduce the 4-factor tier ordering? | rvol sub-score is <10 for 81% of picks → the .35 rvol weight may add no ordering info |
+| **H-STR2** | re-derive weights + cutpoints from post-reg data, register, judge OOS vs v0.2 | cutpoints/weights are currently unjustified; never promote an in-sample fit |
+| **H-REG** | skip picks tagged `market_regime = risk-on`; does the kept subset beat baseline OOS? | in-sample risk-on was −5.49% vs −1.7% otherwise (regime-fragile) |
+| **H-CTRL** | capture matched random in-universe microcaps the screen did **not** pick (forward-only) | enables a proper screened-vs-unscreened discriminant test |
+| **H-REFLEX** | does publishing a pick move the name? (post-publication drift/volume vs audience size) | reflexivity is CIV; ~nil now (no traffic), monitor as reach grows |
+
+---
 *Pre-registration, not investment advice. The forward log (picks.csv/outcomes.csv) is the
 only judge; everything here is a hypothesis until post-registration data says otherwise.*

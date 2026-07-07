@@ -160,18 +160,20 @@ The Guidelines reach reinforces four Messick findings rather than adding new one
 
 Priority: **P1** = blocks any "validated" claim or monetization · **P2** = strengthens the argument materially · **P3** = polish.
 
-| # | Aspect | Threat | Gap | Prescription | Pri |
-|---|--------|--------|-----|-------------|-----|
-| 1 | Content | Underrep. | No domain spec; momentum-only inputs omit liquidity/catalyst/fade drivers | Write domain definition + coverage matrix; label underrepresentation openly | P2 |
-| 2 | Substantive | Underrep. | Fade mechanism not discriminated from rivals | Test unique predictions (fade scales with float thinness) via Finding A + R2 | P2 |
-| 3 | Structural | CIV | Weights & tier cuts (75/60/45) unjustified | Derive or justify weights/cutpoints; document rationale | P1 |
-| 4 | Structural | — | Compensatory vs. conjunctive untested; Finding A shows score↔outcome non-monotonic | Test combination form; run monotonicity check; re-label tiers if needed | P1 |
-| 5 | Generalizability | CIV | Single regime; frame uncharacterized; paper≠real | Make regime hold-out a promotion gate; characterize sampling frame; plan live-fill test | P1 |
-| 6 | External | CIV | No discriminant control arm | Add matched random-microcap benchmark | P2 |
-| 7 | External | — | Criterion relationship null to date | Let Gate-1 (7/27) be the formal readout; publish either way | P1 |
-| 8 | Consequential | CIV | Reflexivity (publishing moves the name) unmonitored | Add post-publication price-impact monitor | P2 |
-| 9 | Consequential | — | No intended-use/misuse + cost-of-error statement | Write use/misuse note tied to validity state | P2 |
-| 10 | UG / Docs | — | No single §15-style validity dossier | Consolidate CSVs + principles + hypotheses into one dossier | P3 |
+Status as of 2026-07-07: rows 1, 3, 4, 10 **closed**; rows 2, 6, 8 **studied + registered forward**; row 5 **gate codified** (live-fill deferred); row 9 **closed**; row 7 owned by the 7/27 verdict task.
+
+| # | Aspect | Gap | Status / where | Pri |
+|---|--------|-----|----------------|-----|
+| 1 | Content | Momentum-only inputs omit liquidity/catalyst/fade drivers | **Closed** — domain + coverage matrix written (Domain-Coverage-Spec); underrep. labelled | P2 |
+| 2 | Substantive | Fade mechanism not discriminated from rivals | **Studied** — heat→drawdown confirmed, fade-as-edge not; unique-prediction test registered **H-SUB1** (Empirical Studies §1) | P2 |
+| 3 | Structural | Weights & tier cuts (75/60/45) unjustified | **Closed (documented) + registered** — calibration flat, rvol weight near-inert (81% <10); re-derivation registered **H-STR2** (Empirical Studies §3) | P1 |
+| 4 | Structural | Compensatory vs. conjunctive untested | **Closed** — conjunctive gate concentrates worst names, no lift; combination form is not the lever (Empirical Studies §2) | P1 |
+| 5 | Generalizability | Single-regime; frame uncharacterized; paper≠real | **Gate codified** — regime hold-out gate in PRINCIPLES P5 + frame characterized; live-fill deferred (Gate 2). Regime-fragile: risk-on −5.49% | P1 |
+| 6 | External | No discriminant control arm | **Studied + registered** — forward log indistinguishable from broad pool (CIs overlap, both neg.); true control registered **H-CTRL** (Empirical Studies §4) | P2 |
+| 7 | External | Criterion relationship null to date | **Owned by 7/27 task** — Gate-1 verdict `thepicklog-gate1-external-validity-verdict` | P1 |
+| 8 | Consequential | Reflexivity unmonitored | **Design done + registered** — monitor spec + ~nil current exposure; **H-REFLEX**, activates at scale (Generalizability & Consequential B.2) | P2 |
+| 9 | Consequential | No intended-use/misuse + cost-of-error statement | **Closed** — use/misuse + asymmetric-loss justification written (Generalizability & Consequential B.1) | P2 |
+| 10 | UG / Docs | No single §15-style validity dossier | **Closed** — Validity-Dossier-UG15 indexes the whole record to §15 headings | P3 |
 
 **Reading the register:** the P1 cluster is small and coherent — justify the score's structure (3, 4), prove the edge generalizes past one regime (5), and let the pre-registered criterion test render its verdict (7). Everything else strengthens the argument but none of it can substitute for those four. Notably, nothing here asks you to *manufacture* a positive result; the framework is satisfied by a rigorously documented null just as much as by a win.
 
