@@ -3470,14 +3470,24 @@ window.addEventListener("hashchange",goHash);
         .select("id,title,kind,rule_json,exit_id,registered_at,status")
         .eq("author_id",IS_SIM.user.id).order("created_at",{ascending:false});
       if(error||!data||!data.length){ el.innerHTML=""; return; }
+      // Which of the user's rules are on the public board yet? A receipt only
+      // resolves once a rule reaches leaderboard.json (board id form "U-"+uuid[:8]).
+      let onBoard=new Set();
+      try{ const lb=await fetch("leaderboard.json",{cache:"no-store"}).then(x=>x.ok?x.json():null);
+        if(lb&&lb.rows) lb.rows.forEach(x=>onBoard.add(String(x.id).toUpperCase())); }catch(e){}
       const ruleStr=r=> r.kind==="exit" ? ("exit: "+r.exit_id)
         : ("keep: "+((r.rule_json&&r.rule_json.predicates)||[]).map(p=>p.field+" "+p.cmp+" "+(Array.isArray(p.value)?("{"+p.value.join(",")+"}"):p.value)).join(" ∧ "));
       el.innerHTML='<div class="ar-lab" style="margin-top:4px">Your registered hypotheses</div>'+data.map(r=>{
         const retired=r.status==="retired";
+        const rid='U-'+String(r.id).slice(0,8);
+        const rcpt=onBoard.has(rid.toUpperCase())
+          ? '<a href="/r/'+encodeURIComponent(rid)+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px;font-weight:600;white-space:nowrap">Get your receipt ↗</a>'
+          : '<span class="pt-ci" title="Your receipt goes live once the rule reaches the public board — usually within a day.">receipt pending</span>';
         return '<div class="ar-mine-row"><div><b>'+escapeHtml(r.title)+'</b> '+
           (retired?'<span class="pt-flag">retired</span>':'<span class="pt-chip ranked" style="opacity:.85">active</span>')+
           '<div class="pt-rule">reg '+r.registered_at+' · <code>'+escapeHtml(ruleStr(r))+'</code></div></div>'+
-          (retired?'':'<button class="ar-x" data-confirm="0" onclick="IS_SIM.retireHypothesis(\''+r.id+'\', this)">Retire</button>')+'</div>';
+          '<div style="display:flex;gap:10px;align-items:center;white-space:nowrap">'+rcpt+
+          (retired?'':'<button class="ar-x" data-confirm="0" onclick="IS_SIM.retireHypothesis(\''+r.id+'\', this)">Retire</button>')+'</div></div>';
       }).join("");
     },
     async retireHypothesis(id, btn){
