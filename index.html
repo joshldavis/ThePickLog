@@ -861,7 +861,7 @@
           if(r.rule_spec){ try{ vurl='dashboard.html#verify='+encodeURIComponent(JSON.stringify(
             {id:r.id,title:r.title,author:r.author,rule_str:r.rule_str,kind:r.rule_spec.kind,
              exit:r.rule_spec.exit,registered_at:r.rule_spec.registered_at,predicates:r.rule_spec.predicates})); }catch(e){} }
-          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
+          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="/r/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px;font-weight:600">receipt ↗</a><br><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
         document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';
@@ -1810,7 +1810,7 @@ async function renderPerformance(){
       <td class="num">${isFinite(sc)?sc.toFixed(1):'—'}</td>
       <td class="num">$${isFinite(px)?px.toFixed(2):'—'}</td>
       <td class="num">$${isFinite(watch)?watch.toFixed(2):'—'}</td>
-      ${gainCell}${dipCell}<td>${resCell}</td></tr>`;
+      ${gainCell}${dipCell}<td>${resCell} <a href="/r/p-${encodeURIComponent(p.pick_id)}" target="_blank" rel="noopener" title="Shareable receipt" style="color:var(--a);font-size:11px;white-space:nowrap;text-decoration:none">↗</a></td></tr>`;
   });
 }
 
