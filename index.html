@@ -778,7 +778,13 @@
             </label>
           </div>
           <div id="arPredBlock">
-            <div class="ar-lab" style="margin-top:10px" id="arPredLabel">Keep a pick only if <span class="dim">(all conditions must hold)</span></div>
+            <div class="ar-lab" style="margin-top:10px" id="arPredLabel">Keep a pick only if</div>
+            <label class="ar-lab" style="margin-top:4px">Match
+              <select id="arOp">
+                <option value="and">ALL of these conditions (and)</option>
+                <option value="or">ANY of these conditions (or)</option>
+              </select>
+            </label>
             <div id="arPreds"></div>
             <button class="btn ghost" style="margin-top:8px" onclick="IS_SIM&&IS_SIM.arenaAddPred()">＋ condition</button>
           </div>
@@ -860,7 +866,7 @@
           var vurl='dashboard.html';
           if(r.rule_spec){ try{ vurl='dashboard.html#verify='+encodeURIComponent(JSON.stringify(
             {id:r.id,title:r.title,author:r.author,rule_str:r.rule_str,kind:r.rule_spec.kind,
-             exit:r.rule_spec.exit,registered_at:r.rule_spec.registered_at,predicates:r.rule_spec.predicates})); }catch(e){} }
+             exit:r.rule_spec.exit,registered_at:r.rule_spec.registered_at,op:r.rule_spec.op,predicates:r.rule_spec.predicates})); }catch(e){} }
           h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+r.author+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="/r/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px;font-weight:600">receipt ↗</a><br><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
@@ -3390,7 +3396,7 @@ window.addEventListener("hashchange",goHash);
       const wantsPreds=(kind==="filter"||kind==="question");
       if(block) block.style.display=wantsPreds?"block":"none";
       const lbl=document.getElementById("arPredLabel");
-      if(lbl) lbl.innerHTML=(kind==="question"?"Ask whether keeping picks with":"Keep a pick only if")+' <span class="dim">(all conditions must hold)</span>';
+      if(lbl) lbl.textContent=(kind==="question"?"Ask whether keeping picks that match:":"Keep a pick if it matches:");
       if(wantsPreds && !document.querySelector("#arPreds .ar-pred")) IS_SIM.arenaAddPred();
     },
     arenaAddPred(){
@@ -3440,8 +3446,9 @@ window.addEventListener("hashchange",goHash);
           }
         }
       }
-      const rule_json= (kind==="filter"||kind==="question") ? {op:"and",predicates} : {op:"and",predicates:[]};
-      const canon=JSON.stringify({k:kind,e:exit,p:predicates.map(p=>p.field+p.cmp+JSON.stringify(p.value)).sort()});
+      const op=(kind==="filter"||kind==="question")&&((document.getElementById("arOp")||{}).value==="or")?"or":"and";
+      const rule_json= (kind==="filter"||kind==="question") ? {op,predicates} : {op:"and",predicates:[]};
+      const canon=JSON.stringify({k:kind,e:exit,o:op,p:predicates.map(p=>p.field+p.cmp+JSON.stringify(p.value)).sort()});
       return {ok:true, title, kind, rule_json, exit_id:exit, spec_hash:IS_SIM.arenaHash(canon)};
     },
     arenaHash(s){ let h=5381; for(let i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))>>>0; } return "h"+h.toString(36); },

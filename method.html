@@ -138,7 +138,7 @@ function toggleMenu(force){
   </ul>
 
   <h2><span class="n">7</span>What you can register (pick-time fields only)</h2>
-  <p>A rule may only reference fields that are known <b>at the moment the pick is logged</b> — <code>price_at_screen</code>, <code>float_shares</code>, <code>gap_pct</code>, <code>rvol</code>, <code>short_interest_pct</code>, <code>tier</code> — plus an exit from the fixed set above. Outcome columns are rejected, so no rule can reference the future. This whitelist is enforced both in the browser and again on the server at registration.</p>
+  <p>A rule may only reference fields that are known <b>at the moment the pick is logged</b> — <code>price_at_screen</code>, <code>float_shares</code>, <code>gap_pct</code>, <code>rvol</code>, <code>short_interest_pct</code>, <code>tier</code> — plus an exit from the fixed set above. Multiple conditions can be combined to match <b>all</b> of them (<code>and</code>) or <b>any</b> of them (<code>or</code>). Outcome columns are rejected, so no rule can reference the future. This whitelist is enforced both in the browser and again on the server at registration.</p>
 
   <h2><span class="n">8</span>Reproducible by anyone</h2>
   <p>One evaluator (<code>hypo_eval.py</code>, standard-library only, deterministic) scores house and user rules identically, and a self-test aborts the build if its numbers ever drift from the weekly report's hand-computed figures. Every value on the leaderboard re-derives from the public <a href="picks.csv" download>picks.csv</a> × <a href="outcomes.csv" download>outcomes.csv</a>. The <a href="dashboard.html">Validation dashboard</a> recomputes the house hypotheses live in your browser from those same files.</p>

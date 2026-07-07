@@ -229,7 +229,7 @@ async function main(){
     if(!spec) return;
     const esc=(s)=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
     const reg = spec.registered_at || "1900-01-01";
-    const keepP=(p,preds)=>(preds||[]).every(function(pr){
+    const _pred=(p,pr)=>{
       const raw=p[pr.field], c=pr.cmp, v=pr.value;
       if([">=",">","<=","<"].indexOf(c)>=0){ const x=num(raw); if(x==null) return true;   // missing ⇒ passes
         return c===">="?x>=v:c===">"?x>v:c==="<="?x<=v:x<v; }
@@ -238,7 +238,9 @@ async function main(){
       if(c==="in")return (v||[]).map(String).indexOf(s)>=0;
       if(c==="not_in")return (v||[]).map(String).indexOf(s)<0;
       return true;
-    });
+    };
+    const keepP=(p,preds)=>{ preds=preds||[];
+      return spec.op==="or" ? preds.some(pr=>_pred(p,pr)) : preds.every(pr=>_pred(p,pr)); };
     const exitRet=(o,ex)=>{ const scc=num(o.ret_open_close_net);
       if(ex==="same_day_close") return scc;
       if(ex && ex.indexOf("target_")===0){ const T=parseFloat(ex.split("_")[1]);

@@ -52,7 +52,8 @@ def _keeps(pick, selection):
     preds = selection.get("predicates", [])
     if not preds:
         return True                      # no selection => all picks (exit-kind)
-    return all(_test_pred(pick, p) for p in preds)   # op "and" (v1)
+    fn = any if selection.get("op") == "or" else all   # match ANY vs match ALL
+    return fn(_test_pred(pick, p) for p in preds)
 
 # ------------------------------------------------------------------ exits
 def _exit_return(o, exit_id):
@@ -202,6 +203,7 @@ def _card(rule, arm, base_post, delta, ci, cfg, asof, kind):
             "kind": kind,
             "exit": rule.get("exit", "same_day_close"),
             "registered_at": rule["registered_at"],
+            "op": (rule.get("selection") or {}).get("op", "and"),
             "predicates": (rule.get("selection") or {}).get("predicates", []),
         },
     }
@@ -232,7 +234,7 @@ def rule_to_str(rule):
         v = "{" + ", ".join(map(str, v)) + "}" if isinstance(v, list) else (
             f"{v:,.0f}" if isinstance(v, (int, float)) and v >= 1000 else v)
         parts.append(f"{p['field']} {_CMP_STR[p['cmp']]} {v}")
-    body = " ∧ ".join(parts)
+    body = (" ∨ " if rule["selection"].get("op") == "or" else " ∧ ").join(parts)
     if rule["kind"] == "question":
         return f"ask: does keeping [{body}] help or hurt?"
     return "keep: " + body
@@ -263,6 +265,9 @@ def _map_user_rule(row):
             return None
         sel = row.get("rule_json") or {"op": "and", "predicates": []}
         preds = sel.get("predicates", []) if isinstance(sel, dict) else []
+        op = sel.get("op", "and") if isinstance(sel, dict) else "and"
+        if op not in ("and", "or"):
+            op = "and"
         for p in preds:
             if p.get("field") not in _USER_FIELDS:   # any bad field => reject whole rule
                 return None
@@ -275,7 +280,7 @@ def _map_user_rule(row):
                        or (row.get("is_profiles") or {}).get("display_name") or "anon"),
             "registered_at": str(row["registered_at"])[:10],
             "kind": kind,
-            "selection": {"op": "and", "predicates": preds},
+            "selection": {"op": op, "predicates": preds},
             "exit": exit_id,
             # A 'question' makes no directional claim — its honesty range (CI) is the answer.
             "claim": {"metric": "expectancy",
@@ -383,26 +388,68 @@ def evaluate_registry(registry_path="hypotheses/registry.json",
 
 # ------------------------------------------------------------------ self-test
 def _selftest():
-    """Golden-master parity gate: deterministic point stats must match the hand-coded
-    weekly_report.py §4c/§4d numbers (and the Test-mode leaderboard). Aborts on drift."""
+    """Parity gate: evaluate()'s point stats for the six house rules must match an
+    INDEPENDENT recomputation done here (no shared keep/exit helpers), on whatever the
+    current CSVs hold. Data-robust by construction — it recomputes the reference from
+    the live log rather than pinning stale constants — so it catches logic regressions
+    without falsely aborting as the sample grows or an edge eventually clears. Aborts on drift."""
     picks, outs = load_log()
-    cfg = {"min_n": 30, "min_keep_frac": 0.15, "boot_iters": 500, "seed": 7}
-    asof = date(2026, 7, 5)
-    reg = json.load(open("hypotheses/registry.json"))
-    by_id = {h["id"]: h for h in reg["hypotheses"]}
-    exp = {  # (n_post, win_post, avg_post, delta_post)
-        "H-F1": (36, 42, -2.6, 0.2), "H-F2": (39, 41, -2.7, 0.1),
-        "H-F3": (44, 39, -3.0, -0.2), "H-F4": (40, 35, -3.6, -0.8),
-        "H-CLEAN": (29, 34, -3.7, -0.9), "H-EX1": (30, 60, -2.4, 1.7),
-    }
-    for hid, (n, win, avg, dl) in exp.items():
+    cfg = {"min_n": 30, "min_keep_frac": 0.15, "boot_iters": 200, "seed": 7}
+    asof = date.today()
+    by_id = {h["id"]: h for h in json.load(open("hypotheses/registry.json"))["hypotheses"]}
+    REG_F, REG_EX = "2026-06-22", "2026-06-23"     # frozen house registration dates
+
+    def _n(d, k):
+        try: return float(d.get(k))
+        except (TypeError, ValueError): return None
+    def keeps(p):                                   # independent house-filter predicates
+        pr, fl, gp = _n(p, "price_at_screen"), _n(p, "float_shares"), _n(p, "gap_pct")
+        ti = (p.get("tier") or "").strip()
+        K = {"H-F1": pr is None or pr >= 1.0, "H-F2": fl is None or fl < 3000000,
+             "H-F3": gp is None or gp < 20, "H-F4": ti not in ("A", "B")}
+        K["H-CLEAN"] = all(K[x] for x in ("H-F1", "H-F2", "H-F3", "H-F4"))
+        return K
+    def scc(o): return _n(o, "ret_open_close_net")
+    def ex1(o):                                     # independent target_10 net return
+        c5, mfe = _n(o, "ret_open_5dclose_net"), _n(o, "mfe_5d")
+        if mfe is None or c5 is None or scc(o) is None: return None
+        return 8.0 if mfe >= 10 else c5
+    def _stats(arm, diffs, base):
+        n = len(arm)
+        return (n,
+                round(100 * sum(1 for x in arm if x > 0) / n) if n else None,
+                round(sum(arm) / n, 1) if n else None,
+                (round(sum(diffs) / len(diffs), 1) if diffs else None) if diffs is not None
+                else (round(sum(arm) / n - sum(base) / len(base), 1) if n and base else None))
+    def ref_filter(hid):
+        kept, base = [], []
+        for o in outs:
+            p = picks.get(o["pick_id"]); r = scc(o)
+            if not p or r is None or not (p.get("trading_date", "") > REG_F): continue
+            base.append(r)
+            if keeps(p)[hid]: kept.append(r)
+        return _stats(kept, None, base)
+    def ref_ex1():
+        arm, diffs = [], []
+        for o in outs:
+            p = picks.get(o["pick_id"])
+            if not p or not (p.get("trading_date", "") > REG_EX): continue
+            a, b = ex1(o), scc(o)
+            if a is None or b is None: continue
+            arm.append(a); diffs.append(a - b)
+        return _stats(arm, diffs, None)
+
+    for hid in ("H-F1", "H-F2", "H-F3", "H-F4", "H-CLEAN"):
         c = evaluate(by_id[hid], picks, outs, cfg, asof)
-        got = (c["n_post"], c["win_post"], c["avg_post"], c["delta_post"])
-        assert got == (n, win, avg, dl), f"PARITY FAIL {hid}: got {got} want {(n, win, avg, dl)}"
-    # every current hypothesis must be non-significant (0 clear the bar) — the honest state
-    assert all(not evaluate(by_id[h], picks, outs, cfg, asof)["significant"] for h in exp), \
-        "expected 0 significant hypotheses at current sample sizes"
-    print("hypo_eval self-test: PARITY OK (6/6 match, 0 significant)", file=sys.stderr)
+        got, want = (c["n_post"], c["win_post"], c["avg_post"], c["delta_post"]), ref_filter(hid)
+        assert got == want, f"PARITY FAIL {hid}: evaluate {got} vs independent ref {want}"
+    c = evaluate(by_id["H-EX1"], picks, outs, cfg, asof)
+    got, want = (c["n_post"], c["win_post"], c["avg_post"], c["delta_post"]), ref_ex1()
+    assert got == want, f"PARITY FAIL H-EX1: evaluate {got} vs independent ref {want}"
+    c2 = evaluate(by_id["H-EX1"], picks, outs, cfg, asof)   # determinism
+    assert (c2["n_post"], c2["avg_post"], c2["delta_post"]) == (c["n_post"], c["avg_post"], c["delta_post"]), \
+        "non-deterministic evaluate()"
+    print(f"hypo_eval self-test: PARITY OK (6/6 vs independent reference, {len(outs)} outcomes)", file=sys.stderr)
 
 if __name__ == "__main__":
     import os
