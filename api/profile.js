@@ -73,12 +73,14 @@ export default async function handler(req, res) {
     .map(r => {
       const ci = Array.isArray(r.ci95) ? `[${pct(r.ci95[0])}, ${pct(r.ci95[1])}]` : "—";
       const flag = r.significant ? `<span class="tag ok">clears 95%</span>` : `<span class="tag ns">directional</span>`;
+      const stabTag = (r.stability === "stable" || r.stability === "mixed") ? ` <span class="tag ${r.stability === "stable" ? "ok" : "ns"}">sign ${esc(r.stability)}</span>` : "";
+      const kindTag = r.kind === "question" ? `<span class="tag q">question</span> ` : "";
       return `<tr>
-        <td class="l"><b>${esc(r.id)}</b> · ${esc(r.title)}<div class="rule">${esc(r.rule_str || "")} · reg ${fmtDate(r.registered_at)}</div></td>
+        <td class="l">${kindTag}<b>${esc(r.id)}</b> · ${esc(r.title)}<div class="rule">${esc(r.rule_str || "")} · reg ${fmtDate(r.registered_at)}</div></td>
         <td class="num">${esc(r.n_post)}</td>
         <td class="num">${esc(r.win_post)}%</td>
         <td class="num ${cls(r.delta_post)}">${pct(r.delta_post)}<div class="ci">${ci}</div></td>
-        <td>${flag}</td>
+        <td>${flag}${stabTag}</td>
         <td><a class="rcpt" href="${esc(base)}/r/${encodeURIComponent(r.id)}" target="_blank" rel="noopener">receipt ↗</a></td>
       </tr>`;
     }).join("");
@@ -120,6 +122,7 @@ export default async function handler(req, res) {
   .tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
   .tag.ok{color:var(--blue);background:#10202e;border:1px solid #24405a}
   .tag.ns{color:var(--amber);background:#2a1d10;border:1px solid #5a3a22}
+  .tag.q{color:#c99bff;background:#241a33;border:1px solid #4a3a6a}
   .rcpt{font-weight:600;font-size:13px;white-space:nowrap}
   .base{color:var(--muted);font-size:13px;margin:14px 2px}
   .ft{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
