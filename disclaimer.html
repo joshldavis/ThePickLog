@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ThePickLog — Disclaimer</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  #mobileMenu a:hover{background:#ffffff08}
+  @media(max-width:880px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 70px}
+  h1{font-size:26px;margin:.2em 0 .1em;letter-spacing:-.01em}
+  .lead{color:var(--dim);font-size:15px;margin:0 0 6px}
+  h2{font-size:16px;margin:30px 0 8px;letter-spacing:.1px}
+  p{margin:8px 0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+  .callout{border-left:3px solid var(--amber);padding:4px 0 4px 12px;color:var(--dim);font-size:14px;margin:12px 0}
+  a{color:var(--blue)}
+  .foot{color:var(--dim);font-size:12px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+  .foot a{color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="index.html#watchlist">Watchlist</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="dashboard.html">Validation</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="method.html">Method</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <span class="proto">PROTOTYPE</span>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="index.html#watchlist">Watchlist</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="dashboard.html">Validation</a>
+    <a href="calculator.html">Calculator</a>
+    <a href="method.html">Method</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open); b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+</script>
+
+<div class="wrap">
+  <h1>Disclaimer</h1>
+  <p class="lead">Please read this before using ThePickLog.</p>
+
+  <div class="panel">
+    <b>ThePickLog is a research project, not investment advice.</b> Nothing here is a recommendation
+    to buy or sell any security. We are not a registered investment adviser or broker-dealer. All
+    trades shown are simulated (paper) and reflect no real money. Many names we study are low-float
+    microcaps that are volatile and illiquid — you can lose your entire investment. Do your own
+    research and consult a licensed professional before investing. Past results, including our public
+    track record, do not predict future returns.
+  </div>
+
+  <h2>What ThePickLog is</h2>
+  <p>ThePickLog is a transparency-first research lab operated by AMD Ventures, LLC. We publish
+  quantitative hypotheses about the stock market, test them out-of-sample, and log the results —
+  including the ones that fail. The site exists so a stranger can verify our claims, not so anyone
+  can copy trades.</p>
+
+  <h2>What ThePickLog is not</h2>
+  <p>We are not a registered investment adviser, broker-dealer, or financial planner. Nothing on this
+  site is personalized investment advice, a solicitation, or a recommendation to buy, sell, or hold
+  any security. We do not know your financial situation, goals, or risk tolerance, and nothing here
+  is tailored to them.</p>
+
+  <h2>Everything shown is research, not a signal</h2>
+  <p>Screener output, graded picks, and hypothesis results are published as general-interest research.
+  They are not real-time "act now" alerts. Market data may be delayed. Do not treat any list on this
+  site as a set of trades to place.</p>
+
+  <h2>Simulated performance</h2>
+  <p>All performance, positions, and the track record are generated from simulated (paper) trading
+  using historical or delayed data. No real money is at risk, and simulated results do not reflect the
+  costs, slippage, liquidity limits, or emotions of real trading.</p>
+  <p class="callout"><b>Microcaps especially.</b> Low-float names are thinly traded and can move
+  sharply on small volume; modeled fills routinely overstate what you could actually get. Treat every
+  number here as a research proxy, not an achievable result.</p>
+
+  <h2>Risk</h2>
+  <p>Investing in equities — and microcap equities in particular — carries substantial risk, including
+  the total loss of capital. Past performance, including any track record shown here, is not
+  indicative of future results.</p>
+
+  <h2>Your responsibility</h2>
+  <p>Any decision you make is your own. Do your own due diligence and consult a licensed financial
+  professional before making investment decisions.</p>
+
+  <h2>Contact</h2>
+  <p>AMD Ventures, LLC (Florida, USA) · <a href="mailto:davis1163@gmail.com">davis1163@gmail.com</a></p>
+
+  <p class="foot">
+    <b>Prototype — sample copy pending legal review.</b>
+    <a href="disclaimer.html">Disclaimer</a> · <a href="privacy.html">Privacy</a>
+  </p>
+</div>
+</body>
+</html>
