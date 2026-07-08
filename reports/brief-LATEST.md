@@ -1,33 +1,33 @@
-# ThePickLog — Morning Brief · 2026-07-07
+# ThePickLog — Morning Brief · 2026-07-08
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **BJDX** (tier A, score 100.0) — very high relative volume (22×); thin float (0.9M); large up-gap (+38%). Watch level (reference only, +20%): $1.92.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SUGP** (tier A, score 84.9) — very high relative volume (11×); thin float (1.2M). Watch level (reference only, +20%): $1.068.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **HKIT** (tier C, score 49.4) — thin float (0.0M). Watch level (reference only, +20%): $4.812.
-- **NCT** (tier C, score 46.2) — thin float (0.4M). Watch level (reference only, +20%): $3.3014.
-- **VMAR** (tier D, score 43.6) — thin float (0.1M). Watch level (reference only, +20%): $1.686.
+- **BJDX** (tier A, score 100.0) — very high relative volume (27×); thin float (0.9M); large up-gap (+25%). Watch level (reference only, +20%): $1.74.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **SUGP** (tier A, score 83.6) — very high relative volume (11×); thin float (1.2M). Watch level (reference only, +20%): $0.9216.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **JAGX** (tier C, score 47.6) — thin float (0.6M). Watch level (reference only, +20%): $3.192.
+- **BNZI** (tier C, score 47.0) — thin float (1.4M). Watch level (reference only, +20%): $4.032.
+- **IOTR** (tier C, score 46.2) — thin float (0.6M). Watch level (reference only, +20%): $3.024.
 
 ## Risk area — read before anything
 - **BJDX**: already extended pre-market — chasing buys the top.
 - **BJDX**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: sub-$1 — heightened manipulation / delisting risk.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
-- **NCT**: high short interest (23% of float) — squeeze-prone and violent both ways.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
-- **CUPR**: high short interest (24% of float) — squeeze-prone and violent both ways.
-- **CUPR**: ultra-thin float — spreads and slippage can be severe.
-- **IOTR**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **SVRN**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: high short interest (30% of float) — squeeze-prone and violent both ways.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **SVRN**: ultra-thin float — spreads and slippage can be severe.
+- **NCT**: high short interest (23% of float) — squeeze-prone and violent both ways.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **RKDA**: sub-$1 — heightened manipulation / delisting risk.
+- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
+- **CUPR**: high short interest (24% of float) — squeeze-prone and violent both ways.
+- **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **194** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 27%) vs **-14%** (rug 13%) for C/D.
