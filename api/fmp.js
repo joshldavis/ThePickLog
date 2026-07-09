@@ -64,6 +64,26 @@ export default async function handler(req, res) {
     });
   }
 
+  // ---- Owner-only gate ---------------------------------------------------
+  // FMP's terms prohibit displaying their data on a multi-user public site
+  // without a Data Display & Licensing agreement (free or paid). Once
+  // FMP_UI_TOKEN is set in Vercel env, this proxy refuses public callers and
+  // the frontend degrades to its labeled "Sample data" state (the committed
+  // pick log / track record is unaffected — it never used FMP). The owner can
+  // still pull live data by presenting the token (?t=... or the x-fmp-token
+  // header), e.g. bookmarking the site with ?t=<token>. If FMP_UI_TOKEN is
+  // unset, behavior is unchanged (open) — setting it is what closes the gate.
+  const GATE = process.env.FMP_UI_TOKEN;
+  if (GATE) {
+    const q0 = req.query || {};
+    const tok = req.headers["x-fmp-token"] || q0.t || q0.token || "";
+    if (tok !== GATE) {
+      return res.status(403).json({
+        error: "FMP live data is owner-only and not configured for public use.",
+      });
+    }
+  }
+
   const q = req.query || {};
   const fn = String(q.fn || "");
   const path = buildPath(fn, q);

@@ -558,7 +558,10 @@
       <label for="keyIn">Live market data &amp; fundamentals — served securely via <code>/api/fmp</code></label>
       <p class="note" style="margin-top:8px">For the deployed app, set <code>FMP_API_KEY</code> in your Vercel
         environment variables. Quotes and fundamentals are then proxied server-side — <b>the key never reaches
-        the browser</b> (same pattern as the Alpaca keys). No setup needed here.</p>
+        the browser</b> (same pattern as the Alpaca keys). <b>Live quotes are owner-only</b>: because the data
+        vendor's terms don't permit public redistribution, the proxy is gated (<code>FMP_UI_TOKEN</code>) and
+        visitors see clearly-labeled <b>Sample data</b> for the live screen. The pick log and track record are
+        unaffected — they never used this feed.</p>
       <label for="keyIn" style="display:block;margin-top:12px">Local override <span class="dim" style="font-weight:400">— optional, for running this file on your own machine</span></label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px">
         <input id="keyIn" placeholder="paste a free, disposable FMP key (blank = use proxy / sample)" />
@@ -1282,6 +1285,15 @@ const FMP_BASE = "https://financialmodelingprep.com/stable/";
    Once the proxy reports it's unconfigured, we stop pinging it and fall back
    to sample data so we don't spam failing requests. */
 let FMP_PROXY_OFF = false;
+// Owner token for the gated /api/fmp proxy. Visitors have none → proxy returns
+// "owner-only" → the site shows labeled Sample data (the record is unaffected).
+// The owner arms live data by loading the site once with ?t=<token> (persisted).
+let FMP_TOKEN = "";
+try{
+  const _t=new URL(location.href).searchParams.get("t");
+  if(_t){ FMP_TOKEN=_t; try{ localStorage.setItem("is_fmp_token", _t); }catch{} }
+  else { try{ FMP_TOKEN=localStorage.getItem("is_fmp_token")||""; }catch{} }
+}catch{}
 function fmpPath(fn, p){
   p = p || {};
   const s = encodeURIComponent(p.symbol||"");
@@ -1301,12 +1313,13 @@ async function fmpGet(fn, p){
     const r=await fetch(url); if(!r.ok) throw new Error("HTTP "+r.status); return r.json();
   }
   if(FMP_PROXY_OFF) throw new Error("proxy unconfigured");
-  const qs=new URLSearchParams(Object.assign({fn}, p)).toString();
+  const _params=Object.assign({fn}, p); if(FMP_TOKEN) _params.t=FMP_TOKEN;
+  const qs=new URLSearchParams(_params).toString();
   const r=await fetch("/api/fmp?"+qs);
   let j=null; try{ j=await r.json(); }catch{}
   if(!r.ok || !j || j.error){
     const msg=(j&&j.error)||("proxy HTTP "+r.status);
-    if(/not configured/i.test(msg)) FMP_PROXY_OFF=true;   // stop retrying
+    if(/not configured|owner-only/i.test(msg)) FMP_PROXY_OFF=true;   // stop retrying (unset key OR owner-gated)
     throw new Error(msg);
   }
   return j;
