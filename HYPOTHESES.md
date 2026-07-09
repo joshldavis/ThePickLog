@@ -196,5 +196,75 @@ In-sample findings are diagnostics only; these are frozen here so only picks log
 | **H-REFLEX** | does publishing a pick move the name? (post-publication drift/volume vs audience size) | reflexivity is CIV; ~nil now (no traffic), monitor as reach grows |
 
 ---
+
+## Batch #3 — exit rule + methods registrations (frozen 2026-07-08)
+
+Registered together on this date. Only picks logged **after 2026-07-08** count toward any
+verdict below. Conventions inherited from H-EX1/H-EX2 (2% haircut, fills at level,
+conservative collisions, deterministic from committed CSVs).
+
+### H-EX10 — tier-gated, amplitude-matched exit
+
+**Rule (frozen):** tier **A/B** picks → **+20% target** (net +18%), unfilled → 5-day close.
+Tier **C/D** picks → **same-day close** (no overnight hold, no target).
+
+**Baselines to beat:** same-day close on all picks (primary) and H-EX8 (secondary — does
+gating C/D out of the target beat giving them a +10% target?). Judged on avg net/trade.
+
+**Registration rationale (in-sample context, NOT the test):** tiers rank spike *intensity*
+(A/B median 5-day MFE 23–28%, P(touch +10%) 75–81%; C/D ≈ 10–13% and ~50%), so the target
+should be scaled to the tier's amplitude and withheld where the amplitude isn't there. In
+the daily-path replay, A/B + 20% target returned +2.8% avg vs −0.6% same-day baseline
+(n=15), while every C/D target variant lost to same-day close.
+
+**⚠️ Concentration caveat (must stay attached):** 7 of 28 in-sample A/B picks are CUPR —
+the single best ticker in the log (median MFE +61.7%). The in-sample signal may be one
+name's pump. **Robustness clause:** a post-registration win only counts if it (a) survives
+a leave-one-ticker-out check (drop the largest-contributing ticker; direction must hold)
+and (b) survives the H-IND1 cluster bootstrap. Slippage caveat applies with extra force:
+A/B names are the thinnest in the log.
+
+### H-IND1 — effective sample size / independence correction (methods, not a trading rule)
+
+**Registered acknowledgment:** the scan universe is a **fixed 16-ticker list**
+(`CONFIG["UNIVERSE"]`), and 13–16 of the 16 pass the screen on every scan day. Outcomes on
+the same ticker across consecutive days share overlapping 5-day price paths and are
+mechanically correlated. Headline stats quoted as "n=165 picks" therefore carry the
+precision of roughly **n≈16 name-level bets** (fewer, counting episodes: the 31 rug rows
+collapse to ~10 tickers / a handful of collapse events). Per-ticker avg net spans −13.3%
+(HKIT) to +1.9% (CUPR) — ticker fixed effects plausibly dominate every subgroup table.
+
+**Rule (frozen):** from this date, every hypothesis verdict (including the Gate-1 verdict
+scheduled 2026-07-27) must report, alongside the pooled stat: (a) a **cluster bootstrap by
+ticker** (resample tickers with replacement, recompute the arm-vs-baseline delta; report
+the bootstrap interval), and (b) the **per-ticker sign count** (how many of the 16 names
+individually favor the arm). A pooled win that fails both is reported as **not
+established**, not as a win. This applies retroactively as a re-read of prior tables, and
+prospectively to all OOS windows. The R1 Beta-Binomial tracker's iid assumption is flagged
+as violated; its posterior is directional only until re-specified with clustering.
+
+### H-DEDUP — one-entry-per-episode re-read
+
+**Rule (frozen):** re-evaluate the headline stats and every registered filter/exit arm on a
+**deduplicated pick set**: keep only the *first* pick of each ticker per episode, where an
+episode ends after 5 consecutive trading days without that ticker being re-picked (i.e., no
+overlapping holds of the same name). In the current log this collapses ~300 picks to
+roughly one row per ticker-episode.
+
+**Question:** does *any* in-sample or OOS finding (Finding A, H-F1..F4, H-EX1..EX9, tier
+tables) survive dedup? A finding that exists only in the duplicated view is an artifact of
+repeated sampling, not a property of the picks.
+
+### H-UNIV1 — universe expansion (structural, forward-only)
+
+**Registered intent:** nothing in this log generalizes beyond the 16 hardcoded names. The
+external-validity claim ("this screen finds low-float spike-fade names") requires a
+market-wide candidate pool. Plan: replace or augment `CONFIG["UNIVERSE"]` with a true
+market-wide low-float gap scan (or, minimally, a rotating universe), version-bump the model
+(v0.3), and treat the fixed-16 record as its own closed cohort. Complements H-CTRL: the
+matched-control test is uninterpretable while the "screen" admits ~100% of its universe
+daily — there is no unscreened in-universe control to match against.
+
+---
 *Pre-registration, not investment advice. The forward log (picks.csv/outcomes.csv) is the
 only judge; everything here is a hypothesis until post-registration data says otherwise.*
