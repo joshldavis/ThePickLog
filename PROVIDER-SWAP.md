@@ -1,40 +1,45 @@
-# Swapping the logger off Yahoo → Polygon (drop-in)
+# Swapping the logger off Yahoo → Alpaca (drop-in)
 
 `data_provider.py` lets the engine switch its market-data feed with one env var. It's
 **inert until you flip it** — default `DATA_PROVIDER=yfinance` reproduces today's
-behavior exactly. This file is the wiring guide for when you have a Polygon key and are
-ready to move off the unofficial Yahoo scraper (the P1 data-licensing item).
+behavior exactly. This is the wiring guide for moving the logger off the unofficial
+Yahoo scraper (the P1 data-licensing item).
 
-## Why
+**Chosen feed: Alpaca.** You already have the account, it's ~$99/mo for the coverage you
+need (vs Polygon's $1,999/mo business tier), and the logger is backend/own-use — not
+public redistribution — so it fits a standard subscription. Polygon is kept in the
+adapter as an alternative (`DATA_PROVIDER=polygon`). See the audit doc
+`ThePickLog-DataSource-Audit-2026-07-07.md` for the full comparison.
+
+## Why move off Yahoo
 `yfinance` scrapes Yahoo's unofficial endpoints; Yahoo's ToS restricts commercial
-redistribution. Fine for the free/personal tool, but it's the weakest link the day you
-monetize. Polygon is a licensed feed with clear commercial terms. See the audit doc
-`ThePickLog-DataSource-Audit-2026-07-07.md` in the stock-screener folder.
+redistribution. Fine for the free/personal tool, but the weakest link at monetization.
 
-## Before you rely on it — 3 things to verify on your Polygon plan
-1. **Pre-market data.** The scan runs ~7:30am ET (pre-market). Polygon's snapshot starts
-   updating ~4:00am ET, but confirm your tier serves pre-market (Starter is 15-min
-   delayed; real-time is a higher tier). If not, the gap%/price at screen will be wrong.
-2. **Free float.** Polygon returns shares *outstanding*, not free float. The screen's
-   float filter + float_score want FREE FLOAT. The adapter falls back to outstanding and
-   sets `float_is_outstanding=True`. For true float keep FMP/another source, or accept the
-   approximation knowingly (it will change which names screen).
-3. **Short interest.** Polygon's short-interest feed is FINRA-sourced, ~2-week cadence,
-   possibly plan-gated. Verify the endpoint path in `_short_interest_pct()` and that your
-   plan includes it; otherwise it returns "" (same as Yahoo when unavailable).
+## Before you rely on Alpaca — verify these
+1. **Use the SIP feed.** Set `ALPACA_DATA_FEED=sip`. The free IEX feed is ~2-3% of
+   market volume and unreliable for low-float microcaps (your actual universe). SIP
+   (full market) needs **Algo Trader Plus, $99/mo** — subscribe before cutover.
+2. **Business/own-use terms.** Confirm with Alpaca support that your LLC using the
+   $99 tier for internal/own data processing (not public redistribution) is fine —
+   internal use normally is; redistribution/display is the restricted part.
+3. **Float is approximated.** Alpaca returns no share count, so the adapter fills
+   `float_shares` from **free SEC EDGAR shares outstanding** (over-counts vs true
+   float; flagged via `float_is_outstanding`). Acceptable for the screen, but know it.
+4. **Short interest** comes from FINRA later (returns "" for now) — same as before the
+   swap; Yahoo's `shortPercentOfFloat` was the only free source and it's captured-not-scored.
 
 ## Test it first (no engine changes)
 ```bash
-export POLYGON_API_KEY=...          # your key
-DATA_PROVIDER=polygon python data_provider.py     # selftest: SPY + BJDX quote, regime, bars
+export ALPACA_KEY_ID=...  ALPACA_SECRET_KEY=...
+DATA_PROVIDER=alpaca ALPACA_DATA_FEED=sip python data_provider.py   # selftest: SPY+BJDX
 ```
 Confirm the quote dict looks sane (price/prev/vol/avg/float) before wiring it in.
 
-## The wiring (3 edits in ignitionscan.py)
+## The wiring (3 edits in ignitionscan.py) — same for any provider
 
 **0. Provenance — bump the model version** so picks stay attributable to their feed:
 ```python
-MODEL_VERSION = "v0.3-poly"   # was "v0.2-yf"
+MODEL_VERSION = "v0.3-alpaca"   # was "v0.2-yf"
 ```
 
 **1. Top of file:** `import data_provider as dp`
@@ -49,8 +54,7 @@ regime = P.get_market_regime()
 # was: q = fetch_one(yf, sym)
 q = P.get_quote(sym)          # same dict shape: price/prev/vol/avg/float_shares/short_interest_pct
 ```
-(You can keep `_yf`, `fetch_one`, `market_regime` in the file — they're just unused when
-`DATA_PROVIDER=polygon`.)
+(You can keep `_yf`, `fetch_one`, `market_regime` — unused when `DATA_PROVIDER=alpaca`.)
 
 **3. cmd_grade + persist_path** — the provider returns a list of dict bars (sorted asc,
 keys: date/open/high/low/close/volume) instead of a pandas DataFrame:
@@ -87,21 +91,30 @@ for i, bar in enumerate(window):
 ```
 
 ## The GitHub Actions change
-In `.github/workflows/ignitionscan.yml`, add to the job env and (optionally) drop the
-yfinance install once you're fully on Polygon (the adapter's Polygon path is stdlib-only):
+The logger runs on GitHub Actions, so the Alpaca keys must be **repo secrets** (the ones
+in Vercel are for the trading proxy, not the Actions runner). Add under repo
+**Settings → Secrets → Actions**: `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY`. Then in
+`.github/workflows/ignitionscan.yml` add to the job env (and you can drop the
+`pip install yfinance` once fully on Alpaca — the Alpaca path is stdlib-only):
 ```yaml
     env:
-      DATA_PROVIDER: polygon
-      POLYGON_API_KEY: ${{ secrets.POLYGON_API_KEY }}
+      DATA_PROVIDER: alpaca
+      ALPACA_DATA_FEED: sip
+      ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+      ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
 ```
-Add `POLYGON_API_KEY` under repo **Settings → Secrets → Actions** (same place as the
-healthcheck secrets). Keep `DATA_PROVIDER` unset (or `yfinance`) to instantly roll back.
+Leave `DATA_PROVIDER` unset (or `yfinance`) to instantly roll back.
 
 ## Cutover guidance (protect the immutable record)
 - **Don't regrade old picks with the new feed.** Prices differ slightly vendor-to-vendor;
   regrading history would rewrite the immutable record. Let existing picks finish grading
-  on Yahoo; start Polygon for **new** picks only (the model-version bump marks the seam).
-- Keep EDGAR for fundamentals/catalyst/dilution (free, redistributable) and FINRA for
-  short interest — this swap is only the price/OHLC/volume layer.
-- `data_provider.py` ships with a mock-tested parser; still run the live selftest against
-  your key before the first real Polygon scan.
+  on Yahoo; start Alpaca for **new** picks only (the model-version bump marks the seam).
+- Keep EDGAR for fundamentals/catalyst/dilution + the float proxy, and FINRA for short
+  interest — this swap is only the price/OHLC/volume layer.
+- `data_provider.py` ships mock-tested; still run the live selftest against your keys
+  (with `ALPACA_DATA_FEED=sip`) before the first real Alpaca scan.
+
+## Alternative: Polygon (kept in the adapter)
+`DATA_PROVIDER=polygon` + `POLYGON_API_KEY` works too, but Polygon's business/public-use
+tier is $1,999/mo — only worth it if you also need it for **public** real-time display.
+For the backend logger, Alpaca at $99 is the better fit.

@@ -7,11 +7,13 @@ WHY
     scraper. That's fine for a free/personal tool, but Yahoo's ToS restricts
     commercial redistribution and yfinance is unsanctioned — so it's the weakest
     link the day ThePickLog monetizes. This module lets the engine switch to a
-    licensed source (Polygon) by flipping one env var, WITHOUT changing any of the
-    engine's logic or the shape of the immutable log.
+    licensed source by flipping one env var, WITHOUT changing any of the engine's
+    logic or the shape of the immutable log. CHOSEN feed = Alpaca (you already have
+    the account; $99/mo full-SIP covers the low-float universe; backend/own-use, not
+    redistribution). Polygon is kept as an alternative.
 
 DESIGN
-    One interface, two implementations, a factory:
+    One interface, three implementations, a factory:
 
         P = get_provider()               # reads $DATA_PROVIDER (default "yfinance")
         q = P.get_quote("BJDX")          # -> dict matching ignitionscan.fetch_one()
@@ -19,20 +21,22 @@ DESIGN
         r = P.get_market_regime()        # -> "risk-on" | "risk-off" | "neutral" | "unknown"
 
     Default is "yfinance" so importing/using this module changes NOTHING until you
-    set DATA_PROVIDER=polygon + POLYGON_API_KEY. See PROVIDER-SWAP.md for wiring.
+    set DATA_PROVIDER=alpaca (+ ALPACA_KEY_ID/ALPACA_SECRET_KEY) — or =polygon.
+    See PROVIDER-SWAP.md for wiring.
 
-    PolygonProvider uses only the standard library (urllib) — no new dependency.
+    The Alpaca and Polygon providers use only the standard library (urllib) —
+    no new dependency.
 
-⚠️ TWO FIELDS POLYGON CANNOT CLEANLY REPLACE — verify before you rely on them:
-    - float_shares: Polygon returns shares *outstanding*, not free float. The screen's
-      float filter/score wants FREE FLOAT. This adapter falls back to outstanding and
-      sets `float_is_outstanding=True` so the caller can flag it. For true float you
-      still need FMP/another source (or accept the approximation, loudly).
-    - short_interest_pct: Polygon's short-interest feed is FINRA-sourced on a two-week
-      cadence and may require a specific plan. Returns "" if unavailable.
+⚠️ FLOAT + SHORT INTEREST — neither price vendor gives these; handled the same way:
+    - float_shares: Alpaca has NO share count; Polygon has shares *outstanding* (not
+      free float). This module approximates float with **free SEC EDGAR shares
+      outstanding** (edgar_shares_outstanding()) and sets `float_is_outstanding=True`
+      so the caller can flag the over-count. True float still needs a paid source.
+    - short_interest_pct: from FINRA (bi-monthly); returns "" until wired. (Polygon
+      also exposes a FINRA-sourced short-interest feed.)
 
 ⚠️ PROVENANCE: switching the price source changes the record's lineage. When you flip
-    to Polygon, BUMP MODEL_VERSION in ignitionscan.py (e.g. "v0.2-yf" -> "v0.3-poly")
+    to Alpaca, BUMP MODEL_VERSION in ignitionscan.py (e.g. "v0.2-yf" -> "v0.3-alpaca")
     so every picks.csv row stays attributable to the feed that produced it. This is a
     verifiability-standard requirement, not optional.
 """
@@ -241,9 +245,163 @@ class PolygonProvider:
             return "unknown"
 
 
+# ============================================ free EDGAR shares (float proxy)
+# Neither Alpaca nor Polygon returns FREE FLOAT. Alpaca returns no share count at
+# all, so for the screen's float filter/score we approximate float with shares
+# OUTSTANDING from SEC EDGAR (free, public domain, already used elsewhere in the
+# app). It's an over-count vs true float — flagged via float_is_outstanding.
+_EDGAR_UA = {"User-Agent": "ThePickLog/1.0 (davis1163@gmail.com)"}
+_edgar_cik = {}   # ticker -> zero-padded CIK
+_edgar_sh = {}    # ticker -> shares outstanding (int)
+
+
+def _edgar_json(url):
+    req = urllib.request.Request(url, headers=_EDGAR_UA)
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
+def edgar_shares_outstanding(symbol):
+    """Latest dei:EntityCommonStockSharesOutstanding for a ticker, or 0. Cached."""
+    sym = symbol.upper()
+    if sym in _edgar_sh:
+        return _edgar_sh[sym]
+    try:
+        if not _edgar_cik:
+            data = _edgar_json("https://www.sec.gov/files/company_tickers.json")
+            for row in data.values():
+                _edgar_cik[row["ticker"].upper()] = str(row["cik_str"]).zfill(10)
+        cik = _edgar_cik.get(sym)
+        if not cik:
+            _edgar_sh[sym] = 0
+            return 0
+        facts = _edgar_json(
+            f"https://data.sec.gov/api/xbrl/companyconcept/CIK{cik}"
+            "/dei/EntityCommonStockSharesOutstanding.json")
+        pts = (facts.get("units") or {}).get("shares") or []
+        val = int(max(pts, key=lambda p: p.get("end", ""))["val"]) if pts else 0
+        _edgar_sh[sym] = val
+        return val
+    except Exception:
+        _edgar_sh[sym] = 0
+        return 0
+
+
+# ================================================================ Alpaca (chosen)
+class AlpacaProvider:
+    """Alpaca Market Data API — the chosen feed (you already have the account).
+
+    Feed tiers (ALPACA_DATA_FEED):
+      sip  full market via CTA+UTP = 100% volume — needs Algo Trader Plus ($99/mo).
+           REQUIRED for reliable low-float/microcap coverage. (default here)
+      iex  free, IEX-only (~2-3% of volume) — thin/unreliable for pennies.
+
+    Endpoints (data.alpaca.markets):
+      snapshot  /v2/stocks/{sym}/snapshot   → latestTrade / dailyBar / prevDailyBar
+      bars      /v2/stocks/{sym}/bars?timeframe=1Day&start&end&adjustment=raw
+    Price/OHLC/volume come from Alpaca; FLOAT from free EDGAR shares outstanding;
+    short interest from FINRA later (returns "" for now). Auth uses the SAME keys
+    as the Alpaca trading proxy (ALPACA_KEY_ID / ALPACA_SECRET_KEY).
+    """
+
+    name = "alpaca"
+    BASE = "https://data.alpaca.markets/v2/stocks"
+
+    def __init__(self, key=None, secret=None, feed=None, avg_window_days=30, throttle=0.1):
+        self.key = key or os.environ.get("ALPACA_KEY_ID") or os.environ.get("APCA_API_KEY_ID", "")
+        self.secret = secret or os.environ.get("ALPACA_SECRET_KEY") or os.environ.get("APCA_API_SECRET_KEY", "")
+        if not (self.key and self.secret):
+            sys.exit("ALPACA_KEY_ID / ALPACA_SECRET_KEY not set (add as GitHub Actions secrets).")
+        self.feed = (feed or os.environ.get("ALPACA_DATA_FEED", "sip")).lower()
+        self.avg_window_days = avg_window_days
+        self.throttle = throttle
+
+    def _hdr(self):
+        return {"APCA-API-KEY-ID": self.key, "APCA-API-SECRET-KEY": self.secret,
+                "User-Agent": "ThePickLog/1.0"}
+
+    def _get(self, path, params=None, retries=3):
+        params = dict(params or {})
+        params["feed"] = self.feed
+        url = self.BASE + path + "?" + urllib.parse.urlencode(params)
+        last = None
+        for attempt in range(retries):
+            try:
+                req = urllib.request.Request(url, headers=self._hdr())
+                with urllib.request.urlopen(req, timeout=20) as r:
+                    return json.loads(r.read().decode("utf-8"))
+            except Exception as e:  # noqa: BLE001 (incl. HTTP 429)
+                last = e
+                time.sleep(1.5 * (attempt + 1))
+        raise last
+
+    def get_quote(self, symbol):
+        try:
+            snap = self._get(f"/{symbol}/snapshot")
+        except Exception:
+            return None
+        lt = (snap.get("latestTrade") or {}).get("p")
+        db = snap.get("dailyBar") or {}
+        pdb = snap.get("prevDailyBar") or {}
+        mb = snap.get("minuteBar") or {}
+        price = lt or mb.get("c") or db.get("c")
+        if not price:
+            return None
+        prev = pdb.get("c")
+        vol = db.get("v") or 0
+        time.sleep(self.throttle)
+        avg = self._avg_volume(symbol)
+        flt = edgar_shares_outstanding(symbol)  # float proxy (see caveat)
+        return {"symbol": symbol, "price": float(price), "prev": float(prev or 0),
+                "vol": float(vol or 0), "avg": float(avg or 0),
+                "float_shares": int(flt or 0), "short_interest_pct": "",
+                "float_is_outstanding": True}
+
+    def _avg_volume(self, symbol):
+        end = datetime.now(timezone.utc).date()
+        start = end - timedelta(days=self.avg_window_days * 2)
+        try:
+            j = self._get(f"/{symbol}/bars",
+                          {"timeframe": "1Day", "start": start.isoformat(),
+                           "end": end.isoformat(), "adjustment": "raw", "limit": 10000})
+            vols = [b.get("v", 0) for b in (j.get("bars") or [])][-self.avg_window_days:]
+            return sum(vols) / len(vols) if vols else 0.0
+        except Exception:
+            return 0.0
+
+    def get_daily_bars(self, symbol, start, end):
+        """start/end 'YYYY-MM-DD'. Engine end is EXCLUSIVE (yfinance); Alpaca end is
+        inclusive, so shift back one day to match."""
+        end_incl = (datetime.strptime(end, "%Y-%m-%d").date() - timedelta(days=1)).isoformat()
+        try:
+            j = self._get(f"/{symbol}/bars",
+                          {"timeframe": "1Day", "start": start, "end": end_incl,
+                           "adjustment": "raw", "limit": 10000})
+        except Exception:
+            return []
+        bars = []
+        for b in (j.get("bars") or []):
+            bars.append({"date": str(b["t"])[:10], "open": float(b["o"]),
+                         "high": float(b["h"]), "low": float(b["l"]),
+                         "close": float(b["c"]), "volume": float(b.get("v", 0))})
+        return bars
+
+    def get_market_regime(self):
+        try:
+            snap = self._get("/SPY/snapshot")
+            p = (snap.get("latestTrade") or {}).get("p") or (snap.get("dailyBar") or {}).get("c")
+            pc = (snap.get("prevDailyBar") or {}).get("c")
+            chg = (p - pc) / pc * 100 if (p and pc) else 0
+            return "risk-on" if chg > 0.3 else "risk-off" if chg < -0.3 else "neutral"
+        except Exception:
+            return "unknown"
+
+
 # ==================================================================== factory
 def get_provider(name=None):
     name = (name or os.environ.get("DATA_PROVIDER", "yfinance")).lower()
+    if name in ("alpaca", "apca"):
+        return AlpacaProvider()
     if name in ("polygon", "poly"):
         return PolygonProvider()
     return YFinanceProvider()
