@@ -1,31 +1,36 @@
-# ThePickLog — Morning Brief · 2026-07-08
+# ThePickLog — Morning Brief · 2026-07-09
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **BJDX** (tier A, score 100.0) — very high relative volume (27×); thin float (0.9M); large up-gap (+25%). Watch level (reference only, +20%): $1.74.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SUGP** (tier A, score 83.6) — very high relative volume (11×); thin float (1.2M). Watch level (reference only, +20%): $0.9216.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **JAGX** (tier C, score 47.6) — thin float (0.6M). Watch level (reference only, +20%): $3.192.
-- **BNZI** (tier C, score 47.0) — thin float (1.4M). Watch level (reference only, +20%): $4.032.
-- **IOTR** (tier C, score 46.2) — thin float (0.6M). Watch level (reference only, +20%): $3.024.
+- **JLHL** (tier A, score 100.0) — very high relative volume (19×); thin float (1.4M); large up-gap (+45%). Watch level (reference only, +20%): $5.3159.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **RPGL** (tier A, score 100.0) — very high relative volume (34×); thin float (0.0M); large up-gap (+32%). Watch level (reference only, +20%): $2.814.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **RKTO** (tier A, score 85.4) — elevated relative volume (8.7×); large up-gap (+36%). Watch level (reference only, +20%): $1.3052.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **VMAR** (tier A, score 84.8) — very high relative volume (11×); thin float (0.1M). Watch level (reference only, +20%): $1.4158.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **WRAP** (tier A, score 76.1) — very high relative volume (36×); large up-gap (+33%). Watch level (reference only, +20%): $2.538.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **BJDX**: already extended pre-market — chasing buys the top.
-- **BJDX**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
-- **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **IOTR**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **JLHL**: already extended pre-market — chasing buys the top.
+- **RPGL**: already extended pre-market — chasing buys the top.
+- **RPGL**: ultra-thin float — spreads and slippage can be severe.
+- **RKTO**: high short interest (22% of float) — squeeze-prone and violent both ways.
+- **RKTO**: already extended pre-market — chasing buys the top.
 - **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **WRAP**: already extended pre-market — chasing buys the top.
+- **BJDX**: ultra-thin float — spreads and slippage can be severe.
+- **BJDX**: ultra-thin float — spreads and slippage can be severe.
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
+- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
+- **CUPR**: high short interest (24% of float) — squeeze-prone and violent both ways.
+- **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **JAGX**: ultra-thin float — spreads and slippage can be severe.
+- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
+- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 - **MASK**: high short interest (30% of float) — squeeze-prone and violent both ways.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **NCT**: high short interest (23% of float) — squeeze-prone and violent both ways.
 - **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
-- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
-- **CUPR**: high short interest (24% of float) — squeeze-prone and violent both ways.
-- **CUPR**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
 
