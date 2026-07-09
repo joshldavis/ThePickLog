@@ -30,11 +30,20 @@ without shrinking the sample to uselessness.
 |----|----------|---------------|-------------|
 | **H-SI** | does short interest ≥20% separate winners from losers? | high SI is squeeze-prone — violent *both* ways, so neither direction is assumed | short-interest capture began 2026-06-16; **no graded pick carries it yet** (all 65 graded predate capture). Tracked in the weekly report; evaluate once enough SI-bearing picks have graded. |
 | **H-DIL** | does an active offering/shelf (`dilution_flag` = offering/shelf) separate winners from losers? | dilution caps a squeeze (new supply at the top) → plausibly *worse* forward returns, **but** an offering is also the very catalyst that ignites these names, so direction is not assumed | `dilution_flag` + `catalyst_type` capture began **2026-06-28** via free SEC EDGAR (`edgar_lens.py`); **no graded pick carries it yet**. Forward-only. Evaluate once enough dilution-bearing picks have graded. |
+| **H-INS** | does net open-market insider buying (`insider_net` = +1) separate winners from losers? | insiders buying their own money in is a classic conviction tell → plausibly *better* forward returns, **but** in spike-prone microcaps a filed buy can also be a pump signal, so direction is not assumed | net open-market insider buy/sell (Form 4 codes P/S only, 90-day window) capture began **2026-07-08** via free SEC EDGAR (`edgar_lens.py`) → `edgar_snapshot.csv`; **no graded pick carries it yet**. Forward-only. Most microcap picks show *no* open-market activity in-window (`insider_net` blank), so expect this to accumulate slowly like H-DIL. Evaluate once enough insider-bearing picks have graded. |
 
 **Data note — `catalyst_type` is a filing proxy, not a news classifier.** It is derived only from
 SEC filings (`offering` = 424B* in 7d · `8K` = recent 8-K · `filing` = other recent filing · `none`),
 because a true news/PR catalyst is not reliably in EDGAR. Per the roadmap guardrail "don't half-build
 a lever off an unreliable source," only the EDGAR-truthful part is captured, and it is labelled as such.
+
+**Data note — `insider_net` is open-market ONLY, and insider *ownership %* is deliberately not
+synthesized.** `insider_net` nets only Form 4 discretionary trades (code `P` buy / `S` sell); grants,
+option exercises, tax-withholding and gifts (`A`/`M`/`F`/`G`…) are excluded so a "+1" means an insider
+chose to put their own money in, not comp mechanics. Insider *ownership %* stays "not checked" because
+an honest figure needs an all-insiders aggregate against shares outstanding that Form 4 alone can't
+give — same guardrail as above. `insider_net` also feeds the point-in-time Quality-Lens grade (the
+`management` category) via the `insiderNet` input, so the snapshot grade reflects it going forward.
 
 **Finding B (quality → shallower drawdown) is now testable forward.** Phase-1 (in-sample, as-of
 grader) was a **NULL** after removing look-ahead. The blocker to a forward test was that quality was

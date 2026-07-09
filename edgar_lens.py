@@ -11,6 +11,16 @@ Closes two data gaps the roadmap flagged, using ONLY free SEC EDGAR (no paid fee
      shallower drawdown?) stays testable OUT-OF-SAMPLE later WITHOUT mutating
      picks.csv's frozen header, and without the look-ahead drift that killed
      back-filling (companyfacts is point-in-time via asof_grader.grade_asof).
+  3. insider_net (net open-market insider buy/sell) → parsed from free SEC Form 4
+     XML over a trailing window and written to the sidecar. Closes the Quality-Lens
+     "insider buy/sell not checked" gap WITHOUT a paid feed (ROADMAP Next #3), and
+     feeds the point-in-time grade via the `insiderNet` profile input. Only open-
+     market purchases (code P) and sales (code S) are netted — grants, option
+     exercises, tax-withholding and gifts (A/M/F/G…) are excluded so the signal
+     means "insider chose to buy/sell with their own money," not comp mechanics.
+     Insider OWNERSHIP % is deliberately NOT synthesized here: it needs an
+     all-insiders aggregate against shares outstanding that Form 4 alone can't give
+     truthfully, so it stays honestly "not checked" (see the guardrail below).
 
 Design rules (match the project's discipline):
   • FORWARD-ONLY: past picks stay blank; we never rewrite the immutable log.
@@ -32,10 +42,13 @@ USAGE:
 NOT INVESTMENT ADVICE.
 """
 import argparse
+import time
+import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import date
 
 # Reuse the audited free-SEC machinery (UA header, retries, CIK map, point-in-time grade).
-from asof_grader import _get, ticker_to_cik, grade_asof
+from asof_grader import _get, ticker_to_cik, grade_asof, UA
 
 # ---------------------------------------------------------------------------
 # Form taxonomy + windows (the only tunables; kept explicit for auditability)
@@ -125,11 +138,197 @@ def classify_filings(filings, asof):
     }
 
 
+# ---------------------------------------------------------------------------
+# INSIDER (Form 4) — PURE CORE (offline-testable)
+# Net open-market insider buy/sell over a trailing window, from Form 4 XML.
+# ---------------------------------------------------------------------------
+INSIDER_WINDOW = 90       # trailing days of Form 4 activity to net (recent conviction)
+FORM4_CAP      = 12       # at most this many recent Form 4 docs fetched per ticker (politeness)
+
+# Only DISCRETIONARY open-market trades carry signal. transactionCode:
+#   P = open-market/private purchase (own money in)   -> +1
+#   S = open-market/private sale     (own money out)  -> -1
+# Excluded on purpose: A (grant/award), M (option exercise), F (tax withhold),
+#   G (gift), C/X/etc. — comp mechanics, not a discretionary bet.
+_OPEN = {"P": 1, "S": -1}
+
+
+def _is_form4(form):
+    return form in ("4", "4/A")
+
+
+def _xt(node, path):
+    """Text at a child path (namespace-free ownership docs). '' if absent."""
+    el = node.find(path)
+    return (el.text or "").strip() if (el is not None and el.text is not None) else ""
+
+
+def parse_form4_xml(xml_text):
+    """Form 4 XML instance -> list of non-derivative transactions.
+    [{"code","ad","shares","price","date"}]. NON-FATAL: [] on any parse problem.
+    (SEC ownership documents are namespace-free, so plain child paths resolve.)"""
+    out = []
+    try:
+        root = ET.fromstring(xml_text)
+    except Exception:
+        return out
+    for tx in root.iter("nonDerivativeTransaction"):
+        out.append({
+            "code":   _xt(tx, "transactionCoding/transactionCode"),
+            "ad":     _xt(tx, "transactionAmounts/transactionAcquiredDisposedCode/value"),
+            "shares": _xt(tx, "transactionAmounts/transactionShares/value"),
+            "price":  _xt(tx, "transactionAmounts/transactionPricePerShare/value"),
+            "date":   _xt(tx, "transactionDate/value"),
+        })
+    return out
+
+
+def net_insider(transactions, asof, window=INSIDER_WINDOW):
+    """Net open-market insider buy/sell over `window` days ending `asof`.
+    as-of-safe (drops future-dated txns). Returns categorical + evidence.
+      insider_net: 1 net buying / -1 net selling / 0 neutral / "" no activity."""
+    asof = _d(asof)
+    buy_val = sell_val = 0.0
+    buy_sh = sell_sh = 0.0
+    n_buy = n_sell = 0
+    last_dt = ""
+    for t in transactions or []:
+        ds = (t.get("date") or "").strip()
+        if len(ds) < 10:
+            continue
+        try:
+            td = _d(ds)
+        except Exception:
+            continue
+        age = (asof - td).days
+        if age < 0 or age > window:        # future = not knowable at screen time; too old = out of window
+            continue
+        sgn = _OPEN.get((t.get("code") or "").strip().upper())
+        if sgn is None:                    # not a discretionary open-market trade
+            continue
+        try:
+            sh = float(t.get("shares") or 0)
+        except Exception:
+            sh = 0.0
+        try:
+            pr = float(t.get("price") or 0)
+        except Exception:
+            pr = 0.0
+        val = sh * pr
+        if sgn > 0:
+            buy_val += val; buy_sh += sh; n_buy += 1
+        else:
+            sell_val += val; sell_sh += sh; n_sell += 1
+        if ds > last_dt:
+            last_dt = ds
+    net_val = buy_val - sell_val
+    if n_buy == 0 and n_sell == 0:
+        insider_net = ""                   # honestly unknown — no open-market activity in window
+        net_out = ""
+    else:
+        insider_net = 1 if net_val > 0 else (-1 if net_val < 0 else 0)
+        net_out = round(net_val, 2)
+    return {
+        "insider_net": insider_net,
+        "insider_net_val": net_out,
+        "insider_buy_val": round(buy_val, 2) if n_buy else "",
+        "insider_sell_val": round(sell_val, 2) if n_sell else "",
+        "insider_buy_ct": n_buy,
+        "insider_sell_ct": n_sell,
+        "insider_window_days": window,
+        "recent_form4_date": last_dt,
+    }
+
+
+# ---------------------------------------------------------------------------
+# INSIDER — network layer (fetch + parse Form 4 XML docs)
+# ---------------------------------------------------------------------------
+def _get_text(url, _retries=2):
+    """Raw-text GET with SEC UA + gzip/deflate handling (asof_grader._get is JSON-only)."""
+    req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"})
+    last = None
+    for attempt in range(_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                raw = r.read()
+                enc = (r.headers.get("Content-Encoding") or "").lower()
+                if enc == "gzip" or raw[:2] == b"\x1f\x8b":
+                    import gzip
+                    raw = gzip.decompress(raw)
+                elif enc == "deflate":
+                    import zlib
+                    raw = zlib.decompress(raw)
+                return raw.decode("utf-8", "replace")
+        except Exception as e:
+            last = e
+            if attempt < _retries:
+                time.sleep(1.5 * (attempt + 1))
+    raise last
+
+
+def form4_urls_from_block(recent, cik, asof, window=INSIDER_WINDOW, cap=FORM4_CAP):
+    """From the SEC submissions 'recent' block, the raw XML URLs of Form 4 docs
+    filed within `window` days on/before `asof`, most-recent first, capped."""
+    forms = recent.get("form") or []
+    dates = recent.get("filingDate") or []
+    accs  = recent.get("accessionNumber") or []
+    docs  = recent.get("primaryDocument") or []
+    asofd = _d(asof)
+    cik_int = str(int(cik))
+    out = []
+    for i, frm in enumerate(forms):
+        if not _is_form4((frm or "").strip()):
+            continue
+        ds = dates[i] if i < len(dates) else ""
+        if len(ds) < 10:
+            continue
+        try:
+            fd = _d(ds)
+        except Exception:
+            continue
+        age = (asofd - fd).days
+        if age < 0 or age > window:
+            continue
+        acc = (accs[i] if i < len(accs) else "").strip()
+        doc = (docs[i] if i < len(docs) else "").strip()
+        # primaryDocument is often the XSL-RENDERED path (e.g. "xslF345X06/form4.xml"), which
+        # serves HTML — not parseable. The raw XML instance is the same basename at the accession
+        # root ("form4.xml"). Take the basename to hit the machine-readable instance.
+        doc_base = doc.split("/")[-1]
+        if not acc or not doc_base.lower().endswith(".xml"):
+            continue
+        url = f"https://www.sec.gov/Archives/edgar/data/{cik_int}/{acc.replace('-', '')}/{doc_base}"
+        out.append((ds, url))
+    out.sort(reverse=True)
+    return out[:cap]
+
+
+def insider_from_block(recent, cik, asof, window=INSIDER_WINDOW, cap=FORM4_CAP):
+    """Fetch + parse recent Form 4 XML, return net_insider(...) enriched with a
+    form4_seen count. NON-FATAL per filing: a bad doc is skipped, not raised."""
+    urls = form4_urls_from_block(recent, cik, asof, window, cap)
+    txns = []
+    seen = 0
+    for _ds, url in urls:
+        try:
+            txns.extend(parse_form4_xml(_get_text(url)))
+            seen += 1
+            time.sleep(0.12)  # be polite: <10 req/s
+        except Exception:
+            continue
+    res = net_insider(txns, asof, window)
+    res["insider_form4_seen"] = seen
+    return res
+
+
 # Flat field list for the forward-only sidecar (keyed by pick_id).
 SNAPSHOT_FIELDS = [
     "pick_id", "ticker", "trading_date", "captured_at", "cik",
     "dilution_flag", "catalyst_type",
     "recent_dilution_form", "recent_dilution_date", "recent_8k_date",
+    "insider_net", "insider_net_val", "insider_buy_val", "insider_sell_val",
+    "insider_buy_ct", "insider_sell_ct", "insider_window_days",
+    "recent_form4_date", "insider_form4_seen",
     "quality_overall", "quality_label", "quality_classification",
     "q_financial", "q_business", "q_management", "q_valuation", "q_risk",
     "q_momentum", "q_governance", "snapshot_note",
@@ -141,11 +340,16 @@ _BLANK = {k: "" for k in SNAPSHOT_FIELDS}
 # ---------------------------------------------------------------------------
 # Network (SEC submissions API for filings; companyfacts via grade_asof for quality)
 # ---------------------------------------------------------------------------
-def recent_filings(cik):
-    """Recent filings (form + date) from the SEC submissions API. The 'recent' block
-    holds ~1 year / up to 1000 filings — ample for our windows. One request."""
+def submissions_recent(cik):
+    """The SEC submissions 'recent' block (~1 year / up to 1000 filings — ample for
+    our windows). ONE request, shared by dilution/catalyst AND insider capture."""
     j = _get(f"https://data.sec.gov/submissions/CIK{cik}.json")
-    rec = ((j or {}).get("filings") or {}).get("recent") or {}
+    return ((j or {}).get("filings") or {}).get("recent") or {}
+
+
+def recent_filings(cik):
+    """Back-compat shim: recent filings as [{form, filingDate}] for classify_filings."""
+    rec = submissions_recent(cik)
     forms = rec.get("form") or []
     dates = rec.get("filingDate") or []
     return [{"form": f, "filingDate": d} for f, d in zip(forms, dates)]
@@ -167,16 +371,38 @@ def snapshot(ticker, asof):
         return out
     out["cik"] = cik
 
-    # 1) dilution / catalyst from filings
+    # 0) one submissions request, shared by dilution AND insider capture
+    recent = None
     try:
-        cls = classify_filings(recent_filings(cik), asof)
-        out.update(cls)
+        recent = submissions_recent(cik)
     except Exception as e:
-        notes.append(f"filings_err:{type(e).__name__}")
+        notes.append(f"submissions_err:{type(e).__name__}")
 
-    # 2) quality grade (point-in-time, look-ahead-safe via asof_grader)
+    # 1) dilution / catalyst from filings
+    if recent is not None:
+        try:
+            filings = [{"form": f, "filingDate": d}
+                       for f, d in zip(recent.get("form") or [], recent.get("filingDate") or [])]
+            out.update(classify_filings(filings, asof))
+        except Exception as e:
+            notes.append(f"filings_err:{type(e).__name__}")
+
+    # 1b) insider net (open-market buy/sell) from Form 4 XML — feeds the grade below
+    insider_net_for_grade = None
+    if recent is not None:
+        try:
+            ins = insider_from_block(recent, cik, asof)
+            out.update(ins)
+            if ins.get("insider_net") != "":
+                insider_net_for_grade = ins.get("insider_net")
+        except Exception as e:
+            notes.append(f"insider_err:{type(e).__name__}")
+
+    # 2) quality grade (point-in-time, look-ahead-safe via asof_grader), now fed the
+    #    Form-4-derived insider signal so the "insider buy/sell" input is no longer blank.
     try:
-        g = grade_asof(ticker, asof)
+        prof = {"insiderNet": insider_net_for_grade} if insider_net_for_grade is not None else None
+        g = grade_asof(ticker, asof, prof)
         if g.get("error"):
             notes.append("quality:" + g["error"][:40])
         else:
@@ -239,7 +465,67 @@ def _selftest():
     for frm in ("S-3", "S-3/A", "S-3ASR", "S-1", "F-3"):
         assert _is_shelf(frm), frm
     assert _is_offering("424B3") and _is_offering("FWP") and not _is_offering("8-K")
-    print("edgar_lens selftest PASS — dilution/catalyst classification + windows + as-of guard")
+
+    # -------- INSIDER (Form 4) core --------
+    iasof = "2026-06-24"
+    # H: net BUYING — two open-market purchases, one small sale, all in window.
+    tx = [
+        {"code": "P", "ad": "A", "shares": "10000", "price": "2.00", "date": "2026-06-10"},
+        {"code": "P", "ad": "A", "shares": "5000",  "price": "2.10", "date": "2026-06-18"},
+        {"code": "S", "ad": "D", "shares": "1000",  "price": "2.50", "date": "2026-06-20"},
+    ]
+    h = net_insider(tx, iasof)
+    assert h["insider_net"] == 1, h                       # 20k+10.5k bought vs 2.5k sold => net buy
+    assert h["insider_buy_ct"] == 2 and h["insider_sell_ct"] == 1, h
+    assert h["insider_net_val"] == round(20000 + 10500 - 2500, 2), h
+    assert h["recent_form4_date"] == "2026-06-20", h
+
+    # I: comp mechanics excluded — a big grant (A) + option exercise (M) are NOT buys.
+    j2 = net_insider([
+        {"code": "A", "ad": "A", "shares": "100000", "price": "0",   "date": "2026-06-15"},
+        {"code": "M", "ad": "A", "shares": "50000",  "price": "1.0", "date": "2026-06-16"},
+        {"code": "S", "ad": "D", "shares": "8000",   "price": "3.0", "date": "2026-06-17"},
+    ], iasof)
+    assert j2["insider_net"] == -1 and j2["insider_buy_ct"] == 0 and j2["insider_sell_ct"] == 1, j2
+
+    # J: window + as-of guard — a purchase 200d old and one dated in the future are ignored.
+    k = net_insider([
+        {"code": "P", "ad": "A", "shares": "9999", "price": "5", "date": "2025-12-01"},  # too old
+        {"code": "P", "ad": "A", "shares": "9999", "price": "5", "date": "2026-07-01"},  # future
+    ], iasof)
+    assert k["insider_net"] == "" and k["insider_buy_ct"] == 0, k    # nothing in window => unknown
+
+    # K: no Form 4 activity at all => honestly blank, not a fabricated 0.
+    assert net_insider([], iasof)["insider_net"] == "", "empty must be blank"
+
+    # L: XML parse — a minimal namespace-free Form 4 instance yields its transaction.
+    xml = ("<ownershipDocument><nonDerivativeTable><nonDerivativeTransaction>"
+           "<transactionDate><value>2026-06-19</value></transactionDate>"
+           "<transactionCoding><transactionCode>P</transactionCode></transactionCoding>"
+           "<transactionAmounts>"
+           "<transactionShares><value>2500</value></transactionShares>"
+           "<transactionPricePerShare><value>1.80</value></transactionPricePerShare>"
+           "<transactionAcquiredDisposedCode><value>A</value></transactionAcquiredDisposedCode>"
+           "</transactionAmounts></nonDerivativeTransaction></nonDerivativeTable></ownershipDocument>")
+    parsed = parse_form4_xml(xml)
+    assert len(parsed) == 1 and parsed[0]["code"] == "P" and parsed[0]["shares"] == "2500", parsed
+    assert net_insider(parsed, iasof)["insider_net"] == 1, parsed
+    assert parse_form4_xml("<not xml") == [], "malformed XML must be non-fatal"
+
+    # M: URL builder — Form 4 within window becomes a raw XML URL; strips CIK zero-pad + dashes.
+    block = {
+        "form": ["4", "10-Q", "4"],
+        "filingDate": ["2026-06-20", "2026-05-15", "2025-01-01"],
+        "accessionNumber": ["0001209191-26-000123", "x", "0001209191-25-000001"],
+        # first doc is given as the XSL-rendered path — must resolve to the raw XML basename.
+        "primaryDocument": ["xslF345X06/form4.xml", "y.htm", "wk-form4_old.xml"],
+    }
+    urls = form4_urls_from_block(block, "0000320193", iasof)
+    assert len(urls) == 1, urls                          # only the in-window Form 4
+    assert urls[0][1] == ("https://www.sec.gov/Archives/edgar/data/320193/"
+                          "000120919126000123/form4.xml"), urls   # xsl prefix stripped
+
+    print("edgar_lens selftest PASS — dilution/catalyst + Form-4 insider net + windows + as-of guard")
 
 
 def main():

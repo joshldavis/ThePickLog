@@ -46,13 +46,16 @@ validation layer Josh can trust before risking attention or money.
    `edgar_snapshot.csv` — which also re-opens the *option* to test Finding B out-of-sample. All
    capture is non-fatal (SEC down ⇒ blanks, picks still log). Registered as **H-DIL** (HYPOTHESES.md,
    two-sided). Next: let it accumulate, then evaluate H-DIL like H-SI once enough picks carry it.
-3. **Insider data (Form 4) from free SEC EDGAR** — the last Quality-Lens fields still shown as
-   "not checked" (insider ownership, insider buy/sell) are assumed to need a paid feed, but Form 4
-   transactions are free in EDGAR. Extend `edgar_lens.py` to parse recent Form 4s (net buy/sell
-   over a window) and feed the Lens + `edgar_snapshot.csv`. Scoped task, not a rider: Form 4 XML
-   parsing + net-transaction math done carefully, non-fatal on EDGAR outage like the rest of the
-   lens. Closes the honest-but-unsatisfying "not checked" gaps without abandoning the free-data
-   constraint. (From the 2026-07-02 feedback review.)
+3. ~~**Insider data (Form 4) from free SEC EDGAR**~~ ✅ **DONE 2026-07-08.** `edgar_lens.py` now
+   parses recent Form 4 XML and nets **open-market** insider buy/sell (`insider_net`: +1/0/−1 over a
+   90-day window, codes P/S only — grants/exercises/tax-withholding excluded) into the forward-only
+   `edgar_snapshot.csv`, and feeds the point-in-time Quality-Lens grade via the `insiderNet` input
+   (`management` category). Non-fatal on EDGAR outage like the rest of the lens; verified live (ZION
+   net −1 = 2 open-market sales; AAPL/KEY correctly blank — only comp-code Form 4s in-window). Fixed
+   the XSL-rendered-vs-raw primaryDocument trap (basename → raw XML instance). Registered as **H-INS**
+   (HYPOTHESES.md, two-sided) — accumulate then evaluate like H-DIL. **Insider ownership %** stays
+   honestly "not checked": Form 4 alone can't give a truthful all-insiders aggregate vs shares
+   outstanding, so we don't synthesize it (same "don't half-build off an unreliable source" guardrail).
 4. **Phase 2 — full-market, point-in-time test of Finding B** (PHASE2-SCOPE.md). Gated on a
    paid historical-float feed. **Recommended: skip** unless deciding to actively sharpen the
    score — low leverage, and a backtest can't back a personal-confidence claim anyway.

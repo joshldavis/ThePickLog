@@ -120,7 +120,9 @@ def assemble_fundamentals(symbol, edgar, profile):
         "pe": (market_cap / ni) if (market_cap and ni) else None,
         "pfcf": (market_cap / fcf0) if (market_cap and _gt0(fcf0)) else (-1 if (fcf0 is not None and fcf0 < 0) else None),
         "evEbitda": ((market_cap + (total_debt or 0) - (cash_bal or 0)) / ebitda) if (market_cap is not None and _gt0(ebitda)) else (-1 if (ebitda is not None and ebitda < 0) else None),
-        "insiderOwnership": None, "insiderNet": None, "founderLed": False, "goingConcern": False,
+        "insiderOwnership": P.get("insiderOwnership"),  # still not free-derivable -> stays None
+        "insiderNet": P.get("insiderNet"),              # now fed from free Form 4 (edgar_lens), None if no activity
+        "founderLed": False, "goingConcern": False,
         "rvol": None,
         "dataSource": "edgar",
     }
