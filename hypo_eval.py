@@ -12,7 +12,7 @@ hypotheses run through — same code, same math, applied evenhandedly.
 
 Run directly:  python hypo_eval.py   -> writes leaderboard.json, runs self-tests.
 """
-import csv, json, random, re, statistics as st, sys
+import csv, json, os, random, re, statistics as st, sys
 from datetime import date
 
 # ------------------------------------------------------------------ log I/O
@@ -23,8 +23,15 @@ def _f(x):
         return None
 
 def load_log(picks_path="picks.csv", outs_path="outcomes.csv"):
-    picks = {r["pick_id"]: r for r in csv.DictReader(open(picks_path))}
-    outs = list(csv.DictReader(open(outs_path)))
+    # COHORT SEAL (H-UNIV1, 2026-07-08): every rule currently on the board was
+    # registered against the v0.2 fixed-16 record, so the leaderboard/gate evaluate
+    # the v0.2 cohort ONLY. The v0.3 market-wide cohort gets its own arms/baselines
+    # when registered. Research override: PICKLOG_COHORT=all|v0.3.
+    coh = os.environ.get("PICKLOG_COHORT", "v0.2")
+    keep = (lambda r: True) if coh == "all" else (
+        lambda r: (r.get("model_version") or "").startswith(coh))
+    picks = {r["pick_id"]: r for r in csv.DictReader(open(picks_path)) if keep(r)}
+    outs = [o for o in csv.DictReader(open(outs_path)) if o.get("pick_id") in picks]
     return picks, outs
 
 # ------------------------------------------------------------------ predicates
@@ -115,6 +122,113 @@ def _paired_ci(diffs, iters, rng):
     d.sort()
     return [round(d[int(.025 * iters)], 1), round(d[int(.975 * iters)], 1)]
 
+
+# ---------------------------------------------------------------------------
+# H-IND1 (pre-registered 2026-07-08): effective-sample-size / independence
+# correction. The scan universe is a fixed ~16-ticker list and the same names
+# recur daily with overlapping 5-day paths, so pooled iid resampling OVERSTATES
+# precision. Every verdict must ALSO report (a) a cluster bootstrap by ticker
+# and (b) a per-ticker sign count; a pooled win that fails BOTH is "not
+# established," not a win. These operate on ticker-tagged observations.
+# ---------------------------------------------------------------------------
+def _group_by_ticker(items):
+    """items: list of (ticker, value) -> {ticker: [values]}."""
+    g = {}
+    for t, v in items:
+        g.setdefault(t, []).append(v)
+    return g
+
+
+def _cluster_paired_ci(paired_items, iters, rng):
+    """Cluster bootstrap by ticker for the mean paired diff (exit kind).
+    Resample TICKERS with replacement (not picks), pool the drawn tickers'
+    diffs, take the mean. Wider than the pooled CI because effective N is the
+    number of names, not the number of overlapping daily rows."""
+    g = _group_by_ticker(paired_items)
+    tickers = list(g)
+    if len(tickers) < 2:
+        return None
+    out = []
+    for _ in range(iters):
+        sample = []
+        for _ in tickers:
+            sample += g[tickers[rng.randrange(len(tickers))]]
+        if sample:
+            out.append(_mean(sample))
+    if len(out) < 2:
+        return None
+    out.sort()
+    return [round(out[int(.025 * len(out))], 1), round(out[int(.975 * len(out))], 1)]
+
+
+def _cluster_two_sample_ci(kept_items, base_items, iters, rng):
+    """Cluster bootstrap by ticker for mean(kept) - mean(base) (filter/question).
+    Resample the SAME ticker set for both arms so each drawn name contributes
+    both its kept and its base returns."""
+    kb = _group_by_ticker(kept_items)
+    bb = _group_by_ticker(base_items)
+    tickers = list(bb)
+    if len(tickers) < 2:
+        return None
+    out = []
+    for _ in range(iters):
+        ka, ba = [], []
+        for _ in tickers:
+            t = tickers[rng.randrange(len(tickers))]
+            ka += kb.get(t, [])
+            ba += bb.get(t, [])
+        if ka and ba:
+            out.append(_mean(ka) - _mean(ba))
+    if len(out) < 2:
+        return None
+    out.sort()
+    return [round(out[int(.025 * len(out))], 1), round(out[int(.975 * len(out))], 1)]
+
+
+def _ticker_signs_paired(paired_items):
+    """Per-ticker sign of the mean paired diff. Returns (favor, against, signed)."""
+    g = _group_by_ticker(paired_items)
+    favor = sum(1 for v in g.values() if _mean(v) > 0)
+    against = sum(1 for v in g.values() if _mean(v) < 0)
+    return favor, against, len(g)
+
+
+def _ticker_signs_two_sample(kept_items, base_items):
+    """Per-ticker sign of mean(kept_t) - mean(base_t), over tickers that have
+    BOTH kept and base observations. Returns (favor, against, signed)."""
+    kb = _group_by_ticker(kept_items)
+    bb = _group_by_ticker(base_items)
+    favor = against = signed = 0
+    for t, kv in kb.items():
+        bv = bb.get(t)
+        if not bv:
+            continue
+        signed += 1
+        d = _mean(kv) - _mean(bv)
+        if d > 0:
+            favor += 1
+        elif d < 0:
+            against += 1
+    return favor, against, signed
+
+
+def _cluster_card(ci, favor, against, signed, pooled_sig):
+    """Assemble the H-IND1 fields + the pre-registered 'established' verdict.
+    established = pooled win that does NOT fail BOTH the cluster CI and the
+    per-ticker majority (spec: fail both => 'not established')."""
+    cluster_sig = bool(ci) and (ci[0] > 0 or ci[1] < 0)
+    ticker_majority = signed > 0 and favor > against
+    established = bool(pooled_sig) and (cluster_sig or ticker_majority)
+    return {
+        "cluster_ci95": ci,
+        "cluster_significant": cluster_sig,
+        "n_tickers": signed,
+        "ticker_favor": favor,
+        "ticker_against": against,
+        "ticker_majority": ticker_majority,
+        "established": established,
+    }
+
 def _state(kept_n, base_n, min_n, min_keep_frac):
     if base_n and kept_n / base_n < min_keep_frac:
         return "insufficient"
@@ -139,6 +253,7 @@ def evaluate(rule, picks, outs, cfg, asof):
     if kind in ("filter", "question"):
         exit_id = rule.get("exit", "same_day_close")
         base_all, base_post, kept_all, kept_post = [], [], [], []
+        kept_items, base_items = [], []   # (ticker, return) for the cluster bootstrap
         for o in outs:
             p = picks.get(o["pick_id"])
             if not p:
@@ -151,15 +266,23 @@ def evaluate(rule, picks, outs, cfg, asof):
             if keep: kept_all.append(r)
             if post(o):
                 base_post.append(r)
-                if keep: kept_post.append(r)
+                tk = p.get("ticker", "")
+                base_items.append((tk, r))
+                if keep:
+                    kept_post.append(r)
+                    kept_items.append((tk, r))
         ci = _two_sample_ci(kept_post, base_post, iters, rng)
         delta = round(_mean(kept_post) - _mean(base_post), 1) if kept_post and base_post else None
+        cluster = _cluster_two_sample_ci(kept_items, base_items, iters, rng)
+        favor, against, signed = _ticker_signs_two_sample(kept_items, base_items)
         card = _card(rule, kept_post, base_post, delta, ci, cfg, asof, kind)
+        card.update(_cluster_card(cluster, favor, against, signed, card["significant"]))
         card["kept_n_all"] = len(kept_all)
         return card
 
     if kind == "exit":
         pairs, base_post, arm_post = [], [], []
+        paired_items = []   # (ticker, diff) for the cluster bootstrap
         for o in outs:
             if not post(o):
                 continue
@@ -170,9 +293,13 @@ def evaluate(rule, picks, outs, cfg, asof):
             pairs.append(alt - base)
             arm_post.append(alt)
             base_post.append(base)
+            paired_items.append((picks.get(o["pick_id"], {}).get("ticker", ""), alt - base))
         ci = _paired_ci(pairs, iters, rng)
         delta = round(_mean(pairs), 1) if pairs else None
+        cluster = _cluster_paired_ci(paired_items, iters, rng)
+        favor, against, signed = _ticker_signs_paired(paired_items)
         card = _card(rule, arm_post, base_post, delta, ci, cfg, asof, kind)
+        card.update(_cluster_card(cluster, favor, against, signed, card["significant"]))
         card["caveats"] = [_SLIP] + ([_STOP_ORDER] if "_stop_" in rule["exit"] else [])
         return card
 
@@ -449,7 +576,38 @@ def _selftest():
     c2 = evaluate(by_id["H-EX1"], picks, outs, cfg, asof)   # determinism
     assert (c2["n_post"], c2["avg_post"], c2["delta_post"]) == (c["n_post"], c["avg_post"], c["delta_post"]), \
         "non-deterministic evaluate()"
-    print(f"hypo_eval self-test: PARITY OK (6/6 vs independent reference, {len(outs)} outcomes)", file=sys.stderr)
+
+    # ---- H-IND1 cluster bootstrap unit tests (independent of live data) ----
+    rng = random.Random(7)
+    # (a) One dominant ticker drives a "positive" pooled result: 30 rows of +5 all
+    #     from ticker AAA, 2 tickers slightly negative. Pooled mean is +; the per-ticker
+    #     sign count must show the majority of NAMES do NOT favor the arm.
+    dom = [("AAA", 5.0)] * 30 + [("BBB", -1.0), ("CCC", -1.0)]
+    fav, ag, sg = _ticker_signs_paired(dom)
+    assert (fav, ag, sg) == (1, 2, 3), (fav, ag, sg)          # 1 name favors, 2 against
+    cl = _cluster_paired_ci(dom, 400, rng)
+    assert cl is not None and cl[0] <= 0 <= cl[1], cl          # cluster CI spans 0 (not established)
+    # (b) Broad, consistent effect across many names: cluster CI should exclude 0.
+    broad = [(f"T{i}", 3.0) for i in range(16)] + [(f"T{i}", 4.0) for i in range(16)]
+    cb = _cluster_paired_ci(broad, 400, rng)
+    assert cb is not None and cb[0] > 0, cb
+    fb, ab, sb = _ticker_signs_paired(broad)
+    assert (fb, ab, sb) == (16, 0, 16), (fb, ab, sb)
+    # (c) verdict assembly: pooled win that fails BOTH cluster + majority => not established
+    v = _cluster_card([-0.5, 2.0], favor=1, against=2, signed=3, pooled_sig=True)
+    assert v["established"] is False and v["cluster_significant"] is False, v
+    v2 = _cluster_card([0.3, 2.0], favor=10, against=2, signed=12, pooled_sig=True)
+    assert v2["established"] is True and v2["ticker_majority"] is True, v2
+    # (d) determinism of the cluster CI under a fixed seed
+    assert _cluster_paired_ci(dom, 400, random.Random(7)) == _cluster_paired_ci(dom, 400, random.Random(7))
+    # (e) evaluate() now emits the H-IND1 fields on the live H-EX1 card
+    for k in ("cluster_ci95", "cluster_significant", "n_tickers", "ticker_favor",
+              "ticker_against", "ticker_majority", "established"):
+        assert k in c, f"evaluate() missing H-IND1 field {k}"
+    assert c["n_tickers"] >= 1
+
+    print(f"hypo_eval self-test: PARITY OK (6/6 vs independent reference, {len(outs)} outcomes) "
+          f"+ H-IND1 cluster bootstrap OK", file=sys.stderr)
 
 if __name__ == "__main__":
     import os

@@ -158,8 +158,11 @@ def _f(x):
 
 
 def load_evaluable():
-    """[(trading_date, graded_at, hit, c5, c0)] for every evaluable graded pick."""
-    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))}
+    """[(trading_date, graded_at, hit, c5, c0)] for every evaluable graded pick.
+    COHORT SEAL (H-UNIV1, 2026-07-08): H-EX1 and its priors were frozen against the
+    v0.2 fixed-16 record; the tracker reads that closed cohort only."""
+    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))
+             if (p.get("model_version") or "").startswith("v0.2")}
     rows = []
     for o in _read(os.path.join(HERE, "outcomes.csv")):
         p = picks.get(o.get("pick_id"))

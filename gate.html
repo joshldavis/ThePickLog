@@ -106,9 +106,13 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   const c1 = (EX.n_post||0)>=30;                                   // sample
   const c2 = (EX.delta_post||0)>0;                                 // expectancy beats baseline
   const c3 = EX.stability==="stable";                             // sign stable ≥3 weeks
-  const c4 = !!EX.significant;                                     // clears the 95% noise bar
+  const c4 = !!EX.significant;                                     // clears the 95% pooled noise bar
+  const c4b = !!EX.established;                                    // H-IND1: survives clustering (pooled sig AND cluster-CI or name-majority)
   const anyFilter = filters.some(r=>(r.delta_post||0)>0 && r.state==="ranked");
   const c5 = weeks!=null && weeks>=8;                             // record length (Gate 3 preview)
+
+  const cci = EX.cluster_ci95?`cluster CI [${EX.cluster_ci95[0]>0?"+":""}${EX.cluster_ci95[0]}, ${EX.cluster_ci95[1]>0?"+":""}${EX.cluster_ci95[1]}]`:"cluster CI —";
+  const nT = EX.n_tickers||0, favN = EX.ticker_favor||0;
 
   const stState=(ok,haveData)=>ok?"ok":(haveData?"no":"pend");
   const html =
@@ -124,6 +128,10 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
       "Clears the noise bar — 95% interval excludes zero",
       "A positive point estimate isn't enough; roughly half of anything is positive by chance.",
       `${ci} · <b class="${c4?'pos':'warn'}">${c4?"significant":"not yet — interval spans zero"}</b>`) +
+    crit(stState(c4b, EX.cluster_ci95!=null),
+      "Survives clustering (H-IND1) — effective sample is names, not daily rows",
+      "The scan universe is a fixed ~16-ticker list, so the same names recur daily with overlapping paths. Pre-registered 2026-07-08: the honest test resamples <em>tickers</em> and counts how many names individually favor the edge — a pooled win that fails both is not established.",
+      `effective N = <b class="${nT>=8?'pos':'warn'}">${nT}</b> names · ${cci} · <b>${favN}/${nT}</b> names favor the edge · <b class="${c4b?'pos':'warn'}">${c4b?"established":"not established"}</b>`) +
     crit(EX.stability==="stable"?"ok":(EX.stability==="mixed"?"no":"pend"),
       "Direction stability — sign holds across ≥ 3 weekly snapshots",
       "A real edge is stable, not a sign that flickers week to week.",
@@ -137,22 +145,23 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
       "The differentiator is a long, clean, reproducible record.",
       `forward record ≈ <b class="${c5?'pos':'warn'}">${weeks!=null?weeks+" weeks":"—"}</b>`);
 
-  // Overall read: pass = at least the exit edge clears (n≥30, positive, significant, stable).
-  const cleared = c1 && c2 && c4 && c3;
+  // Overall read: pass = the exit edge clears the pre-registered bars AND survives the
+  // H-IND1 clustering correction (n≥30, positive, pooled-significant, cluster-established, stable).
+  const cleared = c1 && c2 && c4 && c4b && c3;
   let vTitle, vClass, vText;
   if(cleared){ vTitle="Current read: the exit edge has CLEARED Gate 1"; vClass="pos";
-    vText="On this data the pre-registered exit edge beats its baseline out-of-sample, past the noise bar, with a stable sign. Gates 2–4 (realistic size, clean record length, legal) come next — see the framework."; }
+    vText="On this data the pre-registered exit edge beats its baseline out-of-sample, past the noise bar, and survives the ticker-clustering correction with a stable sign. Gates 2–4 (realistic size, clean record length, legal) come next — see the framework."; }
   else if(!c1){ vTitle="Current read: still accruing sample — not yet judged"; vClass="warn";
     vText="Too few post-registration picks to rule on the edge. This will fill in as new picks are logged and graded; check back."; }
-  else { vTitle="Current read: NOT cleared — no edge shown yet"; vClass="warn";
-    vText="The exit edge has not beaten its baseline past the noise bar. Per the honest prior, this is the most likely outcome — and it means the process is working: it stops us selling noise."; }
+  else { vTitle="Current read: NOT cleared — no edge established yet"; vClass="warn";
+    vText="The exit edge has not cleared the noise bar once the fixed-universe clustering is accounted for. Per the honest prior, this is the most likely outcome — and it means the process is working: it stops us selling noise."; }
 
   root.innerHTML =
     `<div class="verdict"><h2 class="${vClass}">${vTitle}</h2><p class="muted" style="margin:0">${vText}</p></div>`+
     html;
   document.getElementById("foot").innerHTML =
     "Computed live on <b>"+(board.generated_at||"—")+"</b> from leaderboard.json (by <code>hypo_eval.py</code>, parity-locked) × picks.csv. "+
-    "Thresholds are frozen in <a href=\"MONETIZATION-GATE.md\">MONETIZATION-GATE.md</a>; pass = at least the exit edge (H-EX1) clears. "+
+    "Thresholds are frozen in <a href=\"MONETIZATION-GATE.md\">MONETIZATION-GATE.md</a>; pass = the exit edge (H-EX1) clears AND survives the H-IND1 ticker-clustering correction. "+
     "Not investment advice. The model is unvalidated until these bars clear. "+
     "<br><a href=\"disclaimer.html\">Disclaimer</a> &middot; <a href=\"privacy.html\">Privacy</a>";
 })();

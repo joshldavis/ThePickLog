@@ -49,6 +49,16 @@
         "op": "and",
         "predicates": []
       },
+      "cluster_ci95": [
+        -3.4,
+        4.3
+      ],
+      "cluster_significant": false,
+      "n_tickers": 15,
+      "ticker_favor": 10,
+      "ticker_against": 5,
+      "ticker_majority": true,
+      "established": false,
       "rank": 1
     },
     {
@@ -86,6 +96,16 @@
           }
         ]
       },
+      "cluster_ci95": [
+        -0.3,
+        0.0
+      ],
+      "cluster_significant": false,
+      "n_tickers": 15,
+      "ticker_favor": 0,
+      "ticker_against": 1,
+      "ticker_majority": false,
+      "established": false,
       "kept_n_all": 202,
       "rank": 2
     },
@@ -124,6 +144,16 @@
           }
         ]
       },
+      "cluster_ci95": [
+        -1.2,
+        0.5
+      ],
+      "cluster_significant": false,
+      "n_tickers": 12,
+      "ticker_favor": 0,
+      "ticker_against": 0,
+      "ticker_majority": false,
+      "established": false,
       "kept_n_all": 170,
       "rank": 3
     },
@@ -162,6 +192,16 @@
           }
         ]
       },
+      "cluster_ci95": [
+        -0.9,
+        0.2
+      ],
+      "cluster_significant": false,
+      "n_tickers": 13,
+      "ticker_favor": 0,
+      "ticker_against": 0,
+      "ticker_majority": false,
+      "established": false,
       "kept_n_all": 179,
       "rank": 4
     },
@@ -203,6 +243,16 @@
           }
         ]
       },
+      "cluster_ci95": [
+        -1.4,
+        -0.0
+      ],
+      "cluster_significant": false,
+      "n_tickers": 15,
+      "ticker_favor": 1,
+      "ticker_against": 4,
+      "ticker_majority": false,
+      "established": false,
       "kept_n_all": 181,
       "rank": 5
     },
@@ -259,6 +309,16 @@
           }
         ]
       },
+      "cluster_ci95": [
+        -3.2,
+        0.1
+      ],
+      "cluster_significant": false,
+      "n_tickers": 11,
+      "ticker_favor": 1,
+      "ticker_against": 3,
+      "ticker_majority": false,
+      "established": false,
       "kept_n_all": 133,
       "rank": 6
     }

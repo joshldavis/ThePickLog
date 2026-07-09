@@ -30,11 +30,16 @@ import argparse, csv, os, sys, uuid, statistics, time
 from datetime import datetime, timedelta, timezone
 
 MODEL_VERSION = "v0.2-yf"
+# v0.3 (H-UNIV1, registered 2026-07-08): market-wide criteria-defined universe via
+# Alpaca screener (universe.py). Separate cohort tag — the v0.2 fixed-16 record is a
+# CLOSED COHORT and every existing hypothesis/gate reads v0.2 rows only.
+MODEL_VERSION_V3 = "v0.3-alpaca"
 HERE = os.path.dirname(os.path.abspath(__file__))
 PICKS_CSV    = os.path.join(HERE, "picks.csv")
 OUTCOMES_CSV = os.path.join(HERE, "outcomes.csv")
 PATHS_CSV    = os.path.join(HERE, "paths.csv")
 EDGAR_SNAPSHOT_CSV = os.path.join(HERE, "edgar_snapshot.csv")  # forward-only Group-B + quality sidecar
+CANDIDATES_CSV = os.path.join(HERE, "candidates.csv")  # v0.3 control pool (H-CTRL)
 
 CONFIG = {
     "UNIVERSE": ["BJDX","MASK","SUGP","GCDT","CODX","VMAR","PW","NCT","HKIT",
@@ -52,6 +57,11 @@ PICK_FIELDS = [
     "ticker","price_at_screen","float_shares","rvol","gap_pct",
     "float_score","rvol_score","gap_score","price_score","score","tier","watch_level",
     "catalyst_type","dilution_flag","short_interest_pct","market_regime",
+]
+CANDIDATE_FIELDS = [
+    "candidate_id","captured_at","trading_date","model_version",
+    "ticker","price_at_screen","prev_close","day_volume","gap_pct","rvol","float_shares",
+    "score","tier","eligible","published","pick_id",
 ]
 OUTCOME_FIELDS = [
     "pick_id","ticker","trading_date","graded_at",
@@ -256,7 +266,11 @@ def cmd_scan(sample=False):
                  "(If this is a known closure, add the date to NYSE_HOLIDAYS.)")
     # Dedupe guard: never log the same ticker twice for the same trading date
     # (e.g. a manual run after the scheduled run must not double-count picks).
-    already = {(r["ticker"], r["trading_date"]) for r in read_rows(PICKS_CSV)}
+    # Scoped to the v0.2 cohort: a legacy name may legitimately ALSO qualify in the
+    # market-wide v0.3 scan the same day — each cohort's log must stay complete on
+    # its own terms (H-UNIV1), so cross-version rows never suppress each other.
+    already = {(r["ticker"], r["trading_date"]) for r in read_rows(PICKS_CSV)
+               if (r.get("model_version") or "").startswith("v0.2")}
     skipped = [s["ticker"] for s in rows if (s["ticker"], today) in already]
     rows = [s for s in rows if (s["ticker"], today) not in already]
     if skipped:
@@ -291,6 +305,109 @@ def cmd_scan(sample=False):
             row.update({"pick_id":pid, "ticker":s["ticker"], "trading_date":today, "captured_at":now_iso})
             append_row(EDGAR_SNAPSHOT_CSV, edgar_mod.SNAPSHOT_FIELDS, row)
     print(f"\nLogged {len(rows)} picks -> {PICKS_CSV}")
+
+def cmd_scan_market():
+    """v0.3 market-wide scan (H-UNIV1, registered 2026-07-08). Criteria-defined
+    universe via universe.py (Alpaca screener), scored with the UNCHANGED v0.2
+    formula, top-10 published to picks.csv as model_version v0.3-alpaca. EVERY
+    screened candidate (eligible or not, published or not) is logged to
+    candidates.csv — the eligible-but-unpublished names are H-CTRL's forward-only
+    control pool. Loud failure on any data problem; never touches the v0.2 cohort."""
+    import universe
+    today = datetime.now().strftime("%Y-%m-%d")
+    now_iso = datetime.now(timezone.utc).isoformat()
+    if today in NYSE_HOLIDAYS:
+        print(f"Market holiday ({today}) — NYSE closed. No v0.3 scan; nothing logged.")
+        return
+
+    yf = _yf()  # regime read stays identical to v0.2 (same SPY rule, same source)
+    regime = market_regime(yf)
+    candidates, feed = universe.discover(score_inputs)
+
+    eligible = sorted((c for c in candidates if c["eligible"] == ""),
+                      key=lambda c: c.get("score", 0), reverse=True)
+    to_publish = eligible[:universe.GATES["max_published"]]
+
+    # Stale-feed backstop, v0.3-scoped: if today's would-be picks are byte-identical
+    # in price to the last v0.3 session (closed market / frozen feed), log nothing.
+    prior_v3 = [r for r in read_rows(PICKS_CSV)
+                if (r.get("model_version") or "").startswith("v0.3")]
+    dates = [r["trading_date"] for r in prior_v3 if r["trading_date"] < today]
+    if dates:
+        last_date = max(dates)
+        last_px = {r["ticker"]: r["price_at_screen"] for r in prior_v3
+                   if r["trading_date"] == last_date}
+        overlap = [c for c in to_publish if c["ticker"] in last_px]
+        same = [c for c in overlap
+                if abs(float(c["price_at_screen"]) - float(last_px[c["ticker"]])) < 1e-9]
+        if len(overlap) >= 3 and len(same) / len(overlap) >= 0.8:
+            sys.exit(f"ERROR: stale/duplicate v0.3 feed — {len(same)}/{len(overlap)} "
+                     f"quotes identical to {last_date}. Nothing logged; run flagged failed.")
+
+    # Dedupe within the v0.3 cohort only (see the v0.2 guard note above).
+    already = {(r["ticker"], r["trading_date"]) for r in prior_v3}
+    to_publish = [c for c in to_publish if (c["ticker"], today) not in already]
+    cand_logged = {(r["ticker"], r["trading_date"]) for r in read_rows(CANDIDATES_CSV)}
+
+    edgar_mod = None
+    if CONFIG.get("CAPTURE_EDGAR", True):
+        try:
+            import edgar_lens as edgar_mod
+        except Exception as e:
+            print(f"  edgar_lens unavailable — Group-B capture skipped: {type(e).__name__} {str(e)[:60]}")
+
+    published_ids = {}
+    for c in to_publish:
+        pid = str(uuid.uuid4())
+        published_ids[c["ticker"]] = pid
+        snap = {}
+        if edgar_mod:
+            try:
+                snap = edgar_mod.snapshot(c["ticker"], today)
+            except Exception as e:
+                snap = {"snapshot_note": f"{type(e).__name__}:{str(e)[:40]}"}
+        append_row(PICKS_CSV, PICK_FIELDS, {
+            "pick_id": pid, "published_at": now_iso, "trading_date": today,
+            "model_version": MODEL_VERSION_V3,
+            **{k: c[k] for k in ("price_at_screen","float_shares","rvol","gap_pct",
+                                  "float_score","rvol_score","gap_score","price_score",
+                                  "score","tier","watch_level")},
+            "ticker": c["ticker"],
+            "catalyst_type": snap.get("catalyst_type", ""),
+            "dilution_flag": snap.get("dilution_flag", ""),
+            "short_interest_pct": "", "market_regime": regime,
+        })
+        if snap and edgar_mod:
+            row = {k: snap.get(k, "") for k in edgar_mod.SNAPSHOT_FIELDS}
+            row.update({"pick_id": pid, "ticker": c["ticker"], "trading_date": today,
+                        "captured_at": now_iso})
+            append_row(EDGAR_SNAPSHOT_CSV, edgar_mod.SNAPSHOT_FIELDS, row)
+
+    n_cand = 0
+    for c in candidates:
+        if (c["ticker"], today) in cand_logged:
+            continue
+        append_row(CANDIDATES_CSV, CANDIDATE_FIELDS, {
+            "candidate_id": str(uuid.uuid4()), "captured_at": now_iso,
+            "trading_date": today, "model_version": MODEL_VERSION_V3,
+            "ticker": c["ticker"], "price_at_screen": c.get("price_at_screen") or c.get("price"),
+            "prev_close": c.get("prev"), "day_volume": c.get("vol"),
+            "gap_pct": c.get("gap_pct"), "rvol": c.get("rvol"),
+            "float_shares": c.get("float_shares"),
+            "score": c.get("score", ""), "tier": c.get("tier", ""),
+            "eligible": c["eligible"] or "yes",
+            "published": "1" if c["ticker"] in published_ids else "0",
+            "pick_id": published_ids.get(c["ticker"], ""),
+        })
+        n_cand += 1
+
+    print(f"\n{today} v0.3 (feed={feed}) | {len(candidates)} screened | "
+          f"{len(eligible)} eligible | {len(to_publish)} published | regime: {regime}")
+    for c in to_publish:
+        print(f"  {c['ticker']:<7}{c['tier']:<3}{c['score']:>6.1f}  px {c['price_at_screen']}"
+              f"  gap {c['gap_pct']}%  rvol {c['rvol']}  float {c['float_shares']/1e6:.1f}M")
+    print(f"Logged {len(to_publish)} picks -> {PICKS_CSV}; {n_cand} candidates -> {CANDIDATES_CSV}")
+
 
 def _trading_days_since(date_str):
     d0 = datetime.strptime(date_str,"%Y-%m-%d").date(); d1 = datetime.now().date()
@@ -557,9 +674,10 @@ SAMPLE_QUOTES = [
 
 def main():
     ap = argparse.ArgumentParser(description="ThePickLog logger/grader (v0.2, Yahoo Finance)")
-    ap.add_argument("command", choices=["scan","grade","report","brief","demo"])
+    ap.add_argument("command", choices=["scan","scan-market","grade","report","brief","demo"])
     args = ap.parse_args()
     if   args.command=="scan":   cmd_scan()
+    elif args.command=="scan-market": cmd_scan_market()
     elif args.command=="demo":   cmd_scan(sample=True)
     elif args.command=="grade":  cmd_grade()
     elif args.command=="report": cmd_report()

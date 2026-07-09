@@ -211,9 +211,13 @@ def main():
     if a.selftest:
         return _selftest()
 
-    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))}
+    # COHORT SEAL (H-UNIV1, 2026-07-08): the exit study + every H-EX registration
+    # were frozen against the v0.2 fixed-16 record; replay that closed cohort only.
+    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))
+             if (p.get("model_version") or "").startswith("v0.2")}
     outs = _read(os.path.join(HERE, "outcomes.csv"))
-    graded = [o for o in outs if _f(o.get("entry_open")) and _f(o.get("ret_open_close_net")) is not None]
+    graded = [o for o in outs if o.get("pick_id") in picks
+              and _f(o.get("entry_open")) and _f(o.get("ret_open_close_net")) is not None]
 
     paths = load_paths()  # pick_id -> grade-time bars (the reproducible source)
     results = {r["name"]: [] for r in RULES}

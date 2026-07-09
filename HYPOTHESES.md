@@ -265,6 +265,27 @@ market-wide low-float gap scan (or, minimally, a rotating universe), version-bum
 matched-control test is uninterpretable while the "screen" admits ~100% of its universe
 daily — there is no unscreened in-universe control to match against.
 
+**Execution (frozen 2026-07-08, same day):** implemented as `universe.py` +
+`ignitionscan.py scan-market`, cohort tag `model_version = v0.3-alpaca`.
+
+- **Candidate pool:** Alpaca screener, top-50 pre-market gainers ∪ top-100 most-actives
+  (by volume), symbol hygiene drops units/warrants/rights/share-classes.
+- **Eligibility gates (frozen):** price 0.50–10.00 (the v0.2 band) · gap ≥ **+10%**
+  (up-gaps only) · rvol ≥ **2.0** · EDGAR shares-outstanding float proxy
+  **0 < shares ≤ 50M** (missing share data EXCLUDES — never a free float score).
+- **Scoring:** the UNCHANGED v0.2 formula/weights/tier cutpoints (PRINCIPLES P5).
+  Selection = **top 10 by score** per day.
+- **Control pool:** every screened candidate — eligible or not, published or not — is
+  logged to `candidates.csv` with a reject reason / published flag. The
+  eligible-but-unpublished names are H-CTRL's forward-only unscreened control group.
+- **Cohort separation:** the v0.2 fixed-16 record is CLOSED. `weekly_report.py`,
+  `hypo_eval.py` (leaderboard/gate), `bayes_h_ex1.py`, and `exit_sim.py` all read the
+  v0.2 cohort only; v0.3 appears as its own report section. No existing hypothesis
+  verdict (incl. Gate-1 on 2026-07-27) reads a v0.3 row. New v0.3 rules require new
+  registrations with their own baselines.
+- **Changing any gate or the top-N cap requires a new registration** — they are part
+  of the frozen definition, not tunables.
+
 ---
 *Pre-registration, not investment advice. The forward log (picks.csv/outcomes.csv) is the
 only judge; everything here is a hypothesis until post-registration data says otherwise.*
