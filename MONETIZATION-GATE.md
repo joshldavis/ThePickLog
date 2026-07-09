@@ -63,9 +63,12 @@ These are the items ROADMAP.md parked. None worth touching until the edge is pro
   this clears.**
 - **Distribution:** is there a cheap path to an audience, or does CAC swamp a capacity-limited
   product? Be honest about whether you'll actually do the marketing.
-- **Unit economics:** operating cost (data feeds — note catalyst_type/dilution_flag need a paid
-  feed; Phase 2 needs paid historical float) vs. realistic subscriber revenue at the capacity
-  ceiling from Gate 2.
+- **Unit economics:** operating cost vs. realistic subscriber revenue at the capacity ceiling
+  from Gate 2. Data cost is now **near-zero**: `catalyst_type`/`dilution_flag` (2026-06-28) and
+  `insider_net` (2026-07-08) are captured from **free SEC EDGAR**, not a paid feed as originally
+  assumed. The only remaining paid-feed item is **Phase 2's** point-in-time historical float
+  (ROADMAP #4, recommended skip). So operating cost is not a real barrier here — distribution and
+  the capacity ceiling are.
 
 ## Decision tree (late July, when Gate 1 data lands)
 
