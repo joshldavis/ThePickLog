@@ -34,24 +34,21 @@ jobs:
           echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
       - name: Run ${{ steps.cmd.outputs.cmd }}
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
-      # v0.3 market-wide scan (H-UNIV1, registered 2026-07-08): criteria-defined
-      # universe via the Alpaca screener; separate cohort (model_version v0.3-alpaca).
-      # continue-on-error so a v0.3 data problem NEVER blocks the v0.2 scan commit --
-      # the step still shows red for visibility. Skips cleanly until the Alpaca keys
-      # exist as repo secrets (ALPACA-DATA-KEYS-SETUP.md).
-      - name: Market-wide v0.3 scan (Alpaca)
+      # v0.3 market-wide scan (H-UNIV1, registered 2026-07-08; free-feed amendment
+      # 2026-07-09): criteria-defined universe. Default source = FREE Yahoo screeners
+      # (UNIV_SOURCE=yahoo, cohort tag v0.3-yf) -- no keys, no cost. Setting
+      # UNIV_SOURCE=alpaca + the Alpaca secrets upgrades discovery to SIP later
+      # (new sub-cohort tag v0.3-alpaca). continue-on-error so a v0.3 data problem
+      # NEVER blocks the v0.2 scan commit -- the step still shows red for visibility.
+      - name: Market-wide v0.3 scan
         if: steps.cmd.outputs.cmd == 'scan'
         continue-on-error: true
         env:
+          UNIV_SOURCE: yahoo
           ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           ALPACA_DATA_FEED: sip
-        run: |
-          if [ -z "$ALPACA_KEY_ID" ]; then
-            echo "v0.3 scan skipped -- ALPACA_KEY_ID / ALPACA_SECRET_KEY secrets not set (see ALPACA-DATA-KEYS-SETUP.md)."
-          else
-            python ignitionscan.py scan-market
-          fi
+        run: python ignitionscan.py scan-market
       - name: Refresh Finding-A-aware brief
         run: python ignitionscan.py brief || true
       - name: Rebuild Test-mode leaderboard (house + user rules)

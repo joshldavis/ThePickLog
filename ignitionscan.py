@@ -33,7 +33,7 @@ MODEL_VERSION = "v0.2-yf"
 # v0.3 (H-UNIV1, registered 2026-07-08): market-wide criteria-defined universe via
 # Alpaca screener (universe.py). Separate cohort tag — the v0.2 fixed-16 record is a
 # CLOSED COHORT and every existing hypothesis/gate reads v0.2 rows only.
-MODEL_VERSION_V3 = "v0.3-alpaca"
+MODEL_VERSION_V3_PREFIX = "v0.3"   # full tag = v0.3-<source>, e.g. v0.3-yf (free) / v0.3-alpaca (SIP)
 HERE = os.path.dirname(os.path.abspath(__file__))
 PICKS_CSV    = os.path.join(HERE, "picks.csv")
 OUTCOMES_CSV = os.path.join(HERE, "outcomes.csv")
@@ -322,7 +322,8 @@ def cmd_scan_market():
 
     yf = _yf()  # regime read stays identical to v0.2 (same SPY rule, same source)
     regime = market_regime(yf)
-    candidates, feed = universe.discover(score_inputs)
+    candidates, src_tag = universe.discover(score_inputs)
+    model_version = f"{MODEL_VERSION_V3_PREFIX}-{src_tag}"
 
     eligible = sorted((c for c in candidates if c["eligible"] == ""),
                       key=lambda c: c.get("score", 0), reverse=True)
@@ -368,14 +369,14 @@ def cmd_scan_market():
                 snap = {"snapshot_note": f"{type(e).__name__}:{str(e)[:40]}"}
         append_row(PICKS_CSV, PICK_FIELDS, {
             "pick_id": pid, "published_at": now_iso, "trading_date": today,
-            "model_version": MODEL_VERSION_V3,
+            "model_version": model_version,
             **{k: c[k] for k in ("price_at_screen","float_shares","rvol","gap_pct",
                                   "float_score","rvol_score","gap_score","price_score",
                                   "score","tier","watch_level")},
             "ticker": c["ticker"],
             "catalyst_type": snap.get("catalyst_type", ""),
             "dilution_flag": snap.get("dilution_flag", ""),
-            "short_interest_pct": "", "market_regime": regime,
+            "short_interest_pct": c.get("short_interest_pct", ""), "market_regime": regime,
         })
         if snap and edgar_mod:
             row = {k: snap.get(k, "") for k in edgar_mod.SNAPSHOT_FIELDS}
@@ -389,7 +390,7 @@ def cmd_scan_market():
             continue
         append_row(CANDIDATES_CSV, CANDIDATE_FIELDS, {
             "candidate_id": str(uuid.uuid4()), "captured_at": now_iso,
-            "trading_date": today, "model_version": MODEL_VERSION_V3,
+            "trading_date": today, "model_version": model_version,
             "ticker": c["ticker"], "price_at_screen": c.get("price_at_screen") or c.get("price"),
             "prev_close": c.get("prev"), "day_volume": c.get("vol"),
             "gap_pct": c.get("gap_pct"), "rvol": c.get("rvol"),
@@ -401,7 +402,7 @@ def cmd_scan_market():
         })
         n_cand += 1
 
-    print(f"\n{today} v0.3 (feed={feed}) | {len(candidates)} screened | "
+    print(f"\n{today} {model_version} | {len(candidates)} screened | "
           f"{len(eligible)} eligible | {len(to_publish)} published | regime: {regime}")
     for c in to_publish:
         print(f"  {c['ticker']:<7}{c['tier']:<3}{c['score']:>6.1f}  px {c['price_at_screen']}"

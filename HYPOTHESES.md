@@ -265,11 +265,28 @@ market-wide low-float gap scan (or, minimally, a rotating universe), version-bum
 matched-control test is uninterpretable while the "screen" admits ~100% of its universe
 daily — there is no unscreened in-universe control to match against.
 
-**Execution (frozen 2026-07-08, same day):** implemented as `universe.py` +
-`ignitionscan.py scan-market`, cohort tag `model_version = v0.3-alpaca`.
+**Execution (frozen 2026-07-08; free-feed amendment 2026-07-09):** implemented as
+`universe.py` + `ignitionscan.py scan-market`. **Operating source = free Yahoo
+screeners** (`UNIV_SOURCE=yahoo`), cohort tag `model_version = v0.3-yf` — zero data
+cost, same feed lineage as the v0.2 record. An optional later upgrade to Alpaca SIP
+(`UNIV_SOURCE=alpaca`) would start a NEW sub-cohort tag (`v0.3-alpaca`); tags are
+never mixed, so provenance stays attributable per row.
 
-- **Candidate pool:** Alpaca screener, top-50 pre-market gainers ∪ top-100 most-actives
-  (by volume), symbol hygiene drops units/warrants/rights/share-classes.
+- **Candidate pool (yahoo):** custom market-wide criteria query (percent change ≥
+  the +10% gap gate, price inside the frozen 0.50–10 band, US-listed; paged) ∪
+  predefined lists (day gainers, small-cap gainers, aggressive small caps, most
+  actives). OTC / pink sheets excluded; symbol hygiene drops
+  units/warrants/rights/share-classes. Per-name quotes are premarket-aware
+  (preMarketPrice preferred at scan time); float = Yahoo floatShares (fallback
+  sharesOutstanding), same as v0.2.
+  **Documented limitation:** before the open Yahoo's list rankings lag, so a name
+  moving ONLY in today's premarket may not surface until the open; yesterday's
+  movers gapping again are caught (the premarket gap gate does the real selection).
+  This biases v0.3-yf toward continuation gappers — acceptable and disclosed; the
+  Alpaca upgrade closes it.
+- **Candidate pool (alpaca, dormant):** Alpaca screener, top-50 pre-market gainers ∪
+  top-100 most-actives (by volume), same hygiene; float = free SEC EDGAR
+  shares-outstanding proxy.
 - **Eligibility gates (frozen):** price 0.50–10.00 (the v0.2 band) · gap ≥ **+10%**
   (up-gaps only) · rvol ≥ **2.0** · EDGAR shares-outstanding float proxy
   **0 < shares ≤ 50M** (missing share data EXCLUDES — never a free float score).
