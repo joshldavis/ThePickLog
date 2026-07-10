@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-09",
+  "generated_at": "2026-07-10",
   "log": {
-    "picks": 317,
+    "picks": 333,
     "graded": 238
   },
   "baseline": {
@@ -38,7 +38,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.3,
+      "weeks_live": 2.4,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -81,7 +81,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.4,
+      "weeks_live": 2.6,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -129,7 +129,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.4,
+      "weeks_live": 2.6,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -177,7 +177,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.4,
+      "weeks_live": 2.6,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -225,7 +225,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.4,
+      "weeks_live": 2.6,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -276,7 +276,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "building",
-      "weeks_live": 2.4,
+      "weeks_live": 2.6,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
