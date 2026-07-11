@@ -1,0 +1,34 @@
+# ThePickLog — Compete quote cache.
+# Writes real (free, Yahoo) prices for the tradeable universe into Supabase `is_quotes`
+# every ~30 min during US market hours, so the play-money leaderboard + portfolios move
+# with real prices instead of being pinned at cost.
+#
+# Needs two repo secrets: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.
+# NON-FATAL without them — quote_cache.py logs and exits 0, so this workflow never
+# breaks the build if the cache isn't wired up yet.
+name: Compete quote cache
+
+on:
+  workflow_dispatch:
+  schedule:
+    # every 30 min, ~US market hours (UTC window covers ET in both DST and standard time)
+    - cron: "*/30 13-21 * * 1-5"
+
+permissions:
+  contents: read
+
+jobs:
+  quotes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: pip install yfinance
+      - name: Push quotes to is_quotes
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: python quote_cache.py

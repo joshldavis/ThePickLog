@@ -1487,7 +1487,7 @@ function renderBanner(){
     const reason=/429|rate/i.test(DATA_MODE)?"data feed rate limit reached":"live feed temporarily unavailable";
     el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data — ${reason}</b>. This affects only <b>today's screen</b> (live quotes); the <b>Track record & model validation run on the committed pick log, not this feed</b>. The live screen refreshes automatically once the feed recovers. <span class="dim">(The Quality Lens still uses live SEC filings.)</span>`;
   }else{
-    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — add a free <code>FMP</code> API key on the Watchlist tab to pull live quotes for the seed universe. <span class="dim">(Affects only today's screen — the Track record runs on the committed pick log.)</span>`;
+    el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data</b> — live quotes are owner-only (data-vendor licensing), so today's screen shows sample prices. <span class="dim">Compete marks at real cached prices, and the Track record & model validation run on the committed pick log — both unaffected.</span>`;
   }
 }
 
@@ -3259,8 +3259,30 @@ window.addEventListener("hashchange",goHash);
     active:false, user:null, session:null, _saved:new Set(),
 
     /* ---------- pricing ---------- */
+    // Client cache of the server-maintained marks (is_quotes, kept fresh by
+    // quote_cache.py). Refreshed at most once/min. This is what lets a Compete
+    // player's P&L and the leaderboard move with REAL prices — even for visitors on
+    // the owner-only "Sample data" screen who have no live feed of their own.
+    _qcache:{t:0, m:null},
+    async cachedQuote(sym){
+      const now=Date.now();
+      if(!IS_SIM._qcache.m || now - IS_SIM._qcache.t > 60000){
+        try{
+          const {data}=await sb.from("is_quotes").select("ticker,price");
+          const m={}; (data||[]).forEach(r=>{ m[String(r.ticker).toUpperCase()]=Number(r.price); });
+          IS_SIM._qcache={t:now, m};
+        }catch(e){ if(!IS_SIM._qcache.m) IS_SIM._qcache={t:now, m:{}}; }
+      }
+      return IS_SIM._qcache.m[sym] || 0;
+    },
     async markPrice(sym){
       sym=String(sym||"").toUpperCase();
+      // Owner with the live feed: the watchlist's live price is freshest.
+      if(DATA_MODE==="live" && window.LASTPX && window.LASTPX[sym]>0) return Number(window.LASTPX[sym]);
+      // Everyone else: the server-cached real mark, so play-money portfolios actually move.
+      const cq = await IS_SIM.cachedQuote(sym);
+      if(cq>0) return Number(cq);
+      // Fallbacks: any locally-loaded price (incl. the static sample), then the owner proxy.
       if(window.LASTPX && window.LASTPX[sym]>0) return Number(window.LASTPX[sym]);
       try{ const j=await fmpGet("quote",{symbol:sym});
         const p=Array.isArray(j)?(j[0]&&j[0].price):(j&&j.price);
@@ -3303,7 +3325,9 @@ window.addEventListener("hashchange",goHash);
       const input=document.getElementById("qty-"+symbol);
       const qty=parseInt(input&&input.value,10);
       if(!(qty>0)){ toast("Enter a share quantity greater than 0 for "+symbol+".","bad"); return; }
-      const px=(window.LASTPX&&window.LASTPX[symbol])||0;
+      // Owner (live feed) trades at the live watchlist price; everyone else passes 0 so
+      // trade() marks from the server-cached real quote (not the static sample price).
+      const px=(DATA_MODE==="live" && window.LASTPX && window.LASTPX[symbol])||0;
       return IS_SIM.trade(symbol, side, qty, px);
     },
 
@@ -3323,7 +3347,9 @@ window.addEventListener("hashchange",goHash);
       const rows=[];
       for(const p of positions){
         let mark=await IS_SIM.markPrice(p.ticker); if(!(mark>0)) mark=Number(p.avg_cost);
-        sb.rpc("is_cache_quote",{p_ticker:p.ticker,p_price:mark}); // keep leaderboard marks fresh
+        // Only the owner's LIVE marks refresh the shared cache; visitors read it (a
+        // sample-price write-back would clobber the real quote quote_cache.py maintains).
+        if(DATA_MODE==="live") sb.rpc("is_cache_quote",{p_ticker:p.ticker,p_price:mark});
         const mv=p.qty*mark, cost=p.qty*Number(p.avg_cost), pl=mv-cost;
         invested+=mv;
         rows.push(`<tr><td class="tick">${p.ticker}</td><td class="num">${p.qty}</td>`+
