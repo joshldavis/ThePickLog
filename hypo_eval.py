@@ -496,7 +496,11 @@ def evaluate_registry(registry_path="hypotheses/registry.json",
 
     return {
         "generated_at": asof.isoformat(),
-        "log": {"picks": len(picks), "graded": len(outs)},
+        # graded = outcomes with a REAL realized return; void rows (phantom/holiday
+        # scans) carry no return and must not inflate the count. Matches the Track
+        # record + Validation dashboard (both show finite-return grades only).
+        "log": {"picks": len(picks),
+                "graded": sum(1 for o in outs if _f(o.get("ret_open_close_net")) is not None)},
         "baseline": {
             "n_post": len(base_ret),
             "win_post": round(100 * sum(1 for r in base_ret if r > 0) / len(base_ret)) if base_ret else None,
