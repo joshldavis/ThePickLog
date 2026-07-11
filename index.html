@@ -381,6 +381,10 @@
   .pf-tier select{background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:5px 8px;font:inherit;font-size:13px}
   .pf-count{font-size:12.5px;color:var(--muted);margin-left:auto}
   @media(max-width:560px){.pf-count{margin-left:0;width:100%}}
+  /* Sticky header for the (long) pick table — scoped to its own scroll container so
+     the column labels stay put regardless of the sticky site nav's height. */
+  #perfScroll{max-height:74vh;overflow:auto}
+  #perfTable thead th{position:sticky;top:0;z-index:3;background:var(--panel)}
   @media(max-width:880px){
     nav.tabs{display:none}
     .menu-btn{display:flex}
@@ -1139,7 +1143,7 @@
       </label>
       <span class="pf-count" id="perfCount"></span>
     </div>
-    <div class="panel tscroll" style="padding:6px 6px 0">
+    <div id="perfScroll" class="panel tscroll" style="padding:6px 6px 0">
       <table id="perfTable" class="sortable">
         <thead><tr>
           <th>Date <span class="info" data-info="date" role="button" tabindex="0">i</span></th><th>Ticker <span class="info" data-info="ticker" role="button" tabindex="0">i</span></th><th>Tier <span class="info" data-info="tier" role="button" tabindex="0">i</span></th><th class="num">Score <span class="info" data-info="momentumScore" role="button" tabindex="0">i</span></th>
