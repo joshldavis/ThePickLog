@@ -369,6 +369,18 @@
   .tscroll>#perfTable{min-width:780px}
   .tscroll>#posTable,.tscroll>#ordTable,.tscroll>#histTable{min-width:620px}
   .tscroll>.lb-table{min-width:520px}
+  /* Track-record filter bar */
+  .perf-filter{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:2px 0 14px}
+  .pf-seg{display:inline-flex;flex-wrap:wrap;gap:4px;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+  .pf-seg button{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;cursor:pointer;white-space:nowrap}
+  .pf-seg button:hover{color:var(--text)}
+  .pf-seg button.on{background:var(--a);color:#fff}
+  .pf-seg button .c{opacity:.65;font-weight:500;margin-left:3px}
+  .pf-seg button.on .c{opacity:.9}
+  .pf-tier{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+  .pf-tier select{background:var(--panel-2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:5px 8px;font:inherit;font-size:13px}
+  .pf-count{font-size:12.5px;color:var(--muted);margin-left:auto}
+  @media(max-width:560px){.pf-count{margin-left:0;width:100%}}
   @media(max-width:880px){
     nav.tabs{display:none}
     .menu-btn{display:flex}
@@ -1114,6 +1126,19 @@
     </div>
 
     <h2>Every logged pick</h2>
+    <div id="perfFilter" class="perf-filter" style="display:none">
+      <div class="pf-seg" role="group" aria-label="Filter picks">
+        <button type="button" data-f="graded">Graded <span class="c" data-c="graded"></span></button>
+        <button type="button" data-f="wins">Wins <span class="c" data-c="wins"></span></button>
+        <button type="button" data-f="misses">Misses <span class="c" data-c="misses"></span></button>
+        <button type="button" data-f="pending">Pending <span class="c" data-c="pending"></span></button>
+        <button type="button" data-f="all">All <span class="c" data-c="all"></span></button>
+      </div>
+      <label class="pf-tier">Tier
+        <select id="perfTierSel"><option value="">All</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+      </label>
+      <span class="pf-count" id="perfCount"></span>
+    </div>
     <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="perfTable" class="sortable">
         <thead><tr>
@@ -1811,13 +1836,26 @@ async function renderPerformance(){
         `<div class="pct">${c.pos==null?'—':c.pos+'%'}</div>`+
         `<div class="pct" style="width:62px" title="mean net return">${c.mean==null?'—':(c.mean>=0?'+':'')+c.mean.toFixed(1)+'%'}</div></div>`; });
   } else if(cw){ cw.style.display="none"; }
-  const body=document.getElementById("perfBody"); body.innerHTML="";
-  tr.picks.slice().sort((a,b)=> a.trading_date<b.trading_date?1:(a.trading_date>b.trading_date?-1:0)).forEach(p=>{
+  // ---- filterable pick table (default: Graded — hides the not-yet-scored pending block) ----
+  const _sorted = tr.picks.slice().sort((a,b)=> a.trading_date<b.trading_date?1:(a.trading_date>b.trading_date?-1:0));
+  const units = _sorted.map(p=>{
     const o=g.byId[p.pick_id];
+    const rc=o?parseFloat(o.ret_open_close_net):NaN;
+    const kind = !o ? "pending" : (isFinite(rc) ? (rc>0?"win":"miss") : "void");
+    return {p, o, rc, kind, tier:(p.tier||'').toUpperCase()};
+  });
+  const counts = {
+    all: units.length,
+    graded: units.filter(u=>u.kind==="win"||u.kind==="miss").length,
+    wins: units.filter(u=>u.kind==="win").length,
+    misses: units.filter(u=>u.kind==="miss").length,
+    pending: units.filter(u=>u.kind==="pending").length,
+  };
+  const rowHtml = u => {
+    const p=u.p, o=u.o;
     const px=parseFloat(p.price_at_screen), watch=parseFloat(p.watch_level), sc=parseFloat(p.score);
     let gainCell, dipCell, resCell;
-    if(o){ const rc=parseFloat(o.ret_open_close_net);   // realizable open→close — WIN is derived from this [QA M3]
-      const mae=parseFloat(o.mae_5d);                   // worst drawdown over the 5-day window
+    if(o){ const rc=u.rc, mae=parseFloat(o.mae_5d);     // realizable open→close — WIN derived from this [QA M3]
       if(isFinite(rc)){
         gainCell=`<td class="num ${rc>=0?'pos':'neg'}">${(rc>=0?'+':'')+rc.toFixed(1)+'%'}</td>`;
         dipCell=`<td class="num ${isFinite(mae)&&mae<0?'neg':'dim'}">${isFinite(mae)?mae.toFixed(1)+'%':'—'}</td>`;
@@ -1827,14 +1865,45 @@ async function renderPerformance(){
         resCell=`<span class="dim" title="${(o.note||'voided — excluded from all stats').replace(/"/g,'&quot;')}">VOID</span>`;
       }
     } else { gainCell=`<td class="num dim">pending</td>`; dipCell=`<td class="num dim">—</td>`; resCell=`<span class="dim">pending</span>`; }
-    body.innerHTML+=`<tr>
+    return `<tr>
       <td class="dim">${p.trading_date}</td><td class="tick">${p.ticker}</td>
-      <td><span class="tier ${(p.tier||'').toUpperCase()}">${p.tier}</span></td>
+      <td><span class="tier ${u.tier}">${p.tier}</span></td>
       <td class="num">${isFinite(sc)?sc.toFixed(1):'—'}</td>
       <td class="num">$${isFinite(px)?px.toFixed(2):'—'}</td>
       <td class="num">$${isFinite(watch)?watch.toFixed(2):'—'}</td>
       ${gainCell}${dipCell}<td>${resCell} <a href="/r/p-${encodeURIComponent(p.pick_id)}" target="_blank" rel="noopener" title="Shareable receipt" style="color:var(--a);font-size:11px;white-space:nowrap;text-decoration:none">↗</a></td></tr>`;
-  });
+  };
+  const _pfState = { f:"graded", tier:"" };
+  const _pfMatch = u => {
+    const okF = _pfState.f==="all" ? true
+      : _pfState.f==="graded" ? (u.kind==="win"||u.kind==="miss")
+      : _pfState.f==="wins" ? u.kind==="win"
+      : _pfState.f==="misses" ? u.kind==="miss"
+      : _pfState.f==="pending" ? u.kind==="pending" : true;
+    return okF && (!_pfState.tier || u.tier===_pfState.tier);
+  };
+  const body=document.getElementById("perfBody");
+  function _pfRender(){
+    const list = units.filter(_pfMatch);
+    body.innerHTML = list.length ? list.map(rowHtml).join("")
+      : `<tr><td colspan="9" class="muted" style="padding:20px;text-align:center">No picks match this filter.</td></tr>`;
+    const cnt=document.getElementById("perfCount");
+    if(cnt) cnt.textContent = `Showing ${list.length} of ${units.length} picks`;
+  }
+  const bar=document.getElementById("perfFilter");
+  if(bar){
+    bar.style.display="flex";
+    bar.querySelectorAll(".c").forEach(el=>{ const k=el.getAttribute("data-c"); if(counts[k]!=null) el.textContent="("+counts[k]+")"; });
+    bar.querySelectorAll(".pf-seg button").forEach(btn=>{
+      btn.classList.toggle("on", btn.getAttribute("data-f")===_pfState.f);
+      btn.onclick=()=>{ _pfState.f=btn.getAttribute("data-f");
+        bar.querySelectorAll(".pf-seg button").forEach(b=>b.classList.toggle("on", b===btn));
+        _pfRender(); };
+    });
+    const tsel=document.getElementById("perfTierSel");
+    if(tsel){ tsel.value=_pfState.tier; tsel.onchange=()=>{ _pfState.tier=tsel.value; _pfRender(); }; }
+  }
+  _pfRender();
 }
 
 /* ---------- RENDER: scoring page ---------- */
