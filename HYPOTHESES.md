@@ -304,5 +304,76 @@ never mixed, so provenance stays attributable per row.
   of the frozen definition, not tunables.
 
 ---
+
+## Batch #4 — v0.3-yf cohort exit-rule family (frozen 2026-07-13)
+
+Every exit rule registered above (H-EX1…EX10) reads the **closed v0.2 fixed-16 cohort
+only** (H-UNIV1 cohort seal). This batch registers the exit-rule question fresh against
+the **v0.3-yf market-wide cohort**, where independent N actually accumulates. Registered
+**before any v0.3 pick has graded** (0 graded at freeze; first grades expected ~2026-07-16),
+so the entire v0.3 outcome stream is out-of-sample by construction. Only v0.3-yf picks
+with `trading_date` **after 2026-07-13** count toward any verdict (the 14 pre-existing
+ungraded picks from 07-09/07-10 are excluded by the standard convention).
+
+Conventions inherited from H-EX1/H-EX2: 2% cost haircut, fills assumed exactly at the
+level, conservative same-day-collision rules (stop assumed first), deterministic from
+committed CSVs, no discretion. H-IND1 applies: every verdict must report the cluster
+bootstrap by ticker and the per-ticker sign count (the evaluator emits both). Baseline
+for every arm = **same-day open→close, net, on v0.3 picks** (paired, same subset).
+
+| id | rule (frozen) | evaluator exit id |
+|----|---------------|-------------------|
+| **H-V3-EX1** | +10% limit over the 5-day hold; unfilled → 5-day close | `target_10` |
+| **H-V3-EX2** | +5% limit, same structure | `target_5` |
+| **H-V3-EX3** | +15% limit, same structure | `target_15` |
+| **H-V3-EX4** | +20% limit, same structure | `target_20` |
+| **H-V3-EX5** | +10% limit AND −20% disaster stop (stop-first collisions) | `target_10_stop_20` |
+
+**Honest prior, stated at registration (in-sample v0.2 context, NOT the test):** on the
+v0.2 cohort, net of the 2% haircut, **every** target arm *loses* to same-day close in the
+full daily-path replay (−3.6% to −4.9% pooled vs −2.6%), per-ticker sign counts are coin
+flips (best arm 8/15 tickers), and the H-DEDUP re-read collapses to a single path-bearing
+episode (uninterpretable). So the registered expectation is **skeptical**: this family is
+registered because v0.3-yf selects *different* names (market-wide continuation gappers,
+top-10-by-score, real ticker diversity) where the v0.2 null may not transfer — not because
+the v0.2 evidence supports it. A null here is a valid, expected outcome.
+
+**⚠️ Family-wise honesty note (must stay attached):** five arms registered at once = a
+ranked screen, not five independent claims. Any winner must (a) beat baseline on avg
+net/trade, (b) hold direction across ≥3 consecutive weekly snapshots, (c) survive the
+H-IND1 cluster bootstrap + per-ticker majority, and (d) remain the winner as the sample
+grows. Prefer the simplest rule among statistical ties. Slippage caveat inherited: fills
+at level are optimistic on thin names; any edge under ~+1%/trade is noise.
+
+**Wiring (code date = registration date, for once):** `hypo_eval.py` now supports a
+per-hypothesis `"cohort"` field; these five arms are live in `hypotheses/registry.json`
+with `"cohort": "v0.3"` and appear on the Test board scored strictly against v0.3 rows.
+The board's headline baseline remains the v0.2 cohort; each v0.3 card carries its own
+paired baseline.
+
+### H-V3-PAPER — paper-execution instrumentation (measurement, not a trading claim)
+
+**Registered intent:** every exit verdict above rides on the *fills-at-level* proxy. To
+measure the proxy's optimism directly, an **Alpaca paper account** (`paper_trader.py`,
+hardcoded to `paper-api.alpaca.markets` — it cannot touch a live account) trades the
+H-V3-EX1 rule mechanically on published v0.3 picks: fixed small notional per pick, buy at
+the open (OPG market order), +10% GTC limit armed from the actual fill price shortly after
+the open, time-exit near the close of the 5th session. Every order and fill is committed
+to `paper_trades.csv` (forward-only, verifiable).
+
+- **Readout:** realized paper return per pick vs the `paths.csv` proxy return for the same
+  pick under H-V3-EX1. The gap estimates real slippage/fill quality — the number every
+  slippage caveat above currently guesses at.
+- **Known gaps (disclosed):** the TP limit is armed a few minutes after the open, so a
+  touch inside that gap is missed (conservative — can only understate the paper arm);
+  Alpaca paper fills are themselves idealized vs real routes, so the measured gap is a
+  *lower bound* on true slippage; OPG orders may be rejected on some venues/names —
+  rejects are logged, not silently skipped.
+- **This is instrumentation.** It produces no pass/fail of its own and changes no verdict;
+  it calibrates the haircut assumption for every exit hypothesis. NOT INVESTMENT ADVICE —
+  paper money only, and nothing here authorizes a live-money deployment (that remains
+  gated behind MONETIZATION-GATE / Gate-1 and an explicit human decision).
+
+---
 *Pre-registration, not investment advice. The forward log (picks.csv/outcomes.csv) is the
 only judge; everything here is a hypothesis until post-registration data says otherwise.*

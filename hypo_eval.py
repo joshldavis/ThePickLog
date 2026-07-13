@@ -22,12 +22,13 @@ def _f(x):
     except (TypeError, ValueError):
         return None
 
-def load_log(picks_path="picks.csv", outs_path="outcomes.csv"):
-    # COHORT SEAL (H-UNIV1, 2026-07-08): every rule currently on the board was
-    # registered against the v0.2 fixed-16 record, so the leaderboard/gate evaluate
-    # the v0.2 cohort ONLY. The v0.3 market-wide cohort gets its own arms/baselines
-    # when registered. Research override: PICKLOG_COHORT=all|v0.3.
-    coh = os.environ.get("PICKLOG_COHORT", "v0.2")
+def load_log(picks_path="picks.csv", outs_path="outcomes.csv", cohort=None):
+    # COHORT SEAL (H-UNIV1, 2026-07-08): rules registered against the v0.2 fixed-16
+    # record evaluate the v0.2 cohort ONLY. Batch #4 (2026-07-13) introduced
+    # per-hypothesis "cohort" (e.g. "v0.3") — each rule is scored strictly against
+    # its own cohort's picks; cohorts are never mixed on one card.
+    # Research override: PICKLOG_COHORT=all|v0.3.
+    coh = cohort or os.environ.get("PICKLOG_COHORT", "v0.2")
     keep = (lambda r: True) if coh == "all" else (
         lambda r: (r.get("model_version") or "").startswith(coh))
     picks = {r["pick_id"]: r for r in csv.DictReader(open(picks_path)) if keep(r)}
@@ -468,7 +469,21 @@ def evaluate_registry(registry_path="hypotheses/registry.json",
     picks, outs = load_log(picks_path, outs_path)
     asof = asof or date.today()
     users = load_user_hypotheses(user_path) if user_path else []
-    rows = [evaluate(h, picks, outs, cfg, asof) for h in (reg["hypotheses"] + users)]
+    # Per-hypothesis cohort (Batch #4, 2026-07-13): a rule carrying "cohort": "v0.3"
+    # is evaluated against v0.3 picks/outcomes only; everything else stays sealed to
+    # v0.2. Logs are loaded once per cohort and never mixed within a card.
+    _logs = {"v0.2": (picks, outs)}
+    def _log_for(h):
+        coh = h.get("cohort", "v0.2")
+        if coh not in _logs:
+            _logs[coh] = load_log(picks_path, outs_path, cohort=coh)
+        return _logs[coh]
+    rows = []
+    for h in (reg["hypotheses"] + users):
+        hp, ho = _log_for(h)
+        r = evaluate(h, hp, ho, cfg, asof)
+        r["cohort"] = h.get("cohort", "v0.2")
+        rows.append(r)
 
     # Only claimed edges (filter/exit) get a rank; a 'question' makes no directional
     # claim, so it's listed but never ranked as if higher were better.

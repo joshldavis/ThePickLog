@@ -55,3 +55,23 @@ It loads on first open; hit **↻ Refresh** to update. All actions go through th
 - Markets must be open for market orders to fill (otherwise they queue as "new"/"accepted").
 - Order *modify* isn't in the UI (cancel + re-place instead).
 - Penny/low-float names: Alpaca may reject hard-to-borrow shorts or fractional qty; the toast surfaces Alpaca's reason.
+
+## Automated paper trader (H-V3-PAPER, added 2026-07-13)
+
+`paper_trader.py` + `.github/workflows/paper_trader.yml` mechanically trade the
+**H-V3-EX1** rule (+10% target / 5-day hold) on published v0.3 picks — see the
+H-V3-PAPER registration in HYPOTHESES.md. Purpose: measure real (paper) fill quality
+against the fills-at-level proxy. The script is **hardcoded to
+paper-api.alpaca.markets** — no code path reaches a live account.
+
+**One-time setup (Josh):** add two GitHub repo secrets (Settings → Secrets and
+variables → Actions): `ALPACA_KEY_ID` and `ALPACA_SECRET_KEY` — the same *paper*
+keys already in Vercel. Until they exist, every run no-ops green. Optional:
+`PAPER_NOTIONAL` env (default $200/pick).
+
+**Daily cadence (UTC crons, shift 1h in winter):** ~8:00am ET `enter` (OPG market
+buys for today's v0.3 picks, skip symbols already held), ~9:40am ET `arm` (+10% GTC
+limit from each actual fill; the 10-minute gap after the open is a disclosed miss
+window), ~3:45pm ET `manage` (cancel limit + market-close anything ≥5 sessions old;
+snapshot filled take-profits). Every action appends to **`paper_trades.csv`**,
+committed by the Action — the verifiable event log.

@@ -1,0 +1,59 @@
+# H-V3-PAPER instrumentation (HYPOTHESES.md, registered 2026-07-13): trades the
+# H-V3-EX1 rule (+10% target / 5-day hold) on published v0.3 picks in an Alpaca
+# PAPER account, to measure real fill quality vs the fills-at-level proxy.
+# paper_trader.py is HARDCODED to paper-api.alpaca.markets — it cannot touch a
+# live account. Requires repo secrets ALPACA_KEY_ID + ALPACA_SECRET_KEY (the
+# paper keys already used in Vercel); until they're set, every run no-ops green.
+# Crons are UTC and shift 1h in winter, same caveat as ignitionscan.yml.
+name: ThePickLog paper trader
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "enter, arm, or manage"
+        default: manage
+  schedule:
+    - cron: "0 12 * * 1-5"    # ~8:00am ET — enter: OPG buys for today's v0.3 picks
+    - cron: "40 13 * * 1-5"   # ~9:40am ET — arm: +10% GTC limits from actual fills
+    - cron: "45 19 * * 1-5"   # ~3:45pm ET — manage: 5-session time exits + fill snapshots
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Decide mode
+        id: mode
+        run: |
+          MODE=manage
+          if [ "${{ github.event.schedule }}" = "0 12 * * 1-5" ]; then MODE=enter; fi
+          if [ "${{ github.event.schedule }}" = "40 13 * * 1-5" ]; then MODE=arm; fi
+          if [ -n "${{ github.event.inputs.mode }}" ]; then MODE="${{ github.event.inputs.mode }}"; fi
+          echo "mode=$MODE" >> "$GITHUB_OUTPUT"
+      - name: Run paper trader (${{ steps.mode.outputs.mode }})
+        env:
+          ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: python paper_trader.py ${{ steps.mode.outputs.mode }}
+      - name: Commit event log
+        run: |
+          # Commit as the repo owner so Vercel authorizes the auto-deploy.
+          git config user.name "joshldavis"
+          git config user.email "davis1163@gmail.com"
+          [ -f paper_trades.csv ] && git add paper_trades.csv || true
+          if git diff --cached --quiet; then
+            echo "No event-log changes to commit."
+          else
+            git commit -m "data: paper trader ${{ steps.mode.outputs.mode }} $(date -u +%F)"
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed; retrying"; sleep 5
+            done
+          fi

@@ -75,6 +75,61 @@
       "selection": { "op": "and", "predicates": [] },
       "exit": "target_10",
       "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-V3-EX1",
+      "title": "v0.3 cohort: +10% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-07-13",
+      "kind": "exit",
+      "cohort": "v0.3",
+      "selection": { "op": "and", "predicates": [] },
+      "exit": "target_10",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-V3-EX2",
+      "title": "v0.3 cohort: +5% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-07-13",
+      "kind": "exit",
+      "cohort": "v0.3",
+      "selection": { "op": "and", "predicates": [] },
+      "exit": "target_5",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-V3-EX3",
+      "title": "v0.3 cohort: +15% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-07-13",
+      "kind": "exit",
+      "cohort": "v0.3",
+      "selection": { "op": "and", "predicates": [] },
+      "exit": "target_15",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-V3-EX4",
+      "title": "v0.3 cohort: +20% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-07-13",
+      "kind": "exit",
+      "cohort": "v0.3",
+      "selection": { "op": "and", "predicates": [] },
+      "exit": "target_20",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+    },
+    {
+      "id": "H-V3-EX5",
+      "title": "v0.3 cohort: +10% limit with −20% disaster stop",
+      "author": "house",
+      "registered_at": "2026-07-13",
+      "kind": "exit",
+      "cohort": "v0.3",
+      "selection": { "op": "and", "predicates": [] },
+      "exit": "target_10_stop_20",
+      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
     }
   ]
 }
