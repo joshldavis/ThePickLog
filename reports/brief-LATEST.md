@@ -31,7 +31,7 @@ _Impersonal, educational watchlist — identical for all readers. Market regime:
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
-- Across **239** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 26%) vs **-13%** (rug 13%) for C/D.
+- Across **255** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 25%) vs **-13%** (rug 13%) for C/D.
 - **Actionable read:** a top-of-leaderboard A/B name is the part most likely to gut you. Treat a high score as a *warning label on the downside*, not a green light.
 
 ## How to read this
