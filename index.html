@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ThePickLog — Low-Float Pre-Market Screener (Prototype)</title>
+<title>ThePickLog — The Verifiable Stock-Alert Track Record</title>
+<meta name="description" content="A trading research project that logs every pick before the open and grades winners and losers in a public record anyone can verify. See the 7 checks every alert service should pass." />
+<link rel="canonical" href="https://thepicklog.vercel.app/" />
 <style>
   :root{
     --bg:#0a0e14; --panel:#121826; --panel-2:#0f1521; --line:#1f2937;
@@ -477,7 +479,7 @@
       <p class="muted" style="font-size:13.5px;margin:0 0 12px">Independent trackers keep finding the same thing: advertised trading records routinely run well above the verified reality — winners posted, losers deleted, "wins" scored at prices nobody could get. So we wrote down what a record a stranger can actually check looks like — seven principles — and we grade ourselves against it in public, including the parts that make us look bad.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn" onclick="location.href='trust.html#standard'">The standard we hold ourselves to →</button>
-        <button class="btn ghost" onclick="location.href='guide.html'">How to vet any alert service →</button>
+        <button class="btn ghost" onclick="location.href='guide.html'">Read the 7 checks every service should pass →</button>
       </div>
     </div>
 
@@ -495,11 +497,15 @@
     <!-- ============ PLAIN-ENGLISH EXPLAINER ============ -->
     <div class="panel" style="margin-top:26px">
       <h2 style="margin-top:0">What is this?</h2>
-      <p style="font-size:14px">ThePickLog watches the market's tiniest stocks — <b>"low-float"</b> names with very
-        few shares available to trade. Because so few shares exist, when buyers show up these stocks can spike
-        20%, 50%, even 100% in a day. They can also collapse just as fast. Every morning the app finds the ones
-        showing early signs of ignition — unusual volume, a price gap, a small float — and ranks them with a
-        simple, published score.</p>
+      <p style="font-size:14px">ThePickLog is a research project with one uncomfortable rule: <b>we publish our
+        losers.</b> Every trading idea is logged before the market opens and graded automatically a week later —
+        winners and losers alike — in a record we can't go back and edit.</p>
+      <p style="font-size:14px">What it screens for, specifically, is the market's tiniest stocks — <b>"low-float"</b>
+        names with very few shares available to trade. Because so few shares exist, when buyers show up these stocks
+        can spike 20%, 50%, even 100% in a day — and collapse just as fast. Every morning the app finds the ones
+        showing early signs of ignition — unusual volume, a price gap, a small float — and ranks them with a simple,
+        published score. But the screen is just what we point the honesty machine at. <b>The honesty machine is the
+        product.</b></p>
 
       <h2 style="margin-top:22px">What makes it different</h2>
       <p style="font-size:14px;margin-bottom:10px">Most stock-picking tools show you their winners and quietly
@@ -517,9 +523,10 @@
       </div>
 
       <h2 style="margin-top:22px">What the record shows so far</h2>
-      <p style="font-size:14px">Honest answer: bought at the open and held for a week, the picks as a group have
-        <b>lost money</b> so far. But the log revealed something interesting — most picks <b>spike before they
-        fade</b>, touching a meaningful gain within days and then bleeding out. So the live question isn't
+      <p style="font-size:14px">Here's the part no other service will show you: bought at the open and held a week,
+        our picks as a group have <b>lost money</b> so far. We're telling you that up front, because a record you can
+        only trust when it's flattering isn't a record. The log did reveal something useful — most picks <b>spike
+        before they fade</b>, touching a meaningful gain within days and then bleeding out. So the live question isn't
         "which stocks to buy" but "<b>when to sell</b>": does taking a quick gain and walking away change the
         picture? That rule was registered in advance and is being tested right now, on new picks only. The
         <a href="#" onclick="go('performance');return false" style="color:var(--a)">Track record</a> tab has the
@@ -529,6 +536,10 @@
         only (fake money). A personal research tool — not investment advice.</p>
     </div>
 
+    <p class="muted" style="font-size:13px;margin:22px 0 10px">We don't sell picks. When there's something to pay
+      for, it'll be <b>access to honestly-graded research and verification tools — never a "trust our results"
+      subscription.</b> Everything stays free until the method proves itself in public, and we'll say so out loud
+      when that changes.</p>
     <div class="grid price-cards">
       <div class="panel price-card feat">
         <h3>Free &amp; open <span class="is-pill">OPEN NOW</span></h3>
