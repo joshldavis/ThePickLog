@@ -1,4 +1,6 @@
 {
+  "buildCommand": "node scripts/stamp-build.mjs",
+  "outputDirectory": ".",
   "rewrites": [
     { "source": "/r/:id/og.png", "destination": "/api/og?id=:id" },
     { "source": "/r/:id", "destination": "/api/receipt?id=:id" },
