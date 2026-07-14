@@ -31,6 +31,7 @@ import json
 import os
 import sys
 import urllib.request
+from datetime import datetime, timezone
 
 # Tradeable Compete universe = the seed-16 the Watchlist exposes (single source of truth).
 try:
@@ -68,7 +69,11 @@ def fetch_prices(symbols):
 def upsert_quotes(url, key, prices):
     """Bulk upsert into public.is_quotes (ticker unique) with the service role key.
     One request; PostgREST merge-duplicates on the ticker conflict target."""
-    rows = [{"ticker": t, "price": p} for t, p in prices.items()]
+    # Send updated_at too: a PostgREST merge-duplicates upsert only touches the
+    # columns we send, so without this the price refreshes but the timestamp stays
+    # pinned at the row's original insert time (looks perpetually stale).
+    now_iso = datetime.now(timezone.utc).isoformat()
+    rows = [{"ticker": t, "price": p, "updated_at": now_iso} for t, p in prices.items()]
     body = json.dumps(rows).encode()
     req = urllib.request.Request(
         f"{url.rstrip('/')}/rest/v1/is_quotes?on_conflict=ticker",
