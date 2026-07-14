@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ThePickLog — Trust &amp; Data</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.active{color:var(--tx);background:#1f6f6b1f}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  #mobileMenu a:hover{background:#ffffff08}
+  @media(max-width:880px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 70px}
+  h1{font-size:26px;margin:.2em 0 .1em;letter-spacing:-.01em}
+  .lead{color:var(--dim);font-size:15px;margin:0 0 6px}
+  h2{font-size:16px;margin:30px 0 8px;letter-spacing:.1px}
+  p{margin:8px 0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+  .callout{border-left:3px solid var(--amber);padding:4px 0 4px 12px;color:var(--dim);font-size:14px;margin:12px 0}
+  .muted{color:var(--dim)} .pos{color:var(--green)} .neg{color:var(--red)} .warn{color:var(--amber)}
+  a{color:var(--blue)}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12.5px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0}
+  th,td{padding:8px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{color:var(--dim);font-weight:600}
+  .q{font-weight:700;margin:22px 0 2px;font-size:15.5px}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px}
+  .badge.free{color:var(--green);border:1px solid #2ec27e44;background:#2ec27e11}
+  .badge.pub{color:var(--blue);border:1px solid #5aa0ff44;background:#5aa0ff11}
+  .foot{color:var(--dim);font-size:12px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+  .foot a{color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="index.html#watchlist">Watchlist</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="dashboard.html">Validation</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="trust.html" class="active">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <span class="proto">PROTOTYPE</span>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="index.html#watchlist">Watchlist</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="dashboard.html">Validation</a>
+    <a href="calculator.html">Calculator</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open); b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+</script>
+
+<div class="wrap">
+  <h1>Trust &amp; Data</h1>
+  <p class="lead">The questions people actually ask before they trust a numbers-based site — answered plainly, up front.</p>
+
+  <div class="panel">
+    <b>One promise governs this page:</b> a stranger should be able to visit ThePickLog and verify that every
+    claim is true — without taking our word for anything. That's why the entire scored record rebuilds from two
+    public files, and why we tell you exactly where each number comes from below.
+  </div>
+
+  <div class="q">Where does ThePickLog's data come from?</div>
+  <p>Four sources, each doing one job:</p>
+  <table>
+    <thead><tr><th>Source</th><th>What it provides</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>SEC EDGAR</b> <span class="badge pub">public domain</span></td>
+        <td>Company fundamentals, filings, and the dilution/catalyst read behind the Quality Lens; also the free-float proxy.</td>
+        <td>U.S.-government public information, explicitly redistributable. The verifiable core of the site.</td>
+      </tr>
+      <tr>
+        <td><b>Yahoo</b> (via <code>yfinance</code>)</td>
+        <td>Prices, previous close, volume, average volume, short interest, and daily OHLC used to grade picks.</td>
+        <td>Runs <b>server-side only</b>. It never streams to your browser — it's baked into our own published <code>picks.csv</code> / <code>paths.csv</code> / <code>outcomes.csv</code>.</td>
+      </tr>
+      <tr>
+        <td><b>Alpaca</b> (paper)</td>
+        <td>The owner's simulated (paper) trading account. Compete uses play-money via our own database.</td>
+        <td>No real money, no order routing to any real venue.</td>
+      </tr>
+      <tr>
+        <td><b>Anthropic</b></td>
+        <td>Powers the site assistant.</td>
+        <td>Language model, not a market-data feed.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="muted">We do not scrape exchanges, and we do not resell anyone's live feed. What's public on this site
+  is our own <i>derived record</i> — scores and returns we computed — not a re-broadcast market data feed.</p>
+
+  <div class="q">Is any of this a live "buy now" signal?</div>
+  <p><b>No.</b> Everything shown — the screen, the graded picks, the hypothesis results — is published as
+  general-interest research after the fact, not as a real-time alert. Market data here may be delayed, derived, or
+  estimated. Nothing on the site is a set of trades to place. See the <a href="disclaimer.html">Disclaimer</a> for the full statement.</p>
+
+  <div class="q">Do you execute trades, hold money, or connect to my brokerage?</div>
+  <p><b>Never.</b> ThePickLog does not execute trades, route orders, hold funds or assets, or connect to any
+  brokerage account. Every trade you see is simulated. We're the scoreboard and the referee — not the place you
+  place a trade. That boundary is deliberate: it's what lets the record stay independent and checkable.</p>
+
+  <div class="q">Why might a price here differ from my broker or another site?</div>
+  <p>Data providers use different venues, timestamps, consolidation rules, and split/dividend adjustments, so two
+  "prices" for the same stock rarely match to the penny. Some values here are delayed, derived, or estimated
+  rather than an official exchange last-trade. Treat prices on ThePickLog as <b>indicative research data, not
+  execution data</b>.</p>
+  <p class="callout"><b>Microcaps especially.</b> Low-float names are thinly traded and can move sharply on tiny
+  volume. Yahoo is also known to <i>silently revise</i> microcap daily lows after the fact — so we capture the path
+  of each pick <b>forward-only</b> in <code>paths.csv</code> at grade time, and the record is never rewritten with
+  a later, prettier number.</p>
+
+  <div class="q">How fresh is the data, and how are returns measured?</div>
+  <p>Picks are graded five trading days out on the <b>regular-session open → close</b> return — enter at the day's
+  open, exit at that day's close — <b>net of a 2% round-trip cost haircut</b> for wide low-float spreads. We show
+  the worst drawdown you'd have sat through (MAE) next to every result, and we label best-case intraday spikes
+  (MFE) as <i>not an achievable return</i>. The full scoring rules are on the <a href="method.html">Method</a> page.</p>
+
+  <div class="q">Can a stranger really verify every number?</div>
+  <p>Yes — that's the whole design. Every screened name is written to an <b>append-only, immutable</b>
+  <code>picks.csv</code> <i>before</i> its outcome is known; grading writes to a separate <code>outcomes.csv</code>.
+  A single open-source evaluator (<code>hypo_eval.py</code>, standard-library only, deterministic) scores house
+  rules and rules you register through the <i>same</i> code, and the build aborts if its numbers ever drift from
+  the published report. Download the files and recompute anything:</p>
+  <p><a href="picks.csv" download>⬇ picks.csv</a> &nbsp;·&nbsp; <a href="outcomes.csv" download>⬇ outcomes.csv</a>
+  &nbsp;·&nbsp; <a href="dashboard.html">Validation dashboard ↗</a></p>
+
+  <div class="q">Is the AI assistant reliable? Is it investment advice?</div>
+  <p>The assistant reads the material already on the site and helps explain it — what a metric means, what a
+  hypothesis is claiming. It is AI-generated content: it can be incomplete or wrong, so verify anything important
+  against the primary source (the CSVs, the filing, the Method page). It is <b>not</b> investment advice and makes
+  no recommendation to buy or sell.</p>
+
+  <div class="q">What's licensed vs. free — and are you affiliated with the SEC?</div>
+  <p>EDGAR data is U.S.-government public information and freely redistributable; we use it within the SEC's
+  fair-access limits and identify our crawler as required. We are <b>not affiliated with, endorsed by, or
+  connected to the SEC or EDGAR</b> — "sourced from SEC EDGAR" is an attribution, nothing more. The Yahoo-derived
+  price layer appears only inside our own committed record, never as a live feed. As the project matures we plan to
+  move the backend price layer onto a fully licensed feed before any paid tier.</p>
+
+  <div class="q">Who runs this, and how do I reach a human?</div>
+  <p>ThePickLog is a transparency-first research project operated by <b>AMD Ventures, LLC</b> (Florida, USA).
+  Missing a question? Email <a href="mailto:davis1163@gmail.com">davis1163@gmail.com</a> — we read every message.</p>
+
+  <h1 id="standard" style="margin-top:44px">The Verified-by-ThePickLog Standard</h1>
+  <p class="lead">An open standard for a track record a stranger can trust. Free to read, free to adopt, free to hold us to — including ThePickLog itself.</p>
+
+  <div class="panel">
+    <b>The North Star:</b> can a stranger visit a record and verify that every claim is true — from public data, trusting no one? If any claim rests on taking the operator's word for it, the record is not verified. Everything below serves that one test.
+  </div>
+
+  <p>Almost every trading track record you'll see is unverifiable by design: winners posted, losers deleted, "wins" scored at prices nobody could get, rules invented after the fact. Independent trackers routinely find advertised numbers running 10–20 points above reality. This standard defines the opposite — and we grade ourselves against it in public, including the parts that make us look bad.</p>
+
+  <div class="q">The seven principles</div>
+  <table>
+    <thead><tr><th style="width:150px">Principle</th><th>What it requires</th></tr></thead>
+    <tbody>
+      <tr><td><b>1 · Pre-registration</b></td><td>Every prediction is published <i>before</i> its outcome can be known, with a timestamp that provably precedes the result. Nothing is added to the record after the fact.</td></tr>
+      <tr><td><b>2 · Full distribution</b></td><td>Every pick is graded and shown — winners <i>and</i> losers. The complete set is published, not a selection from it.</td></tr>
+      <tr><td><b>3 · Realizable grading</b></td><td>Outcomes are scored at prices a normal participant could actually transact — a real entry, a real exit, net of realistic costs and slippage. "Ever touched +X%" is not a result.</td></tr>
+      <tr><td><b>4 · Rules frozen in advance</b></td><td>Any decision rule is registered with a date and judged <i>only</i> on picks logged after it. Backtests may inform, but only out-of-sample counts as the record.</td></tr>
+      <tr><td><b>5 · Sufficient sample</b></td><td>Headline statistics are claimed only once enough graded, out-of-sample picks exist to be meaningful — a working floor of <b>n ≥ 200</b>. Smaller samples are labeled provisional.</td></tr>
+      <tr><td><b>6 · Immutability</b></td><td>The log is append-only: picks can be added, never edited, deleted, or backdated. Grading runs as an automated, scheduled job — no human touches an outcome after the fact.</td></tr>
+      <tr><td><b>7 · Open verifiability</b></td><td>The underlying data is published so anyone can re-derive every headline figure. Nothing that matters is asserted; everything that matters is checkable.</td></tr>
+    </tbody>
+  </table>
+
+  <p class="callout"><b>What it is not.</b> Meeting the standard says a record is <i>honest</i>, not <i>profitable</i> — an honestly-published losing record fully qualifies (ours currently is one). It is not investment advice, and it is not a seal you can buy: adoption is the badge, and the audit trail is the proof.</p>
+
+  <div class="q">Our own compliance (living disclosure)</div>
+  <p>The standard, applied to its author. This can change as the project matures — if any cell says "Met" and you can prove otherwise from the public data, that's a bug in our honesty and we want to know.</p>
+  <table>
+    <thead><tr><th>Principle</th><th>Status</th><th>Where to check</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Pre-registration</td><td class="pos">Met</td><td>picks logged pre-open — <a href="index.html#performance">Track record</a></td></tr>
+      <tr><td>2 · Full distribution</td><td class="pos">Met</td><td>every pick graded, losers shown — <a href="index.html#performance">Track record</a></td></tr>
+      <tr><td>3 · Realizable grading</td><td class="pos">Met</td><td>open→close, −2% cost haircut, drawdown shown — <a href="method.html">Method</a></td></tr>
+      <tr><td>4 · Rules frozen in advance</td><td class="pos">Met</td><td>hypotheses dated, out-of-sample only — <a href="dashboard.html">Validation</a></td></tr>
+      <tr><td>5 · Sufficient sample</td><td class="warn">Provisional</td><td>sample still filling toward n ≥ 200 — <a href="dashboard.html">Validation</a></td></tr>
+      <tr><td>6 · Immutability</td><td class="pos">Met</td><td>append-only log, scheduled grading — <a href="index.html#performance">Track record</a></td></tr>
+      <tr><td>7 · Open verifiability</td><td class="pos">Met</td><td>figures re-derivable from public CSVs — <a href="dashboard.html">Validation</a></td></tr>
+    </tbody>
+  </table>
+  <p class="muted">New here? The <a href="guide.html">7-check vetting guide</a> is the plain-English version — how to run this same standard on any alert service, including us.</p>
+
+  <p class="foot">
+    <b>Prototype — sample copy pending legal review.</b> Research and educational information only, not investment
+    advice. Past performance does not predict future results.<br>
+    <a href="disclaimer.html">Disclaimer</a> · <a href="method.html">Method</a> · <a href="privacy.html">Privacy</a>
+  </p>
+</div>
+</body>
+</html>
