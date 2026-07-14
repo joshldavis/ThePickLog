@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ThePickLog — Conviction chip (mock)</title>
+<style>
+  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:820px;margin:0 auto;padding:26px 16px 70px}
+  h1{font-size:24px;margin:.2em 0 .1em;letter-spacing:-.01em}
+  h2{font-size:15px;margin:26px 0 8px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em}
+  .lead{color:var(--dim);margin:0 0 6px}
+  .spec{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0;font-size:13.5px}
+  .spec b{color:var(--tx)}
+  .spec code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12px}
+  .spec ul{margin:6px 0;padding-left:18px} .spec li{margin:4px 0;color:var(--dim)}
+
+  /* --- the pick/rule card --- */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+  .card .hrow{display:flex;align-items:flex-start;gap:10px}
+  .card .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--dim)}
+  .card .name{font-weight:700;font-size:16px;letter-spacing:-.01em}
+  .card .why{color:var(--dim);font-size:13.5px;margin:7px 0 10px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
+  .chip{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--dim)}
+
+  /* directional tag (the claim) */
+  .tag{margin-left:auto;flex-shrink:0;font-size:11.5px;font-weight:800;padding:4px 11px;border-radius:999px;white-space:nowrap}
+  .tag.help{color:var(--green);border:1px solid #2ec27e55;background:#2ec27e14}
+  .tag.hurt{color:var(--red);border:1px solid #f0506e55;background:#f0506e14}
+  .tag.exit{color:var(--blue);border:1px solid #5aa0ff55;background:#5aa0ff14}
+  .tag.ask{color:var(--amber);border:1px solid #f5b14c55;background:#f5b14c14}
+
+  /* stats footer */
+  .stats{display:flex;flex-wrap:wrap;gap:14px;align-items:center;border-top:1px solid var(--line);padding-top:10px;font-size:12.5px}
+  .stat{display:flex;flex-direction:column;line-height:1.3}
+  .stat .k{color:var(--dim);font-size:11px}
+  .stat .v{font-weight:700;font-size:14px}
+  .v.pos{color:var(--green)} .v.neg{color:var(--red)} .v.dim{color:var(--dim)}
+
+  /* confidence pill */
+  .conf{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px}
+  .conf.proven{color:var(--green);border:1px solid #2ec27e55;background:#2ec27e14}
+  .conf.dir{color:var(--amber);border:1px solid #f5b14c55;background:#f5b14c14}
+  .conf.maturing{color:var(--dim);border:1px solid var(--line);background:var(--panel2)}
+  .conf.mixed{color:var(--red);border:1px solid #f0506e55;background:#f0506e14}
+  .foot{color:var(--dim);font-size:12px;margin-top:26px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Conviction chip — pick &amp; rule card</h1>
+  <p class="lead">Fynca tags every news item "Why Bullish / Bearish" with a confidence read. We do the same to
+  <b>picks and rules</b> — except the tag states the rule's <i>registered claim</i> and the confidence chip is driven
+  by ThePickLog's real out-of-sample math, not sentiment. Nothing here is decorative; every chip re-derives from
+  <code>picks.csv</code> × <code>outcomes.csv</code>.</p>
+
+  <div class="spec">
+    <b>How to read a card &mdash; data mapping</b>
+    <ul>
+      <li><b>Directional tag</b> = the rule's claim type from the registry:
+        <span class="tag help" style="margin:0">Filter · helps</span>
+        <span class="tag hurt" style="margin:0">Filter · hurts</span>
+        <span class="tag exit" style="margin:0">Exit rule</span>
+        <span class="tag ask" style="margin:0">Question · no claim</span>. A Question is never colored as good/bad — it has no claim to rank.</li>
+      <li><b>Why line</b> = one plain-English sentence stating what the rule bets and why it's worth testing. Written at registration, frozen.</li>
+      <li><b>Field chips</b> = the pick-time conditions only (<code>tier</code>, <code>float_shares</code>, <code>gap_pct</code>, <code>rvol</code>, <code>short_interest_pct</code>, exit). No outcome fields — nothing that references the future.</li>
+      <li><b>Δ vs baseline</b> = mean net-return edge per trade vs the same-day-close baseline, with its 95% bootstrap CI.</li>
+      <li><b>Confidence chip</b> is <i>computed, not chosen</i>:
+        <span class="conf proven" style="margin:0">✓ Proven</span> CI clears zero, n≥30, sign stable ≥3 wks ·
+        <span class="conf dir" style="margin:0">~ Directional</span> CI still spans zero (<code>ns</code>) ·
+        <span class="conf maturing" style="margin:0">○ Maturing</span> n&lt;30 ·
+        <span class="conf mixed" style="margin:0">± Mixed</span> sign flips week to week.</li>
+    </ul>
+    <div style="color:var(--dim);font-size:12.5px;margin-top:4px">Illustrative sample cards below — numbers are placeholders to show the states, not live results.</div>
+  </div>
+
+  <h2>Rule cards</h2>
+
+  <!-- Directional filter, still ns -->
+  <div class="card">
+    <div class="hrow">
+      <div>
+        <div class="id">H-EX10 · registered 2026-06-23</div>
+        <div class="name">Tier-gated +20% target on A/B names</div>
+      </div>
+      <span class="tag help">Filter · helps</span>
+    </div>
+    <div class="why">Bets that only the two hottest tiers reach a +20% intraday target often enough to beat holding to the close — a concentration story, not a broad edge.</div>
+    <div class="chips"><span class="chip">tier A/B</span><span class="chip">exit: +20% target</span><span class="chip">low-float</span></div>
+    <div class="stats">
+      <div class="stat"><span class="k">Δ vs baseline</span><span class="v pos">+1.8 pp</span></div>
+      <div class="stat"><span class="k">95% CI</span><span class="v dim">−0.6 … +4.1</span></div>
+      <div class="stat"><span class="k">Sample</span><span class="v">n = 22</span></div>
+      <span class="conf dir">~ Directional, not proven</span>
+    </div>
+  </div>
+
+  <!-- The honest inverse finding: top tier HURTS -->
+  <div class="card">
+    <div class="hrow">
+      <div>
+        <div class="id">H-STR1 · registered 2026-07-06</div>
+        <div class="name">Hottest momentum tier under-performs</div>
+      </div>
+      <span class="tag hurt">Filter · hurts</span>
+    </div>
+    <div class="why">Our own structural finding, registered forward: the top "heat" tier has historically had the <i>worst</i> mean net return and the deepest drawdowns. The tag says so out loud.</div>
+    <div class="chips"><span class="chip">tier = top</span><span class="chip">exit: same-day close</span></div>
+    <div class="stats">
+      <div class="stat"><span class="k">Δ vs baseline</span><span class="v neg">−2.3 pp</span></div>
+      <div class="stat"><span class="k">95% CI</span><span class="v dim">−4.0 … −0.5</span></div>
+      <div class="stat"><span class="k">Sample</span><span class="v">n = 41 · ranked</span></div>
+      <span class="conf proven">✓ Clears zero · stable</span>
+    </div>
+  </div>
+
+  <!-- A question: no claim -->
+  <div class="card">
+    <div class="hrow">
+      <div>
+        <div class="id">H-SUB1 · registered 2026-07-07</div>
+        <div class="name">Does relative volume help or hurt?</div>
+      </div>
+      <span class="tag ask">Question · no claim</span>
+    </div>
+    <div class="why">Makes no directional bet. Asks whether the <code>rvol</code> weight in the screen does any work — and lets the confidence interval be the answer.</div>
+    <div class="chips"><span class="chip">rvol split</span><span class="chip">exit: same-day close</span></div>
+    <div class="stats">
+      <div class="stat"><span class="k">Δ (high vs low rvol)</span><span class="v dim">+0.2 pp</span></div>
+      <div class="stat"><span class="k">95% CI</span><span class="v dim">−1.9 … +2.2</span></div>
+      <div class="stat"><span class="k">Sample</span><span class="v">n = 63</span></div>
+      <span class="conf dir">~ Inconclusive (near-inert)</span>
+    </div>
+  </div>
+
+  <!-- Maturing exit -->
+  <div class="card">
+    <div class="hrow">
+      <div>
+        <div class="id">H-V3-EX1 · registered 2026-07-13</div>
+        <div class="name">+10% target, −8% stop on v0.3 cohort</div>
+      </div>
+      <span class="tag exit">Exit rule</span>
+    </div>
+    <div class="why">Tests a bracket exit against the close on the newer market-wide cohort. Skeptical prior: in-sample, every target lost to same-day close net of costs.</div>
+    <div class="chips"><span class="chip">cohort: v0.3</span><span class="chip">+10% / −8%</span><span class="chip">stop-first (conservative)</span></div>
+    <div class="stats">
+      <div class="stat"><span class="k">Δ vs baseline</span><span class="v dim">—</span></div>
+      <div class="stat"><span class="k">95% CI</span><span class="v dim">—</span></div>
+      <div class="stat"><span class="k">Sample</span><span class="v">n = 6</span></div>
+      <span class="conf maturing">○ Maturing · n &lt; 30</span>
+    </div>
+  </div>
+
+  <p class="foot"><b>Prototype mock.</b> The tag, chips, and confidence state each map to fields already produced by
+  <code>hypo_eval.py</code> — this is a presentation layer over the existing evaluator, adding no new claims.
+  Research/educational only, not investment advice.</p>
+</div>
+</body>
+</html>
