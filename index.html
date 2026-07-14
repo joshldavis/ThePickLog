@@ -135,6 +135,13 @@
   .tier.B{background:#1f6f6b88;color:#eafffb}
   .tier.C{background:var(--a-soft);color:var(--a)}
   .tier.D{background:#ffffff10;color:var(--dim)}
+  /* conviction chip — the verified read on a pick (see Method / Finding A). Never a buy signal. */
+  .cvrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
+  .cvtag{font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;white-space:nowrap}
+  .cvtag.hot{color:var(--amber);border:1px solid #f5b14c55;background:#f5b14c14}
+  .cvtag.cool{color:var(--muted);border:1px solid var(--line);background:#ffffff08}
+  .cvconf{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:3px 10px;border-radius:999px}
+  .cvconf a{color:var(--blue);text-decoration:none}
   .pos{color:var(--green)} .neg{color:var(--red)}
   .pill{font-size:11px;padding:2px 8px;border-radius:999px;background:#ffffff0d;color:var(--muted)}
   .win{color:var(--green);font-weight:700} .miss{color:var(--red);font-weight:700}
@@ -460,13 +467,14 @@
         <button class="btn" onclick="go('compete');window.setCompeteMode&&setCompeteMode('test')">Take the challenge →</button>
         <button class="btn ghost" onclick="go('performance')">See the record</button>
       </div>
+      <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:56ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled →</a></p>
     </div>
 
     <div class="grid kpis" id="landingKpis"></div>
 
     <div class="panel" style="margin-top:26px">
       <h2 style="margin:0 0 6px">Not another alert service — the scoreboard</h2>
-      <p class="muted" style="font-size:13.5px;margin:0 0 12px">Independent trackers keep finding the same thing: advertised trading records run 10–20 points above the verified reality — winners posted, losers deleted, "wins" scored at prices nobody could get. So we wrote down what a record a stranger can actually check looks like — seven principles — and we grade ourselves against it in public, including the parts that make us look bad.</p>
+      <p class="muted" style="font-size:13.5px;margin:0 0 12px">Independent trackers keep finding the same thing: advertised trading records routinely run well above the verified reality — winners posted, losers deleted, "wins" scored at prices nobody could get. So we wrote down what a record a stranger can actually check looks like — seven principles — and we grade ourselves against it in public, including the parts that make us look bad.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn" onclick="location.href='trust.html#standard'">The standard we hold ourselves to →</button>
         <button class="btn ghost" onclick="location.href='guide.html'">How to vet any alert service →</button>
@@ -1501,6 +1509,18 @@ function renderBanner(){
 }
 
 /* ---------- RENDER: watchlist ---------- */
+/* Conviction chip — the verified read on a pick, tagged like Fynca's "why" chips but
+   backed by the live record, never sentiment. Hot tiers (A/B) carry a downside flag
+   because the log shows they draw down deeper (Finding A); no tier is a buy signal.
+   The confidence half states the model is unvalidated until the Method-page gates clear. */
+function convictionChip(r){
+  const hot = (r.tier==="A"||r.tier==="B");
+  const tag = hot
+    ? `<span class="cvtag hot" title="Hotter tiers have drawn down deeper in the live log (Finding A)">⚠ Hot tier · downside flag</span>`
+    : `<span class="cvtag cool" title="Cooler momentum band — no forward-return edge shown either way">○ Cooler band · no edge shown</span>`;
+  const conf = `<span class="cvconf">Unvalidated — screen shows no proven edge · <a href="method.html#validity">see validity ↗</a></span>`;
+  return `<div class="cvrow">${tag}${conf}</div>`;
+}
 function fmtFloat(m){ return m>=1? m.toFixed(1)+"M" : (m*1000).toFixed(0)+"K"; }
 function renderWatchlist(rows){
   rows.sort((a,b)=>b.score-a.score);
@@ -1548,7 +1568,8 @@ function renderWatchlist(rows){
       gap ${r.gap>=0?'+':''}${r.gap.toFixed(1)}% (score ${r.parts.gap.toFixed(0)}),
       price $${r.price.toFixed(2)} (score ${r.parts.price.toFixed(0)}).
       Weighted blend → <b>${r.score.toFixed(1)} / Tier ${r.tier}</b>.
-      Educational screen only — not a recommendation to buy.</div></td>`;
+      Educational screen only — not a recommendation to buy.
+      ${convictionChip(r)}</div></td>`;
     tr.onclick=()=>{detail.style.display=detail.style.display==="none"?"table-row":"none";};
     body.appendChild(tr); body.appendChild(detail);
   });
