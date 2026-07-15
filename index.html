@@ -147,6 +147,7 @@
   .cvtag.cool{color:var(--muted);border:1px solid var(--line);background:#ffffff08}
   .cvconf{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:3px 10px;border-radius:999px}
   .cvconf a{color:var(--blue);text-decoration:none}
+  .cvtag.mini{font-size:10px;font-weight:700;padding:1px 6px;letter-spacing:.01em}
   .pos{color:var(--green)} .neg{color:var(--red)}
   .pill{font-size:11px;padding:2px 8px;border-radius:999px;background:#ffffff0d;color:var(--muted)}
   .win{color:var(--green);font-weight:700} .miss{color:var(--red);font-weight:700}
@@ -494,6 +495,7 @@
       <p class="muted" style="font-size:13px;margin:6px 0 14px">The highest-momentum names, screened for business
         quality — so you can see at a glance which movers are real businesses and which are likely to rug you.
         Click any row for the full scorecard.</p>
+      <p class="dim" style="font-size:11.5px;margin:-8px 0 12px">Fundamentals sourced from <a href="trust.html" style="color:var(--muted);text-decoration:underline">SEC EDGAR</a> (public filings); live price/market-cap is Yahoo-derived and may be delayed. Not affiliated with the SEC.</p>
       <div id="dashQuality"><div class="dim" style="font-size:13px;padding:6px 2px">Scoring today's top movers…</div></div>
     </div>
 
@@ -1539,6 +1541,12 @@ function renderBanner(){
    backed by the live record, never sentiment. Hot tiers (A/B) carry a downside flag
    because the log shows they draw down deeper (Finding A); no tier is a buy signal.
    The confidence half states the model is unvalidated until the Method-page gates clear. */
+function convictionTag(tier){
+  const hot = (tier==="A"||tier==="B");
+  return hot
+    ? `<span class="cvtag hot mini" title="Hot tier — deeper drawdowns in the live log (Finding A). Not a buy signal.">⚠ hot</span>`
+    : `<span class="cvtag cool mini" title="Cooler band — no forward-return edge shown either way (see Method §9).">○ cool</span>`;
+}
 function convictionChip(r){
   const hot = (r.tier==="A"||r.tier==="B");
   const tag = hot
@@ -1558,7 +1566,7 @@ function renderWatchlist(rows){
     ${stat("Hottest (A/B)",actionable)}
     ${stat("Top score",tops?tops.score.toFixed(1):"—")}
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
-  document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data";
+  document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data · prices Yahoo-derived, may be delayed · not for execution";
   window.LASTPX = window.LASTPX || {};
   window.SCORED_BY_SYM = window.SCORED_BY_SYM || {};
   rows.forEach(r=>{ window.LASTPX[r.symbol]=r.price; window.SCORED_BY_SYM[r.symbol]=r; });
@@ -1566,7 +1574,7 @@ function renderWatchlist(rows){
     const tr=document.createElement("tr"); tr.className="expand";
     tr.innerHTML=`
       <td class="dim">${i+1}</td>
-      <td class="tick"><span class="tlink" title="Company data, links & news" onclick="event.stopPropagation();openInfo('${r.symbol}')">${r.symbol}</span><span class="held" id="held-${r.symbol}"></span></td>
+      <td class="tick"><span class="tlink" title="Company data, links & news" onclick="event.stopPropagation();openInfo('${r.symbol}')">${r.symbol}</span><span class="held" id="held-${r.symbol}"></span><div style="margin-top:3px">${convictionTag(r.tier)}</div></td>
       <td><span class="tier ${r.tier}">${r.tier}</span></td>
       <td class="num">
         <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end">
@@ -1863,7 +1871,7 @@ async function renderPerformance(){
       bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} picks</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`;});
     const body=document.getElementById("perfBody"); body.innerHTML="";
     SAMPLE_PICKS.slice().sort((a,b)=>a[0]<b[0]?1:-1).forEach(p=>{const [d,t,sc,px,mg,win]=p;const tier=tierOf(sc);const watch=(px*1.2).toFixed(2);
-      body.innerHTML+=`<tr><td class="dim">${d}</td><td class="tick">${t}</td><td><span class="tier ${tier}">${tier}</span></td><td class="num">${sc.toFixed(1)}</td><td class="num">$${px.toFixed(2)}</td><td class="num">$${watch}</td><td class="num ${mg>=20?'pos':''}">+${mg}%</td><td class="num dim">—</td><td>${win?'<span class="win">WIN</span>':'<span class="miss">MISS</span>'}</td></tr>`;});
+      body.innerHTML+=`<tr><td class="dim">${d}</td><td class="tick">${t}</td><td><span class="tier ${tier}">${tier}</span> ${convictionTag(tier)}</td><td class="num">${sc.toFixed(1)}</td><td class="num">$${px.toFixed(2)}</td><td class="num">$${watch}</td><td class="num ${mg>=20?'pos':''}">+${mg}%</td><td class="num dim">—</td><td>${win?'<span class="win">WIN</span>':'<span class="miss">MISS</span>'}</td></tr>`;});
     return;
   }
   const g=aggregateReal(tr.picks,tr.outcomes);
@@ -1927,7 +1935,7 @@ async function renderPerformance(){
     } else { gainCell=`<td class="num dim">pending</td>`; dipCell=`<td class="num dim">—</td>`; resCell=`<span class="dim">pending</span>`; }
     return `<tr>
       <td class="dim">${p.trading_date}</td><td class="tick">${p.ticker}</td>
-      <td><span class="tier ${u.tier}">${p.tier}</span></td>
+      <td><span class="tier ${u.tier}">${p.tier}</span> ${convictionTag(u.tier)}</td>
       <td class="num">${isFinite(sc)?sc.toFixed(1):'—'}</td>
       <td class="num">$${isFinite(px)?px.toFixed(2):'—'}</td>
       <td class="num">$${isFinite(watch)?watch.toFixed(2):'—'}</td>

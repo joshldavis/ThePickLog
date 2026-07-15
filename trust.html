@@ -51,6 +51,22 @@
   .foot a{color:var(--dim)}
   @media(max-width:560px){table{font-size:12.5px}th,td{padding:7px 6px}h1{font-size:23px}}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Where does ThePickLog's data come from?","acceptedAnswer":{"@type":"Answer","text":"Four sources, each doing one job: SEC EDGAR (public-domain fundamentals, filings and the free-float proxy behind the Quality Lens); Yahoo via yfinance (prices, volume and daily OHLC used to grade picks, server-side only and baked into our published CSVs); Alpaca paper (a simulated account, no real money or order routing); and Anthropic (the site assistant, not a market-data feed). We do not scrape exchanges or resell a live feed — what's public is our own derived record."}},
+    {"@type":"Question","name":"Is any of this a live buy-now signal?","acceptedAnswer":{"@type":"Answer","text":"No. Everything shown — the screen, graded picks and hypothesis results — is published as general-interest research after the fact, not a real-time alert. Market data may be delayed, derived or estimated, and nothing on the site is a set of trades to place."}},
+    {"@type":"Question","name":"Do you execute trades, hold money, or connect to my brokerage?","acceptedAnswer":{"@type":"Answer","text":"Never. ThePickLog does not execute trades, route orders, hold funds or assets, or connect to any brokerage account. Every trade shown is simulated. We are the scoreboard and the referee, not the place you place a trade."}},
+    {"@type":"Question","name":"Why might a price here differ from my broker or another site?","acceptedAnswer":{"@type":"Answer","text":"Providers use different venues, timestamps, consolidation rules and split/dividend adjustments, so two prices for the same stock rarely match to the penny. Some values here are delayed, derived or estimated rather than an official exchange last-trade — treat prices as indicative research data, not execution data. Microcap daily lows are especially noisy, so we capture each pick's path forward-only and never rewrite the record."}},
+    {"@type":"Question","name":"How fresh is the data, and how are returns measured?","acceptedAnswer":{"@type":"Answer","text":"Picks are graded five trading days out on the regular-session open-to-close return — enter at the open, exit at the close — net of a 2% round-trip cost haircut for wide low-float spreads. Worst drawdown (MAE) is shown next to every result, and best-case intraday spikes (MFE) are labelled as not an achievable return."}},
+    {"@type":"Question","name":"Can a stranger really verify every number?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every screened name is written to an append-only, immutable picks.csv before its outcome is known; grading writes to a separate outcomes.csv. One open-source, deterministic evaluator scores house rules and user-registered rules identically, and the build aborts if its numbers drift from the published report. The files are downloadable so anyone can recompute the record."}},
+    {"@type":"Question","name":"Is the AI assistant reliable? Is it investment advice?","acceptedAnswer":{"@type":"Answer","text":"The assistant reads the material already on the site and helps explain it. It is AI-generated content that can be incomplete or wrong, so verify anything important against the primary source. It is not investment advice and makes no recommendation to buy or sell."}},
+    {"@type":"Question","name":"What's licensed vs. free — and are you affiliated with the SEC?","acceptedAnswer":{"@type":"Answer","text":"EDGAR data is U.S.-government public information and freely redistributable; we use it within the SEC's fair-access limits. We are not affiliated with, endorsed by, or connected to the SEC or EDGAR. The Yahoo-derived price layer appears only inside our own committed record, never as a live feed, and we plan to move the backend price layer onto a fully licensed feed before any paid tier."}}
+  ]
+}
+</script>
 </head>
 <body>
 <div class="top">
