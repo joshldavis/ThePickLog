@@ -107,6 +107,9 @@
   #srcBanner code{font-family:var(--mono);color:var(--text);background:#ffffff0d;padding:1px 6px;border-radius:5px}
   .view{display:none;padding:26px 0 60px}
   .view.active{display:block}
+  /* Validation/Calculator embedded as tabs — iframe auto-sized to content by JS */
+  #view-validation,#view-calculator{padding:0}
+  .embed-tab{width:100%;border:0;display:block;min-height:80vh}
   h1{font-size:30px;letter-spacing:-.02em;margin:.2em 0 .3em}
   h2{font-size:20px;letter-spacing:-.01em;margin:1.4em 0 .6em}
   p.lead{color:var(--muted);font-size:16px;max-width:62ch}
@@ -428,8 +431,8 @@
       <button data-view="landing" class="active">Overview</button>
       <button data-view="watchlist">Watchlist</button>
       <button data-view="performance">Track record</button>
-      <button onclick="window.open('dashboard.html','_blank','noopener')" title="Model validation — every pre-registered hypothesis tracked out-of-sample, recomputed in your browser from the raw CSVs. Opens in a new tab.">Validation ↗</button>
-      <button onclick="window.open('calculator.html','_blank','noopener')" title="Exit-rule scenario calculator — what the +10%-target exit would earn under different touch-rate assumptions, computed live from the raw log. Opens in a new tab.">Calculator ↗</button>
+      <button data-view="validation" title="Model validation — every pre-registered hypothesis tracked out-of-sample, recomputed in your browser from the raw CSVs.">Validation</button>
+      <button data-view="calculator" title="Exit-rule scenario calculator — what the +10%-target exit would earn under different touch-rate assumptions, computed live from the raw log.">Calculator</button>
       <button data-view="scoring">Guide</button>
       <button data-view="portfolio">Portfolio</button>
       <button data-view="compete">Compete</button>
@@ -446,8 +449,8 @@
     <button data-view="landing" class="active">Overview</button>
     <button data-view="watchlist">Watchlist</button>
     <button data-view="performance">Track record</button>
-    <button onclick="window.open('dashboard.html','_blank','noopener')">Validation <span class="ext">new tab ↗</span></button>
-    <button onclick="window.open('calculator.html','_blank','noopener')">Calculator <span class="ext">new tab ↗</span></button>
+    <button data-view="validation">Validation</button>
+    <button data-view="calculator">Calculator</button>
     <button data-view="scoring">Guide</button>
     <button data-view="portfolio">Portfolio</button>
     <button data-view="compete">Compete</button>
@@ -1119,7 +1122,7 @@
     <p class="lead">Every pick logged before the open, graded after 5 trading days — <b>all of them</b>,
       winners and losers. This is the page most scanners won't show you.</p>
     <p class="muted" style="font-size:13px;margin:.4em 0 0">Want the deeper cut? The
-      <a href="dashboard.html" style="color:var(--a)">model validation dashboard</a> tracks every
+      <a href="#validation" onclick="go('validation');return false;" style="color:var(--a)">model validation dashboard</a> tracks every
       pre-registered hypothesis (exit rules, filters, a Bayesian read-out) out-of-sample — recomputed
       live in your browser from the same raw CSVs, so nothing here has to be taken on faith.</p>
     <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
@@ -1260,6 +1263,16 @@
     <div id="daBody"><div class="muted" style="padding:34px;text-align:center">Loading…</div></div>
   </div>
 </div>
+
+<!-- ============ VALIDATION (embedded dashboard.html) ============ -->
+<section class="view" id="view-validation">
+  <iframe class="embed-tab" id="embed-validation" data-src="dashboard.html?embed=1" title="Model validation dashboard" loading="lazy"></iframe>
+</section>
+
+<!-- ============ CALCULATOR (embedded calculator.html) ============ -->
+<section class="view" id="view-calculator">
+  <iframe class="embed-tab" id="embed-calculator" data-src="calculator.html?embed=1" title="Exit-rule scenario calculator" loading="lazy"></iframe>
+</section>
 
 <!-- info tooltip popover (shared) -->
 <div id="infopop"></div>
@@ -1987,6 +2000,22 @@ function go(v){
     else if(!go._pfLoaded){ go._pfLoaded=true; loadPortfolio(); } // alpaca: lazy once
   }
   if(v==="compete" && window.IS_SIM){ IS_SIM.onView(); }
+  if(v==="validation"||v==="calculator"){ loadEmbedTab("embed-"+v); }
+}
+/* Lazy-load the Validation/Calculator iframes on first open, then keep them
+   sized to their content (same-origin, so we can read the inner height). */
+function loadEmbedTab(id){
+  const f=document.getElementById(id); if(!f) return;
+  if(!f.src && f.dataset.src){
+    f.src=f.dataset.src;
+    const sync=()=>{ try{ const d=f.contentDocument; if(d&&d.body){ f.style.height=(d.documentElement.scrollHeight)+"px"; } }catch(e){} };
+    f.addEventListener("load",()=>{
+      sync();
+      try{ new ResizeObserver(sync).observe(f.contentDocument.body); }catch(e){}
+      let n=0; const t=setInterval(()=>{ sync(); if(++n>20) clearInterval(t); },400); // catch async CSV render
+    });
+    window.addEventListener("resize",sync);
+  }
 }
 document.getElementById("tabs").addEventListener("click",e=>{
   if(e.target.dataset.view) go(e.target.dataset.view);
@@ -3282,7 +3311,7 @@ boot();
 
 /* deep-links: index.html#watchlist etc. — used by the sub-page (Validation/Calculator) nav */
 function goHash(){ const h=location.hash.replace("#","");
-  if(["landing","watchlist","performance","scoring","portfolio","compete","assistant"].includes(h)) go(h); }
+  if(["landing","watchlist","performance","scoring","portfolio","compete","assistant","validation","calculator"].includes(h)) go(h); }
 goHash();
 window.addEventListener("hashchange",goHash);
 </script>

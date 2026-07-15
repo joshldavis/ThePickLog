@@ -82,7 +82,11 @@
   .pcard .t{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px}
   .pcard .mfe{font-size:11px}
   .pcard canvas{display:block}
+  /* embedded-as-tab mode: hide the duplicate site top bar so it sits flush under index's header */
+  html.embed .top{display:none}
+  html.embed .wrap{padding-top:4px}
 </style>
+<script>if(new URLSearchParams(location.search).get("embed")==="1"||window.self!==window.top){document.documentElement.classList.add("embed");}</script>
 </head>
 <body>
 <div class="top">
