@@ -1,42 +1,41 @@
-# ThePickLog — Morning Brief · 2026-07-15
+# ThePickLog — Morning Brief · 2026-07-16
 
 _Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **NXTC** (tier A, score 100.0) — very high relative volume (58×); thin float (2.3M); large up-gap (+129%). Watch level (reference only, +20%): $6.0026.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SHPH** (tier A, score 100.0) — very high relative volume (25×); thin float (0.6M); large up-gap (+26%). Watch level (reference only, +20%): $4.4801.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **LEDS** (tier A, score 99.7) — very high relative volume (58×); large up-gap (+55%). Watch level (reference only, +20%): $2.82.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **CNEY** (tier A, score 98.7) — very high relative volume (27×); large up-gap (+21%). Watch level (reference only, +20%): $0.696.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **ACTU** (tier A, score 94.8) — very high relative volume (10×); large up-gap (+19%). Watch level (reference only, +20%): $2.1364.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **JTAI** (tier A, score 100.0) — very high relative volume (35×); thin float (1.2M); large up-gap (+599%). Watch level (reference only, +20%): $3.875.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CPHI** (tier A, score 100.0) — very high relative volume (31×); thin float (0.8M); large up-gap (+59%). Watch level (reference only, +20%): $1.1754.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **LBGJ** (tier A, score 100.0) — very high relative volume (14×); thin float (0.2M); large up-gap (+36%). Watch level (reference only, +20%): $2.148.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **KUST** (tier A, score 100.0) — very high relative volume (19×); thin float (0.6M); large up-gap (+21%). Watch level (reference only, +20%): $1.464.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **WAI** (tier A, score 95.6) — elevated relative volume (8.8×); thin float (2.0M); large up-gap (+33%). Watch level (reference only, +20%): $3.0727.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **NXTC**: already extended pre-market — chasing buys the top.
-- **SHPH**: high short interest (24% of float) — squeeze-prone and violent both ways.
-- **SHPH**: already extended pre-market — chasing buys the top.
-- **SHPH**: ultra-thin float — spreads and slippage can be severe.
-- **LEDS**: already extended pre-market — chasing buys the top.
-- **CNEY**: already extended pre-market — chasing buys the top.
-- **CNEY**: sub-$1 — heightened manipulation / delisting risk.
-- **GCTK**: already extended pre-market — chasing buys the top.
-- **GCTK**: sub-$1 — heightened manipulation / delisting risk.
-- **CRMT**: high short interest (28% of float) — squeeze-prone and violent both ways.
-- **CRMT**: already extended pre-market — chasing buys the top.
-- **PDC**: already extended pre-market — chasing buys the top.
-- **JSPR**: already extended pre-market — chasing buys the top.
-- **JSPR**: sub-$1 — heightened manipulation / delisting risk.
+- **JTAI**: already extended pre-market — chasing buys the top.
+- **CPHI**: already extended pre-market — chasing buys the top.
+- **CPHI**: ultra-thin float — spreads and slippage can be severe.
+- **CPHI**: sub-$1 — heightened manipulation / delisting risk.
+- **LBGJ**: already extended pre-market — chasing buys the top.
+- **LBGJ**: ultra-thin float — spreads and slippage can be severe.
+- **KUST**: high short interest (51% of float) — squeeze-prone and violent both ways.
+- **KUST**: already extended pre-market — chasing buys the top.
+- **KUST**: ultra-thin float — spreads and slippage can be severe.
+- **WAI**: already extended pre-market — chasing buys the top.
+- **ERNA**: ultra-thin float — spreads and slippage can be severe.
+- **TGHL**: already extended pre-market — chasing buys the top.
+- **SLSN**: sub-$1 — heightened manipulation / delisting risk.
+- **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: high short interest (47% of float) — squeeze-prone and violent both ways.
 - **BJDX**: ultra-thin float — spreads and slippage can be severe.
-- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
-- **CUPR**: ultra-thin float — spreads and slippage can be severe.
-- **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
+- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
+- **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
-- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
+- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **287** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 25%) vs **-13%** (rug 13%) for C/D.
