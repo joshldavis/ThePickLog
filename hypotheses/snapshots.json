@@ -9,5 +9,21 @@
 "H-F1": -0.4,
 "H-CLEAN": -1.0
 }
+},
+{
+"date": "2026-07-18",
+"rules": {
+"H-F3": 0.1,
+"H-F2": -0.1,
+"H-F4": -0.1,
+"H-F1": -0.3,
+"H-CLEAN": -0.4,
+"H-EX1": -1.8,
+"H-V3-EX1": null,
+"H-V3-EX2": null,
+"H-V3-EX3": null,
+"H-V3-EX4": null,
+"H-V3-EX5": null
+}
 }
 ]
