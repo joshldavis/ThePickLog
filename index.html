@@ -148,6 +148,12 @@
   .cvconf{font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);background:var(--panel);padding:3px 10px;border-radius:999px}
   .cvconf a{color:var(--blue);text-decoration:none}
   .cvtag.mini{font-size:10px;font-weight:700;padding:1px 6px;letter-spacing:.01em}
+  /* hero live-proof: most-recent graded call, straight from the public log (wins AND losses) */
+  .hero-proof{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;justify-content:center;margin:20px auto 0;max-width:min(560px,92%);padding:9px 15px;border:1px solid var(--line);border-radius:12px;background:var(--panel);font-size:12.5px}
+  .hero-proof .hp-k{color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-size:10.5px;font-weight:700}
+  .hero-proof b{font-family:var(--mono)}
+  .hero-proof .hp-res{font-weight:800;font-family:var(--mono)}
+  .hero-proof a{color:var(--blue);text-decoration:none;font-weight:600}
   .pos{color:var(--green)} .neg{color:var(--red)}
   .pill{font-size:11px;padding:2px 8px;border-radius:999px;background:#ffffff0d;color:var(--muted)}
   .win{color:var(--green);font-weight:700} .miss{color:var(--red);font-weight:700}
@@ -474,6 +480,7 @@
         <button class="btn ghost" onclick="location.href='guide.html'">Read the 7 checks every service should pass →</button>
       </div>
       <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:56ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled →</a></p>
+      <div id="heroProof" class="hero-proof" style="display:none"></div>
     </div>
 
     <div class="grid kpis" id="landingKpis"></div>
@@ -1794,6 +1801,26 @@ function getTrackRecord(){
   })();
   return _trCache;
 }
+/* Hero live-proof: the single most-recent GRADED call — win or loss — read straight
+   from the public picks.csv × outcomes.csv. Shows nothing on sample/empty data so the
+   hero never displays a fake or cherry-picked number. */
+async function renderHeroProof(){
+  const el=document.getElementById("heroProof"); if(!el) return;
+  const tr=await getTrackRecord(); if(!tr||!tr.real) return;
+  const byId={}; (tr.outcomes||[]).forEach(o=>{ byId[o.pick_id]=o; });
+  const graded=tr.picks.filter(p=>{ const o=byId[p.pick_id]; return o&&isFinite(parseFloat(o.ret_open_close_net)); });
+  if(!graded.length) return;
+  graded.sort((a,b)=> a.trading_date<b.trading_date?1:(a.trading_date>b.trading_date?-1:0));
+  const p=graded[0], o=byId[p.pick_id];
+  const rc=parseFloat(o.ret_open_close_net), mae=parseFloat(o.mae_5d);
+  const win=rc>0, sgn=x=>(x>=0?"+":"")+x.toFixed(1)+"%";
+  el.innerHTML=`<span class="hp-k">Most recent graded call</span>`
+    +`<span><b>${p.ticker}</b> <span class="dim">${p.trading_date} · Tier ${p.tier||"—"}</span></span>`
+    +`<span class="hp-res ${win?'pos':'neg'}">${win?'WIN':'LOSS'} ${sgn(rc)}</span>`
+    +(isFinite(mae)?`<span class="dim">worst dip ${sgn(mae)}</span>`:``)
+    +`<a href="#performance" onclick="go('performance');return false;">the whole log (${graded.length} graded) →</a>`;
+  el.style.display="flex";
+}
 const _mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
 const _median=a=>{ if(!a.length)return null; const s=[...a].sort((x,y)=>x-y); const m=s.length>>1;
   return s.length%2? s[m] : (s[m-1]+s[m])/2; };
@@ -2872,6 +2899,8 @@ async function fetchFundamentals(sym){
     pfcf:(marketCap && fcf0>0)? marketCap/fcf0 : (fcf0!=null && fcf0<0? -1 : null),
     evEbitda:(marketCap!=null && ebitda>0)? (marketCap+(totalDebt||0)-(cashBal||0))/ebitda : (ebitda!=null && ebitda<0? -1 : null),
     insiderOwnership:null, insiderNet:null, founderLed:false, goingConcern:false,
+    secCik: source==="edgar" ? (s.cik||null) : null,
+    fiscalYears: source==="edgar" ? (s.fiscalYears||null) : null,
     dataSource: source==="edgar" ? "edgar" : "live"
   };
 }
@@ -2970,9 +2999,21 @@ function renderDeep(res){
   const posList = res.positives.length
     ? `<ul class="flaglist good">`+res.positives.map(x=>`<li>${x}</li>`).join("")+`</ul>`
     : `<p class="muted" style="font-size:13px;margin:4px 0">No standout positive signals.</p>`;
-  const srcLine = res.dataSource==="edgar"
-    ? `Fundamentals: live from <b>SEC EDGAR</b> filings; quote/sector via Financial Modeling Prep.`
-    : res.dataSource==="live"
+  let srcLine;
+  if(res.dataSource==="edgar"){
+    const yrs=(f.fiscalYears||[]).filter(y=>y!=null);
+    const per=yrs.length?`FY${Math.min(...yrs)}–FY${Math.max(...yrs)}`:"";
+    const cik=f.secCik;
+    const co=cik
+      ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${cik}&type=10-K&dateb=&owner=include&count=40`
+      : `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker=${encodeURIComponent(f.symbol)}&type=10-K`;
+    const xbrl=cik?`https://data.sec.gov/api/xbrl/companyfacts/CIK${cik}.json`:null;
+    const L='style="color:var(--a)" target="_blank" rel="noopener"';
+    srcLine=`Fundamentals: live from <b>SEC EDGAR</b> filings${per?` (${per})`:""} — the exact figures behind every category score, drawn from this company's own annual reports. `
+      +`Verify at the source: <a href="${co}" ${L}>SEC&nbsp;10-K&nbsp;filings&nbsp;↗</a>`
+      +(xbrl?` · <a href="${xbrl}" ${L}>raw&nbsp;XBRL&nbsp;data&nbsp;↗</a>`:"")
+      +`. Expand “Why this score” on any category above to see which of these figures fed it. Quote/sector via Financial Modeling Prep.`;
+  } else srcLine = res.dataSource==="live"
     ? `Fundamentals: live via Financial Modeling Prep.`
     : `Fundamentals: <b>sample</b> (synthesized from the ticker — SEC EDGAR had no usable filings for it).`
       + (f.fetchError?` <span style="color:var(--amber)">Source note: ${f.fetchError}.</span>`:"");
@@ -3069,6 +3110,7 @@ async function boot(){
   renderBanner();
   renderWatchlist(scored);
   renderLandingKpis();
+  renderHeroProof();
   renderPerformance();
   renderScoring();
   renderQualityMethodology();
