@@ -109,6 +109,79 @@ suggestions don't get re-litigated later:
   (Gate-1 review fires 2026-07-27). The review optimizes for *looking* convincing; this system is built to
   *be* convincing, and those diverge at exactly the rejected items.
 
+## External improvement plan review — 2026-07-19 (dispositions on record)
+A second, much larger outside plan (8 phases / 30 steps) framed ThePickLog as a public
+verification product. It's directionally aligned with the referee/trust-layer repositioning, but
+as a to-do list it's a multi-month program and can't gate the ~7/23 soft launch. The cheap,
+high-trust credibility items were pulled *out* of here into a pre-launch checklist
+(`ThePickLog-Prelaunch-Credibility-Checklist-2026-07-19.md`, stock screener/): fix the one
+"nothing we can edit" overclaim **and surface the already-built hash chain** (A1, copy pack
+drafted), get owner/admin controls off public pages (A2 = B2), disambiguate the timing model (A3),
+move disclosures next to the numbers (A4), anchor the chain head off-repo (A5). Everything else is
+dispositioned below.
+
+**Deferred backlog — revisit after the 7/27 Gate-1 verdict.** Only pursue if the project keeps
+moving toward semi-public; none are launch-blocking.
+- **Record Integrity & Corrections Policy** — ⚠️ *mostly already built, just invisible.* The
+  tamper-evident hash chain (`log_integrity.py` → `integrity_ledger.csv`) has been sealing every
+  scan/grade/report since genesis 2026-07-06 and is wired into both workflows; logs + ledger also
+  upload as GitHub artifacts. The reviewer's Step 2 is ~80% done — it simply isn't surfaced on the
+  site (zero references in any HTML). Remaining: (a) surface it on method.html + dashboard
+  [copy drafted, see A1 pack] — **pre-launch**; (b) anchor the chain head off-repo — **promoted to
+  pre-launch 7/19** (checklist A5); (c) public change log + written corrections policy — stays in
+  this backlog. Supersedes the parked A6 "per-pick permalink + daily hash" idea.
+- **Method page vs. technical appendix split** — a plain-language "what gets logged / how it's
+  graded / can I reproduce it" page in front of the Messick/validity dossier, not behind it.
+- **Score interpretation statements** — for each score, publish what it does *not* measure and its
+  known limits (momentum ≠ quality ≠ probability of return).
+- **Quality-Lens redesign** — separate data-completeness / financial-distress / operating-quality /
+  valuation-context outputs instead of one blended verdict; rename "Too Hard" → "Outside Model
+  Scope"; sector-specific treatment where the universal model doesn't fit.
+- **One end-to-end verification walkthrough** on the site (single pick: what was logged → what was
+  knowable at the time → how it was graded → result → verify links).
+- **Publish model-validation thresholds in advance** — largely already encoded in the Gate-1
+  criteria; write them down publicly so "supported" has a pre-committed definition.
+- **Publisher/"Verified-by" product + demand interviews (15–20)** — the plan's proposed business.
+  Plausible and consistent with the go-big thread, but unvalidated; do not start before Gate-1 lands.
+- **Launch/trust metrics instrumentation** — % who open the raw log, use the verify tool, view the
+  losing results, return after seeing the record.
+- **Navigation simplification** — the plan wants 4 items (Record / Test a Rule / Method / About)
+  with calculator, guide, glossary, assistant, portfolio demoted to contextual links or footer.
+  The diagnosis (too many equal-weight destinations, no single primary journey) is fair; the exact
+  4-item cut is not obviously right for the dare-first entry flow. Revisit as "one primary journey,"
+  not as their specific IA.
+- **Homepage structure** — evidence scorecard directly below the hero (partly exists via the track
+  record); a single end-to-end verification walkthrough (above); a compact
+  Log→Freeze→Grade→Publish four-step explainer. Cheap and on-brand; the *hero rewrite* they propose
+  is **rejected** — it replaces the dare with a flat descriptive headline.
+- **Environment separation** — their three-environment split (public / owner-research / staging).
+  The public-vs-owner half is handled pre-launch by A2. A real staging deploy is a nice-to-have,
+  not a credibility item.
+
+**Deferred — decisions taken, no build required.**
+- *Define one primary user for the homepage* (they propose: the skeptical investor asking whether a
+  method has a demonstrated edge). Accepted as an editing lens, not a repositioning — it's
+  compatible with the dare front door, which targets the same skepticism from the opposite angle.
+- *Keep consumer research access free during validation; don't lead with paid alerts.* **Accepted**
+  — already the operative posture, and it's why the $99/$199 tiers are being removed pre-launch (B4).
+  Monetization stays gated on Gate-1 regardless.
+- *Their "minimum viable public product" five functions* (log before outcome, preserve/timestamp,
+  grade consistently, publish full distribution, let a stranger reproduce) — this is just the
+  existing North Star restated. No action; noted so it isn't re-proposed as new.
+
+**Partial-adopt (not wholesale) — keep the current positioning.**
+- *Strip the competition down to methodology-only scoring* — **rejected as written**; the "dare"
+  front door is deliberate. Adopt only the nucleus: don't rank Compete on raw fake-portfolio
+  returns; add methodological-quality scoring alongside.
+- *Rename "pick"→"logged observation", "winner"→"positive graded outcome", etc.* — **partial**; a
+  few targeted swaps around genuinely recommendation-flavored words, not a full sterilizing rewrite
+  that would kill the brand voice and the dare hook.
+
+**Rejected / already done.**
+- Much of the plan's Phase 1/Phase 3 is already shipped: nulls published prominently (validity docs
+  + method.html §9, unrefuted-NULL verdict), receipts/verifiability live, disclaimer + privacy pages
+  up, mobile pass shipped, legal review already queued. Cross off, don't rebuild.
+
 ## Reference docs
 STRATEGY-advancing.md · VALIDATION-PLAN.md · SYNTHESIS.md · TEST-PLAN-quality-downside.md ·
 PHASE2-SCOPE.md · HYPOTHESES.md · QA_REPORT.md · IMPROVEMENTS-v0.3.md · REQUIREMENTS.md
