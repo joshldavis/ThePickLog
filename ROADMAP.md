@@ -128,8 +128,9 @@ moving toward semi-public; none are launch-blocking.
   upload as GitHub artifacts. The reviewer's Step 2 is ~80% done — it simply isn't surfaced on the
   site (zero references in any HTML). Remaining: (a) surface it on method.html + dashboard
   [copy drafted, see A1 pack] — **pre-launch**; (b) anchor the chain head off-repo — **promoted to
-  pre-launch 7/19** (checklist A5); (c) public change log + written corrections policy — stays in
-  this backlog. Supersedes the parked A6 "per-pick permalink + daily hash" idea.
+  pre-launch 7/19**, decided **Wayback Machine** (one non-fatal `curl` per run; ledger already
+  serves publicly, verified 7/20) — checklist A5; (c) public change log + written corrections
+  policy — stays in this backlog. Supersedes the parked A6 "per-pick permalink + daily hash" idea.
 - **Method page vs. technical appendix split** — a plain-language "what gets logged / how it's
   graded / can I reproduce it" page in front of the Messick/validity dossier, not behind it.
 - **Score interpretation statements** — for each score, publish what it does *not* measure and its
