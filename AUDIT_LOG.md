@@ -1,5 +1,26 @@
 # ThePickLog — Audit Log
 
+## 2026-07-18 — Weekly verifiability audit — **✅ All claims verify**
+
+Live site checked directly (fetched same-origin from https://thepicklog.vercel.app). All six data checks pass and the six-aspect validity labelling is honest. One minor data-hygiene note (holiday-orphaned picks), no claim is affected.
+
+**Six data checks:**
+- **1. Data served — PASS.** `/picks.csv` HTTP 200 (81.6 KB, 470 rows), `/outcomes.csv` HTTP 200 (44.8 KB, 347 rows). Both non-empty.
+- **2. Real data shown — PASS.** Track record renders the live log ("this page re-derives from them"; "Live data — quotes pulled from Financial Modeling Prep"). The only "sample" string on the page is "out-of-sample," not a sample-fallback badge.
+- **3. No silent gaps — PASS.** 28 distinct trading dates, 2026-06-09 → 2026-07-17. Every US market weekday present; the only absences are Juneteenth (06-19) and the observed July 4 holiday (07-03). No weekday silently missing.
+- **4. Claims == data — PASS.** Recomputed from the raw CSVs: 470 logged / 333 graded / win rate 33.9% → site shows 470 / 333 / **34%** (match). Best 5d-net = **+170.5% (CUPR)**. Win-rate-by-tier: A 30.3% (n=33), B 55.0% (n=20), C 36.2% (n=127), D 30.1% (n=153) — reconciles to the graded set.
+- **5. Honest grading — PASS.** Spot-checked 4 rows across the file (PW, NCT, MASK, PTLE): entry = pick-day open; 2% cost haircut applied exactly (`ret_open_close_net == (close−open)/open×100 − 2.0` within rounding); win column = sign of net return on every checked row; no duplicate pick_ids (no regrades).
+- **6. Disclaimers — PASS.** Educational, "not advice," and "not a broker-dealer" all present.
+
+**Six-aspect validity (Messick):**
+- **Structural — honest.** method.html states plainly: "the momentum tiers rank intensity (and drawdown), not forward return — the top tier historically has the worst mean net and the deepest drawdown." This week's data confirms it: A-tier has the **worst** mean 5d-net (−10.8%). No "higher tier = better" claim anywhere.
+- **Unvalidated label — present.** "Until the data clears the bar the model is treated as unvalidated." Gate-1 external verdict correctly deferred (owned by the 2026-07-27 task; not rendered here).
+- **Validity docs — reachable + linked.** All three referenced from method.html §9 and return HTTP 200: Messick Framework, Domain-Coverage Spec, Structural-Justification (plus Empirical-Validity-Studies and Validity-Dossier-UG15 also linked).
+
+**Minor note (no claim affected):** 14 picks carry `trading_date 2026-06-19` (Juneteenth — market closed), so they can never grade and sit permanently in the ungraded pool. They're correctly excluded from the 333 graded count and don't touch any published number, but worth checking why the scan logged a holiday cohort.
+
+**Grading in the coming week:** 137 picks currently ungraded. The recent cohorts reach their 5-trading-day mark next week — 07-13 (21 picks) ~07-20, 07-14 (26) ~07-21, 07-15 (26) ~07-22, 07-16 (26) ~07-23, 07-17 (24) ~07-24 — ~123 fresh grades landing 07-20→07-24. (The 14 06-19 holiday picks will not grade.)
+
 ## 2026-07-06 — First six-aspect validity audit (Messick) — **⚠️ 1 fail, 5 partial/absent (all labeled)**
 
 New audit dimension per `PRINCIPLES.md §3 item 5`: each of Messick's six aspects of construct
