@@ -2,7 +2,7 @@
 // Replaces the __BUILDSTAMP__ token in the footers with the real commit SHA
 // and the deploy time, so the live footer always reflects the deployed version.
 // Defensive by design: never throws, never fails the build.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'node:fs';
 
 const sha = (process.env.VERCEL_GIT_COMMIT_SHA || '').slice(0, 7) || 'dev';
 
@@ -33,4 +33,36 @@ for (const f of files) {
   } catch (e) {
     console.log(`stamp: skip ${f}: ${e.message}`);
   }
+}
+
+// ---- Prune internal docs from the deployed output ----------------------------
+// outputDirectory is ".", so root-level Markdown files removed here are simply
+// not served (they remain in git). ALLOWLIST = docs intentionally linked from the
+// site; every other root-level *.md is internal and must not be publicly
+// fetchable. Allowlist-based on purpose: a future internal .md is excluded by
+// default. Defensive: never throws, never fails the build. Only touches the repo
+// root — reports/*.md and any subdirectory Markdown are left untouched.
+const PUBLIC_DOCS = new Set([
+  'HYPOTHESES.md',
+  'MONETIZATION-GATE.md',
+  'ThePickLog-Domain-Coverage-Spec-2026-07-06.md',
+  'ThePickLog-Empirical-Validity-Studies-2026-07-07.md',
+  'ThePickLog-Generalizability-and-Consequential-2026-07-07.md',
+  'ThePickLog-Structural-Justification-2026-07-06.md',
+  'ThePickLog-Validity-Dossier-UG15-2026-07-07.md',
+  'ThePickLog-Validity-Framework-Messick-2026-07-06.md',
+]);
+try {
+  for (const f of readdirSync('.')) {
+    if (f.endsWith('.md') && !PUBLIC_DOCS.has(f)) {
+      try {
+        unlinkSync(f);
+        console.log(`prune: removed internal doc ${f}`);
+      } catch (e) {
+        console.log(`prune: skip ${f}: ${e.message}`);
+      }
+    }
+  }
+} catch (e) {
+  console.log('prune: skipped:', e.message);
 }
