@@ -252,7 +252,7 @@ def _agg(xs):
 def _write_report(results, used, n_graded, from_record=0):
     from datetime import datetime
     fetched = used - from_record
-    prov = (f"{from_record} from the immutable grade-time record (paths.csv), {fetched} "
+    prov = (f"{from_record} from the append-only grade-time record (paths.csv), {fetched} "
             "re-fetched (picks that predate path capture)")
     L = ["# ThePickLog — exit-rule study · " + datetime.utcnow().date().isoformat(), "",
          f"Daily-resolution replay of **{used}** graded picks (of {n_graded}). Conservative "
@@ -260,7 +260,7 @@ def _write_report(results, used, n_graded, from_record=0):
          "exploratory** — a chosen rule must be pre-registered and validated forward.", "",
          f"_Bar provenance: {prov}. Grade-time paths are reproducible from committed data; "
          "re-fetched bars can drift if Yahoo revises history, so they converge to the "
-         "immutable source as the record matures._", "",
+         "append-only source as the record matures._", "",
          "| exit rule | n | win% | avg net/trade | median |", "|---|---|---|---|---|"]
     base = None
     rows = []

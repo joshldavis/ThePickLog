@@ -104,7 +104,30 @@ function toggleMenu(force){
   </div>
 
   <h2><span class="n">1</span>The pick log is the only judge</h2>
-  <p>Every screened name is written to <code>picks.csv</code> <b>before the outcome is known</b>, with a timestamp. The log is <b>append-only and immutable</b> — rows are never edited or deleted. Grading writes to a separate <code>outcomes.csv</code> keyed by <code>pick_id</code>. If a claim isn't reproducible from these two public files, it isn't evidence. Backtests are used only to <i>choose</i> what to test — never as a performance claim.</p>
+  <p>Every screened name is written to <code>picks.csv</code> <b>before the outcome is known</b>, with a timestamp. The log is <b>append-only</b> — rows are never edited or deleted, and every write is sealed into a <a href="#record-integrity">tamper-evident hash chain</a>. Grading writes to a separate <code>outcomes.csv</code> keyed by <code>pick_id</code>. If a claim isn't reproducible from these two public files, it isn't evidence. Backtests are used only to <i>choose</i> what to test — never as a performance claim.</p>
+
+  <h2 id="record-integrity">Record integrity — how you'd catch me editing history</h2>
+  <p>The forward log (<code>picks.csv</code>, <code>outcomes.csv</code>, <code>paths.csv</code>) is
+  append-only: rows are written before the outcome is known and never edited. But "append-only"
+  is a promise, so it's backed by something a stranger can check.</p>
+  <p>Every scan, grade, and weekly report seals a row into <code>integrity_ledger.csv</code>: the
+  SHA-256 of each log file plus a running <b>chain hash</b> that folds in the previous row. Editing
+  any historical file — or any past ledger row — breaks the chain from that point forward, and the
+  break is <b>provable</b>, not merely suspicious. The genesis row was sealed 2026-07-06.</p>
+  <pre style="background:#0a0d12;border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:12.5px"><code>file_sha            = sha256(raw bytes of the file)
+prev_chain(genesis) = "0" * 64
+chain               = sha256( prev_chain | picks_sha | outcomes_sha | paths_sha | ts | event )</code></pre>
+  <p>Verify the entire history yourself, in one command:</p>
+  <pre style="background:#0a0d12;border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow:auto;font-size:12.5px"><code>python log_integrity.py --verify        # recompute the chain; exits 1 on any break
+python log_integrity.py --verify-head   # also confirm current files match the last seal</code></pre>
+  <p>The logs and the ledger are also uploaded as GitHub Actions artifacts on every run — a store
+  independent of git history, so they survive a force-push or a bad rebase. You can spot-check the
+  live seal against the public <a href="integrity_ledger.csv" download>integrity_ledger.csv</a>.</p>
+  <p><b>What this does and doesn't prove.</b> It proves the published record has not been quietly
+  rewritten since the genesis seal. It does <i>not</i> make the files physically unchangeable — I
+  control the repository. The honest word is <b>tamper-evident</b>, not <i>immutable</i>: you don't
+  have to trust me, you have to be able to catch me. The one remaining gap — the chain head lives in
+  the same repo — is closed by anchoring it to an outside archive on each run; that's on the roadmap.</p>
 
   <h2><span class="n">2</span>The return we measure is one you could actually get</h2>
   <p>Five trading days after a pick is logged, it's graded on the <b>regular-session open → close</b> return — enter at the day's open (not the pre-market print nobody can be filled at), exit at that day's close — <b>net of a 2% round-trip cost haircut</b> for wide low-float spreads. That net figure is the headline.</p>

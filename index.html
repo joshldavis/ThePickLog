@@ -473,7 +473,7 @@
       <h1>The stock-alert record you can actually verify.<br>Starting with our own.</h1>
       <p class="lead">Most trading track records are winners-only screenshots. ThePickLog logs every pick before the open, grades winners <i>and</i> losers automatically, and publishes a record a stranger can check — no black box, no cherry-picking, nothing we can quietly delete.</p>
       <p class="muted" style="color:var(--green);font-weight:600;margin:0 auto 26px">
-        Logged before the open &nbsp;•&nbsp; Graded winners <i>and</i> losers &nbsp;•&nbsp; Re-derivable from public data &nbsp;•&nbsp; Nothing we can edit
+        Logged before the open &nbsp;•&nbsp; Graded winners <i>and</i> losers &nbsp;•&nbsp; Re-derivable from public data &nbsp;•&nbsp; Tamper-evident hash chain
       </p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
         <button class="btn" onclick="go('performance')">See the public track record →</button>
@@ -808,12 +808,11 @@
     </style>
     <div id="competeTest" style="display:none">
       <p class="lead"><b>Make a call the market can't let you take back.</b> Freeze a rule with today's timestamp
-        and it gets graded <b>out-of-sample</b> against the same immutable pick log the whole site runs on. You can't
-        edit it, delete it, or backdate it &mdash; only calls logged <i>after</i> you register count. Beat the baseline
+        and it gets graded <b>out-of-sample</b> against the same append-only pick log the whole site runs on. The app gives you no way to edit, delete, or backdate it &mdash; only calls logged <i>after</i> you register count. Beat the baseline
         and you climb. Whiff and everyone sees that too. That's the point.</p>
       <div class="pt-how">
         <div class="panel pt-step"><div class="n">1 &middot; CALL IT</div><p>Build your rule from pick-time fields only (price, float, tier, regime&hellip;) plus an exit. No code, no future data, no take-backs.</p></div>
-        <div class="panel pt-step"><div class="n">2 &middot; LOCK IT IN</div><p>Stamped and frozen &mdash; can't be edited, deleted, or backdated. That's what makes your score mean something.</p></div>
+        <div class="panel pt-step"><div class="n">2 &middot; LOCK IT IN</div><p>Stamped and frozen &mdash; the app gives you no way to edit, delete, or backdate it, and it's scored only on picks logged after today. That's what makes your score mean something.</p></div>
         <div class="panel pt-step"><div class="n">3 &middot; GET GRADED</div><p>The public log scores you against the same-day open&rarr;close baseline, out-of-sample. Climb the board or eat the loss in the open.</p></div>
       </div>
 
@@ -851,10 +850,10 @@
             <select id="arExit"></select>
           </label>
           <div class="note" style="margin-top:12px;border-left:3px solid var(--amber,#f5b14c);padding-left:10px">
-            ⛓ <b>This freezes permanently.</b> A registered rule can't be edited, deleted, or backdated — only <i>retired</i>. It's scored only on picks logged <b>after today</b>, so it starts at zero and earns its record over time.
+            ⛓ <b>This freezes on registration.</b> The app won't let you edit, delete, or backdate a registered rule — only <i>retire</i> it. It's scored only on picks logged <b>after today</b>, so it starts at zero and earns its record over time.
           </div>
           <label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:13px;cursor:pointer">
-            <input type="checkbox" id="arConfirm" style="margin-top:3px" /> I understand this is frozen and immutable once registered.
+            <input type="checkbox" id="arConfirm" style="margin-top:3px" /> I understand this is frozen once registered and can only be retired, not edited.
           </label>
           <div style="margin-top:12px"><button class="btn" onclick="IS_SIM&&IS_SIM.arenaSubmit()">Register hypothesis →</button></div>
           <div id="arMsg" class="note" style="display:none;margin-top:10px"></div>
@@ -931,7 +930,7 @@
           h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+authorHtml+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="/r/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px;font-weight:600">receipt ↗</a><br><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
-        document.getElementById('ptProv').innerHTML='Computed from the live immutable log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';
+        document.getElementById('ptProv').innerHTML='Computed from the live append-only log on <b>'+d.generated_at+'</b> — picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';
       }
       function load(){fetch('leaderboard.json').then(function(r){return r.ok?r.json():Promise.reject();}).then(render).catch(function(){render(FALLBACK);});}
     })();
@@ -1153,11 +1152,11 @@
           <li>We publish the full return distribution — median, mean, % positive — not a lone win rate</li>
           <li>Average worst-case drawdown (MAE) is shown, not hidden</li>
           <li>"WIN" means a realizable open→close return after costs, never "ever touched +20%"</li>
-          <li>Picks are immutable once logged; outcomes graded by a scheduled job, not by hand</li>
+          <li>Picks are append-only once logged — never edited or deleted; outcomes graded by a scheduled job, not by hand</li>
           <li>Worst misses shown right next to best calls</li>
         </ul>
         <div class="note" style="margin-top:14px">A modest-but-real edge beats a fake 90%. Stats are blank
-          until picks reach the 5-trading-day grading mark, then fill in from the immutable log.</div>
+          until picks reach the 5-trading-day grading mark, then fill in from the append-only log.</div>
       </div>
     </div>
 
@@ -1632,7 +1631,7 @@ const INFO={
   actionable:{t:"Hottest (A/B)",d:"Count of Tier A or B names (momentum ≥60) — the highest-intensity setups, which in the live log also carry the deepest drawdowns (Finding A). A heat count, not a buy list."},
   "top-score":{t:"Top score",d:"The highest momentum score in today's screen."},
   "top-ticker":{t:"Top ticker",d:"The single highest-scoring name today."},
-  "picks-logged":{t:"Picks logged",d:"Total picks in the immutable public log (picks.csv), each recorded before the open."},
+  "picks-logged":{t:"Picks logged",d:"Total picks in the append-only public log (picks.csv), each recorded before the open."},
   "blended-win-rate":{t:"Blended win rate",d:"Share of GRADED picks with a positive cost-adjusted open→close return — every pick counts, winners and losers. Blank until picks are graded (5 trading days after logging)."},
   "best-net":{t:"Best net return",d:"Best single graded pick by realized open→close return (next open to that day's close, minus a 2% cost haircut)."},
   "trading-days":{t:"Trading days",d:"Distinct trading days logged so far."},
@@ -1773,7 +1772,7 @@ const STAT_INFO={
 };
 function stat(k,v){ const ib=infoBtn(STAT_INFO[k]||""); return `<div class="stat"><div class="k">${k}${ib}</div><div class="v">${v}</div></div>`;}
 
-/* ===== LIVE TRACK RECORD — reads the real, immutable pick log ============
+/* ===== LIVE TRACK RECORD — reads the real, append-only pick log ============
    picks.csv (logged before each open) and outcomes.csv (graded 5 trading
    days later, cost-adjusted) are committed by the scheduled grader job and
    served as static files. We render the REAL record; a clearly-labelled
@@ -3692,7 +3691,7 @@ window.addEventListener("hashchange",goHash);
     arenaHash(s){ let h=5381; for(let i=0;i<s.length;i++){ h=((h<<5)+h+s.charCodeAt(i))>>>0; } return "h"+h.toString(36); },
     async arenaSubmit(){
       if(!IS_SIM.active){ toast("Sign in on the Trade tab to register.","bad"); return; }
-      if(!(document.getElementById("arConfirm")||{}).checked){ IS_SIM.arenaMsg("Please confirm you understand the rule is frozen and immutable.",true); return; }
+      if(!(document.getElementById("arConfirm")||{}).checked){ IS_SIM.arenaMsg("Please confirm you understand the rule is frozen once registered.",true); return; }
       const b=IS_SIM.arenaBuild();
       if(!b.ok){ IS_SIM.arenaMsg(b.err,true); return; }
       IS_SIM.arenaMsg("Registering…",false);

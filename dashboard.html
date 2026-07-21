@@ -133,8 +133,8 @@ function toggleMenu(force){
     <span class="sub" id="updated">loading live data…</span>
     <span class="badge" id="confidence">sizing sample…</span>
   </header>
-  <div class="sub">Computed live in your browser from the immutable log. Verify every number yourself:
-    download the raw record and re-run the math.</div>
+  <div class="sub">Computed live in your browser from the append-only log. Verify every number yourself:
+    download the raw record and re-run the math. <a href="method.html#record-integrity">See how the log is sealed against edits ↗</a></div>
 
   <div class="panel" style="margin-top:10px">
     <div class="dlbar">
@@ -145,7 +145,7 @@ function toggleMenu(force){
       <a class="btn" id="dledgar" href="edgar_snapshot.csv" download style="display:none">⬇ edgar_snapshot.csv <span class="sz" id="szed"></span></a>
       <a class="btn" href="HYPOTHESES.md" target="_blank">📄 HYPOTHESES.md</a>
     </div>
-    <div class="note">The pick log is append-only and immutable — picks are stamped before the outcome
+    <div class="note">The pick log is append-only and tamper-evident — picks are stamped before the outcome
       is known, graded at 5 trading days, never edited. <code>paths.csv</code> is the grade-time daily
       OHLC of each pick (forward-only, so exit rules are reproducible). Nothing here is a prediction.</div>
   </div>
