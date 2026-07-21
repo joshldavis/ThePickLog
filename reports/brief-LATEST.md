@@ -33,7 +33,7 @@ _Impersonal, educational watchlist — identical for all readers. Market regime:
 - **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
-- Across **354** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 27%) vs **-13%** (rug 14%) for C/D.
+- Across **380** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 28%) vs **-13%** (rug 13%) for C/D.
 - **Actionable read:** a top-of-leaderboard A/B name is the part most likely to gut you. Treat a high score as a *warning label on the downside*, not a green light.
 
 ## How to read this
