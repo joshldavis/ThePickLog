@@ -1,39 +1,36 @@
-# ThePickLog — Morning Brief · 2026-07-20
+# ThePickLog — Morning Brief · 2026-07-21
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **unknown**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **PRPL** (tier A, score 100.0) — very high relative volume (33×); thin float (2.3M); large up-gap (+2128%). Watch level (reference only, +20%): $8.292.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BANL** (tier A, score 100.0) — very high relative volume (16×); thin float (0.4M); large up-gap (+1103%). Watch level (reference only, +20%): $4.98.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **CJMB** (tier A, score 100.0) — very high relative volume (37×); thin float (2.4M); large up-gap (+51%). Watch level (reference only, +20%): $1.56.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BIYA** (tier A, score 100.0) — very high relative volume (11×); thin float (1.2M); large up-gap (+154%). Watch level (reference only, +20%): $9.278.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BNRG** (tier A, score 97.0) — elevated relative volume (9.2×); thin float (0.1M); large up-gap (+26%). Watch level (reference only, +20%): $1.044.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **ADVB** (tier A, score 100.0) — very high relative volume (46×); thin float (0.6M); large up-gap (+58%). Watch level (reference only, +20%): $9.539.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **NIKI** (tier A, score 90.5) — very high relative volume (31×); thin float (0.6M). Watch level (reference only, +20%): $9.444.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **GMM** (tier A, score 86.1) — elevated relative volume (6.0×); thin float (0.5M); large up-gap (+32%). Watch level (reference only, +20%): $4.044.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **YIBO** (tier A, score 81.2) — elevated relative volume (5.6×); large up-gap (+21%). Watch level (reference only, +20%): $1.44.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **GREE** (tier B, score 71.9) — large up-gap (+26%). Watch level (reference only, +20%): $2.592.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **PRPL**: already extended pre-market — chasing buys the top.
-- **BANL**: already extended pre-market — chasing buys the top.
-- **BANL**: ultra-thin float — spreads and slippage can be severe.
-- **CJMB**: already extended pre-market — chasing buys the top.
-- **BIYA**: already extended pre-market — chasing buys the top.
-- **BNRG**: already extended pre-market — chasing buys the top.
-- **BNRG**: ultra-thin float — spreads and slippage can be severe.
-- **BNRG**: sub-$1 — heightened manipulation / delisting risk.
-- **SLND**: already extended pre-market — chasing buys the top.
-- **FMST**: already extended pre-market — chasing buys the top.
-- **ESLA**: sub-$1 — heightened manipulation / delisting risk.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
+- **ADVB**: already extended pre-market — chasing buys the top.
+- **ADVB**: ultra-thin float — spreads and slippage can be severe.
+- **NIKI**: ultra-thin float — spreads and slippage can be severe.
+- **GMM**: already extended pre-market — chasing buys the top.
+- **GMM**: ultra-thin float — spreads and slippage can be severe.
+- **YIBO**: already extended pre-market — chasing buys the top.
+- **GREE**: already extended pre-market — chasing buys the top.
 - **BJDX**: high short interest (47% of float) — squeeze-prone and violent both ways.
 - **BJDX**: ultra-thin float — spreads and slippage can be severe.
-- **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
-- **SVRN**: ultra-thin float — spreads and slippage can be severe.
+- **STIM**: high short interest (22% of float) — squeeze-prone and violent both ways.
+- **STIM**: already extended pre-market — chasing buys the top.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
+- **SVRN**: ultra-thin float — spreads and slippage can be severe.
+- **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **354** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 27%) vs **-13%** (rug 14%) for C/D.
