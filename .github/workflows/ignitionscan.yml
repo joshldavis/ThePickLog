@@ -90,6 +90,14 @@ jobs:
             done
             echo "pushed=1" >> "$GITHUB_OUTPUT"
           fi
+      - name: Anchor ledger to Wayback Machine (Internet Archive)
+        # Snapshots the public ledger to a store we don't control, so the seal can
+        # be checked against an external copy. Non-fatal: archive.org has silent
+        # outages and must never break the run. One-run lag is expected (Vercel
+        # redeploys async, so this may capture the prior run's ledger) — fine, we
+        # anchor history, not the present.
+        run: |
+          curl -sS -m 90 "https://web.archive.org/save/https://thepicklog.vercel.app/integrity_ledger.csv" > /dev/null || echo "wayback anchor skipped (non-fatal)"
       # Belt-and-braces: the GitHub→Vercel webhook occasionally skips a push
       # (observed 2×on 2026-07-02), leaving the site a day stale. If the
       # VERCEL_DEPLOY_HOOK secret is set (Vercel → Project → Settings → Git →
