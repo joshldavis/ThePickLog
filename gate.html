@@ -115,7 +115,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   const fp=(x)=>x==null?"—":(x>=0?"+":"")+Number(x).toFixed(1);
   const ci = EX.ci95?`CI [${EX.ci95[0]>0?"+":""}${EX.ci95[0]}, ${EX.ci95[1]>0?"+":""}${EX.ci95[1]}]`:"CI —";
 
-  // Gate-1 criteria (thresholds frozen from MONETIZATION-GATE.md)
+  // Gate-1 criteria (thresholds frozen from HYPOTHESES.md)
   const c1 = (EX.n_post||0)>=30;                                   // sample
   const c2 = (EX.delta_post||0)>0;                                 // expectancy beats baseline
   const c3 = EX.stability==="stable";                             // sign stable ≥3 weeks
@@ -174,7 +174,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
     html;
   document.getElementById("foot").innerHTML =
     "Computed live on <b>"+(board.generated_at||"—")+"</b> from leaderboard.json (by <code>hypo_eval.py</code>, parity-locked) × picks.csv. "+
-    "Thresholds are frozen in <a href=\"MONETIZATION-GATE.md\">MONETIZATION-GATE.md</a>; pass = the exit edge (H-EX1) clears AND survives the H-IND1 ticker-clustering correction. "+
+    "Thresholds are frozen in <a href=\"HYPOTHESES.md\">HYPOTHESES.md</a>; pass = the exit edge (H-EX1) clears AND survives the H-IND1 ticker-clustering correction. "+
     "Not investment advice. The model is unvalidated until these bars clear. "+
     "<br><a href=\"disclaimer.html\">Disclaimer</a> &middot; <a href=\"privacy.html\">Privacy</a>";
 })();

@@ -44,7 +44,10 @@ for (const f of files) {
 // root — reports/*.md and any subdirectory Markdown are left untouched.
 const PUBLIC_DOCS = new Set([
   'HYPOTHESES.md',
-  'MONETIZATION-GATE.md',
+  'PRINCIPLES.md',
+  'INTEGRITY.md',
+  'AUDIT_LOG.md',
+  'README.md',
   'ThePickLog-Domain-Coverage-Spec-2026-07-06.md',
   'ThePickLog-Empirical-Validity-Studies-2026-07-07.md',
   'ThePickLog-Generalizability-and-Consequential-2026-07-07.md',
