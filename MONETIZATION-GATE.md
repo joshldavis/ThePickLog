@@ -88,42 +88,5 @@ late July.** First post-reg H-EX1 grades land ~next week; the expectancy sign an
 across the following ~6 weekly snapshots decide Gate 1. Re-read this file when §4d has ≥30
 post-reg picks with a stable sign.
 
-## Appendix — competitor pricing reference (Fynca, captured 2026-07-13)
-
-**Status: reference only. Inert until Gates 1–3 pass.** Filed here so that *if* Gate 4 ever
-opens we aren't designing tiers from scratch. Nothing here changes the current free posture —
-everything on the site stays free until the edge validates OOS and legal clears.
-
-[fynca.io](https://fynca.io) is an adjacent retail-research tool (node-based "visual canvas,"
-research-not-execution — same legal posture as ours). Not a direct competitor: they sell a
-*workspace*, we publish a *verified record*. Useful only as evidence of what a retail audience
-will actually pay to unlock.
-
-| Their tier | Price | What it unlocks |
-|---|---|---|
-| Free | $0 | core charts/news, 1 saved view, 10 AI calls/mo |
-| Starter | $19/mo | 3 views, shared (viewer), AI heatmaps, analyst opinions, **insider flow**, 50 AI calls |
-| Pro *(their "recommended")* | $59/mo | 8 views, editor sharing, **SEC filings & advanced research**, earnings-call transcripts, 150 AI calls |
-| Max | $99/mo | unlimited views, 300 AI calls |
-
-Packaging conventions worth copying if we ever charge: 14-day trial with no card, annual
-billing at ~21% off, and "early-access pricing locked in while in beta."
-
-**Two reads that matter for our Gate 4:**
-
-1. **Insider flow is a paid-tier feature elsewhere — and costs us ~nothing.** They gate it at
-   $19+. We already capture `insider_net` from **free SEC EDGAR** (2026-07-08), and Form 4
-   capture is Next #3 in ROADMAP.md. Same for SEC filings/fundamentals, which they gate at $59
-   and we get free from EDGAR. This reinforces the Gate 4 finding that **data cost is not our
-   barrier** — distribution and the Gate 2 capacity ceiling are.
-2. **The free→paid line is a usable default.** If the narrow "sell the method + record" play
-   from the decision tree ever runs, their split (free = current//summary view; paid = depth,
-   history, filings, higher limits) is a sane starting shape — *not* live tickers, which the
-   capacity ceiling rules out anyway.
-
-**What this appendix does not do:** it does not imply a paid tier is planned, does not set a
-price, and does not move any gate threshold. Gate 1 still governs, and its honest prior is
-still *fail → stay personal.*
-
 ---
 *Decision framework, not investment or legal advice. The forward log is the only judge.*
