@@ -305,7 +305,7 @@ async function main(){
     ${kpi(fmtPct(med(mae)),"Median worst-dip (MAE)","downside you'd sit through","neg")}
     ${kpi((pct(mae.filter(x=>x<-30).length,mae.length)||0).toFixed(0)+"%","Catastrophic-rug rate","MAE < −30%","warn")}
   </div>`);
-  add(`<div class="note">Maturation: ${picks.length} picks over ${dates.length} scan days (${span}), ~${weeks.toFixed(1)} wks. ${graded.length} graded, ${picks.length-graded.length} pending (grades at 5 trading days).</div>`);
+  add(`<div class="note">Maturation: ${picks.length} picks over ${dates.length} scan days (${span}), ~${weeks.toFixed(1)} wks. ${graded.length} graded, ${picks.filter(p=>!outs.some(o=>o.pick_id===p.pick_id)).length} pending${(outs.length-graded.length)?`, ${outs.length-graded.length} voided (excluded)`:``} (grades at 5 trading days).</div>`);
 
   /* ---- Finding A ---- */
   const tierMae=(ts)=>graded.filter(o=>ts.includes((byId[o.pick_id]||{}).tier)).map(o=>num(o.mae_5d)).filter(x=>x!=null);

@@ -1196,7 +1196,7 @@
 </section>
 
 <footer class="foot"><div class="wrap">
-  ThePickLog — working prototype. Not a live product. Educational sample for development hand-off only.
+  ThePickLog — a personal, transparent research instrument (prototype). Educational / informational only — not investment advice.
   <br>Research, not investment advice. Simulated (paper) trading only.
   <a href="method.html">Method</a> · <a href="guide.html">Vetting Guide</a> · <a href="trust.html">Trust &amp; Data</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="privacy.html">Privacy</a>
   <!-- BUILD STAMP: __BUILDSTAMP__ is auto-filled at deploy by scripts/stamp-build.mjs (commit SHA + deploy time) -->
@@ -3360,7 +3360,7 @@ boot();
 
 /* deep-links: index.html#watchlist etc. — used by the sub-page (Validation/Calculator) nav */
 function goHash(){ const h=location.hash.replace("#","");
-  if(["landing","watchlist","performance","scoring","portfolio","compete","assistant","validation","calculator"].includes(h)) go(h); }
+  const ext={guide:"guide.html",method:"method.html",trust:"trust.html"}; if(ext[h]){ location.replace(ext[h]); return; } if(["landing","watchlist","performance","scoring","portfolio","compete","assistant","validation","calculator"].includes(h)) go(h); }
 goHash();
 window.addEventListener("hashchange",goHash);
 </script>
