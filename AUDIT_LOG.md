@@ -1,5 +1,26 @@
 # ThePickLog — Audit Log
 
+## 2026-07-22 — Weekly verifiability audit — **✅ All claims verify**
+
+Manual functional-test run of the rewritten audit workflow (log-primary delivery + commit/push + issue-on-failure), executed off the Saturday cadence. Live site fetched same-origin from https://thepicklog.vercel.app; every value recomputed from the raw CSVs. All six data checks pass and the six-aspect validity labelling is honest.
+
+**Six data checks:**
+- **1. Data served — PASS.** `/picks.csv` HTTP 200, `/outcomes.csv` HTTP 200, both non-empty (543 picks / 406 graded).
+- **2. Real data shown — PASS.** Track record renders the live log; "543 picks logged" matches the CSV exactly. Only "sample" string on-site is "out-of-sample" (pricing), not a data fallback.
+- **3. No silent gaps — PASS.** 31 trading dates, 2026-06-09 → 2026-07-22; new sessions 07-20/07-21/07-22 all present, so the daily scan is running loudly. Only absent weekdays are Juneteenth (06-19) and observed July 4 (07-03) — both holidays.
+- **4. Claims == data — PASS.** Recompute vs site: picks 543=543; blended win rate 31.5% → site **32%**; median net −2.47% → **−2.5%**; avg worst dip −18.4% = **−18.4%**; best 5d-net **+170.5%**. Win-by-tier: A 29.8% (n=57), B 44.4% (n=27), C 35.0% (n=143), D 27.4% (n=179).
+- **5. Honest grading — PASS.** Spot-checked PW/GCDT/NCT: 2% haircut applied exactly, win = sign of same-day net on every row, 0 duplicate pick_ids (no regrades).
+- **6. Disclaimers — PASS.** Educational, "not investment advice," and "not a broker-dealer" all present.
+
+**Six-aspect validity (Messick):**
+- **Structural — honest.** Tiers presented as intensity/heat, not quality; no "higher tier = better" wording. Data confirms the standing finding more strongly than ever: A-tier has the **worst** mean 5d-net (−15.3%) of all four tiers (B −6.0%, C −7.5%, D −8.1%).
+- **Unvalidated label — present** on index and method (2× each). Gate-1 external verdict correctly deferred to the 2026-07-27 task; not rendered here.
+- **Validity docs — reachable + linked.** All three return HTTP 200 and are linked from method.html §9: Messick Framework, Domain-Coverage Spec, Structural-Justification.
+
+**Minor note (no claim affected):** the 14 Juneteenth (2026-06-19) picks remain permanently ungraded (market closed, empty entry). Correctly excluded from the 406 graded count. The 07-03 holiday correctly has no cohort, so the phantom-cohort fix is holding for new dates.
+
+**Grading in the coming week:** 137 ungraded. Recent cohorts reach their 5-trading-day mark — 07-16 (26) ~07-23, 07-17 (24) ~07-24, 07-20 (25) ~07-27, 07-21 (22) ~07-28, 07-22 (26) ~07-29 — ~123 fresh grades landing 07-23→07-29. (The 14 Juneteenth picks will not grade.)
+
 ## 2026-07-18 — Weekly verifiability audit — **✅ All claims verify**
 
 Live site checked directly (fetched same-origin from https://thepicklog.vercel.app). All six data checks pass and the six-aspect validity labelling is honest. One minor data-hygiene note (holiday-orphaned picks), no claim is affected.
