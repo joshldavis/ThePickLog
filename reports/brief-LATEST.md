@@ -1,39 +1,38 @@
-# ThePickLog — Morning Brief · 2026-07-27
+# ThePickLog — Morning Brief · 2026-07-28
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **EDBL** (tier A, score 100.0) — very high relative volume (44×); thin float (0.1M); large up-gap (+103%). Watch level (reference only, +20%): $7.644.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **LGHL** (tier A, score 100.0) — very high relative volume (45×); thin float (0.5M); large up-gap (+70%). Watch level (reference only, +20%): $1.854.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **DFNS** (tier A, score 100.0) — very high relative volume (40×); thin float (0.3M); large up-gap (+49%). Watch level (reference only, +20%): $7.8.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **GMEX** (tier A, score 100.0) — very high relative volume (20×); thin float (0.0M); large up-gap (+24%). Watch level (reference only, +20%): $2.184.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BIYA** (tier A, score 94.0) — elevated relative volume (8.3×); thin float (1.2M); large up-gap (+85%). Watch level (reference only, +20%): $4.2757.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **BIYA** (tier A, score 100.0) — very high relative volume (18×); thin float (1.2M); large up-gap (+161%). Watch level (reference only, +20%): $6.036.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **KIDZ** (tier A, score 100.0) — very high relative volume (18×); thin float (0.8M); large up-gap (+57%). Watch level (reference only, +20%): $0.7918.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **NCTY** (tier A, score 98.8) — very high relative volume (18×); large up-gap (+35%). Watch level (reference only, +20%): $5.1976.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **REBN** (tier A, score 95.0) — very high relative volume (13×); large up-gap (+17%). Watch level (reference only, +20%): $1.404.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **LVWR** (tier A, score 93.9) — very high relative volume (22×); large up-gap (+101%). Watch level (reference only, +20%): $3.5154.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **EDBL**: already extended pre-market — chasing buys the top.
-- **EDBL**: ultra-thin float — spreads and slippage can be severe.
-- **LGHL**: already extended pre-market — chasing buys the top.
-- **LGHL**: ultra-thin float — spreads and slippage can be severe.
-- **DFNS**: already extended pre-market — chasing buys the top.
-- **DFNS**: ultra-thin float — spreads and slippage can be severe.
-- **GMEX**: already extended pre-market — chasing buys the top.
-- **GMEX**: ultra-thin float — spreads and slippage can be severe.
 - **BIYA**: already extended pre-market — chasing buys the top.
-- **LVWR**: already extended pre-market — chasing buys the top.
+- **KIDZ**: already extended pre-market — chasing buys the top.
+- **KIDZ**: ultra-thin float — spreads and slippage can be severe.
+- **KIDZ**: sub-$1 — heightened manipulation / delisting risk.
 - **NCTY**: already extended pre-market — chasing buys the top.
+- **LVWR**: already extended pre-market — chasing buys the top.
+- **VGAS**: already extended pre-market — chasing buys the top.
+- **VGAS**: ultra-thin float — spreads and slippage can be severe.
 - **ENTX**: already extended pre-market — chasing buys the top.
-- **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **CNET**: sub-$1 — heightened manipulation / delisting risk.
 - **CUPR**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: high short interest (59% of float) — squeeze-prone and violent both ways.
 - **BJDX**: ultra-thin float — spreads and slippage can be severe.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **JAGX**: ultra-thin float — spreads and slippage can be severe.
+- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **VMAR**: sub-$1 — heightened manipulation / delisting risk.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **HKIT**: ultra-thin float — spreads and slippage can be severe.
-- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
+- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **478** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-22%** (rug rate 31%) vs **-14%** (rug 12%) for C/D.
