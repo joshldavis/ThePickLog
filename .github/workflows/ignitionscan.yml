@@ -49,6 +49,15 @@ jobs:
           ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
           ALPACA_DATA_FEED: sip
         run: python ignitionscan.py scan-market
+      # H-CTRL (registered 2026-07-07, amended 2026-07-29): grade the eligible-but-
+      # UNPUBLISHED candidates forward so the discriminant test becomes answerable at all.
+      # Append-only into control_outcomes.csv. continue-on-error + the script's own
+      # catch-all mean a control-data problem can never block the picks/outcomes commit.
+      - name: Grade control pool (H-CTRL)
+        if: steps.cmd.outputs.cmd == 'grade'
+        continue-on-error: true
+        run: python grade_controls.py || echo "control grading skipped (non-fatal)"
+
       - name: Refresh Finding-A-aware brief
         run: python ignitionscan.py brief || true
       - name: Rebuild Test-mode leaderboard (house + user rules)
@@ -72,6 +81,7 @@ jobs:
           git config user.email "davis1163@gmail.com"
           [ -f picks.csv ] && git add picks.csv || true
           [ -f candidates.csv ] && git add candidates.csv || true
+          [ -f control_outcomes.csv ] && git add control_outcomes.csv || true
           [ -f outcomes.csv ] && git add outcomes.csv || true
           [ -f paths.csv ] && git add paths.csv || true
           [ -f edgar_snapshot.csv ] && git add edgar_snapshot.csv || true
@@ -122,6 +132,7 @@ jobs:
           path: |
             picks.csv
             candidates.csv
+            control_outcomes.csv
             outcomes.csv
             paths.csv
             leaderboard.json

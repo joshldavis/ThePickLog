@@ -1,5 +1,78 @@
 # ThePickLog — Audit Log
 
+## 2026-07-29 — Gate-1 external-validity verdict — **❌ FAIL (pre-registered null confirmed)**
+
+The pre-registered external-validity gate reaches its verdict. Evaluated on `leaderboard.json`
+(generated 2026-07-29), recomputed by `hypo_eval.py` and cross-checked against the raw CSVs.
+Publication was due 2026-07-27 and is recorded here on 07-29; the data pipeline was continuous
+and unaffected throughout.
+
+**Verdict: the exit edge did NOT survive out-of-sample. Gate 1 FAILS.**
+
+- **H-EX1 (+10% limit exit) — refuted, and refuted in the negative direction.** n_post = 309;
+  avg net/trade **−5.9%** vs same-day-close baseline **−2.9%**; **Δ −3.0pp**; pooled 95% CI
+  **[−4.4, −1.5]**; cluster CI **[−6.0, −0.6]** (both exclude zero); effective N = **16 names**,
+  **5/16** favor the rule (no name-majority); stability **stable**, 5.1 weeks live. The rule does
+  not merely fail to beat the same-day close — it loses to it significantly, and the loss survives
+  the H-IND1 ticker-clustering correction.
+- **Sign history — why pre-registration was the whole point:** **+1.7pp (n=30) → −2.1pp (n=200) →
+  −3.0pp (n=309)**. The in-sample read was +8% median. The forward sign inverted and then
+  stabilised as n grew. An unregistered version of this project would have shipped the +1.7pp.
+- **Selection filters (H-F1–F4, H-CLEAN) — no edge.** All mature (n 214–317, 5.3 weeks) and all
+  Δ between −0.1 and +0.1pp with every pooled and cluster CI straddling zero.
+- **v0.3 exit family — no better.** H-V3-EX5 (+10% target / −20% stop) is significantly negative
+  (n_post 61, Δ **−6.5pp**, CI [−10.8, −2.3], cluster CI [−10.0, −2.8], 15/54 names favor).
+  H-V3-EX1/EX2/EX3/EX4 remain **immature** (`stability: building`, 2.3 weeks) — their third
+  consecutive weekly snapshot lands with the **2026-08-01** report.
+- **Multiplicity, stated plainly:** across 11 live rules there are 6 positive point estimates
+  against **5.5 expected by chance**, and the only 2 results clearing significance are both
+  **negative**. That is the signature of no effect.
+
+**Decision (MONETIZATION-GATE.md): Gate 1 FAILED → No-Go.** Gates 2–4 are not opened. ThePickLog
+remains a personal, transparent research instrument. The verifiable record — including this
+published null — is the artifact. This is the process working exactly as designed: it stopped us
+selling noise.
+
+**Scope of the verdict (do not over-read it either).** This refutes *this screen's* exit rule and
+current selection filters on the graded record to date. The whole live log spans 2026-06-09 →
+2026-07-29, so per PRINCIPLES P5 the honest statement is *no edge in this screen, at this N, in
+this regime* — not that no edge could ever exist.
+
+**Two corrections shipped alongside this verdict (both found while auditing it):**
+
+1. **`exit_sim.py` was inflating every bar-priced exit rule — fixed.** The exit study reported the
+   same-day-close baseline as **+8.0%** avg net when the true value is **−2.9%**. Cause: for the 65
+   graded picks predating grade-time path capture, the study **re-fetched daily bars live**. A
+   re-fetch returns *split-adjusted* prices while `entry_open` was recorded *unadjusted* at grade
+   time, so a single reverse split injects a four-figure return — which inflated the mean of every
+   rule that exits at a bar price (same-day close, hold-to-5d, day-N close, both trailing rules,
+   H-EX5a/b, H-EX7) while leaving target/stop rules (whose exit price is capped at the level)
+   untouched. That is why the defect looked selective. The re-fetch fallback contradicted
+   PRINCIPLES P1 (`paths.csv` is captured once and never re-pulled) and has been removed: the study
+   now replays **only** the append-only grade-time record, and every pick must additionally
+   reconcile — `bars[0]` must reproduce the stored `ret_open_close_net` to within 0.05pp or the pick
+   is dropped and counted. **Effect: n 399 → 379 (65 excluded, 0 unreconciled), same-day close now
+   reads −2.9% and equals `outcomes.csv` by construction, and every ⭐ marker disappears — with
+   correct data, no exit rule in the study beats the same-day close.** This matters beyond the
+   report: MONETIZATION-GATE **Gate 2 is defined on the `exit_sim.py` path-walked number**, so the
+   gate's own reference metric had been untrustworthy, and three arms were spuriously starred.
+2. **The "float-dominated" structural claim was wrong — corrected.** The validity write-ups stated
+   that because the .35 rvol sub-score is near-inert (81% of picks below 10), the composite is
+   "effectively float-dominated." The premise holds (84% below 10 on current data) but the
+   conclusion inverts the truth. On the v0.2 cohort `float_score` is **almost perfectly constant
+   (mean 99.92, sd 0.26)** and `price_score` is **exactly constant (sd 0.00)**, because a fixed
+   16-name ultra-low-float universe maxes both out — so **40% of the nominal weight (float .30 +
+   price .10) cannot affect the ranking at all**, contributing **0.0%** of score variance. The live
+   inputs are rvol (54.8% of variance) and gap (45.2%), and by rank correlation the score is
+   **gap-dominated**: ρ(score, gap) **+0.925** vs ρ(score, rvol) **+0.576** vs ρ(score, float)
+   **+0.081**. Rvol is not inert so much as *rarely activated but decisive when it fires*; **float
+   is the dead input.** Corrected in the empirical-studies and §15 dossier docs.
+   **New structural finding from the same check:** the composite measures *different things in the
+   two cohorts*. On v0.3 (market-wide) float becomes live and rvol takes over — variance shares
+   rvol **66.0%** / float **26.4%** / gap **7.6%**, rank correlations rvol **+0.738** / float
+   **+0.529** / gap **+0.395**. So the A–D tier scale is **not comparable across cohorts**, which
+   also explains why v0.3 is ~83% tier A. Registered forward as **H-STR3**.
+
 ## 2026-07-22 — Weekly verifiability audit — **✅ All claims verify**
 
 Manual functional-test run of the rewritten audit workflow (log-primary delivery + commit/push + issue-on-failure), executed off the Saturday cadence. Live site fetched same-origin from https://thepicklog.vercel.app; every value recomputed from the raw CSVs. All six data checks pass and the six-aspect validity labelling is honest.

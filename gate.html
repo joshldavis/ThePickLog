@@ -83,6 +83,18 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 
 <div class="wrap">
   <h1>Gate 1 — does the edge survive out-of-sample?</h1>
+  <div class="verdict" style="border-color:#5a2a33;background:#241318">
+    <h2 class="neg" style="margin:.1em 0 .3em">Verdict &middot; 2026-07-29: Gate 1 FAILED &mdash; the edge did not survive.</h2>
+    <p class="muted" style="margin:0 0 8px">The pre-registered evaluation window has closed. <b>H-EX1 finished significantly
+    negative</b> out-of-sample: n=309, &Delta; &minus;3.0pp vs the same-day close, pooled 95% CI [&minus;4.4, &minus;1.5],
+    cluster CI [&minus;6.0, &minus;0.6], 5 of 16 names favoring it. No selection filter showed an edge. Across 11 live rules
+    there are 6 positive point estimates against 5.5 expected by chance, and both significant results are negative.</p>
+    <p class="muted" style="margin:0">This is the pre-registered null, <b>confirmed</b> &mdash; the process working as designed.
+    Per <a href="HYPOTHESES.md">the registry</a>, monetization is <b>No-Go</b> and the model stays labelled unvalidated.
+    Scope: this refutes <i>this</i> screen's exit rule and current filters at this sample and in this regime &mdash; it is not a
+    claim that no edge could ever exist. The boxes below keep recomputing live from the public log, so they will drift
+    past the numbers frozen here.</p>
+  </div>
   <p class="lead">Monetization is <b>downstream</b> of this gate, never a parallel track — there is nothing to sell until the pre-registered edge survives the forward test. The honest prior is that it <b>won't</b>, and that's a success of the process, not a failure. Every box below is computed live from the public log; nothing is a matter of opinion. See the full framework in <a href="method.html">the method</a>.</p>
   <div id="root"><p class="muted">Loading the live leaderboard…</p></div>
   <p class="foot" id="foot"></p>

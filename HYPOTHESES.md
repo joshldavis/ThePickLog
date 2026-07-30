@@ -377,3 +377,145 @@ to `paper_trades.csv` (forward-only, verifiable).
 ---
 *Pre-registration, not investment advice. The forward log (picks.csv/outcomes.csv) is the
 only judge; everything here is a hypothesis until post-registration data says otherwise.*
+
+---
+
+## Registration batch #5 — frozen 2026-07-29
+
+Three registrations arising from the **2026-07-29 full audit**, which evaluated six previously
+registered-but-never-computed hypotheses (H-REG, H-SI, H-DIL, H-SUB1, H-STR1, H-CTRL) and audited
+the exit study. **Provenance, stated plainly: the motivating patterns below were found by looking
+at the existing log.** Under P2 that makes them *variable selection*, not evidence — which is
+exactly why they are frozen here with a date before any of them is allowed to mean anything. Only
+picks with `trading_date` **after 2026-07-29** count. In-sample numbers are quoted solely to record
+what motivated the guess and how large an effect would have to be to matter.
+
+The audit's headline context: **Gate 1 has already failed** (H-EX1 significantly negative). These
+are not an attempt to rescue it. Two are genuinely open questions with a mechanism; one is a
+structural question about the scoring model.
+
+### H-DIL2 — skip names carrying an active offering or shelf (SELECTION)
+
+**Rule (frozen).** Keep only picks whose point-in-time EDGAR `dilution_flag` is `none`; skip
+`offering` and `shelf`. Judged on **avg net/trade vs the unfiltered baseline**, same-day-close
+exit, on the **v0.3-yf cohort only** (the v0.2 fixed-16 record is a closed cohort per H-UNIV1).
+Machine-registered in `hypotheses/registry.json` so the leaderboard scores it automatically.
+
+**Mechanism (why this is not pure data-mining).** A live offering or shelf is dilution overhang: an
+issuer with an effective registration can and does sell into exactly the retail volume spike this
+screen selects for. That caps the pop and supplies persistent offer-side pressure. This is a
+directional prediction from a stated mechanism, not a pattern with a story bolted on afterwards.
+
+**Motivating in-sample split (H-DIL, evaluated for the first time 2026-07-29, all graded picks
+carrying the flag, n=343, ticker-clustered CIs).** `offering` mean **−3.02%** (CI [−5.43, −0.81]) ·
+`shelf` **−4.31%** (CI [−6.17, −2.71]) · `none` **+1.79%** (CI [−3.66, +21.79], n=54 across 13
+tickers). Keeping `none` only: Δ **+4.56pp** vs all, CI [−0.44, +23.96] — **not significant**, and the
+interval is so wide it is nearly uninformative. `catalyst_type` points the same way (`none`
+−1.38% ns vs `8K` −4.69%, `filing` −3.80%, `offering` −4.44%, all significantly negative).
+
+**Registered prior: skeptical-but-curious.** The point estimate is the largest in the dataset and
+the mechanism is real, but (a) the CI is enormous, (b) `none` is the smallest bucket and is
+plausibly just "names EDGAR had nothing recent on," which correlates with being less promoted, and
+(c) five of five previously registered selection filters came back flat. **Pass requires** ≥ 30
+post-registration graded v0.3 picks in the kept subset, Δ > 0 vs baseline, direction stable across
+≥ 3 consecutive weekly snapshots, **and** survival of the H-IND1 cluster bootstrap plus a
+per-ticker majority. The ~+1pp/trade noise floor applies: a Δ under ~+1pp is treated as noise even
+if nominally positive.
+
+**Not registered (deliberately):** the "clean EDGAR" conjunction (`dilution_flag == none` **and**
+`catalyst_type == none`) showed the largest in-sample effect of all (n=28, mean +6.39%, Δ +9.16pp,
+CI [−0.91, +62.36]) and is **left unregistered** because n=28 across 8 tickers with a 63-point-wide
+interval is not a testable claim, and registering both it and H-DIL2 would be two shots at the same
+mechanism. If H-DIL2 survives, the conjunction can be registered separately afterwards.
+
+### H-SHORT1 — is the 5-session fade tradeable from the short side? (EXIT / DIRECTION)
+
+**Rule (frozen).** On **v0.3-yf** picks after 2026-07-29: hypothetical short at the entry session's
+open, cover at the close of the 5th session, with a hard **−25% adverse stop** (i.e. cover if the
+price rises 25% above entry; conservative same-session convention — if a session's range spans both
+the stop and the target, **the stop is assumed to fill first**, as everywhere else in this file).
+Costs: the standard 2% round-trip haircut **plus an explicit borrow accrual** at a disclosed
+annualized rate applied per session held. Position sizing for any reported equity curve is capped
+at **2% of notional per trade**.
+
+**Why this is registered at all.** The 2026-07-29 audit found that the single most robust fact in
+the entire dataset is not an edge but a **decline**: over a 5-session hold these names fall about
+6–7% on average, and it survives everything — on v0.2, **15 of 16 tickers** have a negative mean,
+**7 of 7 weeks** are negative, and leave-one-ticker-out moves the mean only within
+[−3.10, −2.63]; on v0.3, **54 of 67 tickers** are negative with a median of −13.2%. The honest
+question that raises is whether the fade is monetizable from the other side. Registering it is the
+only legitimate way to find out.
+
+**Registered prior: strongly skeptical — expected to fail, for four stated reasons.**
+1. **It already failed to generalize.** The positive expectancy exists only on the closed v0.2
+   cohort (5-day short ≈ **+5.21%/trade** net of 2%, cluster CI ≈ [**+0.85, +9.58**] — note the lower
+   bound sits *below* the Gate-2 floor of +1.0%). Pooled across both cohorts the CI is
+   ≈ [**−1.19, +8.57**] and **no longer excludes zero**, and on v0.3 alone the mean is
+   **negative (−2.67%)** despite a **+11.20%** median, because the right tail eats it. H-UNIV1
+   exists to catch exactly this, and it caught it.
+2. **The tail is ruinous.** Skew −2.3 (v0.2) to −6.3 (v0.3). Worst single 5-session short outcomes
+   in the log: **DFNS −665%, STAK −195%, CUPR −175%, JLHL −124%, CJMB −106%**; six v0.2 trades worse
+   than −50%. A sequential-compounding sketch grows at 2/5/10% of equity per trade and goes to
+   **zero at 25%**. The −25% stop above is what makes the rule testable at all; it will also be
+   gapped through on exactly the names that matter.
+3. **Borrow and locate are probably decisive, and are not modelled by the 2% haircut.** At the point
+   estimate the v0.2 5-day short survives borrow up to ~200%/yr (+0.04%/trade at 200%). But sub-$5
+   low-float names are routinely hard-to-borrow *when locatable at all*, short-sale restriction
+   binds after −10% from the prior close, and halts are common. **Availability, not cost, is the
+   binding constraint** — which is why locate feasibility is a disclosed field of this test, not an
+   afterthought.
+4. **It is post-hoc.** It was found by inspecting the same log it would be judged on, which is why
+   only post-2026-07-29 picks count.
+
+**Pass requires all of:** ≥ 30 post-registration graded v0.3 picks; **both the mean and the
+trimmed mean (10% each tail) and the median** positive net of the 2% haircut *and* a disclosed
+borrow accrual — the mean alone is explicitly **not** sufficient, because the right tail controls it;
+direction stable ≥ 3 consecutive weekly snapshots; survival of the H-IND1 cluster bootstrap **and**
+a per-ticker majority; and a stated locate-feasibility rate. **Explicit measurement caveat:** this
+is a *hypothetical* short computed from committed daily bars. It is a research measurement, **not a
+strategy, not a recommendation, and not authorization for any live or short position** — no
+short is executed anywhere in this project, in paper or in live money.
+
+### H-STR3 — does the four-factor composite add anything over gap alone? (STRUCTURAL)
+
+**Rule (frozen).** Compare the ranking produced by the live composite score against a **gap-only**
+ranking, on post-2026-07-29 picks, per cohort. The composite "adds information" only if it
+separates outcomes better than gap alone by a pre-stated margin: the composite's
+top-vs-bottom-half spread in avg net/trade must exceed the gap-only spread by **≥ 1pp**, with the
+direction holding on the H-IND1 cluster bootstrap. Reported per cohort and **never pooled**.
+
+**Motivation (2026-07-29 audit).** The composite is a four-factor label over what is, in practice,
+one or two live factors — and *which* factors are live depends on the universe. On v0.2:
+`float_score` sd **0.26**, `price_score` sd **0.00** ⇒ 40% of nominal weight contributes **0.0%** of
+variance; live variance rvol **54.8%** / gap **45.2%**; rank correlation ρ(score, gap) **+0.925** vs
+rvol **+0.576** vs float **+0.081**. On v0.3: variance rvol **66.0%** / float **26.4%** / gap
+**7.6%**; ρ rvol **+0.738** / float **+0.529** / gap **+0.395**. **The same formula is a different
+ranking construct in each cohort**, and ~83% of v0.3 picks are tier A.
+
+**Registered prior: the composite adds nothing over gap alone on v0.2, and the cohorts are not
+comparable.** If that is confirmed, the honest response is to simplify the published model
+description — not to re-fit weights (P2 forbids promoting an in-sample fit; any re-derivation is
+H-STR2's job, with its own forward window). **Two-sided and diagnostic:** this is a structural
+claim about what the score measures, not a performance claim, and it cannot produce a
+buy/sell rule either way.
+
+### Amendment to H-CTRL (control capture) — 2026-07-29
+
+H-CTRL has been unanswerable because no forward outcome was ever captured for the control pool.
+`candidates.csv` holds 3,867 rows, but `eligible` is a **reason code, not a boolean**: only **165
+rows are eligible**, of which **133 were published (an 81% publish rate)**, leaving **32
+eligible-but-unpublished controls across 9 trading days, none graded.** `grade_controls.py`
+(added 2026-07-29) now grades the unpublished eligibles forward into `control_outcomes.csv`
+(append-only, forward-only, graded from the same fetch that establishes the entry — so entry and
+outcome are internally consistent, exactly as `outcomes.csv` is produced for picks).
+
+**Two limitations registered now, before any control comparison is read:**
+1. **The publish rate is ~81%, so the control pool is small and not a random sample** — controls are
+   by construction the *lowest-scoring* eligible names each day (the screen publishes the top 10 by
+   score). Any screened-vs-unscreened comparison is therefore confounded with score rank and must
+   be read as "top-10 vs the eligible remainder," never as "screened vs comparable unscreened."
+2. **Quote-budget truncation.** **707 candidate rows (18%) were never priced at all**, rejection
+   reason `quote_budget` — the scan exhausts its quote allowance before evaluating them. This is a
+   silent, previously undocumented selection effect on the v0.3 cohort. It is **disclosed rather
+   than fixed** for now: raising the budget changes the universe definition, and H-UNIV1 freezes
+   that definition, so a change requires a new registration rather than a quiet tweak.

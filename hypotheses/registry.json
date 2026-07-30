@@ -1,7 +1,12 @@
 {
   "_note": "Frozen, append-only registry of pre-registered hypotheses — the machine-readable analog of HYPOTHESES.md. Rules must never be edited or deleted, only retired. Only picks logged AFTER registered_at count toward the out-of-sample score. Seeded with the site's own house rules (self-only preview); user rules append here in Phase 1.",
   "schema_version": 1,
-  "config": { "min_n": 30, "min_keep_frac": 0.15, "boot_iters": 4000, "seed": 7 },
+  "config": {
+    "min_n": 30,
+    "min_keep_frac": 0.15,
+    "boot_iters": 4000,
+    "seed": 7
+  },
   "hypotheses": [
     {
       "id": "H-F1",
@@ -9,11 +14,21 @@
       "author": "house",
       "registered_at": "2026-06-22",
       "kind": "filter",
-      "selection": { "op": "and", "predicates": [
-        { "field": "price_at_screen", "cmp": ">=", "value": 1.0 }
-      ]},
+      "selection": {
+        "op": "and",
+        "predicates": [
+          {
+            "field": "price_at_screen",
+            "cmp": ">=",
+            "value": 1.0
+          }
+        ]
+      },
       "exit": "same_day_close",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-F2",
@@ -21,11 +36,21 @@
       "author": "house",
       "registered_at": "2026-06-22",
       "kind": "filter",
-      "selection": { "op": "and", "predicates": [
-        { "field": "float_shares", "cmp": "<", "value": 3000000 }
-      ]},
+      "selection": {
+        "op": "and",
+        "predicates": [
+          {
+            "field": "float_shares",
+            "cmp": "<",
+            "value": 3000000
+          }
+        ]
+      },
       "exit": "same_day_close",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-F3",
@@ -33,11 +58,21 @@
       "author": "house",
       "registered_at": "2026-06-22",
       "kind": "filter",
-      "selection": { "op": "and", "predicates": [
-        { "field": "gap_pct", "cmp": "<", "value": 20 }
-      ]},
+      "selection": {
+        "op": "and",
+        "predicates": [
+          {
+            "field": "gap_pct",
+            "cmp": "<",
+            "value": 20
+          }
+        ]
+      },
       "exit": "same_day_close",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-F4",
@@ -45,11 +80,24 @@
       "author": "house",
       "registered_at": "2026-06-22",
       "kind": "filter",
-      "selection": { "op": "and", "predicates": [
-        { "field": "tier", "cmp": "not_in", "value": ["A", "B"] }
-      ]},
+      "selection": {
+        "op": "and",
+        "predicates": [
+          {
+            "field": "tier",
+            "cmp": "not_in",
+            "value": [
+              "A",
+              "B"
+            ]
+          }
+        ]
+      },
       "exit": "same_day_close",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-CLEAN",
@@ -57,14 +105,39 @@
       "author": "house",
       "registered_at": "2026-06-22",
       "kind": "filter",
-      "selection": { "op": "and", "predicates": [
-        { "field": "price_at_screen", "cmp": ">=", "value": 1.0 },
-        { "field": "float_shares", "cmp": "<", "value": 3000000 },
-        { "field": "gap_pct", "cmp": "<", "value": 20 },
-        { "field": "tier", "cmp": "not_in", "value": ["A", "B"] }
-      ]},
+      "selection": {
+        "op": "and",
+        "predicates": [
+          {
+            "field": "price_at_screen",
+            "cmp": ">=",
+            "value": 1.0
+          },
+          {
+            "field": "float_shares",
+            "cmp": "<",
+            "value": 3000000
+          },
+          {
+            "field": "gap_pct",
+            "cmp": "<",
+            "value": 20
+          },
+          {
+            "field": "tier",
+            "cmp": "not_in",
+            "value": [
+              "A",
+              "B"
+            ]
+          }
+        ]
+      },
       "exit": "same_day_close",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-EX1",
@@ -72,9 +145,15 @@
       "author": "house",
       "registered_at": "2026-06-23",
       "kind": "exit",
-      "selection": { "op": "and", "predicates": [] },
+      "selection": {
+        "op": "and",
+        "predicates": []
+      },
       "exit": "target_10",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-V3-EX1",
@@ -83,9 +162,15 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "cohort": "v0.3",
-      "selection": { "op": "and", "predicates": [] },
+      "selection": {
+        "op": "and",
+        "predicates": []
+      },
       "exit": "target_10",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-V3-EX2",
@@ -94,9 +179,15 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "cohort": "v0.3",
-      "selection": { "op": "and", "predicates": [] },
+      "selection": {
+        "op": "and",
+        "predicates": []
+      },
       "exit": "target_5",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-V3-EX3",
@@ -105,9 +196,15 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "cohort": "v0.3",
-      "selection": { "op": "and", "predicates": [] },
+      "selection": {
+        "op": "and",
+        "predicates": []
+      },
       "exit": "target_15",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-V3-EX4",
@@ -116,9 +213,15 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "cohort": "v0.3",
-      "selection": { "op": "and", "predicates": [] },
+      "selection": {
+        "op": "and",
+        "predicates": []
+      },
       "exit": "target_20",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     },
     {
       "id": "H-V3-EX5",
@@ -127,9 +230,38 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "cohort": "v0.3",
-      "selection": { "op": "and", "predicates": [] },
+      "selection": {
+        "op": "and",
+        "predicates": []
+      },
       "exit": "target_10_stop_20",
-      "claim": { "metric": "expectancy", "direction": "beats_baseline" }
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
+    },
+    {
+      "id": "H-DIL2",
+      "title": "skip names with an active offering or shelf (EDGAR dilution_flag)",
+      "author": "house",
+      "registered_at": "2026-07-29",
+      "kind": "filter",
+      "cohort": "v0.3-yf",
+      "selection": {
+        "op": "and",
+        "predicates": [
+          {
+            "field": "dilution_flag",
+            "cmp": "==",
+            "value": "none"
+          }
+        ]
+      },
+      "exit": "same_day_close",
+      "claim": {
+        "metric": "expectancy",
+        "direction": "beats_baseline"
+      }
     }
   ]
 }

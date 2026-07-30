@@ -61,7 +61,36 @@ The live score is a **compensatory** linear blend (a thin float can offset weak 
 
 The curve is **flat-to-non-monotonic**: no clean outcome break sits at 75, 60, or 45. The cutpoints are not justified by the data — they are arbitrary intensity bands, and should be described as such (as now shipped in the tier re-label).
 
-**The weight finding (the sharper one).** The nominal weights are float .30 / **rvol .35** / gap .25 / price .10 — rvol carries the *largest* weight. But among graded picks the rvol sub-score has **median 1.2, mean 10.7, and 81% score below 10**; only 7% reach ≥60. **The largest-weighted input is almost always near zero**, so the composite is effectively **float-dominated** and the .35 rvol weight is largely inert. This makes sense mechanically — an end-of-day screen rarely catches a live intraday volume spike — but it means the weight scheme does not reflect the inputs' actual information content. **Structural verdict: both cutpoints and weights are unjustified by evidence; the score is, in effect, a float-and-gap intensity index wearing a four-factor label.** Registered forward as **H-STR1** (float-only score parity) and **H-STR2** (re-derived weights/cutpoints), §4 — never re-fit and shipped in-sample.
+**The weight finding (the sharper one).** — **CORRECTION 2026-07-29: the original version of
+this paragraph reached the wrong conclusion and is restated here. The superseded text read: "the
+composite is effectively float-dominated and the .35 rvol weight is largely inert … the score is,
+in effect, a float-and-gap intensity index."** The premise was right, the inference inverted.
+
+The nominal weights are float .30 / **rvol .35** / gap .25 / price .10. The rvol sub-score is indeed
+mostly asleep: median 0.9, **85% of picks score below 10** on the v0.2 cohort. But rvol is not the
+dead input — **float is.** On v0.2, `float_score` is almost perfectly constant (**mean 99.92,
+sd 0.26**) and `price_score` is *exactly* constant (**sd 0.00**), because a fixed 16-name
+ultra-low-float universe maxes both out on every pick. A constant cannot rank anything, so
+**40% of the nominal weight (float .30 + price .10) contributes 0.0% of the score's variance and
+cannot affect the ordering at all.** The two live inputs are rvol (**54.8%** of weighted variance)
+and gap (**45.2%**), and by rank correlation the ordering is **gap-dominated**:
+ρ(score, gap) **+0.925**, ρ(score, rvol) **+0.576**, ρ(score, float) **+0.081**. So rvol is best
+described as *rarely activated but decisive when it fires* — its large weight is idle 85% of the
+time, which is why gap wins the rank correlation despite carrying a smaller weight.
+
+**The composite also measures different things in different universes.** Re-running the same
+decomposition on the v0.3-yf market-wide cohort inverts the picture: float becomes live and rvol
+takes over — weighted-variance shares rvol **66.0%** / float **26.4%** / gap **7.6%**, rank
+correlations rvol **+0.738** / float **+0.529** / gap **+0.395**. Because the criteria-defined v0.3
+universe admits names across a real float range while pushing gap and rvol near their caps, the
+same formula produces a *different ranking construct* per cohort — and ~83% of v0.3 picks land in
+tier A. **Consequence: the A–D tier scale is not comparable across cohorts**, and any cross-cohort
+statement about tiers is invalid. **Structural verdict (unchanged in direction, sharpened): the
+cutpoints and weights remain unjustified by evidence, and the four-factor label overstates the
+model — on v0.2 it is a gap-and-rvol intensity index with two inert inputs, and on v0.3 it is a
+different index again.** Registered forward as **H-STR1** (float-only parity), **H-STR2**
+(re-derived weights/cutpoints) and **H-STR3** (does the composite add anything over gap alone) —
+never re-fit and shipped in-sample.
 
 ---
 

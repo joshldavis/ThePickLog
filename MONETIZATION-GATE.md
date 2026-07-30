@@ -15,6 +15,30 @@ The honest prior: per HYPOTHESES.md, *most patterns in 52 in-sample picks will n
 OOS.* So the base-rate expectation for Gate 1 is **fail → stay personal.** Everything below is
 conditional on beating that prior.
 
+## Gate-1 verdict — 2026-07-29: **FAILED → No-Go** (decision recorded)
+
+The late-July decision tree resolves to its base-rate branch. On `leaderboard.json` (2026-07-29):
+H-EX1 n_post 309, avg −5.9% vs baseline −2.9%, **Δ −3.0pp**, pooled CI [−4.4, −1.5] and cluster CI
+[−6.0, −0.6] both excluding zero, 5/16 names favor, stability stable. The pre-registered exit edge
+is **significantly negative** out-of-sample and survives the clustering correction. Selection
+filters show no edge. Across 11 rules: 6 positive point estimates vs 5.5 expected by chance, 2
+significant, both negative.
+
+**Decision: No-Go.** Gate 1 is the binding gate and it failed, so Gates 2–4 stay closed. ThePickLog
+remains a personal research instrument. This is the "success of the process" outcome anticipated on
+2026-06-25 — the forward log refused to confirm the edge, so there is nothing to sell, and the
+honest record (now including a published null) was always the only real moat.
+
+**Gate 2's reference metric was broken and is now fixed.** Gate 2 sets its floor on the
+`exit_sim.py` path-walked number (≥ +1.0%/trade). That file was inflating every bar-priced rule via
+a live bar re-fetch against unadjusted stored entries; the same-day-close baseline read +8.0% when
+it is −2.9%. Fixed 2026-07-29 (paths-only + per-pick reconciliation). **After the fix no exit rule
+in the study beats the same-day close at all**, so nothing is within ~4pp of the Gate-2 floor. Any
+future Gate-2 evaluation must use the corrected file.
+
+**Re-open this file only if** a *new* pre-registered hypothesis clears the H-EX1 bars on its own
+forward log — not on a re-cut of the data that produced this verdict.
+
 ## Gate 1 — Does the edge survive out-of-sample? (inherits HYPOTHESES.md)
 
 This is already pre-registered; monetization just adopts it verbatim so we can't move the

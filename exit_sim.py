@@ -221,25 +221,36 @@ def main():
 
     paths = load_paths()  # pick_id -> grade-time bars (the reproducible source)
     results = {r["name"]: [] for r in RULES}
-    used = from_record = 0
+    used = from_record = no_path = unreconciled = 0
     for o in graded:
         entry = _f(o.get("entry_open"))
         bars = paths.get(o.get("pick_id"))
-        if bars:
-            from_record += 1
-        else:
-            try:
-                bars = fetch_bars(o["ticker"], o["trading_date"])
-            except Exception as e:
-                print(f"  fetch skip {o['ticker']} {o['trading_date']}: {type(e).__name__}")
+        # DATA-INTEGRITY FIX (2026-07-29): never re-fetch bars for a historical pick.
+        # A live re-fetch returns SPLIT-ADJUSTED prices while entry_open was recorded
+        # unadjusted at grade time, so a single reverse split produced a spurious
+        # four-figure return and inflated every bar-priced rule's mean (the
+        # "+8.0% same-day close" defect). paths.csv is the append-only, forward-only
+        # record (PRINCIPLES P1: captured once, never re-pulled) — it is the ONLY source.
         if not bars:
+            no_path += 1
+            continue
+        from_record += 1
+        # RECONCILIATION GUARD: bars[0] must reproduce the stored same-day net exactly.
+        # Anything else means the bars and the outcome disagree (adjustment, wrong
+        # session, bad row) — drop the pick loudly rather than average it in.
+        stored = _f(o.get("ret_open_close_net"))
+        if stored is None or abs(net(entry, bars, {"type": "close0"}) - stored) > 0.05:
+            unreconciled += 1
             continue
         used += 1
         tier = (picks.get(o.get("pick_id")) or {}).get("tier", "")
         for r in RULES:
             results[r["name"]].append(net(entry, bars, resolve_rule(r, tier)))
 
-    _write_report(results, used, len(graded), from_record)
+    if no_path or unreconciled:
+        print(f"  excluded: {no_path} without a grade-time path, {unreconciled} failed reconciliation")
+    _write_report(results, used, len(graded), from_record,
+                  no_path=no_path, unreconciled=unreconciled)
 
 
 def _agg(xs):
@@ -249,18 +260,27 @@ def _agg(xs):
     return (wr, st.mean(xs), st.median(xs))
 
 
-def _write_report(results, used, n_graded, from_record=0):
+def _write_report(results, used, n_graded, from_record=0, no_path=0, unreconciled=0):
     from datetime import datetime
-    fetched = used - from_record
-    prov = (f"{from_record} from the append-only grade-time record (paths.csv), {fetched} "
-            "re-fetched (picks that predate path capture)")
+    excl = []
+    if no_path:
+        excl.append(f"{no_path} excluded for having no grade-time path (predate path capture)")
+    if unreconciled:
+        excl.append(f"{unreconciled} excluded for failing reconciliation against outcomes.csv")
+    prov = ("every bar comes from the append-only grade-time record (paths.csv); "
+            + ("; ".join(excl) if excl else "nothing excluded"))
     L = ["# ThePickLog — exit-rule study · " + datetime.utcnow().date().isoformat(), "",
          f"Daily-resolution replay of **{used}** graded picks (of {n_graded}). Conservative "
          "same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / "
          "exploratory** — a chosen rule must be pre-registered and validated forward.", "",
-         f"_Bar provenance: {prov}. Grade-time paths are reproducible from committed data; "
-         "re-fetched bars can drift if Yahoo revises history, so they converge to the "
-         "append-only source as the record matures._", "",
+         f"_Bar provenance: {prov}. **No bar is ever re-fetched live.** A re-fetch returns "
+         "split-adjusted prices while `entry_open` was recorded unadjusted at grade time, so one "
+         "reverse split can inject a four-figure return and inflate the mean of every rule that "
+         "exits at a bar price. Fixed 2026-07-29; the previous revision of this file reported the "
+         "same-day-close baseline as +8.0% for that reason. Every pick below is additionally "
+         "reconciled: `bars[0]` must reproduce the stored `ret_open_close_net` to within 0.05pp, "
+         "so the same-day-close row equals outcomes.csv by construction and a stranger can "
+         "check it._", "",
          "| exit rule | n | win% | avg net/trade | median |", "|---|---|---|---|---|"]
     base = None
     rows = []
