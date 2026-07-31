@@ -1,3 +1,63 @@
+# ROADMAP — superseded 2026-07-29
+
+> **Everything below this section predates the Gate-1 verdict and is retained as history.**
+> The picks-product framing it assumes is closed. Read this section first.
+
+## The project is now a testing lab
+
+Gate 1 failed on 2026-07-29: the pre-registered exit edge came out significantly negative
+(H-EX1, n=309, Δ −3.0pp, CI [−4.4,−1.5]), no selection filter showed an edge, and follow-up
+sweeps closed both remaining directions — **selection** (58 tests, 0 surviving BH-FDR, every
+apparent positive traceable to one stock) and **timing** (no entry point in the window has
+positive drift, so no exit rule can manufacture positive expectancy). The one established
+predictive relationship is H-RISK1: the score ranks **magnitude, not direction**, which is
+volatility persistence and is not tradeable on its own.
+
+**Consequence:** this project cannot produce alpha, and further search for it is not planned.
+What it *can* produce, on demand and indefinitely, is **rigorous verdicts on trading claims**.
+That is now the product.
+
+### Positioning
+*ThePickLog tests what's being sold to retail traders, in public, before the fact, and publishes
+the answer either way.* The credibility asset is that **we tested ourselves first and published
+the failure** — Experiment 01. That is why the series can credibly test anyone else.
+
+### The experiment pipeline
+Each experiment: a claim → a rule frozen with a date → forward-only grading against a
+**day-matched control** → proper statistics (clustered CIs, multiplicity stated) → a verdict
+published either way, whichever way it lands.
+
+- **Experiment 01 — our own low-float momentum screen. FAILED.** Published: `experiment-01.html`,
+  AUDIT_LOG 2026-07-29, MONETIZATION-GATE No-Go.
+- **Experiment 02 — the 2-period RSI "high win rate" trade. RUNNING.** Registered 2026-07-29
+  (HYPOTHESES batch #7), `rsi2_scanner.py`, `experiment-02.html`. First verdict ~2026-09.
+- **Running in parallel:** H-RISK1/H-RISK2 (`risk_eval.py`), H-DIL2, H-SHORT1, H-STR3, and the
+  v0.3 exit family maturing 2026-08-01.
+
+### Selection rules for future experiments
+1. **Publicly documented technique, not a named person.** Testing a published method is a
+   technique evaluation; grading a named operator's claimed returns is a claim about that person's
+   honesty and needs counsel first (the `WEDGE-accountability.md` gate, still closed).
+2. **A universe where costs do not swallow the signal.** Experiment 01's fatal flaw was structural:
+   ~2% friction against <1% drift. Prefer liquid instruments where a real effect is detectable.
+3. **A day-matched control from day one.** No experiment ships without one again.
+4. **Frequent enough signals to reach n≥30 in weeks, not years.** Rules out slow signals like
+   golden crosses as opening experiments.
+5. **A claim someone is actually selling.** The point is public relevance, not novelty.
+
+### Explicitly NOT planned
+Re-running the microcap hypotheses on a wider universe hoping for a different answer; any paid
+picks or signal product (Gate-1 No-Go); the exit-discipline course (the exit is what failed);
+Phase-2 paid float feed. Expanding the universe is worthwhile **only** to create more testable
+claims, never as a second attempt at the trading dream.
+
+### Open, Josh-owned
+The 15–20 "Verified-by" demand interviews (kit built: `ThePickLog-Demand-Interview-Kit-2026-07-29.md`)
+— unblocked by Gate 1 landing, and the only thing that decides the B2B question. Counsel review
+before any named-operator testing or any revenue.
+
+---
+
 # ThePickLog — Roadmap
 
 **Updated:** 2026-07-02 (rev 3) · **Framing:** personal instrument (not a product — no subscribers,

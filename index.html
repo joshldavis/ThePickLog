@@ -470,13 +470,14 @@
 <section class="view active" id="view-landing">
   <div class="wrap">
     <div class="hero">
-      <h1>The stock-alert record you can actually verify.<br>Starting with our own.</h1>
-      <p class="lead">Most trading track records are winners-only screenshots. ThePickLog logs every pick before the open, grades winners <i>and</i> losers automatically, and publishes a record anyone can check — no black box, no cherry-picking, nothing we can quietly delete. It's a transparent research log, not a live trade-alert service: every pick is timestamped before the outcome is known, then graded in public.</p>
+      <h1>We test what's being sold to traders.<br>Starting with our own strategy.</h1>
+      <p class="lead">Retail trading runs on claims nobody checks: impressive win rates, screenshots of the good days, backtests fitted to the past. We take a trading claim, freeze the rule with a date <i>before</i> we look, grade it forward on public data, and publish the verdict — including when it's embarrassing. We started with our own screener. It failed, and we published that too.</p>
       <p class="muted" style="color:var(--green);font-weight:600;margin:0 auto 26px">
-        Logged before the open &nbsp;•&nbsp; Graded winners <i>and</i> losers &nbsp;•&nbsp; Re-derivable from public data &nbsp;•&nbsp; Tamper-evident log
+        Rule frozen before the fact &nbsp;•&nbsp; Graded forward, winners <i>and</i> losers &nbsp;•&nbsp; Recomputable from public data &nbsp;•&nbsp; Published either way
       </p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="btn" onclick="go('performance')">See the public track record →</button>
+        <button class="btn" onclick="location.href='experiments.html'">See the experiments →</button>
+        <button class="btn ghost" onclick="go('performance')">The raw track record →</button>
         <button class="btn ghost" onclick="location.href='guide.html'">Read the 7 checks every service should pass →</button>
       </div>
       <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:56ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled →</a></p>
@@ -485,10 +486,11 @@
     <div class="grid kpis" id="landingKpis"></div>
 
     <div class="panel" style="margin-top:26px">
-      <h2 style="margin:0 0 6px">Not another alert service — the scoreboard</h2>
-      <p class="muted" style="font-size:13.5px;margin:0 0 12px">Independent trackers keep finding the same thing: advertised trading records routinely run well above the verified reality — winners posted, losers deleted, "wins" scored at prices nobody could get. So we wrote down what a record a stranger can actually check looks like — seven principles — and we grade ourselves against it in public, including the parts that make us look bad.</p>
+      <h2 style="margin:0 0 6px">Experiment 01: we tested our own screener. It lost.</h2>
+      <p class="muted" style="font-size:13.5px;margin:0 0 12px">We built a screener for low-float stocks gapping up on heavy volume, pre-registered the edge we believed in, and ran it forward for seven weeks. It lost — significantly, and in the opposite direction to our prediction. At 30 trades it looked like it was working; <b>the early positive read was noise</b>, and the sign inverted as the sample grew. That result, the bug we found in our own scoring while checking it, and what we found instead are all published in full.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn" onclick="location.href='trust.html#standard'">The standard we hold ourselves to →</button>
+        <button class="btn" onclick="location.href='experiment-01.html'">Read Experiment 01 →</button>
+        <button class="btn ghost" onclick="location.href='trust.html#standard'">The standard we hold ourselves to →</button>
         <button class="btn ghost" onclick="go('compete');window.setCompeteMode&&setCompeteMode('test')">Or take the Compete challenge →</button>
       </div>
     </div>

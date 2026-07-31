@@ -1,0 +1,2 @@
+signal_id,experiment,captured_at,signal_date,ticker,close,sma200,rsi2,universe_n,rank_in_day
+EXP02-RSI2-2026-07-31-AAPL,EXP02-RSI2,2026-07-31T22:11:54+00:00,2026-07-31,AAPL,308.91,277.9605,3.531,40,1

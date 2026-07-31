@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Experiment 01 — We tested our own stock screener. It lost money.</title>
+<meta name="description" content="We built a low-float momentum screener, pre-registered the edge we believed in, and ran it forward for seven weeks. It lost significantly — in the opposite direction to our prediction. The full result, including the number that flipped sign as the sample grew.">
+<link rel="canonical" href="https://thepicklog.vercel.app/experiment-01.html">
+<meta property="og:title" content="Experiment 01 — We tested our own stock screener. It lost money.">
+<meta property="og:description" content="Pre-registered, graded forward, published either way. The edge we believed in came out significantly negative — and the early positive read was noise.">
+<meta property="og:type" content="article">
+<style>
+  :root{--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:36px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.12}
+  h2{font-size:23px;margin:1.9em 0 .5em;letter-spacing:-.015em}
+  h3{font-size:17.5px;margin:1.6em 0 .4em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18.5px;color:var(--dim);margin-bottom:1.4em}
+  .verdict{border:1px solid #5a2a33;background:#241318;border-radius:14px;padding:18px 20px;margin:24px 0}
+  .verdict .h{font-size:12px;letter-spacing:.1em;color:#ffb3c0;font-weight:800;margin-bottom:6px}
+  .verdict .b{font-size:21px;font-weight:700;line-height:1.35;margin-bottom:8px}
+  .verdict .s{color:var(--dim);font-size:14.5px;margin:0}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+  td.num{font-family:ui-monospace,Menlo,monospace}
+  .neg{color:var(--red)} .pos{color:var(--green)} .amb{color:var(--amber)}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18px;color:var(--tx)}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:22px 0}
+  .box h3{margin-top:0}
+  .box p:last-child{margin-bottom:0}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+  .next{border:1px solid var(--line);background:var(--panel2);border-radius:14px;padding:18px 20px;margin:30px 0 0;display:block;text-decoration:none;color:inherit}
+  .next:hover{border-color:var(--a)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html" class="on">Experiments</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="index.html#validation">Validation</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="trust.html">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <span class="proto">PROTOTYPE</span>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="index.html#validation">Validation</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <span class="no">EXPERIMENT 01 · REGISTERED 2026-06-23 · VERDICT 2026-07-29</span>
+  <h1>We tested our own stock screener. It lost money.</h1>
+  <p class="standfirst">We built a screener for low-float stocks gapping up on heavy volume, wrote down the edge we believed in before we could see whether it worked, and ran it forward for seven weeks. It didn't just fail. It failed in the opposite direction to our prediction — and the early result that made us optimistic turned out to be noise.</p>
+
+  <div class="verdict">
+    <div class="h">VERDICT</div>
+    <div class="b">FAILED. The pre-registered edge is significantly negative out-of-sample.</div>
+    <p class="s">309 post-registration trades · −3.0 percentage points per trade versus the honest alternative · 95% confidence interval [−4.4, −1.5] · holds after correcting for the fact that we were repeatedly betting on the same 16 names.</p>
+  </div>
+
+  <h2>What we claimed</h2>
+  <p>The screen finds stocks that are small, thinly floated, and jumping on unusual volume — the kind of setup an entire industry of alert services and courses is built around. Our own record showed the picks tended to spike early and fade later, so we formed a specific belief: <b>the edge isn't in picking these, it's in getting out of them.</b></p>
+  <p>So on 23 June 2026 we froze a rule. Buy at the opening price. Rest a limit order 10% above it for a five-day hold. If it fills, you're out with roughly +8% after costs. If it never fills, you exit at the fifth day's close. The bar it had to clear was simple and set in advance: <b>beat just selling at the end of the first day.</b></p>
+  <p>Every backtest we had said this was good. In the sample we'd already seen, it produced a 63% win rate and a +8% median return. That is exactly the kind of number that gets put on a sales page.</p>
+
+  <h2>How we made it impossible to quietly cheat</h2>
+  <p>Publishing a strategy after you know it worked is not evidence of anything, so the whole project is built to make that impossible.</p>
+  <p>The rule went into a public file with a date on it. Only trades that happened <i>after</i> that date could ever count. Every pick is written to an append-only log before the market opens, with its price, and the file is sealed into a hash chain so that any later edit to a past entry would be provable. The daily price paths used for grading are captured once, at grading time, and never re-fetched. And the whole thing runs itself on a schedule — nobody decides which days to include.</p>
+  <p class="pull">If you can only check a record when it's flattering, it isn't a record.</p>
+
+  <h2>What happened</h2>
+  <p>This is the part worth sitting with. Here is the same number, measured three times as the sample grew:</p>
+
+  <table>
+    <thead><tr><th>Trades graded</th><th>Edge vs. the simple alternative</th><th>What we'd have concluded</th></tr></thead>
+    <tbody>
+      <tr><td class="num">30</td><td class="num pos">+1.7 pp</td><td>"It's working."</td></tr>
+      <tr><td class="num">200</td><td class="num neg">−2.1 pp</td><td>"…that's concerning."</td></tr>
+      <tr><td class="num">309</td><td class="num neg">−3.0 pp</td><td>The rule loses, significantly.</td></tr>
+    </tbody>
+  </table>
+
+  <p>At 30 trades the strategy looked like it worked. Had we been selling something, that is exactly the moment the marketing would have gone out — a positive number, a plausible story, and a small sample nobody would have asked about. The sign then inverted and <i>stabilised</i> negative as the evidence accumulated.</p>
+  <p>That is not bad luck. It is what a coin flip looks like when you stop flipping too early, and it is the single most common way retail strategies get sold honestly by people who genuinely believe in them.</p>
+
+  <h2>The verdict, in full</h2>
+  <p>Final measurement on 309 post-registration trades: the rule averaged <b class="neg">−5.9%</b> per trade against a baseline of <b>−2.9%</b> — a gap of <b class="neg">−3.0 percentage points</b>, with a 95% confidence interval of <b>[−4.4, −1.5]</b> that excludes zero. It doesn't merely fail to beat selling on day one; it loses to it, reliably.</p>
+  <p>We also checked it the harder way. Because the screen kept picking the same 16 names, 309 trades are nowhere near 309 independent pieces of evidence. Re-running the statistics treating each <i>company</i> as the unit rather than each trade, the interval is [−6.0, −0.6] — still negative, still excluding zero. Only 5 of the 16 names favoured the rule at all.</p>
+  <p>And the four selection filters we'd registered alongside it — skip the cheapest names, skip the biggest floats, skip the most extended gaps, skip the hottest tiers — all came back flat, every confidence interval straddling zero.</p>
+
+  <div class="box">
+    <h3>The number that keeps everyone honest</h3>
+    <p>Across the eleven rules we had running, six produced a positive-looking point estimate. If none of them worked at all, you would expect about <b>5.5</b> to look positive by pure chance. Two results cleared statistical significance — and <b>both of them were negative.</b></p>
+    <p>That is what "no effect" looks like from the inside. Any project running eleven rules and reporting only the best-looking one could have shown you a winner here.</p>
+  </div>
+
+  <h2>We also found a bug in our own scoring — and it flattered us</h2>
+  <p>While auditing this result we found that one of our analysis scripts was reporting the baseline exit as <b>+8.0%</b> when the true figure is <b>−2.9%</b>. The cause was mundane and instructive: for a minority of older picks the script re-downloaded historical prices, and those come back adjusted for stock splits while the entry price we'd stored was not. One reverse split injected a four-figure return and dragged the averages up.</p>
+  <p>It only inflated the rules whose exit price came from a market price — which is why it looked plausible rather than obviously broken. We removed the re-download entirely and added a check that every trade must reproduce its stored return before it's allowed into the study. <b>After the fix, not a single one of the 23 exit rules we'd tested beats simply selling at the first day's close.</b></p>
+  <p>We're telling you this because a track record that has never published a correction is not a careful record — it's an unaudited one.</p>
+
+  <h2>What we found instead</h2>
+  <p>Having established that the score predicts nothing about <i>direction</i>, we asked what it does predict. The answer is <b>magnitude</b>: it reliably ranks how violently a stock is about to move, while carrying essentially no information about which way. Stocks in the top fifth of our score have roughly a <b>48%</b> chance of drawing down 20% or more within five days, against <b>20%</b> for the bottom fifth.</p>
+  <p>That relationship replicates on a completely separate universe of stocks, survives correcting for repeated names, survives a multiple-testing correction across 26 tests, gets <i>stronger</i> in the most recent data, and isn't explained by share price. It is also — and we want to be precise here — <b>a rediscovery of volatility clustering</b>, one of the best-documented regularities in markets, not something new. It is not an edge and it is not tradeable on its own. Knowing a stock will move a lot tells you nothing about which direction to bet.</p>
+  <p>It is now registered as a forward test in its own right, so it has to prove itself the same way everything else here does.</p>
+
+  <h2>What a trader should actually take from this</h2>
+  <h3>1. This setup, bought at the open, lost money</h3>
+  <p>Across 524 graded picks: a <b>30%</b> win rate, about <b>−2.9%</b> per trade on a same-day hold and <b>−8% to −10%</b> over five days, after a modest cost assumption. No exit rule fixed it. No filter fixed it. Delaying the entry didn't fix it either — we measured the drift entering at every point across the following week and it is negative everywhere, around −0.9% per session.</p>
+
+  <h3>2. Costs, not skill, were the binding constraint</h3>
+  <p>The raw drift is under 1% per session in either direction. A realistic round-trip cost on stocks this thin is larger than that. The signal was smaller than the friction — which is why nothing worked long <i>or</i> short.</p>
+
+  <h3>3. A high win rate is not an edge, and here's the receipt</h3>
+  <p>One rule we tested — take profits at +5% — produced a <b>67% win rate</b> and an expectancy of <b class="neg">−4.4%</b> per trade. Tight targets buy you a pleasant-looking win rate by capping the few trades that would have paid for all the others. <b>If a strategy's win rate rises while its expectancy falls, you are being sold the wrong number.</b></p>
+
+  <h3>4. Check whether the result survives deleting the single best trade</h3>
+  <p>Every apparently profitable variation we found in this data turned out to be one stock that ran +663%. Remove it and each one collapses to a loss. This is the cheapest, most useful check you can run on anybody's backtest, including your own.</p>
+
+  <h2>Check it yourself</h2>
+  <p>None of the above requires trusting us. The complete pick log and every graded outcome are downloadable as raw CSVs from the <a href="index.html#performance">track record</a>. The frozen rules with their registration dates are in <a href="HYPOTHESES.md">HYPOTHESES.md</a>. The full verdict, including the bug write-up, is in the <a href="AUDIT_LOG.md">audit log</a>. The <a href="method.html">method</a> explains how grading works and where it falls short.</p>
+  <p>If you recompute any of these numbers and get something different, we want to know.</p>
+
+  <div class="box">
+    <h3>What this experiment does not say</h3>
+    <p>It says <i>this</i> screen, on <i>these</i> stocks, over <i>this</i> seven-week window, in <i>this</i> market regime, lost money and could not be rescued by any exit or filter we registered. It does not prove that no edge exists in this class of stock, and we haven't tested anyone else's version of it. That's what the rest of the experiments are for.</p>
+  </div>
+
+  <a class="next" href="experiment-02.html">
+    <span class="no">NEXT — EXPERIMENT 02 · RUNNING</span>
+    <div style="font-size:20px;font-weight:700;margin:.3em 0 .3em">The 2-period RSI "high win rate" trade →</div>
+    <p style="color:var(--dim);font-size:14.5px;margin:0">We turn the same machine on somebody else's strategy — one of the most widely published retail setups of the last twenty years, and one that is almost always sold on its win rate. Registered, running, verdict published either way.</p>
+  </a>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). Past results, including ours, do not predict future results. Every figure on this page is recomputable from the public files linked above.
+    <br><a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="experiments.html">All experiments</a>
+  </p>
+</div>
+</body>
+</html>

@@ -58,6 +58,19 @@ jobs:
         continue-on-error: true
         run: python grade_controls.py || echo "control grading skipped (non-fatal)"
 
+      # EXPERIMENT 02 (H-EXP02, registered 2026-07-29): the 2-period RSI mean-reversion
+      # trade on a frozen 40-name large-cap universe, scored against a day-matched control.
+      # Scan logs signals before the next open; grade fills outcomes 5 sessions later.
+      # continue-on-error + the script's own catch-all: this can never block the v0.2/v0.3 commit.
+      - name: Experiment 02 — RSI(2) scan
+        if: steps.cmd.outputs.cmd == 'scan'
+        continue-on-error: true
+        run: python rsi2_scanner.py scan || echo "exp02 scan skipped (non-fatal)"
+      - name: Experiment 02 — RSI(2) grade
+        if: steps.cmd.outputs.cmd == 'grade'
+        continue-on-error: true
+        run: python rsi2_scanner.py grade || echo "exp02 grade skipped (non-fatal)"
+
       - name: Refresh Finding-A-aware brief
         run: python ignitionscan.py brief || true
       - name: Rebuild Test-mode leaderboard (house + user rules)
@@ -90,6 +103,8 @@ jobs:
           [ -f picks.csv ] && git add picks.csv || true
           [ -f candidates.csv ] && git add candidates.csv || true
           [ -f control_outcomes.csv ] && git add control_outcomes.csv || true
+          [ -f rsi2_signals.csv ] && git add rsi2_signals.csv || true
+          [ -f rsi2_outcomes.csv ] && git add rsi2_outcomes.csv || true
           [ -f risk_snapshots.csv ] && git add risk_snapshots.csv || true
           [ -f reports/risk-eval-LATEST.md ] && git add reports/risk-eval-LATEST.md || true
           [ -f outcomes.csv ] && git add outcomes.csv || true
@@ -143,6 +158,8 @@ jobs:
             picks.csv
             candidates.csv
             control_outcomes.csv
+            rsi2_signals.csv
+            rsi2_outcomes.csv
             risk_snapshots.csv
             outcomes.csv
             paths.csv

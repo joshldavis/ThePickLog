@@ -614,3 +614,64 @@ return?), and **H-SIZE1** (inverse-predicted-range position sizing — the one p
 evidence supports, and risk management rather than alpha). All three were written out on
 2026-07-29; none is registered. Registering any of them later requires a new dated entry and a
 fresh out-of-sample window that starts then, not today.
+
+---
+
+## Registration batch #7 — EXPERIMENT 02, frozen 2026-07-29
+
+The first test of **somebody else's** published method rather than our own. Experiment 01 (this
+project's low-float momentum screen, Gate-1 verdict 2026-07-29) is closed and failed; this opens
+the series proper. Evaluator ships with the registration: `rsi2_scanner.py`, wired into the daily
+workflow, writing `rsi2_signals.csv` (append-only, logged before the entry session) and
+`rsi2_outcomes.csv`.
+
+### H-EXP02 — the 2-period RSI mean-reversion trade ("high win rate")
+
+**The claim under test.** Buy a large-cap when its 2-period RSI collapses while the stock is still
+above its 200-day moving average; exit on a short bounce. One of the most widely published retail
+setups of the last two decades, and almost always marketed on its **win rate**.
+
+**Why this claim.** Experiment 01 produced the cleanest possible demonstration that a win rate and
+an expectancy are different animals: a +5% target returned a **67% win rate at −4.4%/trade**. This
+strategy is maximally exposed to that confusion. Second reason: Experiment 01's microcap universe
+had raw drift under 1%/session against a ~2% round-trip cost, so **nothing could have worked there
+in either direction** — the friction exceeded any available signal. Liquid large caps invert that
+(≈0.10% round trip), so a real effect is *detectable* and a failure is a failure on the merits.
+
+**Rule (frozen — every constant lives at the top of `rsi2_scanner.py`; changing any of them voids
+the test and requires a new registration with a new window):**
+- **Universe:** 40 liquid US large caps across sectors, fixed at registration.
+- **Entry condition** (evaluated after the close): `close > SMA(200)` **and** Wilder `RSI(2) < 5`.
+  If more than five names qualify, take the five most oversold (`MAX_PER_DAY = 5`) so no single
+  day can dominate the sample.
+- **Entry price:** the next session's open. Signals are logged before that open.
+- **Exits graded (all three, every trade):** same-day close; 5th-session close; and the published
+  exit — first close with `RSI(2) > 70`, else the 5-session time exit.
+- **Costs:** 0.10% round trip, applied to every trade, stated in advance.
+- **Benchmark — the design fix Experiment 01 lacked:** a **day-matched control**, the equal-weight
+  return of the *entire* frozen universe over the identical window, computed from the same fetch.
+  The scored quantity is the **excess** over that control, so market moves difference out. This is
+  the discriminant comparison H-CTRL was meant to supply and never could.
+- **Window:** only signals with `signal_date` strictly after 2026-07-29 count.
+
+**Pass requires ALL of:** n ≥ 30 post-registration graded signals; **both the mean and the median**
+day-matched excess return positive net of costs (not either — both; Experiment 01 established that
+means on financial data can be a single lucky trade); a ticker-clustered 95% CI on the excess
+excluding zero; and the direction holding across ≥ 3 consecutive weekly snapshots.
+
+**WIN RATE IS REPORTED BUT IS EXPLICITLY NOT A PASS CRITERION.** Frozen here so it cannot later be
+substituted for the result if expectancy disappoints. That substitution is the exact failure mode
+the experiment exists to expose.
+
+**Registered prior (stated before any data).** Short-horizon mean reversion in liquid equities is a
+**real, documented effect** — this is not expected to be nonsense. But this formulation has been
+public and heavily traded since roughly 2008–09, and published effects tend to get arbitraged.
+Prediction: **the high win rate replicates (~65–75%) and the day-matched excess is small or zero
+after costs.** Estimated probability it clears the full bar: **~1 in 3.** A high win rate with no
+excess return is the *most useful* outcome available, because it is precisely what the strategy is
+sold on.
+
+**Scope limits registered in advance.** A verdict here describes *this rule*, on *these 40 names*,
+over *this window*. It is **not** evidence about mean reversion in general, and it is **not** a
+claim about any author, book or service — this tests a **published technique, not a person**. No
+trade is executed anywhere in this project, in paper or in live money.
