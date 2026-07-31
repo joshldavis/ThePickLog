@@ -519,3 +519,98 @@ outcome are internally consistent, exactly as `outcomes.csv` is produced for pic
    silent, previously undocumented selection effect on the v0.3 cohort. It is **disclosed rather
    than fixed** for now: raising the budget changes the universe definition, and H-UNIV1 freezes
    that definition, so a change requires a new registration rather than a quiet tweak.
+
+---
+
+## Registration batch #6 — frozen 2026-07-29 (second registration of the day)
+
+Everything in this registry until now asked one question: **does the model predict profit?**
+The answer is no, and Gate 1 published that today. A follow-up analysis asked a question nobody
+had tested: **does it predict anything else?** It does — and these two registrations put that
+claim on the same forward-only footing as every failed one.
+
+**Provenance, stated plainly.** Both were found by inspecting the existing log on 2026-07-29.
+Under P2 that is variable selection, not evidence. Only picks with `trading_date` **strictly
+after 2026-07-29** count. The in-sample numbers below are recorded so the motivation is auditable
+and so a later reader can see whether the forward result matched the guess.
+
+**An evaluator ships with this registration** (`risk_eval.py`, wired into the daily workflow,
+writing `reports/risk-eval-LATEST.md` + `risk_snapshots.csv`). The 2026-07-29 audit found six
+hypotheses that were registered and then never computed; registering these without an evaluator
+would repeat that failure.
+
+### H-RISK1 — the score ranks MAGNITUDE, not DIRECTION
+
+**Rule (frozen).** Per cohort, on post-2026-07-29 graded picks, compute Spearman rho between
+`score` and (a) `|mae_5d|` (drawdown depth) and (b) `range = mfe_5d − mae_5d`, with a
+ticker-clustered 95% bootstrap CI (H-IND1: the unit is the name, not the row).
+
+**Pass requires ALL of:** n ≥ 30 post-registration picks; rho > 0 with the clustered CI excluding
+zero for **both** magnitude measures; the sign holding across ≥ 3 consecutive weekly snapshots;
+**and — the discriminant half — the rho between `score` and signed return REMAINING
+NON-SIGNIFICANT.** A result where the score predicts magnitude *and* direction fails this
+hypothesis as stated; the claim is specifically that it separates the two.
+
+**In-sample motivation (2026-07-29, ticker-clustered).** v0.2 (n=444, 16 tickers):
+score→|MAE| rho **+0.206**, score→range **+0.277**, score→same-day return **+0.004 (ns)**.
+v0.3 (n=80, 67 tickers): **+0.320**, **+0.440**, **−0.054 (ns)**. Mean |rho| across the family
+was **0.258 for magnitude vs 0.072 for direction**. It survived: replication across two
+disjoint universes; a within-day test that differences out the market (v0.2 score→range mean
+rho +0.255, positive on 77% of 30 days, p=0.0001); Benjamini–Hochberg correction across 26 tests
+(10 survived, the top 8 all magnitude, the 4 worst p-values all direction); an out-of-time split
+(score→|MAE| +0.149 early → **+0.328 late**, both significant); and a partial correlation
+controlling for price level (+0.206 → +0.196, +0.440 → +0.443).
+
+**Registered prior: this is EXPECTED TO PASS** — and it is registered *because* it is expected to
+pass. The record currently contains only refutations, which leaves an honest reader unable to
+distinguish a rigorous instrument from a broken one that returns "no" to everything. A
+pre-registered confirmation is the missing evidence that this apparatus can detect a real effect,
+not merely reject false ones.
+
+**Registered framing — binding, and not to be dropped if it passes.** A confirmation
+demonstrates **volatility persistence**, one of the most documented regularities in markets and
+the basis of GARCH modelling. The score is built from gap and relative volume, both volatility
+measures, so predicting future volatility from current volatility *should* work. This is the
+instrument correctly detecting a known effect — **it is NOT alpha, must never be presented as
+alpha, and does not reopen Gate 1** (failed 2026-07-29). Magnitude without direction is not
+tradeable here: it would require options, and options on floats this thin are typically absent or
+spread far wider than the effect.
+
+### H-RISK2 — the risk gauge is CALIBRATED, not merely correlated
+
+**Rule (frozen).** **v0.2 cohort only.** Assign each post-registration pick to a quintile using
+these **frozen absolute score cutpoints** — `≤42.12 | ≤43.90 | ≤46.98 | ≤54.02 | >54.02` — and
+score the **frozen predicted probabilities** of a deep drawdown (`mae_5d ≤ −20%`):
+
+| quintile | Q1 | Q2 | Q3 | Q4 | Q5 |
+|---|---|---|---|---|---|
+| predicted P(drawdown ≥ 20%) | 20.22% | 39.56% | 34.88% | 38.20% | 48.31% |
+
+**Pass requires both:** a **Brier score beating the no-skill baseline** (the registration-date
+pooled base rate, **0.3626**), and a realised **Q5 − Q1 gap ≥ 15pp**.
+
+**Explicitly NOT applied to v0.3.** The two cohorts have different score distributions (v0.2
+median 45.2, v0.3 median 92.5), so these probabilities are declared **non-transferable** here
+rather than silently reused — the direct consequence of today's H-STR3 cohort-incomparability
+finding. A v0.3 calibration would need its own registration and its own cutpoints.
+
+**In-sample motivation.** Realised P(drawdown ≥ 20%) ran **20.2% (Q1) → 48.3% (Q5)**, a 2.4×
+spread, with P(≥35%) running 4.5% → 18.0% (4×). A back-dated dry run of the shipped evaluator
+over post-2026-06-30 data returned Brier **0.2214 vs baseline 0.2379** (beats) with a realised
+**Q1 15.0% vs Q5 56.4%, gap 41.4pp**.
+
+**Registered prior: partial pass expected.** The ordering will very likely hold; the exact
+probabilities will drift, and the Q2–Q4 plateau (39.6 / 34.9 / 38.2 — non-monotone) is likely to
+persist, because the gauge is genuinely coarse in the middle. This is a materially stronger claim
+than H-RISK1 and the one worth publishing if it lands.
+
+### Drafted and deliberately NOT registered today
+
+Recorded so they cannot be quietly registered later once more data has been seen:
+**H-A2** (Finding A re-specified as a continuous within-day rank test rather than the
+underpowered binary tier filter H-F4 used — A/B is only 11.7% of v0.2 picks but 97.5% of v0.3),
+**H-STR3-B** (does the composite beat its own best single input for risk while failing to for
+return?), and **H-SIZE1** (inverse-predicted-range position sizing — the one practical use the
+evidence supports, and risk management rather than alpha). All three were written out on
+2026-07-29; none is registered. Registering any of them later requires a new dated entry and a
+fresh out-of-sample window that starts then, not today.

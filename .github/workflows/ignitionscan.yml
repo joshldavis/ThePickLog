@@ -67,6 +67,14 @@ jobs:
         run: |
           python fetch_user_rules.py || true
           USER_RULES_PATH=hypotheses/user_rules.json python hypo_eval.py || echo "leaderboard rebuild skipped (non-fatal)"
+      # H-RISK1 / H-RISK2 (registered 2026-07-29, batch #6): forward evaluation of the
+      # magnitude-not-direction claim + the calibrated drawdown gauge. Appends one weekly
+      # snapshot per cohort to risk_snapshots.csv and rewrites reports/risk-eval-LATEST.md.
+      # Non-fatal: this must never block the picks/outcomes commit.
+      - name: Evaluate H-RISK1/H-RISK2
+        continue-on-error: true
+        run: python risk_eval.py || echo "risk eval skipped (non-fatal)"
+
       - name: Seal integrity ledger (tamper-evident hash chain)
         # Records SHA-256 of picks/outcomes/paths into integrity_ledger.csv, chained
         # to the prior row so any later edit to a past entry is provable. Non-fatal:
@@ -82,6 +90,8 @@ jobs:
           [ -f picks.csv ] && git add picks.csv || true
           [ -f candidates.csv ] && git add candidates.csv || true
           [ -f control_outcomes.csv ] && git add control_outcomes.csv || true
+          [ -f risk_snapshots.csv ] && git add risk_snapshots.csv || true
+          [ -f reports/risk-eval-LATEST.md ] && git add reports/risk-eval-LATEST.md || true
           [ -f outcomes.csv ] && git add outcomes.csv || true
           [ -f paths.csv ] && git add paths.csv || true
           [ -f edgar_snapshot.csv ] && git add edgar_snapshot.csv || true
@@ -133,6 +143,7 @@ jobs:
             picks.csv
             candidates.csv
             control_outcomes.csv
+            risk_snapshots.csv
             outcomes.csv
             paths.csv
             leaderboard.json

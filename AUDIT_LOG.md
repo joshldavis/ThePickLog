@@ -1,5 +1,58 @@
 # ThePickLog — Audit Log
 
+## 2026-07-29 — Follow-up: the model predicts MAGNITUDE, not direction — **H-RISK1/H-RISK2 registered**
+
+Same-day follow-up to the Gate-1 verdict. Every one of the 33 registrations to date asked whether
+the model predicts **profit**; none asked whether it predicts anything else. It does.
+
+**Finding.** The composite score is a replicated predictor of how violently a name moves, while
+carrying essentially no information about which way. Mean |rho| across the tested family:
+**0.258 for magnitude** (drawdown depth, total range, upside excursion) vs **0.072 for direction**
+(same-day and 5-day signed return). Ticker-clustered: v0.2 (n=444) score→|MAE| **+0.206**,
+score→range **+0.277**, score→same-day return **+0.004 (ns)**; v0.3 (n=80, a disjoint 67-ticker
+universe) **+0.320**, **+0.440**, **−0.054 (ns)**.
+
+**Stress tests it survived.** (1) Replication across two universes built differently. (2) A
+within-day test that differences out the market — ranking picks against each other on the same
+morning: score→range mean rho **+0.255**, positive on **77% of 30 days**, p=0.0001, while
+score→same-day return is rho +0.010, p=0.78. (3) Benjamini–Hochberg across **26 tests** — 10
+survive at q=0.05, the top 8 all magnitude, and the four worst p-values in the whole family
+(0.63/0.70/0.78/0.94) are all score→direction. (4) An out-of-time split: score→|MAE| **+0.149
+early → +0.328 late**, both significant — it strengthened. (5) A partial correlation controlling
+for price level, the obvious confound: +0.206→+0.196 and +0.440→+0.443, essentially unmoved.
+Also: for risk the four-factor composite **beats every one of its own inputs** on v0.2 (score
++0.206 vs rvol +0.123, float +0.127, price −0.136, gap −0.029) — the opposite of its behaviour
+for return, where H-STR3 finds it adds nothing over gap alone.
+
+**Usable as a gauge.** v0.2 score quintiles: P(drawdown ≥20%) runs **20.2% → 48.3%** (2.4×) and
+P(≥35%) runs 4.5% → 18.0% (4×). Honest caveat: Q2–Q4 are a plateau, so it is a usable gauge, not
+a precision instrument.
+
+**Why H-F4 ("skip hot tiers") missed this.** Tiers A+B are only **11.7%** of v0.2 picks, so
+removing them barely moves a mean — the filter had almost no power by construction, which is
+exactly the Δ +0.1pp null it returned. The signal is **continuous**; the filter was **binary and
+applied to a rare category**. In v0.3 the same labels cover **97.5%** of picks, so the identical
+filter is meaningless in the opposite direction — the cohort-incomparability problem registered
+today as H-STR3.
+
+**What this is NOT — registered in advance so a confirmation cannot be oversold.** This is
+substantially **volatility persistence**, a long-documented regularity; the score is built from
+gap and relative volume, both volatility measures, so it *should* work. It is **not alpha**, it is
+**not tradeable** (magnitude without direction needs options, and options on floats this thin are
+absent or unusably wide), and it **does not reopen Gate 1**, which remains failed. It is also
+post-hoc, which is why it now has a forward window.
+
+**Registered as H-RISK1 (magnitude-not-direction) and H-RISK2 (calibration), batch #6, frozen
+2026-07-29, with `risk_eval.py` shipped alongside** so they cannot become orphans like the six
+registered-but-never-computed hypotheses this week's audit turned up. H-A2, H-STR3-B and H-SIZE1
+were drafted and deliberately left unregistered; that decision is recorded in HYPOTHESES.md so
+they cannot be quietly registered later after more data has been seen.
+
+**Why register something expected to pass.** A record containing only refutations is externally
+indistinguishable from a broken instrument that returns "no" to everything. A pre-registered
+confirmation, run through the same clustering and multiplicity discipline as the failures, is what
+demonstrates the apparatus **discriminates** rather than merely rejects.
+
 ## 2026-07-29 — Gate-1 external-validity verdict — **❌ FAIL (pre-registered null confirmed)**
 
 The pre-registered external-validity gate reaches its verdict. Evaluated on `leaderboard.json`
