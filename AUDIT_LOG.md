@@ -1,5 +1,100 @@
 # ThePickLog — Audit Log
 
+## 2026-07-29 — Selection and timing: both searches closed, with structural reasons
+
+Two exhaustive negative results, logged so neither has to be re-run. Both were prompted by asking
+whether anything in the log supports a *directional* claim after Gate 1 failed. Neither does — and
+in both cases the reason is structural rather than "we tried and missed."
+
+### Selection — 58 tests, nothing survives, and every apparent positive is one stock
+
+Swept every available variable across both cohorts with ticker-clustered CIs: `price_at_screen`,
+`float_shares`, `rvol`, `gap_pct`, `short_interest_pct`, `score`, plus five never previously
+tested — `appearance_idx` (how many times a name had been picked before), `is_fresh` (new or
+returning after a >7-day gap), `breadth` (picks that day), day-of-week, and `watch_level` — against
+same-day and 5-day return, plus categorical and interaction keeps (dilution, catalyst, regime
+splits, SI>=20, low breadth, dilution x regime, SI x dilution).
+
+- **0 of 36 correlation tests survive Benjamini-Hochberg at q=0.05.** Eleven of 58 look
+  significant uncorrected against **~2.9 expected by chance** — mildly elevated, with none of the
+  coherent structure the H-RISK1 magnitude family showed.
+- **Every apparently-positive subset collapses to a single stock (DFNS, +663% over 5 sessions).**
+  Removing that one name: score top-third 5-day **+18.96% -> -5.82%** (median -20.29%); gap
+  top-third **+23.98% -> -0.60%**; rvol top-third **+22.95% -> -1.68%**.
+- The one candidate that briefly looked real — **"freshness"**, fresh names beating stale ones,
+  negative `appearance_idx` correlation in *both* cohorts and a v0.3 spread of +5.90pp with
+  CI [+1.69, +12.12] — **died on inspection.** Its positive mean is DFNS again (**+6.57% ->
+  -3.86%** without it; **median -8.49%**, win rate 36%), and across v0.3's 10-day window
+  `appearance_idx` largely encodes *picked early vs late in the window* — a time effect, not a
+  property of the name. The v0.2 version (fresh -5.67% vs stale -10.77%) is "loses less," not
+  "makes money," and is not significant.
+- **Decisive criterion applied throughout:** a selection rule is only useful if what it *keeps*
+  makes money in absolute terms, not merely loses less than what it drops. Only **2 of 24** tercile
+  subsets beat the ~2% round-trip cost, and both are the DFNS artifact. Medians are negative
+  essentially everywhere.
+
+**Two structural reasons this is not a testing failure.** (1) **v0.2 has no choice set** — it
+admits **13-16 of its 16 names every single day** (median 15/day across 30 days). You cannot select
+from a set you always take in full. v0.3 does choose (top 10 of eligible) but holds only 80 graded
+picks over 10 days, and the eligible-but-unpublished control pool is 32 rows, none graded until
+`grade_controls.py` accrues. (2) **Every variable in `picks.csv` is a magnitude descriptor** — gap,
+relative volume, float, price are all volatility/liquidity measures. **There is no directional
+information in the inputs at all**, which is precisely why the model predicts range and not return
+(H-RISK1). Direction in these names lives in things the log never captures: news content, order
+flow, retail attention velocity, float rotation, halt dynamics, offering terms.
+
+**Methodological rule adopted from this:** means on this data are dominated by single names, so any
+future evaluation here must pre-commit to **median and trimmed statistics** — as H-SHORT1's pass bar
+already requires. A mean-based screen on this dataset will find DFNS and call it an edge.
+
+### Timing — closed at daily resolution, and for a reason that makes further search pointless
+
+Timing was already the most-tested area (23 exit variants in `exit-study-LATEST.md`, five registered
+families), and after the 2026-07-29 `exit_sim.py` fix **every one loses to simply closing same-day**.
+Three timing dimensions had never been tested; all three now have been.
+
+- **Entry timing — the decisive result, never previously examined.** Every rule to date assumes
+  entry at the pick-day open. Raw one-session drift entered at successively later points (v0.2,
+  n=379): d0 open->close **-0.86%**, d0 close->d1 close **-1.46%**, d1 open->close **-0.61%**,
+  d1 close->d2 close **-1.46%**, d2 **-0.79%**, d3 **-0.94%**, d4 **-0.90%**, overnight-only
+  **-0.79%**. **There is no entry point anywhere in the window with positive drift** — it is roughly
+  **-0.9% per session, everywhere**, several individually significant. The entry is not mistimed;
+  the drift is persistent across the whole window.
+- **Therefore exit rules cannot fix this, as a matter of arithmetic.** An exit rule does not change
+  drift; it only decides how much of it is absorbed. With negative drift at every horizon the
+  optimal exit is the **shortest possible hold**, which is exactly what the corrected study reports
+  (same-day close **-2.86%** net beats hold-to-5-days **-10.49%** and beats all 23 variants).
+  Extended to its conclusion, the optimal timing rule is *not to enter*. No further exit rule needs
+  testing at this resolution — none can exist that manufactures positive expectancy from negative
+  drift.
+- **Risk-normalised exits — tested and refuted.** Because a -10% stop is breached by 85% of
+  top-quintile names but 56% of bottom-quintile ones, scaling stops to predicted range (per H-RISK1)
+  looked promising. It is not: scaled stop at 0.4x predicted range gives **-7.37%** vs fixed -10% at
+  **-7.51%** — indistinguishable, both far worse than same-day close. Scaled targets and
+  target+stop combinations all land between -6.16% and -9.38%. **The risk gauge does not rescue exit
+  rules**; it describes how violently the position will move while losing.
+- **State-dependent exit — tested and refuted.** Exiting when a name drops off the screen returns
+  **-10.29%** (v0.2) and **-3.62%** (v0.3), both worse than doing nothing.
+
+**Why "if it's up 20%, sell" feels like it should work.** The median pick touches **+9.1%** at some
+point within five sessions, so most of them *do* rise. Capping fails anyway because reaching a
+target is not random — the names that get there are disproportionately the ones that would have run
+further, so the rule caps winners while retaining full downside. Observed exactly: target +10% gives
+a 44% win rate at -6.2% net, and target +5% gives a **67% win rate at -4.4% net**. **A rule that
+raises the win rate while lowering expectancy is the signature of this trap** (PRINCIPLES P4).
+
+**The one frontier left open, honestly labelled: intraday.** All of the above is daily-bar
+resolution, so when a pick touches +9.1% we cannot tell whether that happened in the first thirty
+minutes or on day four. If the spike is concentrated near the open, an intraday rule would be a
+different object from anything tested here. That is a **data gap, not an analysis gap** — it needs
+minute-level capture the project does not collect, and intraday microcap execution costs run well
+above the 2% haircut used throughout, so the bar is higher than it appears. Not registered; recorded
+as the only surviving timing question.
+
+**Net: selection and timing are both closed at current data and resolution.** The project's one
+established predictive relationship remains H-RISK1 (magnitude, not direction), registered forward
+the same day.
+
 ## 2026-07-29 — Follow-up: the model predicts MAGNITUDE, not direction — **H-RISK1/H-RISK2 registered**
 
 Same-day follow-up to the Gate-1 verdict. Every one of the 33 registrations to date asked whether
