@@ -77,6 +77,7 @@
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <a href="index.html">Overview</a>
     <a href="experiments.html">Experiments</a>
+      <a href="split-adjustment-trap.html">Field notes</a>
     <a href="index.html#performance">Track record</a>
     <a href="index.html#validation">Validation</a>
     <a href="method.html">Method</a>
@@ -137,6 +138,7 @@
   <p>While auditing this result we found that one of our analysis scripts was reporting the baseline exit as <b>+8.0%</b> when the true figure is <b>−2.9%</b>. The cause was mundane and instructive: for a minority of older picks the script re-downloaded historical prices, and those come back adjusted for stock splits while the entry price we'd stored was not. One reverse split injected a four-figure return and dragged the averages up.</p>
   <p>It only inflated the rules whose exit price came from a market price — which is why it looked plausible rather than obviously broken. We removed the re-download entirely and added a check that every trade must reproduce its stored return before it's allowed into the study. <b>After the fix, not a single one of the 23 exit rules we'd tested beats simply selling at the first day's close.</b></p>
   <p>We're telling you this because a track record that has never published a correction is not a careful record — it's an unaudited one.</p>
+  <p>This one generalises well beyond us, so we wrote it up on its own: <a href="split-adjustment-trap.html">the full write-up of the split-adjustment trap</a> — why the error is always positive in cheap stocks, why it survives review, and the checks that catch it.</p>
 
   <h2>What we found instead</h2>
   <p>Having established that the score predicts nothing about <i>direction</i>, we asked what it does predict. The answer is <b>magnitude</b>: it reliably ranks how violently a stock is about to move, while carrying essentially no information about which way. Stocks in the top fifth of our score have roughly a <b>48%</b> chance of drawing down 20% or more within five days, against <b>20%</b> for the bottom fifth.</p>

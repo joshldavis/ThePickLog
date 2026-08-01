@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The bug that makes your backtest look good — and why you can't see it</title>
+<meta name="description" content="Historical stock prices are restated every time a company splits. Mix a stored price with a freshly downloaded one and you invent returns that never happened — and in cheap stocks the error always flatters you. We hit it in our own code. Here is how it works and how to catch it.">
+<link rel="canonical" href="https://thepicklog.vercel.app/split-adjustment-trap.html">
+<meta property="og:title" content="The bug that makes your backtest look good — and why you can't see it">
+<meta property="og:description" content="Split adjustment silently rewrites price history. Mix a stored price with a re-downloaded one and you get returns that never happened. In microcaps the error is always positive.">
+<meta property="og:type" content="article">
+<style>
+  :root{--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:36px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.12}
+  h2{font-size:23px;margin:1.9em 0 .5em;letter-spacing:-.015em}
+  h3{font-size:17.5px;margin:1.6em 0 .4em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18.5px;color:var(--dim);margin-bottom:1.4em}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+  td.num{font-family:ui-monospace,Menlo,monospace}
+  .neg{color:var(--red)} .pos{color:var(--green)} .amb{color:var(--amber)}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18.5px}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:22px 0}
+  .box h3{margin-top:0}
+  .box p:last-child,.box ol:last-child,.box ul:last-child{margin-bottom:0}
+  .warn{border-color:#5a3a22;background:#2a1d10}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13.5px;font-family:ui-monospace,Menlo,monospace}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.55;font-family:ui-monospace,Menlo,monospace;color:#cfe3e1}
+  ol,ul{padding-left:22px}
+  li{margin:8px 0}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="split-adjustment-trap.html" class="on">Field notes</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="trust.html">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <span class="proto">PROTOTYPE</span>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="split-adjustment-trap.html">Field notes</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap">
+  <span class="no">FIELD NOTES · 2026-07-29</span>
+  <h1>The bug that makes your backtest look good — and why you can't see it</h1>
+  <p class="standfirst">We found it in our own code while auditing a result we'd already decided was a failure. It had been quietly inflating our numbers for weeks. It throws no error, it corrupts only some of your rows, and in cheap stocks it always makes you look better. Here is exactly how it works.</p>
+
+  <h2>The thing nobody tells you about historical prices</h2>
+  <p><b>A stock's price history is not a fixed fact. It is a function of when you asked.</b></p>
+  <p>When a company splits its stock, data providers go back and restate the <i>entire</i> prior price series. They have to. A 1-for-10 reverse split takes a $0.50 stock to $5.00 overnight, and if the history weren't restated, every chart would show a 900% one-day gain and every moving average would break.</p>
+  <p>So the vendor multiplies all the earlier prices by an adjustment factor. Reverse split of 1-for-10: multiply history by 10. Forward split of 2-for-1: halve it. The line stays smooth, the indicators keep working, and everybody is happy.</p>
+  <p>The consequence is easy to miss: <b>download Apple's 2019 prices in 2019, and again today, and you get different numbers</b> — because of the 2020 split. The past changed. It will change again.</p>
+
+  <h2>How that turns into invented profit</h2>
+  <p>Any calculation that mixes a price <i>captured at the time</i> with a price <i>downloaded later</i> is comparing two different unit systems. It's a dollars-versus-cents error wearing a plausible disguise.</p>
+  <p>Here is precisely what happened in our code:</p>
+
+  <table>
+    <thead><tr><th>Value</th><th>Where it came from</th><th>Number</th></tr></thead>
+    <tbody>
+      <tr><td>Entry price</td><td>Recorded at grading time, as actually traded</td><td class="num">$0.50</td></tr>
+      <tr><td>Same session's close</td><td>Re-downloaded months later, after a 1-for-10 reverse split</td><td class="num">$5.00</td></tr>
+      <tr><td>Computed return</td><td>(5.00 − 0.50) / 0.50</td><td class="num pos">+900%</td></tr>
+    </tbody>
+  </table>
+
+  <p>The stock did nothing. The trade never happened. But the arithmetic is impeccable, and across a few hundred trades a single row like that is enough to drag an average up by ten percentage points — which is roughly what it did to us.</p>
+
+  <h2>The part almost nobody knows: the error flips sign by universe</h2>
+  <p>This is what makes it genuinely dangerous rather than merely annoying.</p>
+  <p><b>Microcaps do reverse splits.</b> Constantly — usually to claw back above the $1 minimum an exchange requires for continued listing. Reverse splits adjust history <b>upward</b>, so every contaminated row shows a spurious <b class="pos">gain</b>.</p>
+  <p><b>Large caps do forward splits</b>, when the share price has climbed high enough to be inconvenient. Those adjust history <b>downward</b>, producing spurious <b class="neg">losses</b>.</p>
+  <p class="pull">So in exactly the universe where retail traders run backtests — cheap, volatile, heavily promoted stocks — this bug systematically makes results look <i>better</i>. It flatters you precisely where you are least equipped to notice.</p>
+  <p>If you have ever backtested penny stocks and been pleasantly surprised, this is the first thing to rule out.</p>
+
+  <h2>Why it survives review</h2>
+  <ol>
+    <li><b>It is completely silent.</b> No exception, no warning. Just numbers that are slightly too kind.</li>
+    <li><b>It only touches a minority of rows</b> — the ones with a corporate action in the window. So your aggregates look plausible-but-encouraging rather than obviously broken. Nobody investigates a good result as hard as a bad one.</li>
+    <li><b>It corrupts selectively, in a pattern that looks like a finding.</b> In our case it only inflated rules whose exit was an actual market price — sell at the close, trailing stops, time exits. Rules with a <i>capped</i> exit (take profit at +10%) compute their exit as entry × 1.10, so a corrupted bar could change <i>whether</i> the target was hit but never the size of the payoff. Those stayed clean. The result was a table where most rules looked mediocre and three looked like winners. That reads as <i>"some strategies work"</i> — which is exactly the shape of answer you were hoping for.</li>
+    <li><b>The corrupted row is usually your best trade</b>, and nobody deletes their best trade to see if the conclusion holds.</li>
+  </ol>
+
+  <div class="box warn">
+    <h3>And the reason most people simply cannot catch this</h3>
+    <p><b>The bug is invisible unless you kept a forward-only record of prices as they were at the time.</b></p>
+    <p>We only found it because there was a stored, append-only price to disagree with. We recomputed the same-day return from the grade-time record for all 379 picks that had one: mean −2.86% against a stored −2.86%, <b>maximum difference 0.0, zero mismatches.</b> Perfect agreement. That isolated the corruption instantly to the 65 picks that had no stored path and therefore went through a re-download.</p>
+    <p>A backtest that re-downloads everything on every run has <i>nothing to reconcile against</i>. The error is undetectable — and the results are unreproducible — for the same underlying reason. If your backtest can't reproduce its own numbers from a stored record, it also can't tell you when the data moved under it.</p>
+  </div>
+
+  <h2>What it cost us</h2>
+  <p>Our exit study reported the baseline — simply selling at the end of the first day — as <b class="pos">+8.0%</b> average net per trade. The true figure is <b class="neg">−2.9%</b>.</p>
+  <p>Three exit rules carried a marker meaning "beats the baseline by at least 2 points." All three were artifacts. After the fix:</p>
+
+  <table>
+    <thead><tr><th>Exit rule</th><th>Reported</th><th>Actual</th></tr></thead>
+    <tbody>
+      <tr><td>Sell at the first day's close (baseline)</td><td class="num pos">+8.0%</td><td class="num neg">−2.9%</td></tr>
+      <tr><td>Trailing 15% stop</td><td class="num pos">+10.9%</td><td class="num neg">−4.6%</td></tr>
+      <tr><td>Trail 15% after a +10% touch</td><td class="num pos">+11.8%</td><td class="num neg">−6.2%</td></tr>
+      <tr><td>Exit at day 1's close</td><td class="num pos">+6.1%</td><td class="num neg">−4.4%</td></tr>
+      <tr><td>Hold to day 5's close</td><td class="num neg">−2.4%</td><td class="num neg">−10.5%</td></tr>
+    </tbody>
+  </table>
+
+  <p><b>With correct data, not one of the 23 exit rules we tested beats simply selling at the first day's close.</b> Before the fix, three appeared to. We had been looking at a table that said "your instinct was right" when the data said the opposite.</p>
+
+  <h2>How to check your own work</h2>
+  <p>In rough order of how much they buy you:</p>
+  <ol>
+    <li><b>Store prices forward-only, at decision time, and never re-pull them.</b> Write down what you saw when you saw it. This is the only defence that works by construction rather than by vigilance.</li>
+    <li><b>If you must re-pull, reconcile.</b> Recompute something you already stored and require exact agreement before the row is allowed into the study. We now demand that every trade reproduce its recorded same-day return to within 0.05 percentage points, or it is dropped and counted in the report.</li>
+    <li><b>Never mix adjusted and unadjusted prices in one calculation.</b> Pick one and be consistent — including for the entry price, which is where people usually break it.</li>
+    <li><b>Store returns, not prices, where you can.</b> A return computed at the time is adjustment-invariant. A price is not.</li>
+    <li><b>Flag implausible magnitudes instead of averaging them in.</b> A +900% day in a backtest is a data question, not a trade.</li>
+    <li><b>Delete your single best trade and re-run.</b> If the conclusion flips, you never had a result — you had one row. This is the cheapest check on this page and it catches a much wider family of problems than just this one.</li>
+  </ol>
+
+  <h3>A thirty-second version of the check</h3>
+  <p>For any trade in your log, take the entry price you recorded at the time and the entry price you'd get by downloading that same date now. If they differ, everything you computed from that row is suspect:</p>
+  <pre>stored_entry   = 0.50   # what you wrote down on the day
+refetched_entry = 5.00   # same date, downloaded today
+
+if abs(refetched_entry - stored_entry) / stored_entry &gt; 0.001:
+    print("prices were restated — do not mix these two series")</pre>
+  <p>If you have no stored entry price to compare against, that is itself the finding.</p>
+
+  <div class="box">
+    <h3>The wider family this belongs to</h3>
+    <p>Split adjustment is one member of a class: <b>your data provider quietly knows things today that nobody knew at the time.</b> The others worth auditing are survivorship bias (delisted companies silently absent from your universe), restated fundamentals (earnings as revised, not as originally reported), point-in-time index membership (testing "the S&amp;P 500" using today's constituents), and dividend back-adjustment mixing total-return and price-return series. All of them share the same signature: they make the past look more knowable than it was, and they almost always flatter the backtester.</p>
+  </div>
+
+  <h2>Why we're publishing this</h2>
+  <p>We found this bug in our own code, and it had been making our own results look better for weeks. We caught it while auditing a result we had <i>already concluded was a failure</i> — which is worth sitting with, because it means the only reason we looked hard enough was that we were trying to establish a negative rigorously.</p>
+  <p>A track record that has never published a correction is not a careful record. It's an unaudited one.</p>
+  <p>The full technical write-up, including the reconciliation guard we added, is in our <a href="AUDIT_LOG.md">public audit log</a> under 2026-07-29. The experiment this surfaced during is <a href="experiment-01.html">Experiment 01</a>, where we tested our own stock screener and it lost money.</p>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). The diagnosis above is the explanation consistent with our evidence: picks with a stored grade-time price reconciled exactly, and only the re-downloaded subset disagreed. Vendor adjustment behaviour varies, so check your own provider's documentation rather than assuming ours applies.
+    <br><a href="experiments.html">All experiments</a> &middot; <a href="guide.html">The 7 checks every service should pass</a> &middot; <a href="disclaimer.html">Disclaimer</a>
+  </p>
+</div>
+</body>
+</html>

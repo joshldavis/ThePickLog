@@ -73,6 +73,7 @@
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <a href="index.html">Overview</a>
     <a href="experiments.html">Experiments</a>
+      <a href="split-adjustment-trap.html">Field notes</a>
     <a href="index.html#performance">Track record</a>
     <a href="index.html#validation">Validation</a>
     <a href="method.html">Method</a>
@@ -110,6 +111,13 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
     <h2>The MACD bullish crossover</h2>
     <p>Arguably the most widely taught indicator signal in retail trading — it ships on every charting platform and appears in essentially every beginner course. Which makes it the least likely thing in the world to still contain an edge, and exactly the sort of universally-believed claim nobody bothers to check. Registered prior: no edge, roughly 1 in 6 that it clears.</p>
     <div class="meta">registered 2026-07-31 · same 40-name universe · day-matched control · live results update automatically</div>
+  </a>
+
+  <a class="card" href="split-adjustment-trap.html" style="border-color:#5a3a2255">
+    <span class="no">FIELD NOTE</span>
+    <h2>The bug that makes your backtest look good — and why you can't see it</h2>
+    <p>Historical prices are silently rewritten every time a company splits. Mix a price you stored with one you download later and you invent returns that never happened — and in cheap stocks the error is <i>always</i> in your favour. We found it in our own code, where it had been inflating our numbers for weeks. How it works, why it survives review, and the six checks that catch it.</p>
+    <div class="meta">found 2026-07-29 while auditing Experiment 01 · cost us a +8.0% baseline that was really −2.9%</div>
   </a>
 
   <div class="how">
