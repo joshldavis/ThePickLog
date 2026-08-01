@@ -675,3 +675,46 @@ sold on.
 over *this window*. It is **not** evidence about mean reversion in general, and it is **not** a
 claim about any author, book or service — this tests a **published technique, not a person**. No
 trade is executed anywhere in this project, in paper or in live money.
+
+---
+
+## Registration batch #8 — EXPERIMENT 03, frozen 2026-07-31
+
+First experiment declared through the new **`experiment_harness.py`** rather than a bespoke
+scanner. The harness applies the same guarantees to every experiment automatically:
+forward-only, append-only, a **day-matched control always**, declared costs, and mean + median +
+ticker-clustered CI reported together, with win rate reported but never a pass criterion.
+
+### H-EXP03 — the MACD bullish crossover
+
+**The claim under test.** Buy when the MACD(12,26,9) histogram crosses from at-or-below zero to
+above zero while the close is above its 200-day simple moving average. Long-only trend
+following. This is arguably **the most widely taught indicator signal in retail trading** — it
+ships on every charting platform and appears in essentially every beginner course.
+
+**Rule (frozen; constants live in `experiment_harness.py`, and changing any of them voids the
+test and requires a new registration with a new window):**
+- **Universe:** the same 40 liquid US large caps as Experiment 02, fixed.
+- **Entry condition** (evaluated after the close): MACD histogram crosses `<=0` → `>0` **and**
+  `close > SMA(200)`. Max 5 per day, strongest crossover first.
+- **Entry price:** the next session's open; signals logged before it.
+- **Exits graded:** same-day close and the 5th-session close.
+- **Costs:** 0.10% round trip.
+- **Benchmark:** day-matched — the equal-weight return of the entire frozen universe over the
+  identical window, from the same fetch. The scored quantity is the **excess**.
+- **Window:** only signals dated strictly after 2026-07-31 count.
+
+**Pass requires ALL of:** n ≥ 30 post-registration graded signals; **both mean and median**
+day-matched excess positive net of costs; a ticker-clustered 95% CI excluding zero; direction
+holding across ≥ 3 consecutive weekly snapshots. **Win rate is reported but is explicitly not a
+pass criterion.**
+
+**Registered prior.** Published, universally known, and taught to every beginner — which makes
+it the *least* likely thing in the world to still contain an edge, since anything this widely
+followed has had eighteen years of arbitrage. Registered expectation: **the day-matched excess
+is indistinguishable from zero.** Estimated probability it clears the bar: **~1 in 6.** Being
+widely believed is not evidence, which is precisely why it is worth testing in public.
+
+**Scope limits.** A verdict describes *this rule*, on *these 40 names*, over *this window*. It
+is not a claim about MACD in general, about any author or platform, and it is not advice. No
+trade is executed anywhere in this project.

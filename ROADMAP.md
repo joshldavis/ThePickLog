@@ -1,60 +1,109 @@
-# ROADMAP — superseded 2026-07-29
+# ROADMAP — product strategy, adopted 2026-07-31
 
-> **Everything below this section predates the Gate-1 verdict and is retained as history.**
-> The picks-product framing it assumes is closed. Read this section first.
+> Supersedes everything below, including the 2026-07-29 revision. The picks-product framing
+> is closed and is retained only as history.
 
-## The project is now a testing lab
+## What this is
 
-Gate 1 failed on 2026-07-29: the pre-registered exit edge came out significantly negative
-(H-EX1, n=309, Δ −3.0pp, CI [−4.4,−1.5]), no selection filter showed an edge, and follow-up
-sweeps closed both remaining directions — **selection** (58 tests, 0 surviving BH-FDR, every
-apparent positive traceable to one stock) and **timing** (no entry point in the window has
-positive drift, so no exit rule can manufacture positive expectancy). The one established
-predictive relationship is H-RISK1: the score ranks **magnitude, not direction**, which is
-volatility persistence and is not tradeable on its own.
+**ThePickLog tests what's being sold to retail traders, in public, before the fact, and
+publishes the answer either way.** The output is *verdicts on public trading claims*. That is
+the one thing the machine produces reliably, and unlike alpha it accumulates: a verdict is
+permanent, citable years later, and gets *more* valuable when published, whereas an edge decays
+and is destroyed by publication. Those are opposite reactions to sunlight, and this project was
+always structurally suited to the first.
 
-**Consequence:** this project cannot produce alpha, and further search for it is not planned.
-What it *can* produce, on demand and indefinitely, is **rigorous verdicts on trading claims**.
-That is now the product.
+The credibility asset is that **we tested ourselves first and published the failure**
+(Experiment 01). That is what makes testing anyone else credible.
 
-### Positioning
-*ThePickLog tests what's being sold to retail traders, in public, before the fact, and publishes
-the answer either way.* The credibility asset is that **we tested ourselves first and published
-the failure** — Experiment 01. That is why the series can credibly test anyone else.
+## The monetisation model — decided 2026-07-31
 
-### The experiment pipeline
-Each experiment: a claim → a rule frozen with a date → forward-only grading against a
-**day-matched control** → proper statistics (clustered CIs, multiplicity stated) → a verdict
-published either way, whichever way it lands.
+**Verdicts are free. Always.** Paywalling them would cap the exact mechanism that gives them
+value: reach, citation, authority. A library of nulls behind a login also cannot be evaluated
+by a prospect without seeing it, and once seen they have it. The verdicts are the audience
+engine and the credential, not the product.
 
-- **Experiment 01 — our own low-float momentum screen. FAILED.** Published: `experiment-01.html`,
-  AUDIT_LOG 2026-07-29, MONETIZATION-GATE No-Go.
-- **Experiment 02 — the 2-period RSI "high win rate" trade. RUNNING.** Registered 2026-07-29
-  (HYPOTHESES batch #7), `rsi2_scanner.py`, `experiment-02.html`. First verdict ~2026-09.
-- **Running in parallel:** H-RISK1/H-RISK2 (`risk_eval.py`), H-DIL2, H-SHORT1, H-STR3, and the
-  v0.3 exit family maturing 2026-08-01.
+**What is sold is the concierge test.** Someone brings their strategy; we register it, run it
+forward against a day-matched control, and they receive a real verdict with the method attached.
+This is the user-testing product delivered as a *service* — no auth, no hosted compute, no abuse
+surface, no build — and it is priced naturally as labour plus credibility.
 
-### Selection rules for future experiments
-1. **Publicly documented technique, not a named person.** Testing a published method is a
-   technique evaluation; grading a named operator's claimed returns is a claim about that person's
-   honesty and needs counsel first (the `WEDGE-accountability.md` gate, still closed).
-2. **A universe where costs do not swallow the signal.** Experiment 01's fatal flaw was structural:
-   ~2% friction against <1% drift. Prefer liquid instruments where a real effect is detectable.
-3. **A day-matched control from day one.** No experiment ships without one again.
-4. **Frequent enough signals to reach n≥30 in weeks, not years.** Rules out slow signals like
-   golden crosses as opening experiments.
-5. **A claim someone is actually selling.** The point is public relevance, not novelty.
+Critically, it is also **the demand test for the platform.** If five people will not pay to have
+a strategy properly tested, no self-serve platform should be built. If they will, we will have
+learned exactly what to build, while being paid to learn it.
 
-### Explicitly NOT planned
-Re-running the microcap hypotheses on a wider universe hoping for a different answer; any paid
-picks or signal product (Gate-1 No-Go); the exit-discipline course (the exit is what failed);
-Phase-2 paid float feed. Expanding the universe is worthwhile **only** to create more testable
-claims, never as a second attempt at the trading dream.
+## Why NOT the user-experiment platform (yet)
 
-### Open, Josh-owned
-The 15–20 "Verified-by" demand interviews (kit built: `ThePickLog-Demand-Interview-Kit-2026-07-29.md`)
-— unblocked by Gate 1 landing, and the only thing that decides the B2B question. Counsel review
-before any named-operator testing or any revenue.
+Recorded so it is not re-litigated:
+
+1. **Time-to-value is a quarter.** Forward testing takes ~8 weeks by definition. A user
+   registers a rule and waits a quarter to find out it does not work. Against typical churn for
+   low-ARPU consumer subscriptions, the first useful output arrives long after most users have
+   left.
+2. **The deliverable is disappointment.** The base rate says most user strategies fail. Numerai
+   *pays* its users; QuantConnect gives compute away.
+3. **The feature users want is the one we forbid.** "Let me tweak the parameters and see" is an
+   invitation to overfit in the browser — already rejected in the 2026-07-02 dispositions. The
+   guardrails that make the method rigorous (freeze the rule, wait, no re-runs) are exactly what
+   makes a self-serve tester unpleasant. We would either build the rigorous version nobody
+   enjoys or the enjoyable version that destroys the brand.
+4. **It dilutes the only asset.** A platform of user experiments is a platform of mostly-noise
+   carrying our logo. The referee becomes a hosting company.
+5. **New compliance surface** the moment users publish signals others follow.
+
+Phase 3 at the earliest, and only if concierge demand proves real. Go-Big said it in July: *do
+not start here.*
+
+## Feature priority
+
+1. ✅ **Experiment harness** (`experiment_harness.py`, shipped 2026-07-31). Throughput is the
+   product on this path, and a bespoke scanner per experiment was the binding constraint. A new
+   experiment is now a declaration — universe, entry, exits, control, cost, pass bar, prior.
+   Guarantees applied uniformly and un-skippably: forward-only, append-only, a **day-matched
+   control always**, costs declared, mean + median + ticker-clustered CI reported together, and
+   win rate reported but never a pass criterion.
+2. **"Suggest a strategy to test" + public queue.** Gives readers a stake in the outcome and
+   supplies a content pipeline driven by real demand rather than our guesses. Cheap.
+3. **Email capture.** The verdicts are the lead magnet; there is currently no way to reach a
+   reader twice. This is the weakest link in the entire plan.
+4. **Concierge test offer page** — one page, a price, a form. Ships after ~3 published verdicts,
+   so there is something to point at.
+5. NOT building: auth, user rule submission, hosted compute, user leaderboards.
+
+## Experiment selection rules
+
+1. A publicly documented **technique, not a named person.** Grading a named operator's claimed
+   returns is a claim about their honesty and needs counsel first (WEDGE gate, still closed).
+2. A universe where **costs do not swallow the signal.** Experiment 01's fatal flaw was
+   structural: ~2% friction against <1% drift, so nothing could have worked at any setting.
+3. A **day-matched control from day one.** Non-negotiable; the harness enforces it.
+4. Signals frequent enough to reach n≥30 in **weeks, not years** (rules out golden-cross-type
+   signals as openers).
+5. A claim someone is **actually selling.** Public relevance beats novelty.
+
+## Under test now
+
+| # | Claim | Status |
+|---|---|---|
+| 01 | Our own low-float momentum screen | **FAILED** — published |
+| 02 | 2-period RSI mean reversion ("high win rate") | RUNNING — first verdict ~2026-09 |
+| 03 | MACD bullish crossover | RUNNING — registered 2026-07-31 via the harness |
+
+Also accruing: H-RISK1/H-RISK2 (magnitude-not-direction), H-DIL2, H-SHORT1, H-STR3, and the
+v0.3 exit family.
+
+## Explicitly not planned
+
+Re-running the microcap hypotheses on a wider universe hoping for a different answer. Any paid
+picks or signal product (Gate-1 No-Go). The exit-discipline course — the exit is precisely what
+failed. Phase-2 paid float feed. Universe expansion is worthwhile **only** to create more
+testable claims, never as a second attempt at the trading dream.
+
+## Open, Josh-owned
+
+The 15–20 "Verified-by" demand interviews (kit built) — the only thing that settles the B2B
+question. Counsel review before any named-operator testing or any revenue. Market reality check
+already on file: Hulbert Ratings has run seller-paid newsletter auditing since 2016 and lists
+~11 newsletters, so price the ceiling accordingly.
 
 ---
 

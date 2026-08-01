@@ -71,6 +71,18 @@ jobs:
         continue-on-error: true
         run: python rsi2_scanner.py grade || echo "exp02 grade skipped (non-fatal)"
 
+      # EXPERIMENT HARNESS (shipped 2026-07-31): runs every experiment declared in
+      # experiment_harness.py — currently EXP03 (MACD crossover). Forward-only, append-only,
+      # day-matched control enforced for all of them. Non-fatal by construction.
+      - name: Experiment harness — scan
+        if: steps.cmd.outputs.cmd == 'scan'
+        continue-on-error: true
+        run: python experiment_harness.py scan || echo "harness scan skipped (non-fatal)"
+      - name: Experiment harness — grade
+        if: steps.cmd.outputs.cmd == 'grade'
+        continue-on-error: true
+        run: python experiment_harness.py grade || echo "harness grade skipped (non-fatal)"
+
       - name: Refresh Finding-A-aware brief
         run: python ignitionscan.py brief || true
       - name: Rebuild Test-mode leaderboard (house + user rules)
@@ -105,6 +117,8 @@ jobs:
           [ -f control_outcomes.csv ] && git add control_outcomes.csv || true
           [ -f rsi2_signals.csv ] && git add rsi2_signals.csv || true
           [ -f rsi2_outcomes.csv ] && git add rsi2_outcomes.csv || true
+          [ -d experiments ] && git add experiments || true
+          [ -f reports/experiments-LATEST.md ] && git add reports/experiments-LATEST.md || true
           [ -f risk_snapshots.csv ] && git add risk_snapshots.csv || true
           [ -f reports/risk-eval-LATEST.md ] && git add reports/risk-eval-LATEST.md || true
           [ -f outcomes.csv ] && git add outcomes.csv || true
@@ -160,6 +174,7 @@ jobs:
             control_outcomes.csv
             rsi2_signals.csv
             rsi2_outcomes.csv
+            experiments
             risk_snapshots.csv
             outcomes.csv
             paths.csv
