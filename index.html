@@ -485,6 +485,17 @@
 
     <div class="grid kpis" id="landingKpis"></div>
 
+    <div class="panel" style="margin-top:26px;border-color:#5a3a22;background:linear-gradient(180deg,#2a1d10 0%,var(--panel) 60%)">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+        <span class="pill" style="background:#f5b14c22;border:1px solid #f5b14c55;color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px">FIELD NOTE</span>
+        <h2 style="margin:0">The bug that makes your backtest look good</h2>
+      </div>
+      <p class="muted" style="font-size:14px;margin:0 0 12px;max-width:70ch">A stock's price history is <b>not a fixed fact</b> — it gets rewritten every time a company splits. Mix a price you stored with one you download later and you invent returns that never happened. In cheap stocks the error is <b>always in your favour</b>, because reverse splits dominate. It is silent, it corrupts only some of your rows, and it is invisible unless you kept a record of prices as they were at the time.<br><br>We found it in our own code, where it had turned a <b class="neg">&minus;2.9%</b> baseline into a <b class="pos">+8.0%</b> one and made three losing exit rules look like winners. Here is how it works and the six checks that catch it.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" onclick="location.href='split-adjustment-trap.html'">Read the field note &rarr;</button>
+      </div>
+    </div>
+
     <div class="panel" style="margin-top:26px">
       <h2 style="margin:0 0 6px">Experiment 01: we tested our own screener. It lost.</h2>
       <p class="muted" style="font-size:13.5px;margin:0 0 12px">We built a screener for low-float stocks gapping up on heavy volume, pre-registered the edge we believed in, and ran it forward for seven weeks. It lost — significantly, and in the opposite direction to our prediction. At 30 trades it looked like it was working; <b>the early positive read was noise</b>, and the sign inverted as the sample grew. That result, the bug we found in our own scoring while checking it, and what we found instead are all published in full.</p>

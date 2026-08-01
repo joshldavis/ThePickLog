@@ -110,6 +110,10 @@ function toggleMenu(force){
   <h2><span class="n">1</span>The pick log is the only judge</h2>
   <p>Every screened name is written to <code>picks.csv</code> <b>before the outcome is known</b>, with a timestamp. The log is <b>append-only</b> — rows are never edited or deleted, and every write is sealed into a <a href="#record-integrity">tamper-evident hash chain</a>. Grading writes to a separate <code>outcomes.csv</code> keyed by <code>pick_id</code>. If a claim isn't reproducible from these two public files, it isn't evidence. Backtests are used only to <i>choose</i> what to test — never as a performance claim.</p>
 
+  <div class="panel" style="border-color:#5a3a22;background:#2a1d10;margin:18px 0">
+    <b>Why we never re-download a historical price.</b> Price history is restated whenever a company splits, so a price downloaded today is not the price that was on the screen at the time. Mixing the two invents returns that never happened. We store every price forward-only at grade time and reconcile it before use &mdash; a discipline we adopted the hard way, after finding this bug in our own code. <a href="split-adjustment-trap.html">The full write-up &rarr;</a>
+  </div>
+
   <h2 id="record-integrity">Record integrity — how you'd catch me editing history</h2>
   <p>The forward log (<code>picks.csv</code>, <code>outcomes.csv</code>, <code>paths.csv</code>) is
   append-only: rows are written before the outcome is known and never edited. But "append-only"

@@ -152,6 +152,10 @@ function toggleMenu(force){
   <p class="flag g">✓ Green flag: raw data published; numbers re-derivable by anyone.</p>
   <p class="flag r">✕ Red flag: "trust our verified results" with nothing to check.</p>
 
+  <div class="panel" style="border-color:#5a3a22;background:#2a1d10">
+    <b>And one that catches the honest ones too.</b> Not every bad number is dishonest &mdash; some are a data bug nobody noticed. The most common one silently rewrites price history whenever a company splits, and in cheap stocks it <i>always</i> makes results look better. We found it in our own code after it had been inflating our numbers for weeks. If a service shows you a backtest, this is worth understanding before you judge it: <a href="split-adjustment-trap.html">the bug that makes your backtest look good &rarr;</a>
+  </div>
+
   <h2>The 60-second version</h2>
   <div class="panel">
     <ol class="checks">
