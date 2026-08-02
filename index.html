@@ -526,7 +526,7 @@
         <h2 style="margin:0;font-size:19px">Our own screener's live record</h2>
         <span class="dim" style="font-size:13px">— the strategy we tested first, and failed</span>
       </div>
-      <p class="muted" style="font-size:13.5px;margin:4px 0 0;max-width:78ch">These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.</p>
+      <p class="muted" id="kpiCaption" style="font-size:13.5px;margin:4px 0 0;max-width:78ch">These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.</p>
       <div class="grid kpis" id="landingKpis" style="margin-top:14px"></div>
     </div>
 
@@ -1925,8 +1925,13 @@ function gradeAll(picks){
 async function renderLandingKpis(){
   const el=document.getElementById("landingKpis"); if(!el) return;
   const tr=await getTrackRecord();
+  const cap=document.getElementById("kpiCaption");
   if(!tr.real){ const g=gradeAll(SAMPLE_PICKS);
+    // The live pick log didn't load. Say so rather than let a worked sample sit
+    // under a caption claiming these are our published results.
+    if(cap) cap.innerHTML=`<b class="neg">The live pick log couldn't be loaded just now, so these are worked <i>sample</i> numbers, not our record.</b> The real ones are on the <a href="#" onclick="go('performance');return false" style="color:var(--a)">Track record</a> tab and in <a href="picks.csv" download style="color:var(--a)">picks.csv</a>.`;
     el.innerHTML=`${stat("Picks (sample)",g.total)}${stat("Blended win rate",g.winRate+"%")}${stat("Data","sample")}`; return; }
+  if(cap) cap.innerHTML='These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.';
   const g=aggregateReal(tr.picks,tr.outcomes);
   // [Charter P4] Headline the honest distribution, never a lone win rate or a
   // cherry-picked best call: pair win rate with median net return AND the average
