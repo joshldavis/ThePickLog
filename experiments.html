@@ -29,7 +29,9 @@
   #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
   #mobileMenu.open{display:block}
   #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
-  @media(max-width:980px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  @media(max-width:980px){nav.tabs{display:none}.proto{display:none}}
+  .menu-btn{margin-left:auto}
+  @media(max-width:980px){.menu-btn{display:flex}}
   .wrap{max-width:900px;margin:0 auto;padding:30px 16px 80px}
   h1{font-size:34px;margin:.1em 0 .2em;letter-spacing:-.02em;line-height:1.15}
   .lead{color:var(--dim);font-size:16.5px;margin:0 0 10px;max-width:62ch}
@@ -60,6 +62,7 @@
     <nav class="tabs">
       <a href="index.html">Overview</a>
       <a href="experiments.html" class="on">Experiments</a>
+      <a href="split-adjustment-trap.html">Field notes</a>
       <a href="index.html#performance">Track record</a>
       <a href="index.html#validation">Validation</a>
       <a href="method.html">Method</a>
@@ -67,7 +70,6 @@
       <a href="trust.html">Trust &amp; Data</a>
       <a href="privacy.html">Privacy</a>
     </nav>
-    <span class="proto">PROTOTYPE</span>
     <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
   </div>
   <div id="mobileMenu" role="menu" aria-label="Site menu">
@@ -113,7 +115,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
     <div class="meta">registered 2026-07-29 · first verdict expected ~2026-09 · universe frozen · control group logged daily</div>
   </a>
 
-  <a class="card" href="reports/experiments-LATEST.md">
+  <a class="card" href="experiment-03.html">
     <span class="no">EXPERIMENT 03</span><span class="verdict-pill v-run">RUNNING</span>
     <h2>The MACD bullish crossover</h2>
     <p>Arguably the most widely taught indicator signal in retail trading — it ships on every charting platform and appears in essentially every beginner course. Which makes it the least likely thing in the world to still contain an edge, and exactly the sort of universally-believed claim nobody bothers to check. Registered prior: no edge, roughly 1 in 6 that it clears.</p>
@@ -132,7 +134,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   </div>
 
 
-  <div class="how" style="border-color:#1f6f6b55">
+  <div class="how" id="suggest" style="border-color:#1f6f6b55;scroll-margin-top:70px">
     <h2>What should we test next?</h2>
     <ol style="list-style:none;padding-left:0">
       <li>If there's a strategy, indicator or claim you keep seeing sold — and you've never seen anyone check it honestly — tell us and it goes in the public queue. We pick from it.</li>

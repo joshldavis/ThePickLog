@@ -3,8 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ThePickLog — The Verifiable Stock-Alert Track Record</title>
-<meta name="description" content="A trading research project that logs every pick before the open and grades winners and losers in a public record anyone can verify. See the 7 checks every alert service should pass." />
+<title>ThePickLog — we test what's being sold to traders</title>
+<meta name="description" content="We take a trading claim that's being sold, freeze the rule with a date before we look, grade it forward on public data, and publish the verdict either way — starting with our own screener, which failed." />
+<link rel="canonical" href="https://thepicklog.vercel.app/" />
+<meta property="og:site_name" content="ThePickLog" />
+<meta property="og:title" content="We test what's being sold to traders. Starting with our own strategy." />
+<meta property="og:description" content="Rule frozen before the fact, graded forward on public data, verdict published either way. Experiment 01 was our own screener. It lost, and we published it." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://thepicklog.vercel.app/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="We test what's being sold to traders. Starting with our own strategy." />
+<meta name="twitter:description" content="Rule frozen before the fact, graded forward on public data, verdict published either way. Experiment 01 was our own screener. It lost, and we published it." />
 <link rel="canonical" href="https://thepicklog.vercel.app/" />
 <style>
   :root{
@@ -179,6 +188,24 @@
   ul.feat-list li:before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
   .kpis{grid-template-columns:repeat(4,1fr);margin-top:30px}
   @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  /* experiment cards (landing) */
+  .exp-cards{grid-template-columns:repeat(3,1fr);margin-top:14px}
+  @media(max-width:900px){.exp-cards{grid-template-columns:1fr}}
+  a.exp-card{display:block;text-decoration:none;color:inherit;transition:border-color .15s,background .15s}
+  a.exp-card:hover{border-color:var(--a);background:var(--panel-2)}
+  .exp-card h3{margin:.35em 0 .35em;font-size:16.5px;letter-spacing:-.01em;line-height:1.3}
+  .exp-card p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .exp-no{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.08em}
+  .exp-pill{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;padding:3px 8px;
+    border-radius:999px;vertical-align:middle;margin-left:6px;font-family:inherit}
+  .exp-pill.v-fail{background:#3a1c22;color:#ffb3c0;border:1px solid #5a2a33}
+  .exp-pill.v-run{background:#2a1d10;color:var(--amber);border:1px solid #5a3a22}
+  .exp-pill.v-pass{background:#12331f;color:var(--green);border:1px solid #23543a}
+  .exp-meta{margin-top:11px;font-size:11.5px;color:var(--muted);font-family:var(--mono);opacity:.8}
+  /* nav grouping */
+  .tabs .navsep{width:1px;align-self:center;height:18px;background:var(--line);margin:0 6px;flex-shrink:0}
+  #mobileMenu .mgroup{font-size:10.5px;letter-spacing:.1em;color:var(--muted);font-weight:800;
+    padding:12px 12px 4px;text-transform:uppercase}
   .formula{font-family:var(--mono);font-size:13px;background:var(--panel-2);border:1px solid var(--line);
     border-radius:10px;padding:14px 16px;color:var(--text);overflow-x:auto;white-space:pre}
   .wt{display:flex;align-items:center;gap:12px;margin:8px 0}
@@ -315,8 +342,9 @@
   /* ===== Guide page ===== */
   .readrow{display:grid;grid-template-columns:1fr 1fr;gap:2px 28px}
   @media(max-width:720px){.readrow{grid-template-columns:1fr}}
-  .readrow .ri{font-size:13.5px;padding:9px 0;border-bottom:1px solid #ffffff08}
-  .readrow .ri b{font-family:var(--mono);color:var(--a);margin-right:4px}
+  .readrow .ri{font-size:13.5px;line-height:1.62;padding:11px 0;border-bottom:1px solid #ffffff08;color:var(--muted)}
+  .readrow .ri b{display:block;font-family:inherit;font-size:14px;font-weight:700;
+    color:var(--text);letter-spacing:-.005em;margin:0 0 3px}
   .gcat{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin:20px 0 9px;font-weight:700}
   .gloss{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:720px){.gloss{grid-template-columns:1fr}}
@@ -369,7 +397,7 @@
     border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;
     align-items:center;gap:7px;white-space:nowrap}
   .menu-btn:hover{color:var(--a);border-color:var(--a)}
-  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;z-index:30;background:#0a0e14;
     backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;
     box-shadow:0 18px 40px #000a;max-height:calc(100vh - 60px);overflow-y:auto}
   #mobileMenu.open{display:block}
@@ -410,7 +438,9 @@
   }
   @media(max-width:640px){
     .top-cta .badge-proto{display:none}
-    .kpis{grid-template-columns:1fr}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .kpis .stat{padding:12px 13px}
+    .kpis .stat .v{font-size:22px}
     .hero{padding:26px 0 6px}
     .hero h1{font-size:26px}
     .cat-row .cl{width:112px}
@@ -437,33 +467,38 @@
     <nav class="tabs" id="tabs">
       <button data-view="landing" class="active">Overview</button>
       <button id="navExperiments" onclick="location.href='experiments.html'">Experiments</button><button id="navFieldNotes" onclick="location.href='split-adjustment-trap.html'">Field notes</button>
-    <button data-view="watchlist">Watchlist</button>
-      <button data-view="performance">Track record</button>
+      <span class="navsep" aria-hidden="true"></span>
+      <button data-view="performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</button>
       <button data-view="validation" title="Model validation — every pre-registered hypothesis tracked out-of-sample, recomputed in your browser from the raw CSVs.">Validation</button>
+      <span class="navsep" aria-hidden="true"></span>
+      <button data-view="watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today's screen</button>
+      <button data-view="scoring" title="How the momentum score and the Quality Lens are built, metric by metric.">How it's scored</button>
       <button data-view="calculator" title="Exit-rule scenario calculator — what the +10%-target exit would earn under different touch-rate assumptions, computed live from the raw log.">Calculator</button>
-      <button data-view="scoring">Scoring</button>
+      <span class="navsep" aria-hidden="true"></span>
+      <button data-view="compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</button>
       <button data-view="portfolio">Portfolio</button>
-      <button data-view="compete">Compete</button>
       <button data-view="assistant">Assistant</button>
     </nav>
     <div class="top-cta">
       <span id="isAuthBar"></span>
-      <span class="badge-proto">PROTOTYPE</span>
       <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"
         onclick="toggleMenu()">☰ Menu</button>
     </div>
   </div>
   <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <div class="mgroup">The research</div>
     <button data-view="landing" class="active">Overview</button>
     <button id="mnavExperiments" onclick="location.href='experiments.html'">Experiments</button>
     <button id="mnavFieldNotes" onclick="location.href='split-adjustment-trap.html'">Field notes</button>
-    <button data-view="watchlist">Watchlist</button>
     <button data-view="performance">Track record</button>
     <button data-view="validation">Validation</button>
+    <div class="mgroup">The screener</div>
+    <button data-view="watchlist">Today's screen</button>
+    <button data-view="scoring">How it's scored</button>
     <button data-view="calculator">Calculator</button>
-    <button data-view="scoring">Scoring</button>
-    <button data-view="portfolio">Portfolio</button>
+    <div class="mgroup">Play money</div>
     <button data-view="compete">Compete</button>
+    <button data-view="portfolio">Portfolio</button>
     <button data-view="assistant">Assistant</button>
   </div>
   <div class="wrap"><div id="srcBanner"></div></div>
@@ -474,20 +509,57 @@
   <div class="wrap">
     <div class="hero">
       <h1>We test what's being sold to traders.<br>Starting with our own strategy.</h1>
-      <p class="lead">Retail trading runs on claims nobody checks: impressive win rates, screenshots of the good days, backtests fitted to the past. We take a trading claim, freeze the rule with a date <i>before</i> we look, grade it forward on public data, and publish the verdict — including when it's embarrassing. We started with our own screener. It failed, and we published that too.</p>
+      <p class="lead">Retail trading runs on claims nobody checks: impressive win rates, screenshots of the good days, backtests fitted to the past. We take a claim, freeze the rule with a date <i>before</i> we look, grade it forward on public data, and publish the verdict — including when it's embarrassing. We started with our own screener. It failed, and we published that too.</p>
       <p class="muted" style="color:var(--green);font-weight:600;margin:0 auto 26px">
         Rule frozen before the fact &nbsp;•&nbsp; Graded forward, winners <i>and</i> losers &nbsp;•&nbsp; Recomputable from public data &nbsp;•&nbsp; Published either way
       </p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="btn" onclick="location.href='experiments.html'">See the experiments →</button>
-        <button class="btn ghost" onclick="go('performance')">The raw track record →</button>
-        <button class="btn ghost" onclick="location.href='guide.html'">Read the 7 checks every service should pass →</button>
+        <button class="btn" onclick="location.href='experiments.html'">See the experiments &rarr;</button>
+        <button class="btn ghost" onclick="go('performance')">The raw track record &rarr;</button>
       </div>
-      <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:56ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled →</a></p>
+      <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:62ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled &rarr;</a> &nbsp;·&nbsp; <a href="guide.html" style="color:var(--blue);text-decoration:none">The 7 checks any service should pass &rarr;</a></p>
     </div>
 
-    <div class="grid kpis" id="landingKpis"></div>
+    <!-- ===== OUR OWN RECORD — framed as the experiment it is ===== -->
+    <div style="margin-top:34px">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px">
+        <h2 style="margin:0;font-size:19px">Our own screener's live record</h2>
+        <span class="dim" style="font-size:13px">— the strategy we tested first, and failed</span>
+      </div>
+      <p class="muted" style="font-size:13.5px;margin:4px 0 0;max-width:78ch">These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.</p>
+      <div class="grid kpis" id="landingKpis" style="margin-top:14px"></div>
+    </div>
 
+    <!-- ===== THE SERIES ===== -->
+    <div style="margin-top:34px">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:19px">The experiments</h2>
+        <a href="experiments.html" style="margin-left:auto;font-size:13.5px;color:var(--blue);text-decoration:none">All experiments &amp; how they work &rarr;</a>
+      </div>
+      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch">Each one is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control. One is finished. Two are running in public right now.</p>
+      <div class="grid exp-cards">
+        <a class="panel exp-card" href="experiment-01.html">
+          <div class="exp-no">EXPERIMENT 01 <span class="exp-pill v-fail">FAILED</span></div>
+          <h3>Our own low-float momentum screen</h3>
+          <p>We pre-registered the edge we believed in and ran it forward for seven weeks. It lost — significantly, and in the opposite direction to our prediction. At 30 trades it looked like it was working; that early positive read was noise.</p>
+          <div class="exp-meta">verdict 2026-07-29 · n=309 · &Delta; &minus;3.0pp vs baseline</div>
+        </a>
+        <a class="panel exp-card" href="experiment-02.html">
+          <div class="exp-no">EXPERIMENT 02 <span class="exp-pill v-run">RUNNING</span></div>
+          <h3>The 2-period RSI "high win rate" trade</h3>
+          <p>One of the most published retail setups of the last twenty years, almost always sold on its win rate. We're testing whether a high win rate survives contact with expectancy — on liquid names, where costs can't be blamed for the answer.</p>
+          <div class="exp-meta">registered 2026-07-29 · first verdict ~2026-09</div>
+        </a>
+        <a class="panel exp-card" href="experiment-03.html">
+          <div class="exp-no">EXPERIMENT 03 <span class="exp-pill v-run">RUNNING</span></div>
+          <h3>The MACD bullish crossover</h3>
+          <p>The most widely taught indicator signal in retail trading — on every platform, in every beginner course. Which makes it the least likely thing to still contain an edge, and exactly the sort of claim nobody bothers to check.</p>
+          <div class="exp-meta">registered 2026-07-31 · day-matched control</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== FIELD NOTE ===== -->
     <div class="panel" style="margin-top:26px;border-color:#5a3a22;background:linear-gradient(180deg,#2a1d10 0%,var(--panel) 60%)">
       <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
         <span class="pill" style="background:#f5b14c22;border:1px solid #f5b14c55;color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px">FIELD NOTE</span>
@@ -499,13 +571,29 @@
       </div>
     </div>
 
+    <!-- ===== HOW AN EXPERIMENT WORKS ===== -->
     <div class="panel" style="margin-top:26px">
-      <h2 style="margin:0 0 6px">Experiment 01: we tested our own screener. It lost.</h2>
-      <p class="muted" style="font-size:13.5px;margin:0 0 12px">We built a screener for low-float stocks gapping up on heavy volume, pre-registered the edge we believed in, and ran it forward for seven weeks. It lost — significantly, and in the opposite direction to our prediction. At 30 trades it looked like it was working; <b>the early positive read was noise</b>, and the sign inverted as the sample grew. That result, the bug we found in our own scoring while checking it, and what we found instead are all published in full.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn" onclick="location.href='experiment-01.html'">Read Experiment 01 →</button>
-        <button class="btn ghost" onclick="location.href='trust.html#standard'">The standard we hold ourselves to →</button>
-        <button class="btn ghost" onclick="go('compete');window.setCompeteMode&&setCompeteMode('test')">Or take the Compete challenge →</button>
+      <h2 style="margin-top:0">How an experiment works here</h2>
+      <p class="muted" style="font-size:14px;margin-bottom:14px">Five rules. They are the whole method, and they are what makes a verdict here mean something.</p>
+      <div class="readrow">
+        <div class="ri"><b>1 &middot; The claim gets written down first.</b> Rule, universe, entry, exit, cost assumption and the exact bar it has to clear — all frozen with a date, in a public file, before any of the data it will be judged on exists.</div>
+        <div class="ri"><b>2 &middot; It runs forward only.</b> No backtest ever counts as evidence. Only outcomes that happen after the registration date are scored.</div>
+        <div class="ri"><b>3 &middot; It is graded against a control.</b> "It made money" is not a result. The question is always whether it beat the honest alternative — doing the simple thing instead.</div>
+        <div class="ri"><b>4 &middot; The statistics are done properly.</b> Confidence intervals, a correction for the fact that repeated bets on the same names are not independent, and a count of how many results you'd expect to look good by chance alone.</div>
+        <div class="ri"><b>5 &middot; The verdict is published either way.</b> A method we hoped would work and didn't is a more useful result than one more success story.</div>
+      </div>
+      <p class="muted" style="font-size:13px;margin:14px 0 0">Every frozen rule is in <a href="HYPOTHESES.md" style="color:var(--a)">HYPOTHESES.md</a>; every verdict is recorded in the <a href="AUDIT_LOG.md" style="color:var(--a)">audit log</a>; the raw data is in <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a>. Nothing here has to be taken on faith.</p>
+    </div>
+
+    <!-- ===== THE SCREENER, HONESTLY FRAMED ===== -->
+    <div class="panel" style="margin-top:26px">
+      <h2 style="margin-top:0">Where this started: the screener</h2>
+      <p style="font-size:14px">Before it was a testing lab, this was a scanner. Every weekday morning a cloud job screens the market's tiniest stocks — <b>"low-float"</b> names with very few shares available to trade, which can spike 20% or 100% in a day and collapse just as fast — and ranks the ones showing early signs of ignition on a simple published score.</p>
+      <p style="font-size:14px">That screen is <b>Experiment 01</b>, and it failed. We still run it, log it and grade it in public, for two reasons: the log is the raw material every rule here is tested against, and a scanner you can watch fail in real time is a more honest demonstration of the method than any description of it. <b>The screen is what we point the honesty machine at. The honesty machine is the product.</b></p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        <button class="btn ghost" onclick="go('watchlist')">See today's screen &rarr;</button>
+        <button class="btn ghost" onclick="go('performance')">Every pick ever logged &rarr;</button>
+        <button class="btn ghost" onclick="go('scoring')">How the score is built &rarr;</button>
       </div>
     </div>
 
@@ -521,75 +609,20 @@
       <div id="dashQuality"><div class="dim" style="font-size:13px;padding:6px 2px">Scoring today's top movers…</div></div>
     </div>
 
-    <!-- ============ PLAIN-ENGLISH EXPLAINER ============ -->
+    <!-- ===== WHAT THIS COSTS ===== -->
     <div class="panel" style="margin-top:26px">
-      <h2 style="margin-top:0">What is this?</h2>
-      <p style="font-size:14px">ThePickLog is a research project with one uncomfortable rule: <b>we publish our
-        losers.</b> Every trading idea is logged before the market opens and graded automatically a week later —
-        winners and losers alike — in a record we can't go back and edit.</p>
-      <p style="font-size:14px">What it screens for, specifically, is the market's tiniest stocks — <b>"low-float"</b>
-        names with very few shares available to trade. Because so few shares exist, when buyers show up these stocks
-        can spike 20%, 50%, even 100% in a day — and collapse just as fast. Every morning the app finds the ones
-        showing early signs of ignition — unusual volume, a price gap, a small float — and ranks them with a simple,
-        published score. But the screen is just what we point the honesty machine at. <b>The honesty machine is the
-        product.</b></p>
-
-      <h2 style="margin-top:22px">What makes it different</h2>
-      <p style="font-size:14px;margin-bottom:10px">Most stock-picking tools show you their winners and quietly
-        forget their losers. ThePickLog is built the opposite way — so it <i>can't</i> lie:</p>
+      <h2 style="margin-top:0">What this costs, and what we won't sell</h2>
       <div class="readrow">
-        <div class="ri"><b>Every pick is logged before the outcome is known.</b> A cloud job runs the scan each
-          weekday morning and appends the picks to a permanent log. No cherry-picking, no deleting the
-          embarrassing ones — the log is never edited, only added to.</div>
-        <div class="ri"><b>Every pick is graded automatically 5 trading days later.</b> Did it go up or down, how
-          high did it spike, how hard did it crash — measured at prices you could actually get, net of a 2%
-          friction haircut, with the worst drawdown shown alongside every result. Also untouched by human hands.</div>
-        <div class="ri"><b>Rules have to be called in advance.</b> Before any rule is tested ("skip stocks under
-          $1", "sell at +10%"), it's written down with a date — then judged only on picks logged <i>after</i>
-          that date. The same discipline scientists use to avoid fooling themselves with hindsight.</div>
+        <div class="ri"><b>The verdicts are free, permanently.</b> Every experiment, every write-up, the full pick log, the validation dashboard and the raw CSVs. Publishing a verdict only some people can read defeats the point of publishing it.</div>
+        <div class="ri"><b>There is no paid picks product, and there won't be.</b> We tested our own signal in public and it lost. Selling it anyway is the exact behaviour this project exists to check. Anyone charging for signals should be able to show you a record like the one on this site.</div>
+        <div class="ri"><b>If we ever charge, it will be for testing a claim.</b> Bring a strategy someone is selling you and we'll put it through the same frozen-rule, forward-graded, control-matched process — and publish the verdict either way. Nothing is for sale today, and we'll say so out loud when that changes.</div>
       </div>
-
-      <h2 style="margin-top:22px">What the record shows so far</h2>
-      <p style="font-size:14px">Here's the part no other service will show you: bought at the open and held a week,
-        our picks as a group have <b>lost money</b> so far. We're telling you that up front, because a record you can
-        only trust when it's flattering isn't a record. The log did reveal something useful — most picks <b>spike
-        before they fade</b>, touching a meaningful gain within days and then bleeding out. So the live question isn't
-        "which stocks to buy" but "<b>when to sell</b>": does taking a quick gain and walking away change the
-        picture? That rule was registered in advance and is being tested right now, on new picks only. The
-        <a href="#" onclick="go('performance');return false" style="color:var(--a)">Track record</a> tab has the
-        live numbers — every one re-derivable from the public pick log.</p>
-
-      <p class="muted" style="font-size:13px;margin-bottom:0">Runs fully unattended in the cloud. Paper-trading
-        only (fake money). A personal research tool — not investment advice.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn" onclick="location.href='experiments.html#suggest'">Suggest a strategy to test &rarr;</button>
+        <button class="btn ghost" onclick="go('compete');window.IS_SIM&amp;&amp;IS_SIM.openAuth()">Try it with play money &rarr;</button>
+      </div>
+      <p class="dim" style="font-size:12.5px;margin:14px 0 0">Compete is a free $100,000 paper-trading simulation with live prices and a leaderboard — no real money, no brokerage connection, nothing to buy.</p>
     </div>
-
-    <p class="muted" style="font-size:13px;margin:22px 0 10px">We don't sell picks. When there's something to pay
-      for, it'll be <b>access to honestly-graded research and verification tools — never a "trust our results"
-      subscription.</b> Everything stays free until the method proves itself in public, and we'll say so out loud
-      when that changes.</p>
-    <div class="grid price-cards">
-      <div class="panel price-card feat">
-        <h3>Free &amp; open <span class="is-pill">OPEN NOW</span></h3>
-        <div class="p">Free</div>
-        <p class="muted" style="font-size:13px">Everything the site does, free while it proves itself in public.</p>
-        <ul class="feat-list"><li>Today's full screen + scoring detail</li><li>Complete public track record &amp; validation dashboard</li><li><b>Compete:</b> $100,000 in play money, live prices, leaderboard</li><li>Built-in assistant to learn the metrics</li></ul>
-        <button class="btn" style="width:100%;margin-top:14px" onclick="go('compete');window.IS_SIM&&IS_SIM.openAuth()">Create a free account →</button>
-      </div>
-      <div class="panel price-card" style="opacity:.65">
-        <h3>Early access <span class="badge-proto">COMING SOON</span></h3>
-        <div class="p">$99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
-        <p class="muted" style="font-size:13px">Planned — only if the edge survives its out-of-sample test. Nothing is for sale today.</p>
-        <ul class="feat-list"><li>Daily pre-market watchlist</li><li>Email + Discord delivery</li><li>Per-ticker scoring detail</li></ul>
-      </div>
-      <div class="panel price-card" style="opacity:.65">
-        <h3>Public launch <span class="badge-proto">COMING SOON</span></h3>
-        <div class="p">$199<span style="font-size:14px;color:var(--muted)">/mo</span></div>
-        <p class="muted" style="font-size:13px">Planned standard price after any early-access cohort fills.</p>
-        <ul class="feat-list"><li>Everything in Early access</li><li>Priority support</li></ul>
-      </div>
-    </div>
-    <p class="muted" style="font-size:12.5px;margin-top:10px">Paid tiers are shown for transparency about where this <i>could</i> go — they are not available, and won't be unless the
-      pre-registered edge validates out-of-sample and legal review clears. Until then everything is free.</p>
 
     <p class="disclaimer">
       <b>Educational / informational use only.</b> ThePickLog publishes an impersonal, objectively-screened
@@ -597,7 +630,7 @@
       or hold any security, and no content is tailored to any individual's circumstances. We are not a
       broker-dealer or registered investment adviser. The operators may hold positions in screened
       securities. Low-float / low-priced stocks are highly volatile and carry a substantial risk of loss.
-      Past performance does not predict future results. <i>(Prototype — sample copy pending legal review.)</i>
+      Past performance does not predict future results.
     </p>
   </div>
 </section>
@@ -625,6 +658,12 @@
       </table>
     </div>
 
+    <div class="panel" style="margin-top:18px">
+      <h3 style="margin:0 0 6px;font-size:15px">Where these numbers come from</h3>
+      <p class="note" style="margin:0">Fundamentals are read from <a href="trust.html" style="color:var(--a)">SEC EDGAR</a> public filings. Live quotes come from a market-data vendor whose terms don't permit public redistribution, so today's screen shows clearly-labeled <b>sample prices</b> to visitors — the banner at the top of the page says so whenever that's the case. <b>The pick log, the track record and every experiment on this site are unaffected:</b> they have never used this feed, and they re-derive from <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a>. One known limit worth stating: <b>float</b> here is approximated from shares outstanding; true public float and short interest need a paid feed.</p>
+    </div>
+
+    <div id="ownerPanels" hidden>
     <div class="config panel" style="margin-top:18px">
       <label for="keyIn">Live market data &amp; fundamentals — served securely via <code>/api/fmp</code></label>
       <p class="note" style="margin-top:8px">For the deployed app, set <code>FMP_API_KEY</code> in your Vercel
@@ -683,9 +722,10 @@
         or if today's P&amp;L has hit your daily loss limit. The <b>Risk %</b> drives the "Size to risk"
         button in the order ticket (shares = risk $ ÷ distance to your stop). Settings save in this browser.</p>
     </div>
+    </div>
 
     <p class="disclaimer">Educational / informational only — not investment advice or a recommendation.
-      Screened by objective criteria, identical for all users. Sample copy pending legal review.</p>
+      Screened by objective criteria, identical for all users.</p>
   </div>
 </section>
 
@@ -1064,7 +1104,7 @@
           <b>Speculative</b>, or <b>Too Hard</b> (pre-revenue, biotech, mining) — because knowing what
           <i>not</i> to analyze is half the edge.</p>
         <div class="note">Some inputs (insider ownership, auditor changes, going-concern, filing timeliness)
-          need a paid fundamentals/filings feed; in the prototype they're shown as "not checked" rather than guessed.</div>
+          need a paid fundamentals/filings feed; rather than guess, they are shown as "not checked".</div>
       </div>
     </div>
 
@@ -1211,9 +1251,9 @@
 </section>
 
 <footer class="foot"><div class="wrap">
-  ThePickLog — a personal, transparent research instrument (prototype). Educational / informational only — not investment advice.
-  <br>Research, not investment advice. Simulated (paper) trading only.
-  <a href="method.html">Method</a> · <a href="guide.html">Vetting Guide</a> · <a href="trust.html">Trust &amp; Data</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="privacy.html">Privacy</a>
+  ThePickLog — a public testing lab for trading claims, operated by AMD Ventures, LLC (Florida).
+  Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. Simulated (paper) trading only; no real money is ever placed.
+  <br><a href="experiments.html">Experiments</a> · <a href="method.html">Method</a> · <a href="guide.html">Vetting Guide</a> · <a href="trust.html">Trust &amp; Data</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="privacy.html">Privacy</a>
   <!-- BUILD STAMP: __BUILDSTAMP__ is auto-filled at deploy by scripts/stamp-build.mjs (commit SHA + deploy time) -->
   <br><span style="opacity:.55;font-size:11px">Build __BUILDSTAMP__</span>
   <br><br>
@@ -2098,6 +2138,20 @@ const ALPACA_API = "/api/alpaca";
    proxy requires a token (ALPACA_UI_TOKEN in Vercel). Stored per-browser;
    guests are routed to Compete (per-user $100k sim) instead. */
 function ownerToken(){ try{ return localStorage.getItem("is_owner_token")||""; }catch(e){ return ""; } }
+/* Owner-only configuration (market-data key, Alpaca token, risk caps) is hidden from
+   visitors: it is operator plumbing, not product. Reveal it with ?owner=1 once, or
+   automatically on any browser that already holds the owner token. */
+function revealOwnerPanels(){
+  try{
+    const flag=/[?&]owner=1\b/.test(location.search);
+    if(flag){ try{ localStorage.setItem("is_owner_ui","1"); }catch(e){} }
+    let sticky=false; try{ sticky=localStorage.getItem("is_owner_ui")==="1"; }catch(e){}
+    const on = flag || !!ownerToken() || sticky;
+    const el=document.getElementById("ownerPanels"); if(el) el.hidden=!on;
+  }catch(e){}
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",revealOwnerPanels);
+else revealOwnerPanels();
 function saveOwnerToken(){
   const el=document.getElementById("ownerTok"); const v=(el&&el.value.trim())||"";
   try{ if(v) localStorage.setItem("is_owner_token",v); else localStorage.removeItem("is_owner_token"); }catch(e){}
@@ -2734,7 +2788,7 @@ function computeQuality(f){
   const complete = rev.length>=2 && f.equity!=null && fcf0!=null;
   let governance = complete?70:40;
   if(!complete) flags.push({sev:"yellow",t:"Sparse financials",d:"Some core financial statements are missing or stale."});
-  if(f.dataSource==="sample") notes.push("Filing timeliness, auditor and restatement checks need a filings feed — neutral in this prototype.");
+  if(f.dataSource==="sample") notes.push("Filing timeliness, auditor and restatement checks need a filings feed — scored neutral, not guessed.");
 
   /* ---- overall ---- */
   const W=QUALITY.WEIGHTS;
