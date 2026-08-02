@@ -436,11 +436,12 @@
       onkeydown="if(event.key==='Enter')go('landing')"><span class="spark">⛓</span> ThePickLog</div>
     <nav class="tabs" id="tabs">
       <button data-view="landing" class="active">Overview</button>
-      <button data-view="watchlist">Watchlist</button>
+      <button id="navExperiments" onclick="location.href='experiments.html'">Experiments</button><button id="navFieldNotes" onclick="location.href='split-adjustment-trap.html'">Field notes</button>
+    <button data-view="watchlist">Watchlist</button>
       <button data-view="performance">Track record</button>
       <button data-view="validation" title="Model validation — every pre-registered hypothesis tracked out-of-sample, recomputed in your browser from the raw CSVs.">Validation</button>
       <button data-view="calculator" title="Exit-rule scenario calculator — what the +10%-target exit would earn under different touch-rate assumptions, computed live from the raw log.">Calculator</button>
-      <button data-view="scoring">Guide</button>
+      <button data-view="scoring">Scoring</button>
       <button data-view="portfolio">Portfolio</button>
       <button data-view="compete">Compete</button>
       <button data-view="assistant">Assistant</button>
@@ -454,11 +455,13 @@
   </div>
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <button data-view="landing" class="active">Overview</button>
+    <button id="mnavExperiments" onclick="location.href='experiments.html'">Experiments</button>
+    <button id="mnavFieldNotes" onclick="location.href='split-adjustment-trap.html'">Field notes</button>
     <button data-view="watchlist">Watchlist</button>
     <button data-view="performance">Track record</button>
     <button data-view="validation">Validation</button>
     <button data-view="calculator">Calculator</button>
-    <button data-view="scoring">Guide</button>
+    <button data-view="scoring">Scoring</button>
     <button data-view="portfolio">Portfolio</button>
     <button data-view="compete">Compete</button>
     <button data-view="assistant">Assistant</button>
