@@ -1,6 +1,6 @@
-# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-07-31
+# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-08-03
 
-Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W31**.
+Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W32**.
 
 **H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant.
 

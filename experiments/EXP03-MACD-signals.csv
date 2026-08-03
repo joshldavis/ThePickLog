@@ -1,3 +1,4 @@
 signal_id,experiment,captured_at,signal_date,ticker,rank_in_day,meta
 EXP03-MACD-2026-07-31-AMZN,EXP03-MACD,2026-08-01T21:23:50+00:00,2026-07-31,AMZN,1,close=271.58;macd_hist=1.21254;macd_hist_prev=-1.49552;sma200=235.0122
 EXP03-MACD-2026-07-31-GOOGL,EXP03-MACD,2026-08-01T21:23:50+00:00,2026-07-31,GOOGL,2,close=356.13;macd_hist=0.48242;macd_hist_prev=-1.41718;sma200=326.2726
+EXP03-MACD-2026-08-03-SCHW,EXP03-MACD,2026-08-03T13:58:54+00:00,2026-08-03,SCHW,1,close=106.47;macd_hist=0.0396;macd_hist_prev=-0.02144;sma200=95.6238
