@@ -485,9 +485,7 @@
       <button data-view="scoring" title="How the momentum score and the Quality Lens are built, metric by metric.">How it's scored</button>
       <button data-view="calculator" title="Exit-rule scenario calculator — what the +10%-target exit would earn under different touch-rate assumptions, computed live from the raw log.">Calculator</button>
       <span class="navsep" aria-hidden="true"></span>
-      <button data-view="compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</button>
-      <button data-view="portfolio">Portfolio</button>
-      <button data-view="assistant">Assistant</button>
+      <button data-view="compete" title="Free $100,000 paper-trading simulation with a public leaderboard. Your portfolio lives inside it.">Compete</button>
     </nav>
     <div class="top-cta">
       <span id="isAuthBar"></span>
@@ -508,8 +506,7 @@
     <button data-view="calculator">Calculator</button>
     <div class="mgroup">Play money</div>
     <button data-view="compete">Compete</button>
-    <button data-view="portfolio">Portfolio</button>
-    <button data-view="assistant">Assistant</button>
+    <button data-view="portfolio">&nbsp;&nbsp;↳ My portfolio</button>
   </div>
   <div class="wrap"><div id="srcBanner"></div></div>
 </header>
@@ -569,15 +566,26 @@
       </div>
     </div>
 
-    <!-- ===== FIELD NOTE ===== -->
-    <div class="panel" style="margin-top:26px;border-color:#5a3a22;background:linear-gradient(180deg,#2a1d10 0%,var(--panel) 60%)">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
-        <span class="pill" style="background:#f5b14c22;border:1px solid #f5b14c55;color:var(--amber);font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px">FIELD NOTE</span>
-        <h2 style="margin:0">The bug that makes your backtest look good</h2>
+    <!-- ===== FIELD NOTES ===== -->
+    <div style="margin-top:34px">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:19px">Field notes</h2>
+        <span class="dim" style="font-size:13px">— the mistakes, written up</span>
       </div>
-      <p class="muted" style="font-size:14px;margin:0 0 12px;max-width:70ch">A stock's price history is <b>not a fixed fact</b> — it gets rewritten every time a company splits. Mix a price you stored with one you download later and you invent returns that never happened. In cheap stocks the error is <b>always in your favour</b>, because reverse splits dominate. It is silent, it corrupts only some of your rows, and it is invisible unless you kept a record of prices as they were at the time.<br><br>We found it in our own code, where it had turned a <b class="neg">&minus;2.9%</b> baseline into a <b class="pos">+8.0%</b> one and made three losing exit rules look like winners. Here is how it works and the six checks that catch it.</p>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn" onclick="location.href='split-adjustment-trap.html'">Read the field note &rarr;</button>
+      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch">Both of these are our own errors. We publish them because a record that has never issued a correction isn't a careful record — it's an unaudited one.</p>
+      <div class="grid exp-cards" style="grid-template-columns:repeat(2,1fr)">
+        <a class="panel exp-card" href="late-cohorts.html" style="border-color:#5a2a33;background:linear-gradient(180deg,#2a1218 0%,var(--panel) 60%)">
+          <div class="exp-no">FIELD NOTE <span class="exp-pill v-fail">CORRECTION</span></div>
+          <h3>We logged 128 picks after the opening bell</h3>
+          <p>This site has one load-bearing claim: every pick is written down before the market opens. On seven occasions our scheduler drifted past the bell and logged anyway — and we didn't notice for six weeks. An outside reader found it in our public CSV. What broke, what it did to the numbers, why we <i>won't</i> claim it flattered us, and the gate that makes it impossible now.</p>
+          <div class="exp-meta">128 picks / 7 cohorts excluded &middot; headline &minus;2.68% &rarr; &minus;3.40%</div>
+        </a>
+        <a class="panel exp-card" href="split-adjustment-trap.html" style="border-color:#5a3a22;background:linear-gradient(180deg,#2a1d10 0%,var(--panel) 60%)">
+          <div class="exp-no">FIELD NOTE</div>
+          <h3>The bug that makes your backtest look good</h3>
+          <p>A stock's price history is <b>not a fixed fact</b> — it gets rewritten every time a company splits. Mix a stored price with one you download later and you invent returns that never happened, and in cheap stocks the error is <b>always in your favour</b>. We found it in our own code, where it had turned a <b class="neg">&minus;2.9%</b> baseline into a <b class="pos">+8.0%</b> one.</p>
+          <div class="exp-meta">found while auditing Experiment 01 &middot; six checks that catch it</div>
+        </a>
       </div>
     </div>
 
@@ -625,7 +633,7 @@
       <div class="readrow">
         <div class="ri"><b>Every verdict is free, permanently.</b> Each experiment, each write-up, the full pick log, the validation dashboard and the raw CSVs. Publishing a verdict only some people can read defeats the point of publishing it.</div>
         <div class="ri"><b>We will never sell you a signal.</b> No picks, no alerts, no "our system says buy." We tested our own signal in public and it lost — selling it anyway is the exact behaviour this project exists to check.</div>
-        <div class="ri"><b>What we'd charge for is the machinery, not the answers.</b> Getting verdicts early, choosing what gets tested next, and eventually running your own frozen rule through the same harness. Priced so it can't pretend to be a trading edge.</div>
+        <div class="ri"><b>What we'd charge for is the machinery, not the answers.</b> Choosing what gets tested next, the working notes behind each experiment, and eventually running your own frozen rule through the same harness. <b>Never earlier access to a verdict</b> — those land free and public on the same day for everyone. Priced so it can't pretend to be a trading edge.</div>
       </div>
     </div>
 
@@ -647,17 +655,18 @@
         <div class="p">$9.99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
         <p class="muted" style="font-size:13px">For people who want the lab to keep running. Planned, not for sale today.</p>
         <ul class="feat-list">
-          <li>Verdicts and field notes a week before they're public</li>
           <li>A vote on what gets tested next</li>
-          <li>Told the moment an experiment reaches its verdict</li>
-          <li>The full frozen-rule and signal archive as downloads</li>
+          <li>Emailed the moment an experiment reaches its verdict</li>
+          <li>Every frozen rule, signal and outcome as a clean download</li>
+          <li>The working notes — what we tried, what broke, what we threw away</li>
         </ul>
+        <p class="dim" style="font-size:11.5px;margin:10px 0 0"><b>Not</b> early access to verdicts. Those stay free and public the day they land — a verdict only some people can read isn't published.</p>
         <form class="wl-form" onsubmit="return tplWaitlist(event,'member')">
           <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for Member updates">
           <button class="btn ghost" type="submit">Notify me</button>
         </form>
         <p class="wl-msg" role="status" aria-live="polite"></p>
-        <p class="wl-fine">One email when it opens. Nothing else, ever. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
+        <p class="wl-fine">We'll send one confirmation email — you're not on the list until you click it. After that, one email when it opens. Nothing else, ever. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
       </div>
       <div class="panel price-card">
         <h3>Lab access <span class="badge-proto">COMING SOON</span></h3>
@@ -674,7 +683,7 @@
           <button class="btn ghost" type="submit">Notify me</button>
         </form>
         <p class="wl-msg" role="status" aria-live="polite"></p>
-        <p class="wl-fine">One email when it opens. Nothing else, ever. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
+        <p class="wl-fine">We'll send one confirmation email — you're not on the list until you click it. After that, one email when it opens. Nothing else, ever. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
       </div>
     </div>
     <p class="muted" style="font-size:12.5px;margin-top:12px">The paid tiers are shown so you can see where this is headed — they are <b>not available</b>, nothing on this site is for sale today, and neither tier will ever include picks, alerts or a signal. They open only if and when the tooling is genuinely worth it and legal review clears. We'll say so out loud when that changes.</p>
@@ -801,7 +810,10 @@
   <div class="wrap">
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <h1 style="margin:.2em 0">Portfolio <span class="badge-proto">PAPER MODE</span></h1>
-      <button class="btn ghost" style="margin-left:auto" onclick="loadPortfolio()">↻ Refresh</button>
+      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" onclick="go('compete')">&larr; Back to Compete</button>
+        <button class="btn ghost" onclick="loadPortfolio()">↻ Refresh</button>
+      </div>
     </div>
     <p class="lead" id="pfLead">Your simulated Compete portfolio — balances, open positions, and order history.</p>
 
@@ -856,7 +868,10 @@
   <div class="wrap">
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <h1 style="margin:.2em 0">Compete <span class="is-pill">SIM</span></h1>
-      <button class="btn ghost" style="margin-left:auto" onclick="IS_SIM&&IS_SIM.refreshLeaderboard()">↻ Refresh</button>
+      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn ghost" onclick="go('portfolio')">My portfolio &rarr;</button>
+        <button class="btn ghost" onclick="IS_SIM&&IS_SIM.refreshLeaderboard()">↻ Refresh</button>
+      </div>
     </div>
 
     <div class="pt-modes" role="tablist" aria-label="Compete mode">
@@ -1270,8 +1285,10 @@
       <div class="panel">
         <h2 style="margin-top:0">Return by tier</h2>
         <p class="muted" style="font-size:13px;margin-top:0">Does a higher score actually mean a better
-          outcome? The bars show win rate by tier — but the real test is whether A beats B beats C on
-          <i>mean net return</i>. This is how you'd know, and how you'd kill the product honestly if it doesn't.</p>
+      outcome? The real test is whether A beats B beats C on <b>mean net return</b> — so that is the
+      column below, next to the median, the number of distinct companies behind it, and a
+      ticker-clustered confidence interval. This is how you'd know, and how you'd kill the product
+      honestly if it doesn't.</p>
         <div id="byTier"></div>
       </div>
       <div class="panel">
@@ -1991,6 +2008,25 @@ function aggregateReal(picks, outcomes){
   const maes=graded.map(p=>parseFloat(byId[p.pick_id].mae_5d)).filter(isFinite);               // worst drawdown — the downside the brief promises to show
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
   graded.forEach(p=>{ const t=(p.tier||"").toUpperCase(); if(byTier[t]){ byTier[t][0]++; if(_rc(p)>0) byTier[t][1]++; } });
+  /* Per-tier evidence, not just win rate. The copy beside this chart says the real
+     test is whether A beats B beats C on MEAN NET RETURN — so show that, plus the
+     median (a mean on financial data can be one lucky trade), the number of distinct
+     companies (repeated bets on the same ticker are not independent evidence — cf.
+     H-IND1), and a ticker-clustered 95% interval so nobody over-reads a small n. */
+  const tierStats={};
+  ["A","B","C","D"].forEach(t=>{
+    const rows=graded.filter(p=>(p.tier||"").toUpperCase()===t);
+    const v=rows.map(_rc).filter(isFinite);
+    const tickers=[...new Set(rows.map(p=>(p.ticker||"").toUpperCase()).filter(Boolean))];
+    if(!v.length){ tierStats[t]={n:0,tickers:0}; return; }
+    const mean=v.reduce((x,y)=>x+y,0)/v.length;
+    const sorted=v.slice().sort((x,y)=>x-y);
+    const median=sorted.length%2 ? sorted[(sorted.length-1)/2]
+                                 : (sorted[sorted.length/2-1]+sorted[sorted.length/2])/2;
+    tierStats[t]={n:v.length, tickers:tickers.length, mean, median,
+                  win:Math.round(100*rows.filter(p=>_rc(p)>0).length/v.length),
+                  ci:_clusterCI(rows, _rc)};
+  });
   // Calibration: % positive by score band — the validity curve (SYNTHESIS 1.3).
   const bands=[[0,45],[45,55],[55,65],[65,75],[75,85],[85,101]];
   const calib=bands.map(([lo,hi])=>{
@@ -2006,7 +2042,7 @@ function aggregateReal(picks, outcomes){
     meanNet: _mean(rets), medianNet: _median(rets),
     pctPos: rets.length? Math.round(rets.filter(x=>x>0).length/rets.length*100): null,
     mean5d: _mean(r5), meanMae: _mean(maes), calib,
-    days: [...new Set(picks.map(p=>p.trading_date))].sort(), byId, byTier };
+    days: [...new Set(picks.map(p=>p.trading_date))].sort(), byId, byTier, tierStats };
 }
 
 /* ---------- legacy sample aggregation (fallback only) ---------- */
@@ -2017,6 +2053,34 @@ function gradeAll(picks){
   const byTier={A:[0,0],B:[0,0],C:[0,0],D:[0,0]};
   picks.forEach(p=>{const t=tierOf(p[2]); byTier[t][0]++; if(p[5])byTier[t][1]++;});
   return {total,wins,winRate:Math.round(wins/total*100),best,byTier};
+}
+
+/* Ticker-clustered bootstrap 95% CI. Resamples COMPANIES, not trades: the log
+   recycles the same names daily, so treating each trade as independent evidence
+   overstates certainty badly (H-IND1 — effective N is closer to the number of
+   distinct tickers than the number of rows). Deterministic seed so the interval
+   a reader sees is the interval we see. */
+function _clusterCI(rows, val, iters){
+  const by={};
+  rows.forEach(r=>{ const k=(r.ticker||"?").toUpperCase(); const v=val(r);
+    if(isFinite(v)) (by[k]=by[k]||[]).push(v); });
+  const keys=Object.keys(by);
+  if(keys.length<2) return null;
+  let seed=1234567;
+  const rnd=()=>{ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; };
+  const N=iters||1200, means=[];
+  for(let i=0;i<N;i++){
+    let sum=0,cnt=0;
+    for(let k=0;k<keys.length;k++){
+      const g=by[keys[Math.floor(rnd()*keys.length)]];
+      for(let j=0;j<g.length;j++){ sum+=g[j]; cnt++; }
+    }
+    if(cnt) means.push(sum/cnt);
+  }
+  if(!means.length) return null;
+  means.sort((a,b)=>a-b);
+  const q=(p)=>means[Math.min(means.length-1,Math.max(0,Math.round(p*(means.length-1))))];
+  return [q(0.025), q(0.975)];
 }
 
 /* ---------- RENDER: landing KPIs ---------- */
@@ -2079,9 +2143,32 @@ async function renderPerformance(){
       5-day-swing return averaged <b>${sgn(g.mean5d)}</b> — the downside and the swing case most scanners never show.`;
   }
   const bt=document.getElementById("byTier"); bt.innerHTML="";
-  ["A","B","C","D"].forEach(t=>{ const [n,w]=g.byTier[t]; const wr=n?Math.round(w/n*100):0;
-    bt.innerHTML+=`<div class="wt"><div class="lbl"><span class="tier ${t}">${t}</span> <span class="muted" style="font-size:12px">${n} graded</span></div><div class="bar"><i style="width:${wr}%"></i></div><div class="pct">${n?wr+'%':'—'}</div></div>`; });
-  if(!g.graded) bt.innerHTML+=`<p class="muted" style="font-size:13px;margin-top:8px">No graded outcomes yet — the earliest picks reach the 5-trading-day mark shortly, and win-rate-by-tier fills in automatically.</p>`;
+  if(g.graded){
+    const pc=(v)=> v==null? "—" : (v>=0?"+":"")+v.toFixed(1)+"%";
+    let rows="";
+    ["A","B","C","D"].forEach(t=>{
+      const st=(g.tierStats||{})[t]||{n:0};
+      if(!st.n){ rows+=`<tr><td><span class="tier ${t}">${t}</span></td><td class="num dim">0</td><td class="num dim">—</td><td class="num dim">—</td><td class="num dim">—</td><td class="num dim">—</td></tr>`; return; }
+      const ciTxt = st.ci ? `[${pc(st.ci[0])}, ${pc(st.ci[1])}]` : "—";
+      const spans = st.ci ? (st.ci[0]<=0 && st.ci[1]>=0) : true;
+      rows+=`<tr>
+        <td><span class="tier ${t}">${t}</span></td>
+        <td class="num">${st.n}</td>
+        <td class="num dim" title="distinct companies — the honest unit of evidence">${st.tickers}</td>
+        <td class="num ${st.mean>0?'pos':'neg'}"><b>${pc(st.mean)}</b></td>
+        <td class="num ${st.median>0?'pos':'neg'}">${pc(st.median)}</td>
+        <td class="num dim" style="font-size:12px">${ciTxt}${spans?' <span title="interval spans zero — not distinguishable from no effect" style="opacity:.75">ns</span>':''}</td>
+      </tr>`;
+    });
+    bt.innerHTML=`<div class="tscroll"><table style="width:100%"><thead><tr>
+        <th>Tier</th><th class="num">Graded</th><th class="num">Tickers</th>
+        <th class="num">Mean net</th><th class="num">Median net</th>
+        <th class="num">95% CI (clustered)</th>
+      </tr></thead><tbody>${rows}</tbody></table></div>
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0"><b>Mean net is the column that matters.</b> If the score ranked edge, A would beat B would beat C here — it doesn't. <b>Tickers</b> is the count of distinct companies: the log revisits the same names daily, so repeated bets are not independent evidence and the real sample is closer to that number than to the graded count. The interval resamples <i>companies</i>, not trades, which is why it is wide; <b>ns</b> means it spans zero.</p>`;
+  } else {
+    bt.innerHTML=`<p class="muted" style="font-size:13px;margin-top:8px">No graded outcomes yet — the earliest picks reach the 5-trading-day mark shortly, and this table fills in automatically.</p>`;
+  }
   const cw=document.getElementById("calibWrap"), cb=document.getElementById("calib");
   if(cw&&cb&&g.graded){ cw.style.display="block"; cb.innerHTML="";
     g.calib.forEach(c=>{ const lbl=`${c.lo}–${c.hi-1}`;
@@ -2219,12 +2306,17 @@ async function tplWaitlist(ev, tier){
       {p_email:email, p_tier:tier, p_source:"landing-"+tier});
     if(error) throw error;
     if(data && data.ok===false){
-      say(data.error==="invalid_email" ? "That doesn't look like an email address." : "Couldn't add you just now — try again in a moment.","err");
+      if(data.error==="invalid_email")      say("That doesn't look like an email address.","err");
+      else if(data.error==="rate_limited")  say("We're getting an unusual number of signups right now — try again in a little while.","err");
+      else                                  say("Couldn't add you just now — try again in a moment.","err");
     } else if(data && data.already){
-      say("You're already on this list. We'll email you when it opens.","ok");
+      say(data.confirmed ? "You're already confirmed on this list."
+                         : "You're already on this list — check for the confirmation email.","ok");
       form.style.display="none";
     } else {
-      say("Done — you'll get one email when this opens.","ok");
+      // Double opt-in: the row exists but is NOT subscribed until it is confirmed.
+      // Say that plainly rather than implying they are done.
+      say("Almost — check your inbox and click the confirmation link. You're not on the list until you do.","ok");
       form.style.display="none";
     }
   }catch(e){
