@@ -16,3 +16,6 @@ brief.md
 
 # Phase 1: user hypotheses fetched fresh from Supabase each Action run (transient)
 hypotheses/user_rules.json
+
+# One-off patch scripts used to edit files in place; never part of the project.
+patch*.py
