@@ -91,6 +91,12 @@
   <h1>We tested our own stock screener. It lost money.</h1>
   <p class="standfirst">We built a screener for low-float stocks gapping up on heavy volume, wrote down the edge we believed in before we could see whether it worked, and ran it forward for seven weeks. It didn't just fail. It failed in the opposite direction to our prediction — and the early result that made us optimistic turned out to be noise.</p>
 
+  <div style="border:1px solid #5a2a33;background:#2a1218;border-radius:14px;padding:16px 20px;margin:22px 0">
+    <div style="font-size:12px;letter-spacing:.1em;color:#ffb3c0;font-weight:800;margin-bottom:5px">CORRECTION · 2026-08-04</div>
+    <p style="margin:0 0 8px;font-size:15px"><b>128 picks in this experiment's log were written down after the market had already opened</b>, because our scheduler drifted past the bell on seven occasions. Five of those cohorts fall inside this experiment's window. They are now excluded everywhere.</p>
+    <p style="margin:0;color:var(--dim);font-size:14.5px">The corrected in-window mean moves from &minus;2.64% to <b>&minus;3.65%</b>. <b>The verdict below does not change</b> — the failure is slightly larger than reported, not smaller. We could not show that the late data flattered us either: the entire mean difference is one trade. <a href="late-cohorts.html">The full correction and post-mortem &rarr;</a></p>
+  </div>
+
   <div class="verdict">
     <div class="h">VERDICT</div>
     <div class="b">FAILED. The pre-registered edge is significantly negative out-of-sample.</div>
@@ -104,7 +110,7 @@
 
   <h2>How we made it impossible to quietly cheat</h2>
   <p>Publishing a strategy after you know it worked is not evidence of anything, so the whole project is built to make that impossible.</p>
-  <p>The rule went into a public file with a date on it. Only trades that happened <i>after</i> that date could ever count. Every pick is written to an append-only log before the market opens, with its price, and the file is sealed into a hash chain so that any later edit to a past entry would be provable. The daily price paths used for grading are captured once, at grading time, and never re-fetched. And the whole thing runs itself on a schedule — nobody decides which days to include.</p>
+  <p>The rule went into a public file with a date on it. Only trades that happened <i>after</i> that date could ever count. Every pick is written to an append-only log before the market opens, with its price, and the file is sealed into a hash chain so that any later edit to a past entry would be provable. (That timing is now enforced by a hard gate. For seven sessions it was not, and we <a href="late-cohorts.html">published the correction</a> rather than quietly restating the numbers.) The daily price paths used for grading are captured once, at grading time, and never re-fetched. And the whole thing runs itself on a schedule — nobody decides which days to include.</p>
   <p class="pull">If you can only check a record when it's flattering, it isn't a record.</p>
 
   <h2>What happened</h2>

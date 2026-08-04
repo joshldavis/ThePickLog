@@ -28,6 +28,9 @@ NOTHING HERE IS INVESTMENT ADVICE. The model is unvalidated until report says ot
 
 import argparse, csv, os, sys, uuid, statistics, time
 from datetime import datetime, timedelta, timezone
+# One shared definition of "before the open" — see market_time.py and the
+# 2026-08-04 late-cohort correction in AUDIT_LOG.md.
+from market_time import pre_open_guard, trading_date_et
 
 MODEL_VERSION = "v0.2-yf"
 # v0.3 (H-UNIV1, registered 2026-07-08): market-wide criteria-defined universe via
@@ -211,7 +214,7 @@ def _is_stale_duplicate_scan(today, rows):
 
 
 def cmd_scan(sample=False):
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = trading_date_et()   # market time, not the CI runner's clock
     now_iso = datetime.now(timezone.utc).isoformat()
     f = CONFIG["FILTERS"]
     rows = []
@@ -226,6 +229,18 @@ def cmd_scan(sample=False):
             # correct — a closed day must NOT produce a screen (cf. the 2026-06-19 phantom bug).
             print(f"Market holiday ({today}) — NYSE closed. No scan; nothing logged.")
             return
+
+        # HARD PRE-OPEN GATE (added 2026-08-04 after the late-cohort correction).
+        # GitHub Actions cron is best-effort and drifted past the opening bell on 7
+        # occasions before anyone noticed. The entire record rests on picks being
+        # written down before the outcome could be known, so a late run must produce
+        # NOTHING rather than a cohort that quietly contaminates the headline.
+        blocked, why = pre_open_guard(today)
+        if blocked:
+            sys.exit(f"ERROR: refusing to scan — {why}. A pick logged at or after the "
+                     f"opening auction cannot be graded against that session's open, so "
+                     f"no rows were written. Re-run before the bell, or skip the session.")
+
         yf = _yf()
         regime = market_regime(yf)
         fetched = 0
@@ -314,11 +329,23 @@ def cmd_scan_market():
     candidates.csv — the eligible-but-unpublished names are H-CTRL's forward-only
     control pool. Loud failure on any data problem; never touches the v0.2 cohort."""
     import universe
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = trading_date_et()   # market time, not the CI runner's clock
     now_iso = datetime.now(timezone.utc).isoformat()
     if today in NYSE_HOLIDAYS:
         print(f"Market holiday ({today}) — NYSE closed. No v0.3 scan; nothing logged.")
         return
+
+    # HARD PRE-OPEN GATE (added 2026-08-04 after the late-cohort correction).
+    # GitHub Actions cron is best-effort and drifted past the opening bell on 7
+    # occasions before anyone noticed. The entire record rests on picks being
+    # written down before the outcome could be known, so a late run must produce
+    # NOTHING rather than a cohort that quietly contaminates the headline.
+    blocked, why = pre_open_guard(today)
+    if blocked:
+        sys.exit(f"ERROR: refusing to scan — {why}. A pick logged at or after the "
+             f"opening auction cannot be graded against that session's open, so "
+             f"no rows were written. Re-run before the bell, or skip the session.")
+
 
     yf = _yf()  # regime read stays identical to v0.2 (same SPY rule, same source)
     regime = market_regime(yf)

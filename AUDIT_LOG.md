@@ -1,5 +1,51 @@
 # ThePickLog — Audit Log
 
+## 2026-08-04 — **❌ CORRECTION: 128 picks were logged after the opening bell**
+
+**Severity: HIGH — this contradicted the site's central claim.** Found by an outside review of the public `picks.csv`, not by us. Full public write-up: `/late-cohorts.html`.
+
+**The defect.** The daily scan is scheduled on GitHub Actions for 07:30 ET. Actions cron is documented as *best-effort*; under load it drifts. On **7 sessions** it drifted past the 09:30 ET opening auction and logged anyway: **128 picks**, 2 to 72 minutes late.
+
+| session | picks | scan ran (ET) | vs open |
+|---|---|---|---|
+| 2026-06-15 | 13 | 09:32 | +2 min |
+| 2026-07-06 | 16 | 10:42 | +72 min |
+| 2026-07-07 | 16 | 09:33 | +3 min |
+| 2026-07-09 | 21 | 10:04 | +34 min |
+| 2026-07-13 | 21 | 09:34 | +4 min |
+| 2026-07-27 | 22 | 09:53 | +23 min |
+| 2026-08-03 | 19 | 09:57 | +27 min |
+
+Every affected cohort is late **in its entirety** — the whole morning scan, not stragglers. The headline metric is the same-day open→close return, so a pick logged at 09:32 was scored against an opening price that had already printed. That is not a forecast.
+
+**Root cause.** `cmd_scan` guarded against NYSE holidays and against a stale/duplicate quote feed (added after the 2026-06-19 phantom cohort) but **never checked the wall clock**. We guarded the market and the data and forgot to guard the deadline.
+
+**Impact on published numbers.** Graded rows, excluding VOID:
+
+| group | n | mean net | median net | win |
+|---|---|---|---|---|
+| as published | 596 | −2.68% | −2.72% | 30.9% |
+| **timely only (corrected)** | 487 | **−3.40%** | −2.76% | 31.2% |
+| late cohorts | 109 | +0.55% | −2.48% | 29.4% |
+
+**We do NOT claim the violation flattered the record.** The mean gap is +3.95pp but the **median gap is +0.28pp**, and the entire mean difference is one position — JLHL +240.9% on 07-09. Drop it: late mean −1.67%. Drop the top three: −2.99%, indistinguishable from timely. Late-cohort medians are −4.07/−2.88/−1.10/−1.65/−2.83/−2.26, all negative and ordinary. Per Experiment 01's own lesson (delete your best trade and look again), the protocol failure is real and the contamination is not measurable. Both halves are stated publicly.
+
+**Impact on Experiment 01 — verdict UNCHANGED.** Five of the seven cohorts fall in its window: in-window 461 graded mean −2.64%; timely-only 365 mean **−3.65%**. The published FAIL stands, by a slightly wider margin. No verdict anywhere reverses.
+
+**Remediation (all shipped this commit):**
+1. **Hard pre-open gate** — new `market_time.py`; `cmd_scan` and `cmd_scan_market` resolve now in `America/New_York` and `sys.exit` non-zero at or after **09:20 ET** for the target session. A late run writes nothing. 10-minute margin so a near miss fails loudly rather than landing by luck.
+2. **Scan cron moved 07:30 → 07:00 ET** for margin. The gate is the guarantee; the cron is convenience.
+3. **`today` is now derived in market time**, not the CI runner's UTC clock.
+4. **Exclusion is DERIVED, not stored** — no hand-set flag. `market_time.is_timely()` (Python) and `isTimelyPick()` (index.html, dashboard.html) compute it from `published_at` × `trading_date`, so anyone can reproduce our exact exclusion set from the public CSV. Three independent implementations agree: 602 timely / 128 late / 7 cohorts.
+5. **DST handled** via `zoneinfo` / `Intl` with an explicit zone — 09:30 ET is 13:30Z in summer, 14:30Z in winter; hard-coding either breaks the check for half the year. Selftest covers both directions and **gates the CI job**.
+6. **Rows are NOT voided.** They stay in `picks.csv` with their outcomes. Unlike the 06-19 phantom cohort (a session that never happened), these were real scans logged late — the honest remedy is exclude-and-disclose, not delete.
+7. **Every surface excludes them and says what it dropped**: landing KPI strip, Track record, `dashboard.html`, `weekly_report.py`, `hypo_eval.py`. No silent truncation.
+8. **Weekly audit now checks timeliness**, so a recurrence surfaces in days rather than six weeks.
+
+**Also corrected:** the Track record page described the headline as a 5-day grading without stating that the headline number is the **same-day open→close** and that the 5-day wait exists to measure MFE/MAE/path. Reworded.
+
+**Process note.** This was in a file we have published for weeks. We never ran the check on our own data; a reader did. The lesson recorded for future audits: *audit the measurement apparatus, not just the measurements.*
+
 ## 2026-08-01 — Weekly verifiability audit — **✅ All claims verify**
 
 Live site fetched same-origin from https://thepicklog.vercel.app (build `2026-07-31 18:13 ET · 0cd0ff2`); every displayed number recomputed independently from the raw CSVs. All six data checks pass and the six-aspect validity labelling is honest. One **new** data-hygiene issue found — five picks are stuck permanently ungraded by a transient-retry path that never terminates. No displayed claim is affected.

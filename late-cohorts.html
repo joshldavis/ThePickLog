@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>We logged 128 picks after the opening bell — correction and post-mortem</title>
+<meta name="description" content="The whole record rests on picks being written down before the market opens. On seven occasions our scheduler drifted past the bell and logged anyway. What broke, what it did to the numbers, and the gate that makes it impossible now.">
+<link rel="canonical" href="https://thepicklog.vercel.app/late-cohorts.html">
+<meta property="og:title" content="We logged 128 picks after the opening bell">
+<meta property="og:description" content="A scheduler that is 'best effort' met a claim that has to be exact. The correction, the numbers, and why we can't tell you it flattered us.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;z-index:30;background:#0a0e14;border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.menu-btn{display:flex}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:34px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.14}
+  h2{font-size:22px;margin:1.9em 0 .5em;letter-spacing:-.015em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18px;color:var(--dim);margin-bottom:1.4em}
+  .status{border:1px solid #5a2a33;background:#2a1218;border-radius:14px;padding:16px 20px;margin:22px 0}
+  .status .h{font-size:12px;letter-spacing:.1em;color:#ffb3c0;font-weight:800;margin-bottom:5px}
+  .status .b{font-size:19px;font-weight:700;margin-bottom:6px}
+  .status p{color:var(--dim);font-size:14.5px;margin:0}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:20px 0}
+  .box h3{margin:0 0 10px;font-size:17px}
+  .box p:last-child{margin-bottom:0}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:13px;font-family:ui-monospace,Menlo,monospace;line-height:1.5}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+  td.num,th.num{text-align:right;font-family:ui-monospace,Menlo,monospace}
+  .neg{color:var(--red)} .pos{color:var(--green)}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="late-cohorts.html" class="on">Field notes</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="index.html#validation">Validation</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="trust.html">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="split-adjustment-trap.html">Field note: the split-adjustment trap</a>
+    <a href="late-cohorts.html">Field note: the late cohorts</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="index.html#validation">Validation</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap">
+  <span class="no">FIELD NOTE · CORRECTION · 2026-08-04</span>
+  <h1>We logged 128 picks after the opening bell</h1>
+  <p class="standfirst">This site has exactly one load-bearing claim: every pick is written down before the market opens, so nobody — including us — could have known the outcome. On seven occasions that was not true, and we did not notice for six weeks. Here is what broke, what it did to the numbers, and what stops it now.</p>
+
+  <div class="status">
+    <div class="h">CORRECTION</div>
+    <div class="b">128 picks across 7 cohorts were logged 2 to 72 minutes after their own session opened.</div>
+    <p>They remain in the public log — nothing has been deleted — but they are now excluded from every figure on this site. The headline open→close return moves from <b>−2.68%</b> to <b>−3.40%</b>.</p>
+  </div>
+
+  <h2>What the claim actually requires</h2>
+  <p>A forward-graded record is only worth something if the writing-down genuinely precedes the outcome. Our headline return is the <b>same-day open→close</b>: enter at that morning's opening price, exit at that afternoon's close, net of costs. That number is meaningful only if the pick existed <i>before</i> the opening auction printed.</p>
+  <p>A pick logged at 09:32 fails that test completely. Not marginally — completely. The opening price it is scored against had already happened. Whatever the scanner saw at 09:32 included information the 09:29 version of it did not have, and the entry price was never available to anyone reading the log.</p>
+
+  <h2>What went wrong</h2>
+  <p>The scan runs on a GitHub Actions schedule, set for 07:30 ET — two hours of margin before the bell. That felt like plenty.</p>
+  <p>But scheduled workflows on GitHub are explicitly <b>best-effort</b>. Under load, a job scheduled for 07:30 can start considerably later, and there is no guarantee and no alert. Ours drifted. Usually by seconds. Seven times, by enough to cross the bell:</p>
+
+  <table>
+    <thead><tr><th>Session</th><th class="num">Picks</th><th>Scan ran</th><th class="num">vs 09:30 open</th></tr></thead>
+    <tbody>
+      <tr><td>2026-06-15</td><td class="num">13</td><td>09:32 ET</td><td class="num neg">+2 min</td></tr>
+      <tr><td>2026-07-06</td><td class="num">16</td><td>10:42 ET</td><td class="num neg">+72 min</td></tr>
+      <tr><td>2026-07-07</td><td class="num">16</td><td>09:33 ET</td><td class="num neg">+3 min</td></tr>
+      <tr><td>2026-07-09</td><td class="num">21</td><td>10:04 ET</td><td class="num neg">+34 min</td></tr>
+      <tr><td>2026-07-13</td><td class="num">21</td><td>09:34 ET</td><td class="num neg">+4 min</td></tr>
+      <tr><td>2026-07-27</td><td class="num">22</td><td>09:53 ET</td><td class="num neg">+23 min</td></tr>
+      <tr><td>2026-08-03</td><td class="num">19</td><td>09:57 ET</td><td class="num neg">+27 min</td></tr>
+    </tbody>
+  </table>
+
+  <p>Every affected cohort is late <i>in its entirety</i>. This was never a few stragglers — it was the whole morning scan running after the bell, seven times.</p>
+  <p>The scanner had guards. It refuses to run on NYSE holidays. It refuses to run when the quote feed returns the previous session's prices unchanged — a check we added after a phantom Juneteenth cohort. What it never did was <b>look at the clock</b>. It checked what the market was doing and what the data looked like, and never asked the one question that its own core claim depended on.</p>
+
+  <h2>What it did to the numbers</h2>
+  <p>Excluding the late cohorts, on the 596 graded picks:</p>
+
+  <table>
+    <thead><tr><th>Group</th><th class="num">n</th><th class="num">Mean net</th><th class="num">Median net</th><th class="num">Win rate</th></tr></thead>
+    <tbody>
+      <tr><td>As previously published</td><td class="num">596</td><td class="num neg">−2.68%</td><td class="num neg">−2.72%</td><td class="num">30.9%</td></tr>
+      <tr><td><b>Timely only (corrected)</b></td><td class="num">487</td><td class="num neg"><b>−3.40%</b></td><td class="num neg">−2.76%</td><td class="num">31.2%</td></tr>
+      <tr><td>Late cohorts</td><td class="num">109</td><td class="num pos">+0.55%</td><td class="num neg">−2.48%</td><td class="num">29.4%</td></tr>
+    </tbody>
+  </table>
+
+  <p>The corrected headline is <b>worse</b>. Our screen looks slightly more unprofitable than we had been reporting, which — given that we had already published it as a failure — changes the conclusion not at all and the number visibly.</p>
+
+  <h2>The part we are not going to overclaim</h2>
+  <p>The tempting story here is: our protocol broke in a way that flattered us. Late picks show +0.55% while timely picks show −3.40%, a four-point gap, and look-ahead is exactly the kind of thing that produces that. It would be a satisfying confession.</p>
+  <p>We don't think it's true, and the honest thing is to say so.</p>
+  <p>The <b>median</b> late pick returned −2.48% against −2.76% for timely picks. That gap is a quarter of a percentage point. The mean gap is entirely one trade: <b>JLHL, +241%</b> on 2026-07-09. Remove that single position and the late group's mean falls to −1.67%. Remove the top three and it is −2.99% — indistinguishable from the timely group. The six late cohorts have median returns of −4.07%, −2.88%, −1.10%, −1.65%, −2.83% and −2.26%: all negative, all ordinary.</p>
+  <p class="pull">A four-point gap that vanishes when you delete one row is not evidence of bias. It is one lucky microcap.</p>
+  <p>Which is a lesson this project has already published once. <a href="experiment-01.html">Experiment 01</a>'s central finding was that a mean on financial data can be a single trade wearing a statistic's clothing, and that the way to check is to delete your best result and look again. Here that test says the protocol failure was real and the contamination was not measurable.</p>
+  <p>So: <b>we broke the rule, the rule matters, and we cannot show you that breaking it helped us.</b> Both halves of that are the finding.</p>
+
+  <h2>What it does to Experiment 01</h2>
+  <p>Five of the seven late cohorts fall inside <a href="experiment-01.html">Experiment 01</a>'s measurement window. Within that window, 461 graded picks averaged −2.64%; the 365 timely ones averaged <b>−3.65%</b>.</p>
+  <p>The verdict was FAIL and remains FAIL, by a slightly wider margin. We want to be clear that we are not reporting this because it happens to be harmless — we would be publishing it either way, which is the entire premise of the site. But it is worth stating plainly that no verdict reverses.</p>
+
+  <h2>What stops it happening again</h2>
+  <div class="box">
+    <p><b>1 · A hard pre-open gate.</b> The scanner now resolves the current time in <code>America/New_York</code> and refuses to write anything at or after <b>09:20 ET</b> — ten minutes before the bell, so a near miss fails loudly instead of landing by luck. A late run produces no picks at all. An incomplete record is recoverable; a contaminated one quietly poisons every statistic downstream for months.</p>
+    <p><b>2 · The schedule moved earlier</b>, from 07:30 to 07:00 ET. That is the convenience; the gate is the guarantee. We are no longer relying on a best-effort scheduler to enforce a claim that has to be exact.</p>
+    <p><b>3 · The exclusion is derived, not stored.</b> Nothing was flagged by hand. Every surface computes timeliness from the <code>published_at</code> and <code>trading_date</code> columns already in the public CSV, so you can reproduce our exclusion set exactly rather than trusting a flag we set ourselves.</p>
+    <p><b>4 · The rule is tested, and the test gates the job.</b> <code>market_time.py</code> ships with a selftest covering both daylight-saving directions — 09:30 ET is 13:30 UTC in summer and 14:30 UTC in winter, and hard-coding either would silently break the check for half the year. It runs in CI before the scanner does.</p>
+    <p style="margin-bottom:0"><b>5 · The weekly audit now checks timeliness</b>, so a recurrence surfaces in days rather than after six weeks.</p>
+  </div>
+
+  <h2>Check it yourself</h2>
+  <p>Everything above re-derives from the public log. No flag, no special access:</p>
+  <pre>import csv, datetime as dt
+from zoneinfo import ZoneInfo
+ET = ZoneInfo("America/New_York")
+
+late = []
+for r in csv.DictReader(open("picks.csv")):
+    t = dt.datetime.fromisoformat(r["published_at"]).astimezone(ET)
+    session = dt.datetime.strptime(r["trading_date"], "%Y-%m-%d")
+    open_et = dt.datetime.combine(session.date(), dt.time(9, 30), tzinfo=ET)
+    if t &gt;= open_et:
+        late.append(r)
+
+print(len(late))                                  # 128
+print(sorted({r["trading_date"] for r in late}))   # the 7 cohorts</pre>
+  <p>Grab <a href="picks.csv" download>picks.csv</a> and run it. If you get a different answer than we do, <a href="mailto:davis1163@gmail.com?subject=late-cohort%20correction">tell us</a> — that is the point of publishing the data.</p>
+
+  <div class="box">
+    <h3>The general version</h3>
+    <p>If you keep a forward-graded record of anything, the failure mode generalises: <b>you will guard the thing you are measuring and forget to guard the measurement itself.</b> We checked whether the market was open and whether the data was fresh. We never checked whether we were on time — because the schedule was a setting we configured once and then stopped thinking of as a variable.</p>
+    <p style="margin-bottom:0">Anything scheduled by a best-effort scheduler is a variable. If a deadline is load-bearing for your claim, verify it at write time and refuse to write when you miss it. A gap in the record is a fact you can work with. A silently late entry is a lie you will repeat in every summary statistic until someone else finds it.</p>
+  </div>
+
+  <p style="margin-top:26px">Found by an outside review of the raw <a href="picks.csv" download>picks.csv</a> on 2026-08-04. We had published that file for weeks and had not run this check on it ourselves. That is embarrassing and it is also exactly why the file is public.</p>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida).
+    <br>Recorded in the <a href="AUDIT_LOG.md">audit log</a> · <a href="split-adjustment-trap.html">← the other bug that flattered our numbers</a>
+    <br><a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="experiments.html">All experiments</a>
+  </p>
+</div>
+</body>
+</html>

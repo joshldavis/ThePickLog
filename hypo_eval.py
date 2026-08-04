@@ -14,6 +14,7 @@ Run directly:  python hypo_eval.py   -> writes leaderboard.json, runs self-tests
 """
 import csv, json, os, random, re, statistics as st, sys
 from datetime import date
+from market_time import split_timely, late_cohort_summary
 
 # ------------------------------------------------------------------ log I/O
 def _f(x):
@@ -31,7 +32,20 @@ def load_log(picks_path="picks.csv", outs_path="outcomes.csv", cohort=None):
     coh = cohort or os.environ.get("PICKLOG_COHORT", "v0.2")
     keep = (lambda r: True) if coh == "all" else (
         lambda r: (r.get("model_version") or "").startswith(coh))
-    picks = {r["pick_id"]: r for r in csv.DictReader(open(picks_path)) if keep(r)}
+    rows = [r for r in csv.DictReader(open(picks_path)) if keep(r)]
+
+    # PRE-OPEN SEAL (2026-08-04). A pick logged at or after its own session's open
+    # was scored against a price that had already printed, so it is not evidence
+    # about anything. 128 rows across 7 cohorts were affected before the scanner
+    # gained a hard gate; they stay in the public log but are excluded from every
+    # evaluation. Derived from published_at, so anyone can reproduce the exclusion.
+    rows, late = split_timely(rows)
+    if late:
+        by = late_cohort_summary(late)
+        print(f"[hypo_eval] excluded {len(late)} late-logged picks "
+              f"across {len(by)} cohorts: {by}", file=sys.stderr)
+
+    picks = {r["pick_id"]: r for r in rows}
     outs = [o for o in csv.DictReader(open(outs_path)) if o.get("pick_id") in picks]
     return picks, outs
 

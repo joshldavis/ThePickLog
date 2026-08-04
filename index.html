@@ -1075,8 +1075,10 @@
         how few shares exist, how unusual today's volume is, how far the price has gapped, and the share price
         itself. A second, independent check reads the company's actual financial statements to ask whether
         there's a real business behind the ticker. Then the honesty machinery takes over: every pick is written
-        to a permanent, append-only log <b>before the market opens</b>, and graded automatically five trading
-        days later at prices you could realistically get — including how badly it fell, not just how high it
+        to a permanent, append-only log <b>before the market opens</b> — enforced by a hard gate that refuses
+        to log anything after 09:20 ET, <a href="late-cohorts.html" style="color:var(--a)">added after we
+        found seven sessions where it hadn't been</a> — and graded automatically at prices you could
+        realistically get — including how badly it fell, not just how high it
         spiked. Any new rule must be registered with a date in advance and proves itself only on future picks.
         In one sentence: <i>a robot that picks volatile stocks every morning and grades its own homework a week
         later, in a log it can't edit.</i></p>
@@ -1249,8 +1251,12 @@
 <section class="view" id="view-performance">
   <div class="wrap">
     <h1>Track record</h1>
-    <p class="lead">Every pick logged before the open, graded after 5 trading days — <b>all of them</b>,
+    <p class="lead">Every pick logged before the open, graded on that day's open→close return — <b>all of them</b>,
       winners and losers. This is the page most scanners won't show you.</p>
+    <p class="muted" style="font-size:13px;margin:.4em 0 0">In August 2026 we found that our scheduler had
+      drifted past the opening bell on seven occasions and logged 128 picks late. Those picks are excluded
+      from every number here and the rows were kept, not deleted.
+      <a href="late-cohorts.html" style="color:var(--a)">Read the correction &rarr;</a></p>
     <p class="muted" style="font-size:13px;margin:.4em 0 0">Want the deeper cut? The
       <a href="#validation" onclick="go('validation');return false;" style="color:var(--a)">model validation dashboard</a> tracks every
       pre-registered hypothesis (exit rules, filters, a Bayesian read-out) out-of-sample — recomputed
@@ -1906,6 +1912,26 @@ function parseCSV(txt){
   const head=split(lines[0]);
   return lines.slice(1).map(l=>{ const c=split(l); const o={}; head.forEach((h,i)=>o[h]=c[i]); return o; });
 }
+/* PRE-OPEN SEAL (2026-08-04) — the browser mirror of market_time.py.
+   A pick logged at or after its own session's 09:30 ET open was graded against
+   an opening price that had already printed, so it is not evidence. 128 rows
+   across 7 cohorts were affected before the scanner gained a hard pre-open gate.
+   They stay in the public CSV; every figure on this site excludes them, and the
+   exclusion is DERIVED from published_at so a stranger recomputes the same set.
+   Intl with an explicit time zone handles DST — 09:30 ET is 13:30Z in summer and
+   14:30Z in winter, and hard-coding either breaks the check for half the year. */
+const _ET_HM=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",
+  hour:"2-digit",minute:"2-digit",hour12:false,year:"numeric",month:"2-digit",day:"2-digit"});
+function isTimelyPick(p){
+  const ts=p&&p.published_at, td=p&&p.trading_date;
+  if(!ts||!td) return false;                     // fail closed: unprovable means excluded
+  const d=new Date(ts); if(isNaN(d)) return false;
+  const part={}; for(const x of _ET_HM.formatToParts(d)) part[x.type]=x.value;
+  const et=`${part.year}-${part.month}-${part.day}`;
+  if(et<td) return true;                          // logged on an earlier calendar day
+  if(et>td) return false;
+  return (+part.hour*60 + +part.minute) < 570;    // 09:30 ET
+}
 let _trCache=null;
 function getTrackRecord(){
   if(_trCache) return _trCache;
@@ -1915,9 +1941,14 @@ function getTrackRecord(){
         fetch("picks.csv",{cache:"no-store"}).then(r=>r.ok?r.text():Promise.reject("picks "+r.status)),
         fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
       ]);
-      const picks=parseCSV(pT).filter(p=>p.pick_id&&p.ticker);
-      if(!picks.length) throw new Error("empty picks.csv");
-      return {real:true, picks, outcomes: oT?parseCSV(oT):[]};
+      const all=parseCSV(pT).filter(p=>p.pick_id&&p.ticker);
+      if(!all.length) throw new Error("empty picks.csv");
+      const picks=[], late=[];
+      all.forEach(p=>(isTimelyPick(p)?picks:late).push(p));
+      const lateCohorts={}; late.forEach(p=>{const d=p.trading_date||"?"; lateCohorts[d]=(lateCohorts[d]||0)+1;});
+      if(!picks.length) throw new Error("no timely picks in picks.csv");
+      return {real:true, picks, outcomes: oT?parseCSV(oT):[],
+              late, lateCohorts, lateCount:late.length};
     }catch(e){ return {real:false, err:String(e)}; }
   })();
   return _trCache;
@@ -1998,7 +2029,8 @@ async function renderLandingKpis(){
     // under a caption claiming these are our published results.
     if(cap) cap.innerHTML=`<b class="neg">The live pick log couldn't be loaded just now, so these are worked <i>sample</i> numbers, not our record.</b> The real ones are on the <a href="#" onclick="go('performance');return false" style="color:var(--a)">Track record</a> tab and in <a href="picks.csv" download style="color:var(--a)">picks.csv</a>.`;
     el.innerHTML=`${stat("Picks (sample)",g.total)}${stat("Blended win rate",g.winRate+"%")}${stat("Data","sample")}`; return; }
-  if(cap) cap.innerHTML='These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.';
+  if(cap) cap.innerHTML='These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.'
+    + (tr.lateCount ? ` <b class="neg">${tr.lateCount} picks are excluded</b> — our scanner logged them after the opening bell, so they were never a real forecast. <a href="late-cohorts.html" style="color:var(--a)">Why →</a>` : '');
   const g=aggregateReal(tr.picks,tr.outcomes);
   // [Charter P4] Headline the honest distribution, never a lone win rate or a
   // cherry-picked best call: pair win rate with median net return AND the average
@@ -2028,7 +2060,8 @@ async function renderPerformance(){
     return;
   }
   const g=aggregateReal(tr.picks,tr.outcomes);
-  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged, on cost-adjusted open→close returns. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a> — every number on this page re-derives from them.`;
+  const lateNote = tr.lateCount ? `<br><br><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a)">What happened, and what it did to the numbers →</a>` : "";
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a> — every number on this page re-derives from them.${lateNote}`;
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}

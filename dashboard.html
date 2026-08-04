@@ -191,8 +191,43 @@ async function main(){
     exitMd = await fetch("reports/exit-study-LATEST.md",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"");
   }catch(e){ document.getElementById("root").innerHTML='<div class="err">Could not load live data: '+e+'</div>'; return; }
 
-  const picks = parseCSV(picksTxt);
-  const outs  = parseCSV(outsTxt);
+  /* PRE-OPEN SEAL (2026-08-04) — mirrors market_time.py / index.html. Picks logged
+     at or after their own session's 09:30 ET open were graded against an opening
+     price that had already printed. They stay in the public CSV and are excluded
+     from every figure here; the exclusion is derived from published_at so it can be
+     reproduced. Intl with an explicit zone handles DST correctly. */
+  const _ETHM=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",
+    hour:"2-digit",minute:"2-digit",hour12:false,year:"numeric",month:"2-digit",day:"2-digit"});
+  function isTimelyPick(p){
+    const ts=p&&p.published_at, td=p&&p.trading_date;
+    if(!ts||!td) return false;
+    const d=new Date(ts); if(isNaN(d)) return false;
+    const q={}; for(const x of _ETHM.formatToParts(d)) q[x.type]=x.value;
+    const et=`${q.year}-${q.month}-${q.day}`;
+    if(et<td) return true;
+    if(et>td) return false;
+    return (+q.hour*60 + +q.minute) < 570;
+  }
+  const picksAll = parseCSV(picksTxt);
+  const picks = picksAll.filter(isTimelyPick);
+  const lateAll = picksAll.filter(p=>p.pick_id && !isTimelyPick(p));
+  const lateCoh = {}; lateAll.forEach(p=>{const d=p.trading_date||"?"; lateCoh[d]=(lateCoh[d]||0)+1;});
+  const outsAll = parseCSV(outsTxt);
+  const _keep = new Set(picks.map(p=>p.pick_id));
+  const outs  = outsAll.filter(o=>_keep.has(o.pick_id));
+  if(lateAll.length){
+    const banner=document.createElement("div");
+    banner.className="err";
+    banner.style.cssText="border-color:#5a3a22;background:#2a1d10;color:#f5b14c;margin-bottom:14px";
+    banner.innerHTML='<b>'+lateAll.length+' picks across '+Object.keys(lateCoh).length+
+      ' cohorts are excluded from everything below.</b> Our scanner logged them after their own '+
+      'session had already opened ('+Object.entries(lateCoh).map(([d,n])=>d+' ('+n+')').join(', ')+
+      '), so their open→close return was measured against a price that had already printed. '+
+      'Nothing was deleted — the rows are still in picks.csv and the exclusion re-derives from '+
+      '<code>published_at</code>. <a href="late-cohorts.html" style="color:#f5b14c">Full disclosure →</a>';
+    const root=document.getElementById("root");
+    if(root && root.parentNode) root.parentNode.insertBefore(banner, root);
+  }
   const byId = Object.fromEntries(picks.map(p=>[p.pick_id,p]));
   const graded = outs.filter(o=>num(o.ret_open_close_net)!=null);
 

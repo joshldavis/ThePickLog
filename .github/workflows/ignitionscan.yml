@@ -9,7 +9,11 @@ on:
         description: "scan or grade"
         default: scan
   schedule:
-    - cron: "30 11 * * 1-5"   # ~7:30am ET scan (UTC; shifts 1h in winter)
+    # 07:00 ET. Was 07:30 ET until 2026-08-04, when a review found GitHub's
+    # best-effort cron had drifted past the 09:30 opening bell on 7 occasions and
+    # logged anyway. Moving it earlier buys ~2h20m of margin before the hard
+    # pre-open gate in market_time.py, which is what actually enforces the rule.
+    - cron: "0 11 * * 1-5"    # ~7:00am ET scan (UTC; shifts 1h in winter)
     - cron: "0 21 * * 1-5"    # ~5:00pm ET grade
 
 permissions:
@@ -32,6 +36,11 @@ jobs:
           if [ "${{ github.event.schedule }}" = "0 21 * * 1-5" ]; then CMD=grade; fi
           if [ -n "${{ github.event.inputs.command }}" ]; then CMD="${{ github.event.inputs.command }}"; fi
           echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
+      # The pre-open rule is load-bearing for every claim on the site, so its
+      # selftest gates the run rather than merely reporting. If timeliness logic
+      # is broken, logging nothing is the correct outcome.
+      - name: Verify pre-open timing rules
+        run: python market_time.py
       - name: Run ${{ steps.cmd.outputs.cmd }}
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
       # v0.3 market-wide scan (H-UNIV1, registered 2026-07-08; free-feed amendment

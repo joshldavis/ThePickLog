@@ -23,6 +23,7 @@ NOT investment advice. This summarizes the public record; it makes no prediction
 import csv, os, statistics as st
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+from market_time import split_timely, late_cohort_summary
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPORTS = os.path.join(HERE, "reports")
@@ -100,6 +101,14 @@ def main():
     # against. The young v0.3 market-wide cohort is summarized separately in §6
     # and never mixes into the v0.2 tables or the Gate-1 inputs.
     picks = [p for p in all_picks if (p.get("model_version") or "").startswith("v0.2")]
+
+    # PRE-OPEN SEAL (2026-08-04) — see market_time.py and AUDIT_LOG.md. Picks logged
+    # at or after their own session's open are excluded from every number in this
+    # report. They remain in the public log; what was dropped is stated below rather
+    # than silently truncated.
+    picks, late_picks = split_timely(picks)
+    late_by_cohort = late_cohort_summary(late_picks)
+
     v2_ids = {p["pick_id"] for p in picks if p.get("pick_id")}
     outs = [o for o in all_outs if o.get("pick_id") in v2_ids]
     today = date.today().isoformat()
@@ -111,6 +120,14 @@ def main():
     w("Auto-generated weekly from the immutable pick log (picks.csv / outcomes.csv). "
       "No predictions; this is the public record summarized. Not investment advice.")
     w("")
+    if late_by_cohort:
+        w(f"> **Excluded from every figure below: {len(late_picks)} picks across "
+          f"{len(late_by_cohort)} cohorts that were logged at or after their own session's "
+          f"open** and therefore scored against a price that had already printed "
+          f"(`{', '.join(f'{d} ({n})' for d, n in late_by_cohort.items())}`). The rows stay "
+          f"in picks.csv; the exclusion re-derives from `published_at`. See AUDIT_LOG.md "
+          f"2026-08-04.")
+        w("")
 
     if not picks:
         w("> picks.csv not found or empty.")
@@ -586,6 +603,21 @@ def main():
     ids = [p["pick_id"] for p in picks if p.get("pick_id")]
     if len(ids) != len(set(ids)):
         issues.append(f"duplicate pick_ids in picks.csv ({len(ids) - len(set(ids))})")
+    # PRE-OPEN TIMELINESS (added 2026-08-04). The site's central claim is that picks
+    # are written down before the outcome could be known; a scheduler drifting past
+    # the bell broke it for 7 cohorts before anyone noticed. This check exists so a
+    # recurrence surfaces in the next weekly report instead of after six weeks.
+    # Known-historical cohorts are already excluded above and are NOT re-reported as
+    # a new issue; anything NEW is a live defect that means the gate has failed.
+    KNOWN_LATE = {"2026-06-15", "2026-07-06", "2026-07-07", "2026-07-09",
+                  "2026-07-13", "2026-07-27", "2026-08-03"}
+    new_late = {d: n for d, n in late_by_cohort.items() if d not in KNOWN_LATE}
+    if new_late:
+        issues.append(
+            f"**PRE-OPEN GATE FAILURE** — {sum(new_late.values())} picks logged at or after "
+            f"their own session's open in NEW cohorts {sorted(new_late)}. The hard gate in "
+            f"market_time.py should have made this impossible; investigate before trusting "
+            f"any figure that includes them.")
     orphans = [o["pick_id"] for o in outs if o.get("pick_id") and o["pick_id"] not in by_id]
     if orphans:
         issues.append(f"{len(orphans)} outcome rows reference unknown pick_ids")
@@ -604,8 +636,19 @@ def main():
         have = set(pick_dates)
         gaps = [d for d in expected if d not in have]
     if gaps:
-        issues.append(f"{len(gaps)} weekday(s) with no scan (may be US market holidays): "
-                      + ", ".join(str(d) for d in gaps[:8]) + ("…" if len(gaps) > 8 else ""))
+        # Separate the two reasons a weekday can be missing, so an excluded late
+        # cohort is never mistaken for a holiday (or vice versa).
+        excluded = [d for d in gaps if str(d) in late_by_cohort]
+        unexplained = [d for d in gaps if str(d) not in late_by_cohort]
+        if excluded:
+            issues.append(f"{len(excluded)} weekday(s) with no VALID scan because the cohort was "
+                          f"logged after the open and excluded: "
+                          + ", ".join(str(d) for d in excluded[:8])
+                          + ("…" if len(excluded) > 8 else "") + " (see AUDIT_LOG.md 2026-08-04)")
+        if unexplained:
+            issues.append(f"{len(unexplained)} weekday(s) with no scan (may be US market holidays): "
+                          + ", ".join(str(d) for d in unexplained[:8])
+                          + ("…" if len(unexplained) > 8 else ""))
     if issues:
         for i in issues:
             w(f"- ⚠️ {i}")
