@@ -20,7 +20,7 @@
   nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
   nav.tabs a:hover{color:var(--tx);background:#ffffff08}
   .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
-  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
   .menu-btn:hover{color:var(--a);border-color:var(--a)}
   #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
   #mobileMenu.open{display:block}
@@ -48,7 +48,7 @@
       <a href="index.html">Overview</a>
       <a href="experiments.html">Experiments</a>
       <a href="split-adjustment-trap.html">Field notes</a>
-      <a href="index.html#watchlist">Watchlist</a>
+      <a href="index.html#watchlist">Today&rsquo;s screen</a>
       <a href="index.html#performance">Track record</a>
       <a href="index.html#validation">Validation</a>
       <a href="index.html#calculator">Calculator</a>
@@ -57,14 +57,13 @@
       <a href="trust.html">Trust &amp; Data</a>
       <a href="privacy.html" class="active">Privacy</a>
     </nav>
-    <span class="proto">PROTOTYPE</span>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">☰ Menu</button>
   </div>
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <a href="index.html">Overview</a>
       <a href="experiments.html">Experiments</a>
       <a href="split-adjustment-trap.html">Field notes</a>
-    <a href="index.html#watchlist">Watchlist</a>
+    <a href="index.html#watchlist">Today&rsquo;s screen</a>
     <a href="index.html#performance">Track record</a>
     <a href="index.html#validation">Validation</a>
     <a href="index.html#calculator">Calculator</a>
@@ -100,6 +99,7 @@ function toggleMenu(force){
   <h2>What we collect</h2>
   <ul>
     <li><b>Email address</b> — when you sign up, so we can create your account and, if you opt in, send you updates.</li>
+    <li><b>Email address, if you ask to be notified</b> — if you enter your email on one of the &ldquo;coming soon&rdquo; cards, we store just that address and which tier you asked about, so we can email you once when it opens. No account is created, and we don&rsquo;t use it for anything else.</li>
     <li><b>Your Compete activity</b> — the simulated picks, hypotheses, and handle you register, so the leaderboard and your history work. Note that hypotheses you register and your public handle are shown publicly on the site (for example on the Test leaderboard and public profile pages).</li>
     <li><b>Basic usage data</b> — standard, largely anonymous analytics (pages visited, approximate location, device and browser type) to understand how the site is used.</li>
   </ul>
@@ -110,7 +110,9 @@ function toggleMenu(force){
 
   <h2>How we use it</h2>
   <p>To run the service: to authenticate you, show your history, operate Compete, and — only if you
-  opt in — email you. <b>We do not sell or rent your personal information to anyone.</b></p>
+  opt in — email you. A notify-me address is used for exactly one message, when the thing you asked
+  about opens; tell us and we&rsquo;ll delete it sooner. <b>We do not sell or rent your personal
+  information to anyone.</b></p>
 
   <h2>Who we share it with</h2>
   <p>Only the infrastructure providers needed to run the site — our hosting provider (Vercel) and our
