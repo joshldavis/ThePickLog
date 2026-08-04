@@ -613,15 +613,60 @@
     <div class="panel" style="margin-top:26px">
       <h2 style="margin-top:0">What this costs, and what we won't sell</h2>
       <div class="readrow">
-        <div class="ri"><b>The verdicts are free, permanently.</b> Every experiment, every write-up, the full pick log, the validation dashboard and the raw CSVs. Publishing a verdict only some people can read defeats the point of publishing it.</div>
-        <div class="ri"><b>There is no paid picks product, and there won't be.</b> We tested our own signal in public and it lost. Selling it anyway is the exact behaviour this project exists to check. Anyone charging for signals should be able to show you a record like the one on this site.</div>
-        <div class="ri"><b>If we ever charge, it will be for testing a claim.</b> Bring a strategy someone is selling you and we'll put it through the same frozen-rule, forward-graded, control-matched process — and publish the verdict either way. Nothing is for sale today, and we'll say so out loud when that changes.</div>
+        <div class="ri"><b>Every verdict is free, permanently.</b> Each experiment, each write-up, the full pick log, the validation dashboard and the raw CSVs. Publishing a verdict only some people can read defeats the point of publishing it.</div>
+        <div class="ri"><b>We will never sell you a signal.</b> No picks, no alerts, no "our system says buy." We tested our own signal in public and it lost — selling it anyway is the exact behaviour this project exists to check.</div>
+        <div class="ri"><b>What we'd charge for is the machinery, not the answers.</b> Getting verdicts early, choosing what gets tested next, and eventually running your own frozen rule through the same harness. Priced so it can't pretend to be a trading edge.</div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-        <button class="btn" onclick="location.href='experiments.html#suggest'">Suggest a strategy to test &rarr;</button>
-        <button class="btn ghost" onclick="go('compete');window.IS_SIM&amp;&amp;IS_SIM.openAuth()">Try it with play money &rarr;</button>
+    </div>
+
+    <div class="grid price-cards">
+      <div class="panel price-card feat">
+        <h3>Free &amp; open <span class="is-pill">OPEN NOW</span></h3>
+        <div class="p">Free</div>
+        <p class="muted" style="font-size:13px">Everything we publish, and everything the site does. No card, no trial.</p>
+        <ul class="feat-list">
+          <li>Every experiment and verdict, win or lose</li>
+          <li>The full pick log, validation dashboard and raw CSVs</li>
+          <li><b>Compete:</b> $100,000 in play money, live prices, leaderboard</li>
+          <li>Built-in assistant to learn the metrics</li>
+        </ul>
+        <button class="btn" style="width:100%;margin-top:14px" onclick="go('compete');window.IS_SIM&amp;&amp;IS_SIM.openAuth()">Sign up for free &rarr;</button>
       </div>
-      <p class="dim" style="font-size:12.5px;margin:14px 0 0">Compete is a free $100,000 paper-trading simulation with live prices and a leaderboard — no real money, no brokerage connection, nothing to buy.</p>
+      <div class="panel price-card">
+        <h3>Member <span class="badge-proto">COMING SOON</span></h3>
+        <div class="p">$9.99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
+        <p class="muted" style="font-size:13px">For people who want the lab to keep running. Planned, not for sale today.</p>
+        <ul class="feat-list">
+          <li>Verdicts and field notes a week before they're public</li>
+          <li>A vote on what gets tested next</li>
+          <li>Told the moment an experiment reaches its verdict</li>
+          <li>The full frozen-rule and signal archive as downloads</li>
+        </ul>
+      </div>
+      <div class="panel price-card">
+        <h3>Lab access <span class="badge-proto">COMING SOON</span></h3>
+        <div class="p">$19.99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
+        <p class="muted" style="font-size:13px">Point the machinery at your own rule. Planned, not for sale today.</p>
+        <ul class="feat-list">
+          <li>Everything in Member</li>
+          <li>Register your own rule and have it frozen and graded forward</li>
+          <li>Scored against the same day-matched control we use</li>
+          <li>Your results published alongside ours, pass or fail</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted" style="font-size:12.5px;margin-top:12px">The paid tiers are shown so you can see where this is headed — they are <b>not available</b>, nothing on this site is for sale today, and neither tier will ever include picks, alerts or a signal. They open only if and when the tooling is genuinely worth it and legal review clears. We'll say so out loud when that changes.</p>
+    <div class="panel" style="margin-top:22px;border-color:#1f6f6b55">
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1;min-width:240px">
+          <h3 style="margin:0 0 4px;font-size:16px">Start free, or tell us what to test next</h3>
+          <p class="muted" style="font-size:13.5px;margin:0">Create an account to trade the screen with play money and follow every experiment as it grades. Or send us a claim someone is selling and it goes in the public queue.</p>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" onclick="go('compete');window.IS_SIM&amp;&amp;IS_SIM.openAuth()">Sign up for free &rarr;</button>
+          <button class="btn ghost" onclick="location.href='experiments.html#suggest'">Suggest a strategy &rarr;</button>
+        </div>
+      </div>
     </div>
 
     <p class="disclaimer">
