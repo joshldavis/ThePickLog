@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>About Josh Davis and ThePickLog | Who runs this</title>
+<meta name="description" content="ThePickLog tests retail trading claims prospectively with prespecified rules, benchmarks, and pass criteria, publishing every result — including failures.">
+<link rel="canonical" href="https://thepicklog.vercel.app/about.html">
+<meta property="og:title" content="About Josh Davis and ThePickLog">
+<meta property="og:description" content="An I/O psychologist applies the standards used to validate assessments to retail trading claims — starting with his own strategy, which failed.">
+<meta property="og:type" content="profile">
+<style>
+  :root{--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;z-index:30;background:#0a0e14;border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.menu-btn{display:flex}}
+  .wrap{max-width:820px;margin:0 auto;padding:30px 16px 80px}
+  h1{font-size:34px;margin:.1em 0 .25em;letter-spacing:-.02em;line-height:1.15}
+  h2{font-size:22px;margin:38px 0 12px;letter-spacing:-.01em}
+  .lead{color:var(--dim);font-size:16.5px;margin:0 0 16px;max-width:64ch}
+  p{margin:0 0 14px;max-width:68ch}
+  a{color:var(--blue)}
+  .q{border-left:3px solid var(--a);background:var(--panel2);padding:14px 18px;margin:18px 0 22px;border-radius:0 12px 12px 0;font-size:17px;font-weight:600;max-width:68ch}
+  .q.narrow{font-size:16px}
+  .rule{border:0;border-top:1px solid var(--line);margin:34px 0}
+  ul{margin:0 0 14px;padding-left:20px;max-width:68ch}
+  li{margin:0 0 10px}
+  li b{color:var(--tx)}
+  .card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:18px 20px;margin:20px 0;max-width:68ch}
+  .card p:last-child{margin-bottom:0}
+  .num{font-family:ui-monospace,Menlo,monospace;color:var(--tx);font-weight:700}
+  .sig{color:var(--dim);font-size:13.5px;font-family:ui-monospace,Menlo,monospace;margin:0 0 26px}
+  .foot{color:var(--dim);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px;max-width:none}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="field-notes.html">Field notes</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="index.html#validation">Validation</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="about.html" class="on">About</a>
+      <a href="trust.html">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="index.html#validation">Validation</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="about.html">About</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap">
+  <h1>About Josh Davis and ThePickLog</h1>
+  <p class="sig">Who runs this site, what he does for a living, and why he tested his own strategy first</p>
+
+  <p>I'm Josh Davis. I have a Ph.D. in Industrial/Organizational Psychology, and much of my professional work comes down to one question:</p>
+
+  <div class="q">Does this measure actually predict the outcome it claims to predict, or does it only appear to?</div>
+
+  <p>The domains of psychological assessment and trading are very different, but the predictive claims share the same basic structure. Information available today is converted into a score or a rule that is supposed to predict what happens later.</p>
+
+  <p>In retail trading, the evidence offered for those claims is often weaker than the claim itself. A profitable chart, a high win rate, or an impressive backtest can look persuasive without showing that a durable and repeatable signal exists.</p>
+
+  <p>ThePickLog applies a prospective standard: define the rule before the outcome is known, test it on new data, compare it against a benchmark specified in advance, and publish the result either way.</p>
+
+  <hr class="rule">
+
+  <h2>About me</h2>
+
+  <p>I run AMD Consulting, a consulting practice focused on executive assessment and selection, executive coaching, and organizational research and analytics.</p>
+
+  <p>In that work, an assessment is a claim about the future. People who score one way are expected to perform differently later from people who score another way. Establishing that requires reliable measurement, a relevant outcome, an appropriate comparison, and evidence gathered in a way that limits how much the interpretation can be changed after the result is known.</p>
+
+  <p>Organizations use these tools to help decide who gets hired, promoted, developed, and placed in leadership roles. Those decisions have real consequences, so the standard cannot simply be that an assessment looks plausible or produces an appealing result.</p>
+
+  <p>None of this makes me an authority on predicting stock prices. It does give me a practical framework for evaluating whether a predictive claim has been tested in a way that can distinguish signal from noise, hindsight, and researcher discretion.</p>
+
+  <hr class="rule">
+
+  <h2>I started with my own strategy</h2>
+
+  <p>I did not begin ThePickLog as an outside critic of other people's trading ideas. I began as someone who had built a trading screener and believed it worked.</p>
+
+  <p>I spent months developing a low-float momentum screen, a category with a large retail following. I liked the theory, and I liked what the historical results appeared to show.</p>
+
+  <p>So I treated it the way I would treat an assessment being prepared for real-world use. I froze the rule, registered the prediction before the outcomes existed, ran it forward on data nobody had seen yet, compared it with a defined baseline, and reported the full set of variations I had tested rather than presenting the best-looking result as though it were the only one examined.</p>
+
+  <p><b>It failed.</b></p>
+
+  <p>Across <span class="num">309</span> post-registration trades, the strategy finished <span class="num">3.0 percentage points</span> below baseline, with a 95% confidence interval from <span class="num">−4.4</span> to <span class="num">−1.5</span> percentage points. The result was statistically significant, and in the direction opposite to the one I had predicted.</p>
+
+  <p>The most instructive part was how the result developed. The estimated effect was positive early on: <span class="num">+1.7</span> percentage points at 30 trades. By 200 trades it had fallen to <span class="num">−2.1</span> points. At 309 trades it was <span class="num">−3.0</span>.</p>
+
+  <p>The apparent effect changed sign as the sample grew.</p>
+
+  <p>Two errors surfaced along the way, and both are published.</p>
+
+  <div class="card">
+    <p><b>A scoring bug.</b> One of my analysis scripts had been inflating the reported results for several weeks — a split-adjustment mismatch that made a losing baseline look like an +8% gain. <a href="split-adjustment-trap.html">The write-up is here</a>.</p>
+  </div>
+
+  <div class="card">
+    <p><b>A protocol failure,</b> found by an outside review of my public data rather than by me. The daily scan is supposed to run and log every pick before the market opens. On seven sessions it drifted past the opening bell and logged anyway — 128 picks recorded after the prices they were meant to predict had already begun printing. Five of those seven sessions fall inside Experiment 01's window.</p>
+    <p>The affected rows remain visible in the public record, they are now excluded from every calculation by a rule anyone can recompute from the published CSVs, and a hard pre-open gate was added so that a late run writes nothing at all. <b>Correcting it made my result worse, not better</b> — the in-window mean moved from −2.64% to −3.65% — and the verdict was unchanged. <a href="late-cohorts.html">The full account is here</a>.</p>
+  </div>
+
+  <p>The original hypothesis, the interim results, the sign reversal, and the final verdict are published in <a href="experiment-01.html">Experiment 01</a>. Both corrections are in the <a href="field-notes.html">field notes</a> and the <a href="AUDIT_LOG.md">audit log</a>.</p>
+
+  <p>One result from that experiment is the example I return to whenever someone cites win rate as evidence of an edge: one exit variation won <span class="num">67%</span> of the time and still lost an average of <span class="num">4.4%</span> per trade.</p>
+
+  <p>That failure is not an awkward exception to this project. It is the foundation of it.</p>
+
+  <p>Anyone can be skeptical of someone else's strategy. The more meaningful test is whether you will apply the same standard to your own idea, and publish the answer when it is unfavorable.</p>
+
+  <hr class="rule">
+
+  <h2>Why trading evidence often misleads</h2>
+
+  <p>The recurring problems are straightforward:</p>
+
+  <ul>
+    <li><b>Performance on the same historical data used to create and tune a strategy is not independent evidence that it will work later.</b> That is development, not validation.</li>
+    <li><b>A high win rate alone does not establish an edge.</b> A strategy can win frequently and still lose money if its losses are larger than its gains.</li>
+    <li><b>A return without a relevant benchmark is difficult to interpret.</b> Markets rise, risk is sometimes rewarded, and different market environments favor different styles. The question is not only whether a strategy made money, but whether it outperformed the alternative it was supposed to beat.</li>
+    <li><b>Testing many variations increases the probability that at least one will look successful by chance.</b> Showing only the winner turns a selection effect into what appears to be a discovery.</li>
+  </ul>
+
+  <p>Underneath each problem is the same safeguard: the prediction, benchmark, evaluation period, and pass criteria should be defined before the result is known. A strategy that begins as a claim about excess returns should not quietly become a claim about drawdown control after the returns disappoint.</p>
+
+  <p>How each of these is handled here is set out on the <a href="method.html">Method</a> page, and the places I have made these mistakes myself are written up in the <a href="field-notes.html">field notes</a>.</p>
+
+  <hr class="rule">
+
+  <h2>Independence and incentives</h2>
+
+  <p>ThePickLog is an independent research project operated by me through AMD Ventures, LLC, outside my client work through AMD Consulting.</p>
+
+  <p>I do not sell trading signals, stock picks, alerts, or access to a supposedly profitable strategy. I do not manage client money, connect to users' brokerage accounts, or route real-money orders. All trades and outcomes reported on the site are simulated or hypothetical.</p>
+
+  <p>Any future revenue from the project would come from research tools, access to the testing process, or the work required to run an experiment — not from a strategy producing a positive result.</p>
+
+  <p>That does not eliminate every possible source of bias. A researcher can still have reputational, intellectual, or audience-related reasons to prefer an interesting result. Financial separation simply removes one direct incentive to declare that a strategy works.</p>
+
+  <p>ThePickLog is currently a one-person research project. Automated and version-controlled systems handle much of the data collection, scoring, and reporting. Those systems reduce manual intervention, but they do not eliminate error. The seven late cohorts described above are a case in point: automation failed quietly, and an outside reader caught it before I did.</p>
+
+  <p>When an error is found, the correction is published.</p>
+
+  <hr class="rule">
+
+  <h2>What this can and cannot establish</h2>
+
+  <p>Prospective testing solves some problems, but not all of them.</p>
+
+  <p>A forward test can still be affected by thin liquidity, spreads, slippage, delayed execution, and market impact. These can make a simulated result difficult or impossible to achieve in actual trading.</p>
+
+  <p>A sample may also be too small to detect a modest but genuine effect. A strategy can fail during one market environment and perform differently in another. A successful result over a limited period does not prove that the advantage will persist.</p>
+
+  <p>Each experiment states which limitations are most relevant to its particular claim. The broader framework is explained on the <a href="method.html">Method</a> page.</p>
+
+  <p>One passing experiment does not prove a permanent market advantage. One failed experiment does not establish that every possible variation of an idea is worthless.</p>
+
+  <p>The question ThePickLog asks is deliberately narrower:</p>
+
+  <div class="q narrow">Under the rules, data, assumptions, benchmark, evaluation period, and success criteria specified in advance, did the strategy do what it claimed it would?</div>
+
+  <p>That is a smaller question than many trading publications try to answer. It is also one that can be answered more honestly.</p>
+
+  <hr class="rule">
+
+  <h2>What I am not claiming</h2>
+
+  <p>I am not a registered investment adviser, broker-dealer, portfolio manager, or financial professional. Nothing published on ThePickLog is investment advice or a recommendation to buy, sell, or hold any security.</p>
+
+  <p>I am also not presenting myself as a successful trader. The first strategy tested publicly on this site was mine, and it lost.</p>
+
+  <p>I am not neutral about method. I believe much of the evidence used to promote trading strategies to retail investors falls short of what the claims require.</p>
+
+  <p>I do try to remain neutral about outcome. That is why the prediction, benchmark, evaluation window, and pass criteria are frozen before the data exist: to reduce my ability to move them after seeing the answer.</p>
+
+  <hr class="rule">
+
+  <h2>Corrections</h2>
+
+  <p>Questions, corrections, and strategies you would like to see tested are welcome — <a href="mailto:davis1163@gmail.com?subject=ThePickLog">send them here</a>.</p>
+
+  <p>Corrections especially. If a number, assumption, calculation, or conclusion on this site is wrong, I want to know. The last significant correction on this site came from a reader, not from me. Substantive corrections are added to the <a href="AUDIT_LOG.md">audit log</a> alongside the original result, the reason for the change, and the effect on the verdict.</p>
+
+  <p>The goal is not to create a record that never contains an error. It is to create a record that makes its errors visible.</p>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). Past results, including ours, do not predict future results.
+    <br><a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="experiments.html">All experiments</a> &middot; <a href="field-notes.html">Field notes</a>
+  </p>
+</div>
+</body>
+</html>
