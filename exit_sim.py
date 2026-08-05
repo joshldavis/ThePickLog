@@ -22,7 +22,8 @@ USAGE:
   python3 exit_sim.py                      # fetch daily paths for graded picks, write report
 NOT INVESTMENT ADVICE.
 """
-import argparse, csv, os, statistics as st
+import argparse, csv, os, sys, statistics as st
+from market_time import split_timely, late_cohort_summary
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 HAIRCUT = 2.0          # match ignitionscan grader
@@ -213,8 +214,17 @@ def main():
 
     # COHORT SEAL (H-UNIV1, 2026-07-08): the exit study + every H-EX registration
     # were frozen against the v0.2 fixed-16 record; replay that closed cohort only.
-    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))
-             if (p.get("model_version") or "").startswith("v0.2")}
+    _rows = [p for p in _read(os.path.join(HERE, "picks.csv"))
+             if (p.get("model_version") or "").startswith("v0.2")]
+    # PRE-OPEN SEAL (2026-08-04) — see market_time.py and AUDIT_LOG.md. Picks logged
+    # at or after their own session's open were scored against a price that had
+    # already printed, so they are not evidence. Derived from published_at, never a
+    # stored flag, so the exclusion reproduces from the public CSV.
+    _rows, _late = split_timely(_rows)
+    if _late:
+        print(f"[exit_sim] excluded {len(_late)} late-logged picks across "
+              f"{len(late_cohort_summary(_late))} cohorts", file=sys.stderr)
+    picks = {p["pick_id"]: p for p in _rows}
     outs = _read(os.path.join(HERE, "outcomes.csv"))
     graded = [o for o in outs if o.get("pick_id") in picks
               and _f(o.get("entry_open")) and _f(o.get("ret_open_close_net")) is not None]

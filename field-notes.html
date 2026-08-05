@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Field notes — the mistakes, written up | ThePickLog</title>
+<meta name="description" content="Errors we found in our own record, written up in full: what broke, what it cost, and the checks that catch it. A record that has never issued a correction isn't a careful record — it's an unaudited one.">
+<link rel="canonical" href="https://thepicklog.vercel.app/field-notes.html">
+<meta property="og:title" content="Field notes — the mistakes, written up">
+<meta property="og:description" content="Errors we found in our own record, published in full. What broke, what it cost, and the checks that catch it.">
+<meta property="og:type" content="website">
+<style>
+  :root{--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;z-index:30;background:#0a0e14;border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.menu-btn{display:flex}}
+  .wrap{max-width:900px;margin:0 auto;padding:30px 16px 80px}
+  h1{font-size:34px;margin:.1em 0 .2em;letter-spacing:-.02em;line-height:1.15}
+  .lead{color:var(--dim);font-size:16.5px;margin:0 0 10px;max-width:64ch}
+  .strip{color:var(--green);font-weight:600;font-size:13.5px;margin:14px 0 30px}
+  a{color:var(--blue)}
+  .card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:20px 22px;margin:16px 0;display:block;text-decoration:none;color:inherit}
+  a.card:hover{border-color:var(--a);background:var(--panel2)}
+  .card .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  .card h2{margin:.25em 0 .3em;font-size:21px;letter-spacing:-.01em}
+  .card p{margin:0;color:var(--dim);font-size:14.5px}
+  .pill{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.06em;padding:4px 10px;border-radius:999px;vertical-align:middle;margin-left:8px}
+  .v-fail{background:#3a1c22;color:#ffb3c0;border:1px solid #5a2a33}
+  .v-warn{background:#2a1d10;color:var(--amber);border:1px solid #5a3a22}
+  .meta{margin-top:12px;font-size:12.5px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}
+  .how{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:20px 22px;margin:30px 0}
+  .how h2{margin:0 0 10px;font-size:19px}
+  .how p{margin:0 0 10px;color:var(--dim);font-size:14.5px}
+  .how p:last-child{margin-bottom:0}
+  .how b{color:var(--tx)}
+  .foot{color:var(--dim);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="field-notes.html" class="on">Field notes</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="index.html#validation">Validation</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="trust.html">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="index.html#validation">Validation</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap">
+  <h1>Field notes</h1>
+  <p class="lead">Errors we found in our own record, written up in full — what broke, what it cost us, and the checks that catch it. Every one of these made our numbers look better than they were.</p>
+  <p class="strip">Found in public data &nbsp;•&nbsp; Corrected, not quietly restated &nbsp;•&nbsp; The fix is in the write-up</p>
+
+  <a class="card" href="late-cohorts.html" style="border-color:#5a2a3355">
+    <span class="no">FIELD NOTE · 2026-08-04</span><span class="pill v-fail">CORRECTION</span>
+    <h2>We logged 128 picks after the opening bell</h2>
+    <p>This site has one load-bearing claim: every pick is written down before the market opens. On seven occasions our scheduler drifted past the bell and logged anyway — and we didn't notice for six weeks. An outside reader found it in our public CSV. What broke, what it did to the numbers, why we <i>won't</i> claim it flattered us, and the hard gate that makes it impossible now.</p>
+    <div class="meta">128 picks / 7 cohorts excluded · headline −2.68% → −3.40% · verdicts unchanged</div>
+  </a>
+
+  <a class="card" href="split-adjustment-trap.html" style="border-color:#5a3a2255">
+    <span class="no">FIELD NOTE · 2026-07-29</span><span class="pill v-warn">BUG</span>
+    <h2>The bug that makes your backtest look good — and why you can't see it</h2>
+    <p>Historical prices are silently rewritten every time a company splits. Mix a price you stored with one you download later and you invent returns that never happened — and in cheap stocks the error is <i>always</i> in your favour. We found it in our own code, where it had been inflating our numbers for weeks. How it works, why it survives review, and the six checks that catch it.</p>
+    <div class="meta">found while auditing Experiment 01 · cost us a +8.0% baseline that was really −2.9%</div>
+  </a>
+
+  <div class="how">
+    <h2>Why these exist</h2>
+    <p>Every trading record you have ever been shown was produced by software, and software has bugs. The question is never whether a record contains errors — it is whether anyone would ever tell you.</p>
+    <p><b>A track record that has never published a correction is not a careful record. It's an unaudited one.</b> So when we find something, it gets written up properly: the mechanism, the numbers before and after, and enough detail that you could find the same bug in your own work.</p>
+    <p>Both notes here were errors in <i>our</i> favour. That is not a coincidence — errors that make your numbers worse get found immediately, and errors that flatter you can sit there for months. It is exactly why the raw data is public and why we would rather a reader find the next one than nobody find it at all.</p>
+  </div>
+
+  <p class="lead" style="margin-top:26px">The verdicts themselves live under <a href="experiments.html">Experiments</a>, and every correction is recorded in the <a href="AUDIT_LOG.md">audit log</a>. The raw data is on the <a href="index.html#performance">track record</a> page — <a href="picks.csv" download>picks.csv</a> and <a href="outcomes.csv" download>outcomes.csv</a>.</p>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida).
+    <br><a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="experiments.html">All experiments</a>
+  </p>
+</div>
+</body>
+</html>

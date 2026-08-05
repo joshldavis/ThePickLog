@@ -37,6 +37,7 @@ USAGE
 """
 import argparse
 import csv
+from market_time import split_timely, late_cohort_summary
 import io
 import os
 import sys
@@ -153,7 +154,16 @@ def brier(preds, actuals):
 
 # ------------------------------------------------------------------ evaluation
 def load_rows():
-    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))}
+    _rows = _read(os.path.join(HERE, "picks.csv"))
+    # PRE-OPEN SEAL (2026-08-04) — see market_time.py and AUDIT_LOG.md. Picks logged
+    # at or after their own session's open were scored against a price that had
+    # already printed, so they are not evidence. Derived from published_at, never a
+    # stored flag, so the exclusion reproduces from the public CSV.
+    _rows, _late = split_timely(_rows)
+    if _late:
+        print(f"[risk_eval] excluded {len(_late)} late-logged picks across "
+              f"{len(late_cohort_summary(_late))} cohorts", file=sys.stderr)
+    picks = {p["pick_id"]: p for p in _rows}
     rows = []
     for o in _read(os.path.join(HERE, "outcomes.csv")):
         p = picks.get(o.get("pick_id"))

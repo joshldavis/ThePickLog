@@ -48,6 +48,7 @@ Selftests run on every invocation and abort on failure.
 """
 
 import csv, math, os, sys
+from market_time import split_timely, late_cohort_summary
 from datetime import datetime, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -161,8 +162,17 @@ def load_evaluable():
     """[(trading_date, graded_at, hit, c5, c0)] for every evaluable graded pick.
     COHORT SEAL (H-UNIV1, 2026-07-08): H-EX1 and its priors were frozen against the
     v0.2 fixed-16 record; the tracker reads that closed cohort only."""
-    picks = {p["pick_id"]: p for p in _read(os.path.join(HERE, "picks.csv"))
-             if (p.get("model_version") or "").startswith("v0.2")}
+    _rows = [p for p in _read(os.path.join(HERE, "picks.csv"))
+             if (p.get("model_version") or "").startswith("v0.2")]
+    # PRE-OPEN SEAL (2026-08-04) — see market_time.py and AUDIT_LOG.md. Picks logged
+    # at or after their own session's open were scored against a price that had
+    # already printed, so they are not evidence. Derived from published_at, never a
+    # stored flag, so the exclusion reproduces from the public CSV.
+    _rows, _late = split_timely(_rows)
+    if _late:
+        print(f"[bayes_h_ex1] excluded {len(_late)} late-logged picks across "
+              f"{len(late_cohort_summary(_late))} cohorts", file=sys.stderr)
+    picks = {p["pick_id"]: p for p in _rows}
     rows = []
     for o in _read(os.path.join(HERE, "outcomes.csv")):
         p = picks.get(o.get("pick_id"))

@@ -62,7 +62,7 @@
     <nav class="tabs">
       <a href="index.html">Overview</a>
       <a href="experiments.html">Experiments</a>
-      <a href="split-adjustment-trap.html" class="on">Field notes</a>
+      <a href="field-notes.html" class="on">Field notes</a>
       <a href="index.html#performance">Track record</a>
       <a href="method.html">Method</a>
       <a href="guide.html">Vetting Guide</a>
@@ -74,7 +74,7 @@
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <a href="index.html">Overview</a>
     <a href="experiments.html">Experiments</a>
-    <a href="split-adjustment-trap.html">Field notes</a>
+    <a href="field-notes.html" class="on">Field notes</a>
     <a href="index.html#performance">Track record</a>
     <a href="method.html">Method</a>
     <a href="guide.html">Vetting Guide</a>
@@ -181,6 +181,11 @@ if abs(refetched_entry - stored_entry) / stored_entry &gt; 0.001:
   <p>We found this bug in our own code, and it had been making our own results look better for weeks. We caught it while auditing a result we had <i>already concluded was a failure</i> — which is worth sitting with, because it means the only reason we looked hard enough was that we were trying to establish a negative rigorously.</p>
   <p>A track record that has never published a correction is not a careful record. It's an unaudited one.</p>
   <p>The full technical write-up, including the reconciliation guard we added, is in our <a href="AUDIT_LOG.md">public audit log</a> under 2026-07-29. The experiment this surfaced during is <a href="experiment-01.html">Experiment 01</a>, where we tested our own stock screener and it lost money.</p>
+
+  <div class="box" style="border-color:#5a2a33;background:#2a1218">
+    <h3 style="margin:0 0 8px">The other one</h3>
+    <p style="margin:0">This wasn't the only error in our favour. In August 2026 we found that our scanner had logged 128 picks <i>after</i> the market had already opened, on seven separate sessions — breaking the one guarantee the whole record depends on. <a href="late-cohorts.html">That correction is here</a>, and the pattern is the same: an error that flatters you can sit there for weeks, because nothing forces you to look.</p>
+  </div>
 
   <p class="foot">
     Educational and informational only — not investment advice, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). The diagnosis above is the explanation consistent with our evidence: picks with a stored grade-time price reconciled exactly, and only the re-downloaded subset disagreed. Vendor adjustment behaviour varies, so check your own provider's documentation rather than assuming ours applies.
