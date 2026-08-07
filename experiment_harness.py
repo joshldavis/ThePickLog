@@ -423,7 +423,7 @@ def _f(x):
 
 
 def _read(p):
-    if not os.path.exists(p):
+    if not os.path.exists(p) or os.path.getsize(p) == 0:
         return []
     with io.open(p, newline="", encoding="utf-8") as fh:
         return list(csv.DictReader(fh))
@@ -433,7 +433,11 @@ def _append(p, fields, rows):
     if not rows:
         return
     os.makedirs(os.path.dirname(p), exist_ok=True)
-    first = not os.path.exists(p)
+    # An EXISTING BUT EMPTY file must still get a header: an interrupted first run leaves a
+    # zero-byte file, and without this the first data row silently becomes the header, every
+    # later _read returns garbage, and the catch-all keeps CI green while nothing is
+    # collected. Found by the 2026-08-07 review of calendar_eval.py, which shared this code.
+    first = (not os.path.exists(p)) or os.path.getsize(p) == 0
     with io.open(p, "a", newline="", encoding="utf-8") as fh:
         w = csv.DictWriter(fh, fieldnames=fields)
         if first:

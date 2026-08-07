@@ -879,3 +879,82 @@ AI-picker services (named operators — WEDGE gate, counsel required).
 
 **Scope limits.** Each verdict describes its frozen rule on this universe over its window.
 Not advice; no trades executed.
+
+---
+
+## Amendment to H-EXP04 / H-EXP05 (calendar experiments) — 2026-08-07
+
+**Registration dates are UNCHANGED (2026-08-06). Zero outcome rows had been graded when this
+amendment was made** — the first grade run had not yet occurred, so no observed data informed
+any part of it. This is recorded in full because the standard this project holds others to is
+that the *apparatus* gets audited, not just the measurements. An adversarial review one day
+after registration found six defects in `calendar_eval.py`. Four were bugs in the measurement
+apparatus and were simply fixed. Two changed the pass bar, and those are amended here.
+
+### Fixed without changing the registered rule (apparatus bugs)
+- **Partial-bar bias, asymmetric.** The incomplete-month guard deferred every non-TOM session
+  of the current month, so the only sessions gradeable on the day they occurred were positions
+  0/1/2 of a month — which are *always* turn-of-month. A grade run before the closing bell
+  would have frozen a live intraday snapshot into the treatment arm and never into the control
+  arm. The CI cron is 21:00 UTC, which is 4:00pm ET in winter — the bell itself, in the months
+  EXP04's verdict lands. The evaluator now never grades the final fetched session.
+- **Truncated leading month.** TOM position was derived from the fetched session list, so the
+  first (partial) month of the ~400-day window had its first three *fetched* sessions flagged
+  turn-of-month. The evaluator now never grades sessions in the window's first month.
+- **Zero-byte outcomes file.** An interrupted first run left an empty CSV with no header; the
+  first data row then became the header and grading raised `KeyError` forever, swallowed by
+  the catch-all so CI stayed green while nothing was collected. Fixed here and in
+  `experiment_harness.py`, which carried the identical bug and therefore exposed EXP03.
+- **Wrong clustering unit.** The last 4 sessions of month M and the first 3 of month M+1 are
+  one contiguous 7-session run of market time — the most correlated observations in the
+  sample — but were keyed to two different calendar months, understating that correlation.
+  The cluster is now the turn-of-month **cycle**, which also puts each cycle's control
+  sessions in the same cluster as its treatment sessions, making the comparison
+  contemporaneous by construction.
+
+### Amended pass bar (this is the part that changes what the experiments must clear)
+- **The confidence interval was the CI of the wrong quantity.** The control mean was computed
+  once and subtracted as a *constant* before bootstrapping, so none of the control arm's
+  sampling uncertainty reached the interval. Both arms are now resampled and recomputed inside
+  every bootstrap draw.
+- **Too few clusters, and a verdict republished at every look.** n>=30 sessions is only about
+  five clusters, and the verdict line was recomputed on every run with no alpha spending — so
+  across a year of looks a no-effect claim had roughly a 1-in-5 chance of printing a pass at
+  least once. **Both experiments now additionally require a minimum cluster count, and no
+  verdict of any kind is computed or displayed until it is met:**
+
+| | registered 2026-08-06 | amended 2026-08-07 | expected verdict window |
+|---|---|---|---|
+| H-EXP04 | n>=30 TOM sessions | n>=30 **and >=12 complete turn-of-month cycles** | ~2027-09 (was ~2026-12) |
+| H-EXP05 | n>=30 sessions | n>=30 **and >=20 ISO weeks** | ~2027-01 (was ~2026-09) |
+
+All other pass criteria are unchanged: mean **and** median both in the claimed direction, a
+clustered 95% CI excluding zero, direction holding across >=3 consecutive weekly snapshots,
+and win rate reported but never a pass criterion.
+
+### The residual, measured and published rather than assumed away
+Simulating the shipped estimator under the null (no effect), the one-sided false-positive rate
+of the `CI low > 0` test is:
+
+| clusters | false-positive rate (nominal 2.5%) |
+|---|---|
+| ~5 (the original bar) | 7.6% — and **12.1%** before the frozen-control-mean fix |
+| 8 | 5.1% |
+| **12 (the amended EXP04 floor)** | **4.2% ± 0.5%** |
+| 20 | ~4.5% (within noise of 12) |
+
+A percentile cluster bootstrap stays modestly anti-conservative at any cluster count reachable
+in a sane window, and pushing the floor past 12 buys nothing measurable while costing years.
+So the floor is 12 and the residual is disclosed on the live report: a bare "clears the bar" on
+EXP04 should be read as roughly a **1-in-24** false-positive risk, not 1-in-40.
+
+**Why amend rather than void.** Voiding and re-registering would reset the window for no gain:
+the claims, the universe, the window definitions, the control design and the registration date
+are all untouched, and not one row of data had been observed. Amending a pass bar *after*
+seeing results would be indefensible; amending it before any result exists, and publishing the
+diff, is the honest version. Recorded here so the change is checkable against git history.
+
+**Known and NOT fixed here:** `experiment_harness.py` republishes its verdict at every look
+with no alpha spending, exactly as `calendar_eval.py` did. That affects **EXP02 and EXP03**,
+which already have graded data, so amending their bar mid-flight is a separate decision with
+its own disclosure requirement. Logged, not silently carried.

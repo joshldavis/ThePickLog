@@ -103,7 +103,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <div class="status">
     <div class="h">STATUS</div>
     <div class="b">Registered and running. No verdict yet.</div>
-    <p>Every session's two legs are graded automatically at the close. A verdict needs at least 30 post-registration sessions — about six weeks, so expect the first read around <b>mid-September 2026</b>. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
+    <p>Every session's two legs are graded automatically at the close. A verdict needs at least 30 post-registration sessions <b>and at least 20 ISO weeks</b> — so expect the first read around <b>January 2027</b>. Until both floors are met the report shows the running numbers but computes no verdict at all — see the amendment note below. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
   </div>
 
   <h2>Read this box before the numbers</h2>
@@ -133,7 +133,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 
   <h2>What it has to clear</h2>
   <div class="box">
-    <p><b>1.</b> At least 30 post-registration sessions graded.<br>
+    <p><b>1.</b> At least 30 post-registration sessions graded, <b>and at least 20 distinct ISO weeks</b>.<br>
     <b>2.</b> The mean <b>and</b> the median of the per-session difference (overnight minus intraday) both positive.<br>
     <b>3.</b> A 95% confidence interval on that difference that excludes zero, computed treating each <i>week</i> as the unit of evidence.<br>
     <b>4.</b> The direction holding across at least three consecutive weekly snapshots.</p>
@@ -143,6 +143,14 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <h2>What we expect to happen</h2>
   <p>The direction has 27 years of history behind it, but the effect is roughly five basis points a day against a hundred basis points of daily noise — at 30 sessions, <b>statistical power is the risk, not direction</b>. Our registered expectation: the difference points positive but has maybe a <b>one in three</b> chance of clearing the full bar at the first snapshot, rising if it's allowed to accrue. And the gap has been narrowing: the intraday leg has been positive since 2010, so a fading effect is a live possibility and would itself be worth publishing.</p>
   <p class="pull">The interesting outcome isn't only "real or not." It's watching, in public, whether a famous effect that killed two ETFs still exists at all once someone writes the prediction down first.</p>
+
+  <h2>Amended one day after registration — before any data existed</h2>
+  <div class="box" style="border-color:#5a3a22">
+    <h3>What changed, and why we are telling you</h3>
+    <p>An adversarial review of our own grading code, run the day after registration, found that the verdict was being recomputed at every look with no correction for repeated testing — so across a year of snapshots a claim with no real effect had roughly a <b>one-in-five</b> chance of printing a pass at least once. Thirty sessions is also only about six weeks, far too few independent weeks for the interval to be trustworthy.</p>
+    <p>So this experiment now also requires <b>at least 20 distinct ISO weeks</b>, and <b>no verdict is computed at all</b> until that floor is met. The first read moves from September 2026 to January 2027. Nothing else changed: the claim, the control, the scope limit and the registration date are untouched, and not one row of data had been graded when this was written.</p>
+    <p style="margin-bottom:0">The full diff is in <a href="HYPOTHESES.md">HYPOTHESES.md</a> and in the git history. We are publishing it because a project that grades other people's claims does not get to quietly patch its own scoreboard.</p>
+  </div>
 
   <h2>How you'll be able to check it</h2>
   <p>Every session's two legs are appended to <code>experiments/EXP0405-CAL-outcomes.csv</code> — public and append-only. The frozen claim lives in <a href="HYPOTHESES.md">HYPOTHESES.md</a> as H-EXP05, dated, with the constants in <code>calendar_eval.py</code>. Running numbers regenerate into the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>; the verdict goes to the <a href="AUDIT_LOG.md">audit log</a> and this page. If we change any constant, the test is void and we'll say so.</p>
