@@ -4,22 +4,22 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 **H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant.
 
-### v0.2-yf — n_post = 14
+### v0.2-yf — n_post = 27
 
-- score -> |MAE| (drawdown depth): rho=-0.379 CI[-0.798,+0.262] n=14 tickers=14 ns
-- score -> range (MFE-MAE): rho=+0.090 CI[-0.564,+0.636] n=14 tickers=14 ns
-- score -> same-day return *(must stay ns)*: rho=-0.051 CI[-0.676,+0.585] n=14 tickers=14 ns
-- score -> 5-day return *(must stay ns)*: rho=+0.335 CI[-0.266,+0.820] n=14 tickers=14 ns
+- score -> |MAE| (drawdown depth): rho=+0.053 CI[-0.356,+0.456] n=27 tickers=14 ns
+- score -> range (MFE-MAE): rho=+0.145 CI[-0.327,+0.529] n=27 tickers=14 ns
+- score -> same-day return *(must stay ns)*: rho=-0.222 CI[-0.588,+0.247] n=27 tickers=14 ns
+- score -> 5-day return *(must stay ns)*: rho=+0.057 CI[-0.375,+0.485] n=27 tickers=14 ns
 - consecutive weekly snapshots with positive |MAE| rho: **0** (need >= 3)
 
 **v0.2-yf verdict: not yet established**
 
-### v0.3-yf — n_post = 10
+### v0.3-yf — n_post = 20
 
-- score -> |MAE| (drawdown depth): rho=-0.092 CI[-0.656,+0.827] n=10 tickers=10 ns
-- score -> range (MFE-MAE): rho=+0.350 CI[-0.384,+0.829] n=10 tickers=10 ns
-- score -> same-day return *(must stay ns)*: rho=+0.202 CI[-0.568,+0.804] n=10 tickers=10 ns
-- score -> 5-day return *(must stay ns)*: rho=+0.509 CI[-0.250,+0.896] n=10 tickers=10 ns
+- score -> |MAE| (drawdown depth): rho=+0.238 CI[-0.251,+0.705] n=20 tickers=20 ns
+- score -> range (MFE-MAE): rho=+0.506 CI[+0.104,+0.784] n=20 tickers=20 SIG
+- score -> same-day return *(must stay ns)*: rho=-0.086 CI[-0.564,+0.446] n=20 tickers=20 ns
+- score -> 5-day return *(must stay ns)*: rho=+0.063 CI[-0.479,+0.511] n=20 tickers=20 ns
 - consecutive weekly snapshots with positive |MAE| rho: **0** (need >= 3)
 
 **v0.3-yf verdict: not yet established**
@@ -28,7 +28,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 **H-RISK2** — is the gauge *calibrated*, not merely correlated? v0.2 cohort only; the frozen probabilities are explicitly NOT transferable to v0.3 (different score distributions — see H-STR3).
 
-Not evaluable yet: 14 post-registration v0.2 picks with a drawdown (need 30).
+Not evaluable yet: 27 post-registration v0.2 picks with a drawdown (need 30).
 
 ---
 
