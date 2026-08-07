@@ -58,11 +58,16 @@ the point of this project is that the apparatus gets audited, not just the measu
        clusters; even with D and E fixed the false-positive rate there is ~8%. And the
        verdict line was recomputed every run with no alpha spending, so across a year of
        looks a no-effect claim had roughly a 1-in-5 chance of printing a pass at least once.
-       FIX: cluster-count floors (MIN_CYCLES / MIN_WEEKS) added to the pass bar, and NO
-       verdict language of any kind is emitted until the floor is reached. This moves the
-       expected verdict windows to ~2027-01 (EXP05) and ~2027-09 (EXP04). Slower is the
-       point: an underpowered early read is the exact failure Experiment 01 already taught
-       us, and repeating it would be indefensible.
+       FIX, in two parts. (i) Cluster-count floors (MIN_CYCLES / MIN_WEEKS) added to the pass
+       bar, and NO verdict language of any kind is emitted until the floor is reached. (ii) A
+       floor alone only DELAYS the first look — after it the verdict would still be re-tested
+       on every run — so each experiment also gets ONE pre-declared VERDICT DATE (VERDICT_ON).
+       The verdict is computed at the first run on or after that date at which the floors are
+       met, is written once to an append-only verdicts file, and is thereafter DISPLAYED FROM
+       THAT FILE AND NEVER RECOMPUTED. One experiment, one look, fixed in advance. This moves
+       the verdict dates to 2027-01-04 (EXP05) and 2027-09-01 (EXP04). Slower is the point: an
+       underpowered early read is the exact failure Experiment 01 already taught us, and
+       repeating it would be indefensible.
 
     RESIDUAL, MEASURED AND DISCLOSED RATHER THAN ASSUMED AWAY. Simulating the SHIPPED
     estimator under the null (no effect, 7 treatment + 14 control sessions per cycle), the
@@ -98,6 +103,11 @@ AMENDED_AT = "2026-08-07"      # pass-bar amendment, made before any row was eve
 MIN_N = 30                     # sessions — from the original registration
 MIN_CYCLES = 12                # EXP04: distinct complete turn-of-month cycles (amendment F)
 MIN_WEEKS = 20                 # EXP05: distinct ISO weeks (amendment F)
+# ONE pre-declared look per experiment (amendment F-ii). The verdict is computed at the first
+# run on or after this date at which the floors are met, locked to an append-only file, and
+# never recomputed. Chosen so the floor is comfortably reachable: EXP05 needs 20 ISO weeks
+# from 2026-08-07 (~2026-12-25); EXP04 needs 12 complete cycles, the 12th being 2027-08.
+VERDICT_ON = {"EXP04": "2027-09-01", "EXP05": "2027-01-04"}
 BOOT = 3000
 SEED = 7
 TICKERS = ["QQQ", "SPY"]       # QQQ decides; SPY is replication-only
@@ -249,6 +259,27 @@ def out_path():
     return os.path.join(DATA, "EXP0405-CAL-outcomes.csv")
 
 
+VERDICT_FIELDS = ["experiment", "locked_at", "n", "clusters", "treat_mean", "treat_median",
+                  "ctrl_mean", "ctrl_median", "ci_lo", "ci_hi", "verdict"]
+
+
+def verdict_path():
+    return os.path.join(DATA, "EXP0405-CAL-verdicts.csv")
+
+
+def locked_verdicts():
+    return {r["experiment"]: r for r in _read(verdict_path())}
+
+
+def lock_verdict(row):
+    """Append-only, once per experiment. A locked verdict is displayed verbatim forever
+    after; it is never recomputed, which is what makes it ONE look (amendment F-ii)."""
+    if row["experiment"] in locked_verdicts():
+        return
+    _append(verdict_path(), VERDICT_FIELDS, [row])
+    print("calendar_eval: LOCKED verdict for %s — %s" % (row["experiment"], row["verdict"]))
+
+
 def _f(x):
     try:
         v = float(x)
@@ -368,35 +399,85 @@ def summarise(ticker):
     }
 
 
-def _verdict_tom(s):
-    # (F) No verdict language of ANY kind before both floors are met — otherwise the verdict
-    # is re-tested at every look with no alpha spending.
-    if s["tom_n"] < MIN_N or s["cycles"] < MIN_CYCLES:
-        return ("accruing — %d/%d turn-of-month sessions and %d/%d complete cycles; "
-                "no verdict is computed until both floors are met"
+def _floors(exp, s):
+    if exp == "EXP04":
+        return s["tom_n"] >= MIN_N and s["cycles"] >= MIN_CYCLES
+    return s["on_n"] >= MIN_N and s["on_weeks"] >= MIN_WEEKS
+
+
+def _progress(exp, s):
+    if exp == "EXP04":
+        return ("%d/%d turn-of-month sessions and %d/%d complete cycles"
                 % (s["tom_n"], MIN_N, s["cycles"], MIN_CYCLES))
-    ci = s["tom_ci"]
-    if ci is None or s["rest_mean"] is None or s["rest_med"] is None:
-        return "accruing — control arm too thin to compute the interval"
-    if ci["lo"] > 0 and s["tom_mean"] > s["rest_mean"] and s["tom_med"] > s["rest_med"]:
-        return "**clears the bar on current data** (mean, median and cycle-clustered CI all favour TOM)"
-    if ci["hi"] < 0:
-        return "**significantly NEGATIVE** — TOM sessions are running below the rest"
-    return "**no edge detected** — the TOM excess is indistinguishable from zero"
+    return "%d/%d sessions and %d/%d ISO weeks" % (s["on_n"], MIN_N, s["on_weeks"], MIN_WEEKS)
 
 
-def _verdict_on(s):
-    if s["on_n"] < MIN_N or s["on_weeks"] < MIN_WEEKS:
-        return ("accruing — %d/%d sessions and %d/%d ISO weeks; no verdict is computed "
-                "until both floors are met" % (s["on_n"], MIN_N, s["on_weeks"], MIN_WEEKS))
+def _compute(exp, s):
+    """The verdict text. Only ever called once per experiment, at the pre-declared date."""
+    if exp == "EXP04":
+        ci = s["tom_ci"]
+        if ci is None or s["rest_mean"] is None or s["rest_med"] is None:
+            return None
+        if ci["lo"] > 0 and s["tom_mean"] > s["rest_mean"] and s["tom_med"] > s["rest_med"]:
+            return "CLEARS THE BAR — mean, median and cycle-clustered CI all favour turn-of-month"
+        if ci["hi"] < 0:
+            return "SIGNIFICANTLY NEGATIVE — turn-of-month sessions ran below the rest"
+        return "NO EDGE DETECTED — the turn-of-month excess is indistinguishable from zero"
     ci = s["on_ci"]
     if ci is None:
-        return "accruing — sample too thin to compute the interval"
+        return None
     if ci["lo"] > 0 and s["on_mean"] > 0 and s["on_med"] > 0:
-        return "**clears the bar on current data** (mean, median and week-clustered CI all positive)"
+        return "CLEARS THE BAR — mean, median and week-clustered CI all positive"
     if ci["hi"] < 0:
-        return "**significantly NEGATIVE** — intraday is beating overnight"
-    return "**no edge detected** — the overnight-minus-intraday difference is indistinguishable from zero"
+        return "SIGNIFICANTLY NEGATIVE — intraday beat overnight"
+    return "NO EDGE DETECTED — the overnight-minus-intraday difference is indistinguishable from zero"
+
+
+def _lock_row(exp, s, verdict, today):
+    ci = s["tom_ci"] if exp == "EXP04" else s["on_ci"]
+    if exp == "EXP04":
+        n, clusters = s["tom_n"], s["cycles"]
+        tm, tmed, cm, cmed = s["tom_mean"], s["tom_med"], s["rest_mean"], s["rest_med"]
+    else:
+        n, clusters = s["on_n"], s["on_weeks"]
+        tm, tmed, cm, cmed = s["on_mean"], s["on_med"], 0.0, 0.0
+    r = lambda v: "" if v is None else round(v, 5)
+    return {"experiment": exp, "locked_at": today, "n": n, "clusters": clusters,
+            "treat_mean": r(tm), "treat_median": r(tmed), "ctrl_mean": r(cm),
+            "ctrl_median": r(cmed), "ci_lo": r(ci["lo"]), "ci_hi": r(ci["hi"]),
+            "verdict": verdict}
+
+
+def resolve(exp, s, today, is_primary):
+    """One experiment, one look, fixed in advance (amendment F-ii).
+
+    Before the pre-declared date: progress only, no verdict language of any kind.
+    On/after it, once the floors are met: compute ONCE, lock to an append-only file.
+    Ever after: display the locked text verbatim — never recomputed, so no amount of
+    re-running this script can turn a null into a pass."""
+    lk = locked_verdicts().get(exp)
+    if lk:
+        return ("**%s** *(locked %s at n=%s over %s clusters — computed once, at the "
+                "pre-declared verdict date, and never recomputed)*"
+                % (lk["verdict"], lk["locked_at"], lk["n"], lk["clusters"]))
+    prog = _progress(exp, s)
+    if today < VERDICT_ON[exp]:
+        return ("accruing — %s. **No verdict is computed before the single pre-declared "
+                "verdict date of %s**, and none is computed then unless the floors are met."
+                % (prog, VERDICT_ON[exp]))
+    if not _floors(exp, s):
+        return ("past the pre-declared verdict date (%s) with the floor not yet met — %s. "
+                "The verdict locks at the first run where it is." % (VERDICT_ON[exp], prog))
+    v = _compute(exp, s)
+    if v is None:
+        return ("past the pre-declared verdict date (%s) but the interval could not be "
+                "computed — %s" % (VERDICT_ON[exp], prog))
+    if is_primary:
+        lock_verdict(_lock_row(exp, s, v, today))
+        return ("**%s** *(locked %s at n=%d over %d clusters — computed once and never "
+                "recomputed)*" % (v, today, *( (s["tom_n"], s["cycles"]) if exp == "EXP04"
+                                               else (s["on_n"], s["on_weeks"]) )))
+    return "%s *(replication read — does not decide)*" % v
 
 
 def report():
@@ -415,6 +496,14 @@ def report():
          "or displayed until those floors are met.** The registration date is unchanged. Full "
          "detail in HYPOTHESES.md and in the evaluator's header."
          % (AMENDED_AT, MIN_CYCLES, MIN_WEEKS, MIN_N), "",
+         "> **One experiment, one look.** Each experiment has a single pre-declared verdict "
+         "date — **EXP05 %s, EXP04 %s**. The verdict is computed at the first run on or after "
+         "that date at which the floors are met, written once to an append-only verdicts file, "
+         "and thereafter displayed from that file and **never recomputed**. Re-running this "
+         "script, on any later data, cannot turn a null into a pass. Before that date this "
+         "report shows the running numbers and nothing else — a verdict re-tested at every "
+         "weekly snapshot is a verdict with no alpha left to spend."
+         % (VERDICT_ON["EXP05"], VERDICT_ON["EXP04"]), "",
          "> **Known residual, measured not assumed.** Simulated under the null, the one-sided "
          "false-positive rate of this interval is **4.2%% (+/-0.5) at the %d-cycle floor** "
          "against a nominal 2.5%% — down from 12.1%% as the code was originally written. A "
@@ -422,6 +511,7 @@ def report():
          "reachable in a sane window, and raising the floor further buys nothing measurable. "
          "So: read a bare \"clears the bar\" on EXP04 as about a 1-in-24 false-positive risk, "
          "not 1-in-40." % MIN_CYCLES, ""]
+    today = datetime.now(timezone.utc).date().isoformat()
     for t in TICKERS:
         s = summarise(t)
         role = "PRIMARY — this decides" if t == PRIMARY else "replication read only"
@@ -440,7 +530,7 @@ def report():
                   "median %+.3f%%" % (s["tom_mean"], s["tom_med"], s["rest_mean"], s["rest_med"]),
                   "- cycle-clustered 95%% CI of the TOM-minus-rest difference: %s" % cis,
                   "- TOM win rate %.0f%% *(reported only)*" % s["tom_win"]]
-        L += ["- **read: %s**" % _verdict_tom(s), "",
+        L += ["- **read: %s**" % resolve("EXP04", s, today, t == PRIMARY), "",
               "### EXP05 — overnight vs intraday (attribution claim)",
               "- sessions graded: **%d** (need %d); ISO weeks: **%d** (need %d)"
               % (s["on_n"], MIN_N, s["on_weeks"], MIN_WEEKS)]
@@ -455,7 +545,7 @@ def report():
                   "per session; at %.2f%%/RT the mean must exceed %.2f%% just to break even. "
                   "EXP05 passing does NOT make it tradeable — that is the registered scope."
                   % (COST_RT_NOTE, COST_RT_NOTE)]
-        L += ["- **read: %s**" % _verdict_on(s), ""]
+        L += ["- **read: %s**" % resolve("EXP05", s, today, t == PRIMARY), ""]
     L += ["---", "",
           "Constants are frozen in `calendar_eval.py`; changing any voids the affected "
           "experiment and requires a new registration with a new window. Outcomes are "
@@ -514,8 +604,14 @@ def _selftest():
             "tom_med": 9.9, "rest_mean": 0.0, "rest_med": 0.0, "tom_ci": None, "tom_win": 99.0,
             "on_n": 35, "on_mean": 9.9, "on_med": 9.9, "on_ci": None, "on_weeks": 7,
             "on_win": 99.0}
-    assert "accruing" in _verdict_tom(thin) and "clears" not in _verdict_tom(thin)
-    assert "accruing" in _verdict_on(thin) and "clears" not in _verdict_on(thin)
+    for exp in ("EXP04", "EXP05"):
+        r = resolve(exp, thin, "2026-08-07", True)
+        assert "accruing" in r and "CLEARS" not in r, (exp, r)
+        assert VERDICT_ON[exp] in r, (exp, r)          # the single look is advertised
+    # even with the floors met, nothing is computed before the pre-declared date
+    fat = dict(thin, cycles=99, on_weeks=99)
+    for exp in ("EXP04", "EXP05"):
+        assert "accruing" in resolve(exp, fat, "2026-12-31", True)
 
     # ---- amendment C: an existing but EMPTY file still gets a header
     import tempfile
@@ -554,7 +650,7 @@ def _selftest():
             assert all(r["cycle"] for r in got)
             s = summarise("QQQ")
             assert s["tom_n"] and s["rest_n"] and s["cycles"] >= 1
-            assert "accruing" in _verdict_tom(s)                   # floors not met
+            assert "accruing" in resolve("EXP04", s, "2026-08-07", True)  # floors not met
         finally:
             DATA = keep
 

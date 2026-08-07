@@ -923,10 +923,20 @@ apparatus and were simply fixed. Two changed the pass bar, and those are amended
   least once. **Both experiments now additionally require a minimum cluster count, and no
   verdict of any kind is computed or displayed until it is met:**
 
-| | registered 2026-08-06 | amended 2026-08-07 | expected verdict window |
+| | registered 2026-08-06 | amended 2026-08-07 | single verdict date |
 |---|---|---|---|
-| H-EXP04 | n>=30 TOM sessions | n>=30 **and >=12 complete turn-of-month cycles** | ~2027-09 (was ~2026-12) |
-| H-EXP05 | n>=30 sessions | n>=30 **and >=20 ISO weeks** | ~2027-01 (was ~2026-09) |
+| H-EXP04 | n>=30 TOM sessions | n>=30 **and >=12 complete turn-of-month cycles** | **2027-09-01** (was ~2026-12) |
+| H-EXP05 | n>=30 sessions | n>=30 **and >=20 ISO weeks** | **2027-01-04** (was ~2026-09) |
+
+**A floor alone was not enough.** It delays the first look, but after it the verdict would
+still have been recomputed on every run, and the alpha leak returns. So each experiment now
+also has **ONE pre-declared verdict date**, above. The verdict is computed at the first run on
+or after that date at which the floors are met, written once to an append-only
+`experiments/EXP0405-CAL-verdicts.csv`, and thereafter **displayed from that file and never
+recomputed**. Re-running the evaluator on any later data cannot change a locked verdict, and
+that is verified by a test: lock a pass, flip the underlying data to strongly negative, re-run
+across four later dates, and the output is byte-identical. One experiment, one look, fixed in
+advance.
 
 All other pass criteria are unchanged: mean **and** median both in the claimed direction, a
 clustered 95% CI excluding zero, direction holding across >=3 consecutive weekly snapshots,

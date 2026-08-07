@@ -103,7 +103,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <div class="status">
     <div class="h">STATUS</div>
     <div class="b">Registered and running. No verdict yet.</div>
-    <p>Every session's two legs are graded automatically at the close. A verdict needs at least 30 post-registration sessions <b>and at least 20 ISO weeks</b> — so expect the first read around <b>January 2027</b>. Until both floors are met the report shows the running numbers but computes no verdict at all — see the amendment note below. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
+    <p>Every session's two legs are graded automatically at the close. A verdict needs at least 30 post-registration sessions <b>and at least 20 ISO weeks</b> — and the verdict is computed on a single pre-declared date, <b>4 January 2027</b>, and then locked. Until then the report shows the running numbers and no verdict at all — see the amendment note below. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
   </div>
 
   <h2>Read this box before the numbers</h2>
@@ -136,7 +136,8 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
     <p><b>1.</b> At least 30 post-registration sessions graded, <b>and at least 20 distinct ISO weeks</b>.<br>
     <b>2.</b> The mean <b>and</b> the median of the per-session difference (overnight minus intraday) both positive.<br>
     <b>3.</b> A 95% confidence interval on that difference that excludes zero, computed treating each <i>week</i> as the unit of evidence.<br>
-    <b>4.</b> The direction holding across at least three consecutive weekly snapshots.</p>
+    <b>4.</b> The direction holding across at least three consecutive weekly snapshots.<br>
+    <b>5.</b> All of the above assessed <b>once</b>, on the pre-declared verdict date of 4 January 2027 — then written down and never recomputed.</p>
     <p style="margin-top:12px"><b>Win rate is reported but is explicitly not a pass criterion.</b></p>
   </div>
 
@@ -148,7 +149,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <div class="box" style="border-color:#5a3a22">
     <h3>What changed, and why we are telling you</h3>
     <p>An adversarial review of our own grading code, run the day after registration, found that the verdict was being recomputed at every look with no correction for repeated testing — so across a year of snapshots a claim with no real effect had roughly a <b>one-in-five</b> chance of printing a pass at least once. Thirty sessions is also only about six weeks, far too few independent weeks for the interval to be trustworthy.</p>
-    <p>So this experiment now also requires <b>at least 20 distinct ISO weeks</b>, and <b>no verdict is computed at all</b> until that floor is met. The first read moves from September 2026 to January 2027. Nothing else changed: the claim, the control, the scope limit and the registration date are untouched, and not one row of data had been graded when this was written.</p>
+    <p>So this experiment now also requires <b>at least 20 distinct ISO weeks</b>, and the verdict is computed <b>once, on a single pre-declared date</b> — 4 January 2027 — then written to a file and never recomputed, so re-running our own code on later data cannot turn a null into a pass. The first read moves from September 2026 to 4 January 2027. Nothing else changed: the claim, the control, the scope limit and the registration date are untouched, and not one row of data had been graded when this was written.</p>
     <p style="margin-bottom:0">The full diff is in <a href="HYPOTHESES.md">HYPOTHESES.md</a> and in the git history. We are publishing it because a project that grades other people's claims does not get to quietly patch its own scoreboard.</p>
   </div>
 

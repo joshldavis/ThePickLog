@@ -103,7 +103,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <div class="status">
     <div class="h">STATUS</div>
     <div class="b">Registered and running. No verdict yet.</div>
-    <p>Every trading session is classified in advance by the exchange calendar — turn-of-month or not — and graded automatically at each close. A verdict needs at least 30 post-registration turn-of-month sessions <b>and at least 12 complete turn-of-month cycles</b>; expect the first verdict around <b>September 2027</b>. Until both floors are met the report shows the running numbers but computes no verdict at all — see the amendment note below. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
+    <p>Every trading session is classified in advance by the exchange calendar — turn-of-month or not — and graded automatically at each close. A verdict needs at least 30 post-registration turn-of-month sessions <b>and at least 12 complete turn-of-month cycles</b>; the verdict is computed on a single pre-declared date, <b>1 September 2027</b>, and then locked. Until then the report shows the running numbers and no verdict at all — see the amendment note below. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
   </div>
 
   <h2>Where this came from</h2>
@@ -133,7 +133,8 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
     <p><b>1.</b> At least 30 post-registration turn-of-month sessions graded, <b>and at least 12 complete turn-of-month cycles</b>.<br>
     <b>2.</b> Turn-of-month mean <b>and</b> median both above the other-days mean and median. Both, not either.<br>
     <b>3.</b> A 95% confidence interval on the difference that excludes zero, computed treating each <i>turn-of-month cycle</i> as the unit of evidence — consecutive sessions are not independent, and the last four sessions of one month plus the first three of the next are a single unbroken run of market time.<br>
-    <b>4.</b> The direction holding across at least three consecutive weekly snapshots.</p>
+    <b>4.</b> The direction holding across at least three consecutive weekly snapshots.<br>
+    <b>5.</b> All of the above assessed <b>once</b>, on the pre-declared verdict date of 1 September 2027 — then written down and never recomputed.</p>
     <p style="margin-top:12px"><b>Win rate is reported but is explicitly not a pass criterion.</b></p>
   </div>
 
@@ -146,7 +147,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
     <h3>What changed, and why we are telling you</h3>
     <p>The day after registering this experiment we ran an adversarial review of our own grading code and found six defects. Four were plain bugs and we fixed them. Two changed what this experiment has to clear, so they are amended on the record.</p>
     <p><b>The confidence interval was too narrow.</b> We computed the control average once and subtracted it as a fixed number, so none of the control group's own uncertainty made it into the interval. Simulated against pure noise, our &ldquo;95% interval&rdquo; was wrong about <b>12%</b> of the time instead of 2.5%.</p>
-    <p><b>And the bar was being re-tested at every look.</b> The report recomputed a verdict on every run, so across a year of looks a claim with no real effect had roughly a <b>one-in-five</b> chance of printing a pass at least once. Both experiments now require a minimum number of independent <i>cycles</i>, not just sessions, and <b>no verdict is computed at all until that floor is reached</b>. That is why the verdict moved from December 2026 to September 2027.</p>
+    <p><b>And the bar was being re-tested at every look.</b> The report recomputed a verdict on every run, so across a year of looks a claim with no real effect had roughly a <b>one-in-five</b> chance of printing a pass at least once. Both experiments now require a minimum number of independent <i>cycles</i>, not just sessions — and, because a floor only delays the first look rather than limiting how many you take, each one now has <b>a single pre-declared verdict date</b>. The verdict is computed once, on that date, written to a file, and never recomputed; re-running our own code on later data cannot turn a null into a pass. That is why the verdict moved from December 2026 to 1 September 2027.</p>
     <p><b>The residual, stated plainly:</b> even after the fix, at the 12-cycle floor the interval is wrong about <b>4.2%</b> of the time against a nominal 2.5%. That is a property of this kind of statistic at any sample size reachable in a sane window, so rather than pretend otherwise: read a bare &ldquo;clears the bar&rdquo; here as about a <b>1-in-24</b> chance of being a false positive, not 1-in-40.</p>
     <p style="margin-bottom:0">Not one row of data had been graded when this was written, so nothing here was chosen after seeing a result — which is the only reason amending is legitimate rather than fatal. The full diff is in <a href="HYPOTHESES.md">HYPOTHESES.md</a> and in the git history.</p>
   </div>
