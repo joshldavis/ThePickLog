@@ -1,0 +1,2 @@
+signal_id,experiment,captured_at,signal_date,ticker,rank_in_day,meta
+EXP08-BOLLREVERT-2026-08-06-UNH,EXP08-BOLLREVERT,2026-08-07T11:36:53+00:00,2026-08-06,UNH,1,bb_mid=421.145;bb_sd=7.6452;close=403.97;z=-2.2465
