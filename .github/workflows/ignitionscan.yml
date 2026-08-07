@@ -92,6 +92,17 @@ jobs:
         continue-on-error: true
         run: python experiment_harness.py grade || echo "harness grade skipped (non-fatal)"
 
+      # CALENDAR EXPERIMENTS (EXP04 turn-of-month + EXP05 overnight-vs-intraday,
+      # batch #9 registered 2026-08-06): timing claims on QQQ (SPY replication read)
+      # scored against TIME-matched controls — see calendar_eval.py header for why the
+      # harness's cross-sectional day-matched control does not apply to timing claims.
+      # No scan step exists by construction: sessions derive from the exchange calendar,
+      # so the Experiment-01 pre-open failure mode is impossible here. Non-fatal.
+      - name: Calendar experiments (EXP04/05) — grade
+        if: steps.cmd.outputs.cmd == 'grade'
+        continue-on-error: true
+        run: python calendar_eval.py grade || echo "calendar grade skipped (non-fatal)"
+
       - name: Refresh Finding-A-aware brief
         run: python ignitionscan.py brief || true
       - name: Rebuild Test-mode leaderboard (house + user rules)
@@ -128,6 +139,7 @@ jobs:
           [ -f rsi2_outcomes.csv ] && git add rsi2_outcomes.csv || true
           [ -d experiments ] && git add experiments || true
           [ -f reports/experiments-LATEST.md ] && git add reports/experiments-LATEST.md || true
+          [ -f reports/calendar-experiments-LATEST.md ] && git add reports/calendar-experiments-LATEST.md || true
           [ -f risk_snapshots.csv ] && git add risk_snapshots.csv || true
           [ -f reports/risk-eval-LATEST.md ] && git add reports/risk-eval-LATEST.md || true
           [ -f outcomes.csv ] && git add outcomes.csv || true

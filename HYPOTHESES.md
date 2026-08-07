@@ -718,3 +718,95 @@ widely believed is not evidence, which is precisely why it is worth testing in p
 **Scope limits.** A verdict describes *this rule*, on *these 40 names*, over *this window*. It
 is not a claim about MACD in general, about any author or platform, and it is not advice. No
 trade is executed anywhere in this project.
+
+---
+
+## Registration batch #9 — EXPERIMENTS 04 + 05 (calendar/timing), frozen 2026-08-06
+
+Two claims surfaced by the 2026-08-06 exploratory calendar sweep (25 declared tests on QQQ,
+1999–2026, BH-FDR(25), split-sample, SPY replication — **0 of 25 survived FDR in-sample**,
+which is exactly why these are registered forward rather than believed backward). Both are
+TIMING claims on a single asset, so they run on **`calendar_eval.py`**, not
+`experiment_harness.py`: the harness's day-matched control is cross-sectional (a signal vs its
+universe), and for a timing claim on one ticker the universe IS the position — the correct
+control is **time-matched** (other sessions, or the same session's other leg). All other
+harness guarantees carry over unchanged: forward-only, append-only, declared costs, mean AND
+median AND clustered 95% CI together, win rate reported but never a pass criterion, constants
+frozen — changing one voids the test.
+
+Calendar claims have a property worth recording: **there is no signal-capture race.** Whether a
+future session is a turn-of-month session is fixed by the exchange calendar; every session has
+an overnight and an intraday leg. The Experiment-01 pre-open failure mode cannot occur here by
+construction. Grading is derived, idempotent, and can lag without bias.
+
+### H-EXP04 — the turn-of-month effect
+
+**The claim under test.** QQQ's mean close→close return on turn-of-month sessions — the **last
+4 plus first 3 trading days of each month** — exceeds its mean on all other sessions.
+Documented in the academic literature since the late 1980s (Ariel; Lakonishok & Smidt) and
+still sold today in seasonality newsletters and "smart timing" content — a publicly documented
+TECHNIQUE, not a named person.
+
+**Rule (frozen; constants live in `calendar_eval.py`):**
+- **Asset:** QQQ decides. SPY graded in parallel as a replication read — reported, never a
+  pass criterion.
+- **Window definition:** last 4 + first 3 trading days, derived from the exchange calendar
+  itself. The final (incomplete) month of any fetch grades only its first-3 sessions, since
+  its last-4 flags are not yet determined and outcomes are append-only.
+- **Scored quantity:** per-TOM-session excess over the contemporaneous non-TOM mean, forward
+  window only.
+- **Costs:** the claim is scored gross at day level; the strategy expression (~12 round
+  trips/yr) is reported with a 0.02%/RT footnote — at that frequency costs cannot decide the
+  verdict either way, which is one reason this claim was chosen (selection rule #2).
+- **Window:** only sessions strictly after **2026-08-06** count. n ≥ **30 TOM sessions**
+  (~4½ months, expected verdict window around **2026-12**).
+
+**Pass requires ALL of:** n ≥ 30 post-registration TOM sessions; TOM mean AND median both
+above the non-TOM mean and median; a **month-clustered** 95% CI of the TOM excess excluding
+zero (sessions inside one month are not independent evidence); direction holding across ≥ 3
+consecutive weekly snapshots. Win rate reported only.
+
+**Registered prior.** In the 1999–2026 backtest the effect is directionally stable in all
+three decades and replicates in SPY (t = 2.43 there), but the QQQ t is only 1.41 and the
+family-wide FDR pass rate was zero. Forty years of publication is forty years of arbitrage
+opportunity. Registered expectation: **more likely than not, no edge** — estimated probability
+it clears the bar: **~1 in 3** (the highest prior yet registered, and deliberately so: this is
+the strongest surviving candidate from a 25-test sweep, and the register-then-watch discipline
+is the point).
+
+**Scope limits.** A verdict describes this window definition on QQQ over this period. It is
+not a claim about seasonality in general and not advice. No trade is executed.
+
+### H-EXP05 — overnight vs intraday (an ATTRIBUTION claim, explicitly not a trading claim)
+
+**The claim under test.** QQQ's overnight leg (previous close → open) exceeds its intraday leg
+(open → close), per session. In the 1999–2026 backtest this is the strongest structure in the
+data: $1 compounded overnight-only grew to ~$35 while intraday-only fell to ~$0.47; the paired
+difference is +5.6 bp/session (t = 2.71) and positive in every 5-year block. The claim was
+literally productised — the NightShares "night effect" ETFs — and those funds **closed in July
+2023**, which is precisely why the registered scope stops at attribution.
+
+**Rule (frozen; constants live in `calendar_eval.py`):**
+- **Asset:** QQQ decides; SPY replication read only.
+- **Scored quantity:** the per-session **paired difference** overnight − intraday — the same
+  day is its own control, the cleanest control in the project.
+- **Costs:** none apply to an attribution claim; the report carries a permanent tradeability
+  footnote (capturing the overnight leg costs one round trip per session; at 0.02%/RT the mean
+  must exceed 2 bp/session net just to break even, before slippage and taxes).
+- **Window:** only sessions strictly after **2026-08-06** count. n ≥ **30 sessions**
+  (~6 weeks, expected first verdict window around **2026-09**).
+
+**Pass requires ALL of:** n ≥ 30; mean AND median paired difference positive; a
+**week-clustered** 95% CI excluding zero; direction holding across ≥ 3 consecutive weekly
+snapshots. Win rate reported only.
+
+**Registered prior.** Backed by a large academic literature and 27 years of in-sample
+structure, but the gap has been narrowing (intraday positive since 2010) and six weeks is a
+short window for a ~5 bp/day effect against ~100 bp/day noise — power is the risk, not
+direction. Registered expectation: **direction positive but quite possibly not resolvable at
+n = 30; ~1 in 3 it clears at the first snapshot**, higher if allowed to accrue. **BINDING
+SCOPE NOTE (mirrors H-RISK):** a pass means the attribution is real over the window. It does
+NOT mean the effect is tradeable at retail, and it must never be presented as a tradeable
+edge — the NightShares closure is the cited evidence for why.
+
+**Scope limits.** Attribution on QQQ over this window; not advice; no trade executed.
