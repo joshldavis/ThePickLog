@@ -42,13 +42,50 @@ import io
 import os
 import random
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "experiments")
 REPORT = os.path.join(HERE, "reports", "experiments-LATEST.md")
 
 MIN_N = 30          # global minimum before any experiment is ruled on
+# --- AMENDMENT 2026-08-07: one experiment, one look -------------------------------------
+# The verdict used to be recomputed on EVERY run from n>=MIN_N onward, with no alpha
+# spending, so across a year of weekly snapshots a no-effect claim had roughly a 1-in-5
+# chance of printing a pass at least once. Two additions fix that, and they are REPORTING
+# logic only — not one stored signal or outcome row is affected:
+#   (1) a CLUSTER floor. n counts trades; the clustered CI's precision is governed by the
+#       number of distinct NAMES, since repeated bets on one ticker are not independent
+#       evidence. 30 trades on 4 names is not 30 pieces of evidence.
+#   (2) ONE pre-declared VERDICT DATE per experiment. A floor alone only delays the first
+#       look; after it the verdict would still be re-tested every run. The verdict is now
+#       computed at the first run on or after that date at which both floors are met,
+#       written once to an append-only verdicts file, and thereafter displayed from that
+#       file and NEVER recomputed.
+# The dates below are the batch's ALREADY-PLANNED continue/kill read (~1 Nov 2026). They
+# were set from that pre-existing plan, deliberately WITHOUT inspecting any current result.
+MIN_CLUSTERS = 20   # distinct tickers required before any verdict is computed
+VERDICT_ON = {
+    "EXP03-MACD": "2026-11-02",
+    "EXP06-SUPERTREND": "2026-11-02",
+    "EXP07-SMAPULL": "2026-11-02",
+    "EXP08-BOLLREVERT": "2026-11-02",
+    "EXP09-NR7": "2026-11-02",
+}
+DEFAULT_VERDICT_LAG_DAYS = 90   # any future declaration that omits an explicit date
+
+
+def verdict_date(e):
+    """Explicit `verdict_on` in the declaration wins; then the table above; otherwise a
+    default lag from registration, so a new experiment can never accidentally ship with an
+    unbounded number of looks."""
+    if e.get("verdict_on"):
+        return e["verdict_on"]
+    if e["id"] in VERDICT_ON:
+        return VERDICT_ON[e["id"]]
+    d = datetime.strptime(e["registered_at"], "%Y-%m-%d") + timedelta(days=DEFAULT_VERDICT_LAG_DAYS)
+    return d.date().isoformat()
+
 BOOT = 3000
 SEED = 7
 
@@ -590,6 +627,27 @@ def grade_one(e, data=None):
     return len(rows_out)
 
 
+VERDICT_FIELDS = ["experiment", "locked_at", "n", "clusters", "mean1", "med1",
+                  "ci_lo", "ci_hi", "verdict"]
+
+
+def verdicts_path():
+    return os.path.join(DATA, "HARNESS-verdicts.csv")
+
+
+def locked_verdicts():
+    return {r["experiment"]: r for r in _read(verdicts_path())}
+
+
+def lock_verdict(row):
+    """Append-only, once per experiment. A locked verdict is displayed verbatim ever after
+    and never recomputed — that is what makes it ONE look."""
+    if row["experiment"] in locked_verdicts():
+        return
+    _append(verdicts_path(), VERDICT_FIELDS, [row])
+    print(f"  LOCKED verdict for {row['experiment']}: {row['verdict']}")
+
+
 def summarise(e):
     g = _read(out_path(e))
     n = len(g)
@@ -605,21 +663,59 @@ def summarise(e):
             "trim1": trimmed_mean(ex1), "meann": (sum(exn) / len(exn)) if exn else None,
             "medn": median(exn),
             "win": (100.0 * sum(wins) / len(wins)) if wins else None,
+            "clusters": len(set(tk)),
             "mature": len(ex1) >= MIN_N}
 
 
-def verdict_line(s):
+def _compute_verdict(s):
+    """The verdict text. Only ever called once per experiment, at the pre-declared date."""
+    ci = s.get("ci1")
+    if not ci:
+        return None
+    if ci["lo"] > 0 and (s["mean1"] or 0) > 0 and (s["med1"] or 0) > 0:
+        return "CLEARS THE BAR — mean, median and clustered CI all positive"
+    if ci["hi"] < 0:
+        return "SIGNIFICANTLY NEGATIVE — worse than the day-matched control"
+    return "NO EDGE DETECTED — the excess is indistinguishable from zero"
+
+
+def verdict_line(s, e=None, today=None):
+    """One experiment, one look (amendment 2026-08-07).
+
+    Before the pre-declared verdict date: progress only, no verdict language of any kind.
+    On/after it, once BOTH floors are met: compute once and lock to an append-only file.
+    Ever after: display the locked text verbatim, so no amount of re-running this script on
+    later data can turn a null into a pass."""
     if not s.get("n"):
         return "no graded signals yet"
-    if not s.get("mature"):
+    if e is None:
         return f"accruing — {s['n']}/{MIN_N} graded, no verdict yet"
-    ci = s.get("ci1")
-    ok = (ci and (ci["lo"] > 0) and (s["mean1"] or 0) > 0 and (s["med1"] or 0) > 0)
-    if ok:
-        return "**clears the bar on current data** (mean, median and clustered CI all positive)"
-    if ci and ci["hi"] < 0:
-        return "**significantly NEGATIVE** — worse than the day-matched control"
-    return "**no edge detected** — the excess is indistinguishable from zero"
+    lk = locked_verdicts().get(e["id"])
+    if lk:
+        return (f"**{lk['verdict']}** *(locked {lk['locked_at']} at n={lk['n']} over "
+                f"{lk['clusters']} names — computed once, at the pre-declared verdict date, "
+                f"and never recomputed)*")
+    today = today or datetime.now(timezone.utc).date().isoformat()
+    vd = verdict_date(e)
+    prog = (f"{s['n']}/{MIN_N} graded signals over {s.get('clusters', 0)}/{MIN_CLUSTERS} "
+            f"distinct names")
+    if today < vd:
+        return (f"accruing — {prog}. **No verdict is computed before the single pre-declared "
+                f"verdict date of {vd}**, and none is computed then unless both floors are met.")
+    if not (s.get("mature") and s.get("clusters", 0) >= MIN_CLUSTERS):
+        return (f"past the pre-declared verdict date ({vd}) with the floor not yet met — "
+                f"{prog}. The verdict locks at the first run where it is.")
+    v = _compute_verdict(s)
+    if v is None:
+        return (f"past the pre-declared verdict date ({vd}) but the interval could not be "
+                f"computed — {prog}")
+    ci = s["ci1"]
+    lock_verdict({"experiment": e["id"], "locked_at": today, "n": s["n"],
+                  "clusters": s.get("clusters", 0), "mean1": round(s["mean1"], 5),
+                  "med1": round(s["med1"], 5), "ci_lo": round(ci["lo"], 5),
+                  "ci_hi": round(ci["hi"], 5), "verdict": v})
+    return (f"**{v}** *(locked {today} at n={s['n']} over {s.get('clusters', 0)} names — "
+            f"computed once and never recomputed)*")
 
 
 def cmd_report():
@@ -628,14 +724,28 @@ def cmd_report():
          "**excess over a day-matched control** (the equal-weight return of its own frozen "
          "universe over the identical window), net of a declared cost. Mean, median and a "
          "ticker-clustered 95% CI are reported together, because a mean on financial data can "
-         "be a single lucky trade. **Win rate is reported but is never a pass criterion.**", ""]
+         "be a single lucky trade. **Win rate is reported but is never a pass criterion.**", "",
+         "> **Amended 2026-08-07 — one experiment, one look.** The verdict used to be "
+         "recomputed on every run from n>=30 onward, so across a year of snapshots a claim "
+         "with no real effect had roughly a 1-in-5 chance of printing a pass at least once. "
+         f"Each experiment now also needs **>={MIN_CLUSTERS} distinct names** (repeated bets "
+         "on one ticker are not independent evidence) and has **one pre-declared verdict "
+         "date**, shown below. The verdict is computed at the first run on or after that date "
+         "at which both floors are met, written once to an append-only verdicts file, and "
+         "thereafter displayed from that file and **never recomputed**. Before that date this "
+         "report shows running numbers and no verdict language of any kind. This changed "
+         "REPORTING ONLY — no stored signal or outcome row was altered — and the dates were "
+         "set from the batch's already-planned continue/kill read, without inspecting any "
+         "current result. Full detail in HYPOTHESES.md.", ""]
     for e in EXPERIMENTS:
         s = summarise(e)
         L += [f"## {e['id']} — {e['title']}", "",
               f"- status: **{e.get('status')}**, registered {e['registered_at']}, "
               f"universe {len(e['universe'])} names, hold {e['hold_sessions']} sessions, "
               f"cost {e['cost_roundtrip']}% round trip",
-              f"- graded signals: **{s.get('n', 0)}** (need {MIN_N})"]
+              f"- graded signals: **{s.get('n', 0)}** (need {MIN_N}) over "
+              f"**{s.get('clusters', 0)}** distinct names (need {MIN_CLUSTERS}); "
+              f"single pre-declared verdict date **{verdict_date(e)}**"]
         if s.get("n"):
             ci = s.get("ci1")
             cis = f"[{ci['lo']:+.3f}, {ci['hi']:+.3f}] over {ci['clusters']} names" if ci else "n/a"
@@ -645,7 +755,7 @@ def cmd_report():
                   f"- day-matched excess, {e['hold_sessions']} sessions: mean "
                   f"**{s['meann']:+.3f}%**, median **{s['medn']:+.3f}%**",
                   f"- win rate {s['win']:.0f}% *(reported only — not a pass criterion)*"]
-        L += [f"- **read: {verdict_line(s)}**", "",
+        L += [f"- **read: {verdict_line(s, e)}**", "",
               f"> Registered prior: {e['prior']}", ""]
     L += ["---", "",
           "Rules are frozen in `experiment_harness.py`; changing any constant voids that "
@@ -725,6 +835,36 @@ def _selftest():
     # verdict wording
     assert "accruing" in verdict_line({"n": 5, "mature": False})
     assert "no graded signals" in verdict_line({"n": 0})
+    # amendment 2026-08-07: no verdict before the pre-declared date, and locking is final
+    import tempfile as _tf
+    global DATA
+    _keep = DATA
+    try:
+        DATA = _tf.mkdtemp()
+        _e = {"id": "SELFTEST-X", "registered_at": "2026-01-01", "verdict_on": "2026-06-01"}
+        _pass = {"n": 99, "mature": True, "clusters": 40, "mean1": 1.0, "med1": 1.0,
+                 "ci1": {"lo": 0.5, "hi": 1.5, "clusters": 40}}
+        # before the date: progress only, and the date is advertised
+        _r = verdict_line(_pass, _e, today="2026-05-31")
+        assert "accruing" in _r and "CLEARS" not in _r and "2026-06-01" in _r, _r
+        # floors not met on the date: still no verdict
+        _thin = dict(_pass, clusters=3)
+        assert "floor not yet met" in verdict_line(_thin, _e, today="2026-06-01")
+        # on the date with floors met: computed and locked
+        _r = verdict_line(_pass, _e, today="2026-06-01")
+        assert "CLEARS THE BAR" in _r and "locked" in _r, _r
+        # afterwards, with the data flipped NEGATIVE, the locked verdict must not move
+        _neg = {"n": 99, "mature": True, "clusters": 40, "mean1": -1.0, "med1": -1.0,
+                "ci1": {"lo": -1.5, "hi": -0.5, "clusters": 40}}
+        _outs = {verdict_line(_neg, _e, today=d) for d in
+                 ("2026-06-02", "2026-09-01", "2027-01-01")}
+        assert len(_outs) == 1 and "CLEARS THE BAR" in list(_outs)[0], _outs
+        assert len(_read(verdicts_path())) == 1
+        # default date for a declaration that omits one
+        assert verdict_date({"id": "NEW", "registered_at": "2026-01-01"}) == "2026-04-01"
+    finally:
+        DATA = _keep
+
     # every declared experiment is well formed
     for e in EXPERIMENTS:
         for k in ("id", "title", "registered_at", "status", "universe", "entry",

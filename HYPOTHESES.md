@@ -968,3 +968,54 @@ diff, is the honest version. Recorded here so the change is checkable against gi
 with no alpha spending, exactly as `calendar_eval.py` did. That affects **EXP02 and EXP03**,
 which already have graded data, so amending their bar mid-flight is a separate decision with
 its own disclosure requirement. Logged, not silently carried.
+
+---
+
+## Amendment to the EXPERIMENT HARNESS (H-EXP03, H-EXP06 … H-EXP09) — 2026-08-07
+
+The same adversarial review that produced the calendar-experiment amendment above found that
+`experiment_harness.py` had the identical unlimited-looks property, and it was live for every
+experiment the harness runs. Fixed the same day, with the same disclosure standard.
+
+**What was wrong.** From `n >= 30` graded signals onward the verdict line was recomputed on
+**every run** — daily in CI — with no alpha spending. A claim with no real effect therefore
+had roughly a **1-in-5 chance of printing "clears the bar" at least once** across a year of
+snapshots. The registered "direction holding across >=3 consecutive weekly snapshots" rule is
+a partial mitigation, but it does not control the error rate.
+
+**What changed — reporting logic only.**
+1. **A cluster floor: >= 20 distinct names.** `n` counts trades, but the clustered CI's
+   precision is governed by the number of distinct tickers, since repeated bets on one name
+   are not independent evidence. Thirty trades spread over four names is not thirty pieces of
+   evidence. (This is the H-IND1 effective-sample-size finding applied to the pass bar.)
+2. **One pre-declared verdict date per experiment: 2026-11-02.** A floor alone only delays
+   the first look. The verdict is now computed at the first run on or after that date at which
+   both floors are met, written once to an append-only `experiments/HARNESS-verdicts.csv`, and
+   thereafter displayed from that file and **never recomputed**. Verified by test: lock a pass,
+   flip the underlying data to strongly negative, re-run across three later dates — the output
+   is identical and the verdicts file still holds exactly one row.
+3. Any future declaration that omits an explicit `verdict_on` gets one automatically
+   (registration + 90 days), so a new experiment cannot ship with unbounded looks by oversight.
+
+**Why this is not the thing we criticise other people for.** Three reasons, and all three have
+to hold:
+- **No result had been observed.** At the moment of the change, **zero graded outcome rows
+  existed for any harness experiment** — signals had been logged since 2026-07-31, but none had
+  matured, so there was nothing to see and nothing informed the change. The outcomes files did
+  not exist yet.
+- **The dates were not chosen from the data.** 2026-11-02 is the batch's already-planned
+  continue/kill read date, recorded before this review, and was carried over deliberately
+  rather than picked now.
+- **The amendment can only make a pass HARDER.** It adds a floor and removes looks; there is
+  no configuration of the data under which it makes "clears the bar" easier to print. A
+  mid-flight change that can only reduce the chance of declaring your own success is safe in a
+  way that a loosening change never is. If we ever propose one that runs the other way, it
+  should be refused.
+
+**Not affected: H-EXP02.** Experiment 02 runs on its own `rsi2_scanner.py`, which prints a
+maturity flag only and declares no automated verdict, so it never had the republishing
+problem. The same one-look discipline applies when its verdict is written up by hand: fix the
+evaluation date before looking.
+
+**Unchanged:** every registered rule, universe, entry condition, exit, cost assumption and
+registration date. No stored signal or outcome row was altered by this amendment.
