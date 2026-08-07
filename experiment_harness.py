@@ -230,7 +230,7 @@ def entry_macd_cross(bars):
 
 
 def entry_supertrend_flip(bars):
-    """EXP04 entry: Supertrend(10, 3) trend state flips -1 -> +1 on the latest bar.
+    """EXP06 entry: Supertrend(10, 3) trend state flips -1 -> +1 on the latest bar.
     Deliberately NO trend filter — the claim as sold has none; adding one would test
     our idea, not theirs."""
     if len(bars) < 60:
@@ -249,7 +249,7 @@ def entry_supertrend_flip(bars):
 
 
 def entry_sma_pullback(bars):
-    """EXP05 entry: uptrend pullback — close above SMA(200), today's low touches or
+    """EXP07 entry: uptrend pullback — close above SMA(200), today's low touches or
     pierces SMA(20), close back above SMA(20). The most widely taught swing entry."""
     closes = [b["c"] for b in bars]
     s200, s20 = sma(closes, 200), sma(closes, 20)
@@ -266,7 +266,7 @@ def entry_sma_pullback(bars):
 
 
 def entry_bollinger_revert(bars):
-    """EXP06 entry: close below the lower Bollinger Band (20, 2.0) with the close above
+    """EXP08 entry: close below the lower Bollinger Band (20, 2.0) with the close above
     SMA(200) — the taught, Connors-style long-only version of the high-win-rate pitch."""
     closes = [b["c"] for b in bars]
     s200, s20 = sma(closes, 200), sma(closes, 20)
@@ -286,7 +286,7 @@ def entry_bollinger_revert(bars):
 
 
 def entry_nr7_uptrend(bars):
-    """EXP08 entry: today's high-low range is strictly the narrowest of the last 7
+    """EXP09 entry: today's high-low range is strictly the narrowest of the last 7
     sessions, with the close above SMA(200). Tests whether volatility contraction in an
     uptrend precedes upward expansion — the honest daily-bar version of the sold
     intraday-breakout claim (entry is next open, not an intraday range break)."""
@@ -336,7 +336,7 @@ EXPERIMENTS = [
     # and same-day signal overlap across experiments is reported.
     # ------------------------------------------------------------------
     {
-        "id": "EXP04-SUPERTREND",
+        "id": "EXP06-SUPERTREND",
         "title": "The Supertrend flip",
         "registered_at": "2026-08-06",
         "status": "registered",
@@ -355,7 +355,7 @@ EXPERIMENTS = [
                   "from zero; ~1 in 6 it clears."),
     },
     {
-        "id": "EXP05-SMAPULL",
+        "id": "EXP07-SMAPULL",
         "title": "The moving-average pullback (buy the dip in an uptrend)",
         "registered_at": "2026-08-06",
         "status": "registered",
@@ -374,7 +374,7 @@ EXPERIMENTS = [
                   "is exactly what arbitrages an edge away."),
     },
     {
-        "id": "EXP06-BOLLREVERT",
+        "id": "EXP08-BOLLREVERT",
         "title": "Bollinger Band mean reversion",
         "registered_at": "2026-08-06",
         "status": "registered",
@@ -392,7 +392,7 @@ EXPERIMENTS = [
                   "indistinguishable from zero; ~1 in 6 it clears."),
     },
     {
-        "id": "EXP08-NR7",
+        "id": "EXP09-NR7",
         "title": "Volatility contraction (NR7) in an uptrend",
         "registered_at": "2026-08-06",
         "status": "registered",

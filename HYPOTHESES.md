@@ -810,3 +810,72 @@ NOT mean the effect is tradeable at retail, and it must never be presented as a 
 edge — the NightShares closure is the cited evidence for why.
 
 **Scope limits.** Attribution on QQQ over this window; not advice; no trade executed.
+
+---
+
+## Registration batch #10 — EXPERIMENTS 06–09 (the Tier-A retail-technique family), frozen 2026-08-06
+
+Four techniques currently sold to retail traders, selected from a 2026-08-06 survey of what is
+being discussed and sold (Supertrend/"one indicator" video content; swing-trading course
+pullback entries; the high-win-rate mean-reversion pitch; breakout-course volatility
+contraction). All four are **cross-sectional signal claims on the frozen 40-name large-cap
+universe**, so they run on `experiment_harness.py` with every harness guarantee: forward-only,
+append-only, day-matched control (the scored quantity is the EXCESS), 0.10% round trip
+declared, mean AND median AND ticker-clustered 95% CI together, win rate reported but never a
+pass criterion, constants frozen — changing one voids the test. Shared mechanics: entry next
+open, exits at the same-day close AND the 5th-session close, max 5 signals/day per experiment
+with a declared tie-break. n ≥ 30 per experiment before any verdict.
+
+**Numbering note.** These were drafted as EXP04/05/06/08 and renumbered to **EXP06–EXP09**
+before any signal was logged or scored, because batch #9 (registered ~4 minutes earlier the
+same evening) took EXP04/EXP05 for the calendar experiments. An ID is a label, not a frozen
+constant; no data existed under the old labels.
+
+**FAMILY POLICY, declared before any result exists.** With EXP02–EXP09 running concurrently
+(~8 experiments at ~1-in-6 priors), **approximately one chance pass is EXPECTED across the
+family**. The published family verdict applies Benjamini–Hochberg FDR across all concurrently
+registered experiments; a single pass is reported as *consistent with chance* until it
+survives that correction and a fresh forward window. EXP06–EXP09 share one universe, so they
+are **correlated tests, not independent replications** — same-day signal overlap across
+experiments is reported alongside the verdicts.
+
+### H-EXP06 — the Supertrend flip
+Supertrend(10, 3), Wilder ATR, trend flips −1 → +1 at the close. Deliberately **no trend
+filter** — the claim as sold has none; adding one would test our idea, not theirs. Tie-break:
+largest distance of the close above the flip line. Registered prior: the most heavily
+marketed single indicator in current retail video content, at exactly these default settings,
+on forty of the most liquid names on earth — expectation **excess indistinguishable from
+zero; ~1 in 6 it clears**.
+
+### H-EXP07 — the moving-average pullback
+Close above SMA(200); today's low touches or pierces SMA(20); close back above SMA(20).
+Tie-break: deepest touch first. Registered prior: the most widely taught swing entry in
+existence; the mechanism (short-term reversion inside medium-term momentum) is at least
+coherent, which earns the highest prior in this batch: **~1 in 5**. Expectation is still zero
+excess — textbook status is what arbitrages an edge away.
+
+### H-EXP08 — Bollinger Band mean reversion
+Close below the lower Bollinger Band (20, 2.0) with the close above SMA(200) — the taught,
+Connors-style long-only version. Tie-break: most negative z-score first. Registered prior:
+the same high-win-rate sales pitch as EXP02's RSI(2) through a different mechanism;
+win-rate-flattering by construction (many small reverts, occasional large losses) — exactly
+the shape the mean/median/clustered-CI reporting exists to expose. **~1 in 6.**
+
+### H-EXP09 — volatility contraction (NR7) in an uptrend
+Today's high–low range strictly the narrowest of the last 7 sessions, close above SMA(200).
+Tie-break: narrowest relative range first. **Disclosed deviation:** the sold version buys an
+intraday break of the range; ours enters at the next open because the pre-open logging gate
+forbids acting on the open print. What is tested is "contraction precedes upward expansion in
+uptrends," and every publication of this experiment must say so. Registered prior: contraction
+preceding expansion is documented (Crabel); the **direction** is the sold part and the part
+with no documented edge. **~1 in 6.**
+
+**Deferred from the same survey** (with reasons, so they are not re-litigated casually):
+gap-and-go continuation (frequency on a large-cap universe needs a dry-scan check first;
+microcap version fails on costs per EXP01), TTM Squeeze (needs a Keltner built-in), opening
+range breakout and ICT/fair-value-gaps (intraday data the project does not ingest), 0DTE and
+wheel strategies (options cost model), congress-trade copying (needs a disclosure feed),
+AI-picker services (named operators — WEDGE gate, counsel required).
+
+**Scope limits.** Each verdict describes its frozen rule on this universe over its window.
+Not advice; no trades executed.
