@@ -54,6 +54,13 @@
   li{margin:8px 0}
   .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
 </style>
+<meta property="og:image" content="https://thepicklog.vercel.app/og/split-adjustment-trap.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.vercel.app/og/split-adjustment-trap.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.vercel.app/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div class="top">
@@ -188,6 +195,55 @@ if abs(refetched_entry - stored_entry) / stored_entry &gt; 0.001:
     <h3 style="margin:0 0 8px">The other one</h3>
     <p style="margin:0">This wasn't the only error in our favour. In August 2026 we found that our scanner had logged 128 picks <i>after</i> the market had already opened, on seven separate sessions — breaking the one guarantee the whole record depends on. <a href="late-cohorts.html">That correction is here</a>, and the pattern is the same: an error that flatters you can sit there for weeks, because nothing forces you to look.</p>
   </div>
+
+
+  <!-- ===== FREE VERDICT-EMAIL LIST ===== -->
+  <div id="verdict-email" style="border:1px solid #1f6f6b55;background:var(--panel,#121826);border-radius:14px;padding:20px 22px;margin:34px 0 8px;scroll-margin-top:70px">
+    <h2 style="margin:0 0 6px;font-size:20px">Get every verdict by email</h2>
+    <p style="margin:0 0 12px;color:var(--dim,#8b97a7);font-size:14.5px">A verdict lands every few weeks. We'll email you each one, free, the day it publishes — and nothing else. No signals, no picks, no offers. Verdicts stay free and public for everyone either way; this just means you don't have to remember to check back.</p>
+    <form onsubmit="return tplVerdicts(event)" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails"
+        style="flex:1;min-width:200px;background:var(--panel2,#0f1521);border:1px solid var(--line,#1f2937);color:var(--tx,#e6edf3);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px">
+      <button type="submit" style="background:var(--a,#1f6f6b);border:0;color:#eafffb;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer">Email me each verdict</button>
+    </form>
+    <p class="vl-msg" role="status" aria-live="polite" style="margin:8px 0 0;font-size:13px"></p>
+    <p style="margin:8px 0 0;font-size:11.5px;color:var(--dim,#8b97a7)">One confirmation email first — you're not on the list until you click it. <a href="privacy.html" style="color:var(--dim,#8b97a7)">Privacy</a></p>
+  </div>
+
+<script>
+async function tplVerdicts(ev){
+  ev.preventDefault();
+  var f=ev.target, i=f.querySelector('input[name="email"]'), b=f.querySelector('button'),
+      m=f.parentElement.querySelector('.vl-msg');
+  var email=(i.value||'').trim();
+  var say=function(t,c){ if(m){ m.textContent=t; m.style.color=(c==='err')?'#f0506e':'#2ec27e'; } };
+  if(!email){ say('Enter an email first.','err'); return false; }
+  b.disabled=true; var lbl=b.textContent; b.textContent='Adding…'; say('');
+  try{
+    var ac=new AbortController(); var tmo=setTimeout(function(){ac.abort();},15000);
+      var r=await fetch('https://qkdgijiotxxndrfagexr.supabase.co/rest/v1/rpc/is_join_waitlist',{
+      method:'POST',
+      headers:{'content-type':'application/json','apikey':'sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3'},
+      body:JSON.stringify({p_email:email,p_tier:'any',p_source:'verdicts-split-adjustment-trap'}),signal:ac.signal});
+    clearTimeout(tmo);
+    var d=await r.json();
+    if(d && d.ok===false){
+      say(d.error==='invalid_email' ? "That doesn't look like an email address."
+        : d.error==='rate_limited' ? "We're getting an unusual number of signups right now — try again in a little while."
+        : "Couldn't add you just now — try again in a moment.",'err');
+    } else if(d && d.already){
+      say(d.confirmed ? "You're already confirmed on this list."
+                      : "You're already on this list — check for the confirmation email.",'ok');
+      f.style.display='none';
+    } else {
+      say("Almost — check your inbox and click the confirmation link. You're not on the list until you do.",'ok');
+      f.style.display='none';
+    }
+  }catch(e){ say("Couldn't add you just now — try again in a moment.",'err'); }
+  b.disabled=false; b.textContent=lbl;
+  return false;
+}
+</script>
 
   <p class="foot">
     Educational and informational only — not investment advice, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). The diagnosis above is the explanation consistent with our evidence: picks with a stored grade-time price reconciled exactly, and only the re-downloaded subset disagreed. Vendor adjustment behaviour varies, so check your own provider's documentation rather than assuming ours applies.

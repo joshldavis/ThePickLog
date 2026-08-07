@@ -21,6 +21,7 @@
        font:inherit;font-weight:700;font-size:14.5px;text-decoration:none;margin-top:8px}
   .ok{color:var(--green)} .err{color:var(--red)}
 </style>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div class="card">
@@ -42,7 +43,7 @@
       return;
     }
     if(!window.supabase){
-      show("Couldn't reach the server","<p>Your browser couldn't load the client library — an extension or network filter may be blocking it. Try again, or email <a href=\"mailto:davis1163@gmail.com\">davis1163@gmail.com</a> and we'll confirm you by hand.</p>","err");
+      show("Couldn't reach the server","<p>Your browser couldn't load the client library — an extension or network filter may be blocking it. Try again, or send a note through the <a href=\"about.html#corrections\">contact form</a> and we'll confirm you by hand.</p>","err");
       return;
     }
     try{
@@ -59,13 +60,13 @@
       } else {
         show("That link didn't work",
           `<p>This confirmation link is not recognised. It may have been mistyped, or truncated by an email client.</p>
-           <p>Email <a href="mailto:davis1163@gmail.com?subject=Waitlist%20confirmation">davis1163@gmail.com</a> and we'll sort it out.</p>
+           <p>Send a note through the <a href="about.html#corrections">contact form</a> and we'll sort it out.</p>
            <a class="btn" href="index.html">Back to the site</a>`, "err");
       }
     }catch(e){
       show("Something went wrong",
-        `<p>We couldn't confirm you just now. Try the link again in a moment, or email
-         <a href="mailto:davis1163@gmail.com?subject=Waitlist%20confirmation">davis1163@gmail.com</a>.</p>
+        `<p>We couldn't confirm you just now. Try the link again in a moment, or send a note through the
+         <a href="about.html#corrections">contact form</a>.</p>
          <a class="btn" href="index.html">Back to the site</a>`, "err");
     }
   })();

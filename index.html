@@ -468,6 +468,12 @@
     key: "sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3"
   };
 </script>
+<meta property="og:image" content="https://thepicklog.vercel.app/og/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.vercel.app/og/card.png">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.vercel.app/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <header class="top">
@@ -525,6 +531,14 @@
         <button class="btn" onclick="location.href='experiments.html'">See the experiments &rarr;</button>
         <button class="btn ghost" onclick="go('performance')">The raw track record &rarr;</button>
       </div>
+      <!-- free verdict-email list -->
+      <form onsubmit="return tplVerdicts(event)" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px auto 0;max-width:440px">
+        <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails"
+          style="flex:1;min-width:180px;background:var(--panel2);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px">
+        <button class="btn" type="submit" style="white-space:nowrap">Email me each verdict</button>
+      </form>
+      <p class="vl-msg" role="status" aria-live="polite" style="margin:8px auto 0;font-size:13px;max-width:440px"></p>
+      <p class="dim" style="font-size:11.5px;margin:6px auto 0;max-width:52ch">Free, one email per verdict, nothing else — with a confirmation email first. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
       <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:62ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled &rarr;</a> &nbsp;·&nbsp; <a href="guide.html" style="color:var(--blue);text-decoration:none">The 7 checks any service should pass &rarr;</a></p>
     </div>
 
@@ -2298,7 +2312,7 @@ async function tplWaitlist(ev, tier){
   if(!email){ say("Enter an email first.","err"); return false; }
   const sb=tplWaitlistClient();
   if(!sb){
-    say("Couldn't reach the list from this browser — email davis1163@gmail.com and we'll add you.","err");
+    say("Couldn't reach the list from this browser — try again later, or use the contact form on the About page.","err");
     return false;
   }
 
@@ -2322,10 +2336,45 @@ async function tplWaitlist(ev, tier){
       form.style.display="none";
     }
   }catch(e){
-    say("Couldn't add you just now — try again, or email davis1163@gmail.com.","err");
+    say("Couldn't add you just now — try again in a moment.","err");
   }finally{
     btn.disabled=false; btn.textContent=label;
   }
+  return false;
+}
+
+
+
+async function tplVerdicts(ev){
+  ev.preventDefault();
+  var f=ev.target, i=f.querySelector('input[name="email"]'), b=f.querySelector('button'),
+      m=f.parentElement.querySelector('.vl-msg');
+  var email=(i.value||'').trim();
+  var say=function(t,c){ if(m){ m.textContent=t; m.style.color=(c==='err')?'#f0506e':'#2ec27e'; } };
+  if(!email){ say('Enter an email first.','err'); return false; }
+  b.disabled=true; var lbl=b.textContent; b.textContent='Adding…'; say('');
+  try{
+    var ac=new AbortController(); var tmo=setTimeout(function(){ac.abort();},15000);
+      var r=await fetch('https://qkdgijiotxxndrfagexr.supabase.co/rest/v1/rpc/is_join_waitlist',{
+      method:'POST',
+      headers:{'content-type':'application/json','apikey':'sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3'},
+      body:JSON.stringify({p_email:email,p_tier:'any',p_source:'verdicts-home'}),signal:ac.signal});
+    clearTimeout(tmo);
+    var d=await r.json();
+    if(d && d.ok===false){
+      say(d.error==='invalid_email' ? "That doesn't look like an email address."
+        : d.error==='rate_limited' ? "We're getting an unusual number of signups right now — try again in a little while."
+        : "Couldn't add you just now — try again in a moment.",'err');
+    } else if(d && d.already){
+      say(d.confirmed ? "You're already confirmed on this list."
+                      : "You're already on this list — check for the confirmation email.",'ok');
+      f.style.display='none';
+    } else {
+      say("Almost — check your inbox and click the confirmation link. You're not on the list until you do.",'ok');
+      f.style.display='none';
+    }
+  }catch(e){ say("Couldn't add you just now — try again in a moment.",'err'); }
+  b.disabled=false; b.textContent=lbl;
   return false;
 }
 
