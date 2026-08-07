@@ -108,6 +108,56 @@ def macd_hist_series(xs, fast=12, slow=26, sig=9):
     return [line[i + lag] - sl[i] for i in range(len(sl))]
 
 
+def stdev_pop(xs):
+    """Population standard deviation (Bollinger convention)."""
+    if not xs:
+        return None
+    m = sum(xs) / float(len(xs))
+    return (sum((x - m) ** 2 for x in xs) / float(len(xs))) ** 0.5
+
+
+def atr_wilder_series(bars, period=10):
+    """Wilder-smoothed ATR. Returns list aligned to bars (None until warm)."""
+    n = len(bars)
+    atr = [None] * n
+    if n <= period:
+        return atr
+    tr = [None] * n
+    for i in range(1, n):
+        tr[i] = max(bars[i]["h"] - bars[i]["l"],
+                    abs(bars[i]["h"] - bars[i - 1]["c"]),
+                    abs(bars[i]["l"] - bars[i - 1]["c"]))
+    atr[period] = sum(tr[1:period + 1]) / float(period)
+    for i in range(period + 1, n):
+        atr[i] = (atr[i - 1] * (period - 1) + tr[i]) / period
+    return atr
+
+
+def supertrend_state(bars, period=10, mult=3.0):
+    """Standard Supertrend with band ratcheting.
+    Returns (trend, line): trend[i] in {+1, -1, None}; line[i] = the active band."""
+    n = len(bars)
+    atr = atr_wilder_series(bars, period)
+    trend, line = [None] * n, [None] * n
+    fu, fl = [None] * n, [None] * n
+    for i in range(n):
+        if atr[i] is None:
+            continue
+        mid = (bars[i]["h"] + bars[i]["l"]) / 2.0
+        bu, bl = mid + mult * atr[i], mid - mult * atr[i]
+        if i == 0 or fu[i - 1] is None:
+            fu[i], fl[i], trend[i] = bu, bl, 1
+        else:
+            fu[i] = bu if (bu < fu[i - 1] or bars[i - 1]["c"] > fu[i - 1]) else fu[i - 1]
+            fl[i] = bl if (bl > fl[i - 1] or bars[i - 1]["c"] < fl[i - 1]) else fl[i - 1]
+            if trend[i - 1] == 1:
+                trend[i] = -1 if bars[i]["c"] < fl[i] else 1
+            else:
+                trend[i] = 1 if bars[i]["c"] > fu[i] else -1
+        line[i] = fl[i] if trend[i] == 1 else fu[i]
+    return trend, line
+
+
 # --------------------------------------------------------------- statistics
 def median(xs):
     if not xs:
@@ -179,6 +229,83 @@ def entry_macd_cross(bars):
                 "rank_metric": -h[-1]}   # strongest crossover first
 
 
+def entry_supertrend_flip(bars):
+    """EXP04 entry: Supertrend(10, 3) trend state flips -1 -> +1 on the latest bar.
+    Deliberately NO trend filter — the claim as sold has none; adding one would test
+    our idea, not theirs."""
+    if len(bars) < 60:
+        return False, {}
+    trend, line = supertrend_state(bars, period=10, mult=3.0)
+    if trend[-1] is None or trend[-2] is None:
+        return False, {}
+    ok = bool(trend[-2] == -1 and trend[-1] == 1)
+    if not ok:
+        return False, {}
+    c = bars[-1]["c"]
+    dist = (c - line[-1]) / c if c else 0.0
+    return True, {"st_line": round(line[-1], 4), "close": round(c, 4),
+                  "dist_pct": round(dist * 100.0, 4),
+                  "rank_metric": -dist}   # largest distance above the flip line first
+
+
+def entry_sma_pullback(bars):
+    """EXP05 entry: uptrend pullback — close above SMA(200), today's low touches or
+    pierces SMA(20), close back above SMA(20). The most widely taught swing entry."""
+    closes = [b["c"] for b in bars]
+    s200, s20 = sma(closes, 200), sma(closes, 20)
+    if s200 is None or s20 is None or not s20:
+        return False, {}
+    c, lo = bars[-1]["c"], bars[-1]["l"]
+    ok = bool(c > s200 and lo <= s20 < c)
+    if not ok:
+        return False, {}
+    depth = lo / s20
+    return True, {"sma20": round(s20, 4), "sma200": round(s200, 4),
+                  "close": round(c, 4), "low_over_sma20": round(depth, 5),
+                  "rank_metric": depth}   # deepest touch first
+
+
+def entry_bollinger_revert(bars):
+    """EXP06 entry: close below the lower Bollinger Band (20, 2.0) with the close above
+    SMA(200) — the taught, Connors-style long-only version of the high-win-rate pitch."""
+    closes = [b["c"] for b in bars]
+    s200, s20 = sma(closes, 200), sma(closes, 20)
+    if s200 is None or s20 is None:
+        return False, {}
+    sd = stdev_pop(closes[-20:])
+    if not sd:
+        return False, {}
+    c = closes[-1]
+    z = (c - s20) / sd
+    ok = bool(c < s20 - 2.0 * sd and c > s200)
+    if not ok:
+        return False, {}
+    return True, {"bb_mid": round(s20, 4), "bb_sd": round(sd, 4), "z": round(z, 4),
+                  "close": round(c, 4),
+                  "rank_metric": z}   # most negative z first
+
+
+def entry_nr7_uptrend(bars):
+    """EXP08 entry: today's high-low range is strictly the narrowest of the last 7
+    sessions, with the close above SMA(200). Tests whether volatility contraction in an
+    uptrend precedes upward expansion — the honest daily-bar version of the sold
+    intraday-breakout claim (entry is next open, not an intraday range break)."""
+    closes = [b["c"] for b in bars]
+    s200 = sma(closes, 200)
+    if s200 is None or len(bars) < 7:
+        return False, {}
+    ranges = [b["h"] - b["l"] for b in bars[-7:]]
+    today = ranges[-1]
+    c = closes[-1]
+    ok = bool(c > s200 and today >= 0 and all(today < r for r in ranges[:-1]) and c)
+    if not ok:
+        return False, {}
+    rel = today / c
+    return True, {"range": round(today, 4), "range_pct": round(rel * 100.0, 4),
+                  "close": round(c, 4), "sma200": round(s200, 4),
+                  "rank_metric": rel}   # narrowest relative range first
+
+
 EXPERIMENTS = [
     {
         "id": "EXP03-MACD",
@@ -197,6 +324,91 @@ EXPERIMENTS = [
                   "Registered expectation: the day-matched excess is indistinguishable from "
                   "zero. Estimated probability it clears the bar: ~1 in 6. Being widely "
                   "believed is not evidence, which is the point of testing it."),
+    },
+    # ------------------------------------------------------------------
+    # TIER-A BATCH, registered together 2026-08-06 (one family, one clock).
+    # FAMILY POLICY, declared before any result exists: with ~8 experiments running
+    # concurrently at ~1-in-6 priors, ~1 chance pass is EXPECTED. The published
+    # family verdict applies Benjamini-Hochberg FDR across all concurrently
+    # registered experiments; a single pass is reported as consistent with chance
+    # until it survives that correction and a fresh forward window. Experiments
+    # sharing this universe are correlated tests, not independent replications,
+    # and same-day signal overlap across experiments is reported.
+    # ------------------------------------------------------------------
+    {
+        "id": "EXP04-SUPERTREND",
+        "title": "The Supertrend flip",
+        "registered_at": "2026-08-06",
+        "status": "registered",
+        "universe": UNIVERSE_LARGECAP40,
+        "lookback_days": 500,
+        "entry": entry_supertrend_flip,
+        "hold_sessions": 5,
+        "max_per_day": 5,
+        "cost_roundtrip": 0.10,
+        "prior": ("Currently the most heavily marketed single indicator in retail video "
+                  "content, almost always at exactly these default settings (10, 3). It is "
+                  "a mechanically sane ATR trailing band, which is why it demos well — and "
+                  "why, on forty of the most liquid names on earth, it should already be "
+                  "arbitraged flat. Deliberately tested with NO trend filter because the "
+                  "claim as sold has none. Registered expectation: excess indistinguishable "
+                  "from zero; ~1 in 6 it clears."),
+    },
+    {
+        "id": "EXP05-SMAPULL",
+        "title": "The moving-average pullback (buy the dip in an uptrend)",
+        "registered_at": "2026-08-06",
+        "status": "registered",
+        "universe": UNIVERSE_LARGECAP40,
+        "lookback_days": 500,
+        "entry": entry_sma_pullback,
+        "hold_sessions": 5,
+        "max_per_day": 5,
+        "cost_roundtrip": 0.10,
+        "prior": ("The most widely taught swing entry in existence — nearly every course "
+                  "teaches some form of buying the pullback to the 20-day in an uptrend. "
+                  "The mechanism (short-term reversion inside medium-term momentum) is at "
+                  "least coherent, which earns it a slightly better prior than a raw "
+                  "indicator flip: call it ~1 in 5. Registered expectation is still that "
+                  "the day-matched excess is indistinguishable from zero — textbook status "
+                  "is exactly what arbitrages an edge away."),
+    },
+    {
+        "id": "EXP06-BOLLREVERT",
+        "title": "Bollinger Band mean reversion",
+        "registered_at": "2026-08-06",
+        "status": "registered",
+        "universe": UNIVERSE_LARGECAP40,
+        "lookback_days": 500,
+        "entry": entry_bollinger_revert,
+        "hold_sessions": 5,
+        "max_per_day": 5,
+        "cost_roundtrip": 0.10,
+        "prior": ("The same high-win-rate sales pitch as Experiment 02's RSI(2), through a "
+                  "different mechanism: the band adapts to volatility. Win-rate-flattering "
+                  "by construction — many small reverts punctuated by occasional large "
+                  "losses — which is precisely the shape the mean/median/clustered-CI "
+                  "reporting exists to expose. Registered expectation: excess "
+                  "indistinguishable from zero; ~1 in 6 it clears."),
+    },
+    {
+        "id": "EXP08-NR7",
+        "title": "Volatility contraction (NR7) in an uptrend",
+        "registered_at": "2026-08-06",
+        "status": "registered",
+        "universe": UNIVERSE_LARGECAP40,
+        "lookback_days": 500,
+        "entry": entry_nr7_uptrend,
+        "hold_sessions": 5,
+        "max_per_day": 5,
+        "cost_roundtrip": 0.10,
+        "prior": ("That contraction precedes expansion (Crabel's NR7) is well documented; "
+                  "what is SOLD is the direction, and direction is the part with no "
+                  "documented edge. This is also the honest daily-bar version of an "
+                  "intraday claim: entry is the next open, not a break of the range, "
+                  "because our pre-open logging gate forbids acting on the open print. "
+                  "That deviation is disclosed wherever this experiment is published. "
+                  "Registered expectation: excess indistinguishable from zero; ~1 in 6."),
     },
 ]
 
@@ -458,10 +670,47 @@ def _selftest():
     hist = macd_hist_series([b["c"] for b in bars])
     crosses = sum(1 for i in range(1, len(hist)) if hist[i - 1] <= 0 < hist[i])
     assert crosses >= 1, crosses
-    # flat series must not fire
+    # flat series must not fire — for ANY entry
     flat = [{"d": f"d{i}", "o": 100.0, "h": 100.0, "l": 100.0, "c": 100.0} for i in range(300)]
-    ok, _ = entry_macd_cross(flat)
-    assert not ok
+    for fn in (entry_macd_cross, entry_supertrend_flip, entry_sma_pullback,
+               entry_bollinger_revert, entry_nr7_uptrend):
+        ok, _ = fn(flat)
+        assert not ok, fn.__name__
+    # supertrend: sustained trends resolve to the matching state
+    mkbars = lambda cs: [{"d": f"d{i}", "o": c, "h": c * 1.01, "l": c * 0.99, "c": c}
+                         for i, c in enumerate(cs)]
+    tu, _ = supertrend_state(mkbars([100.0 + i for i in range(120)]))
+    assert tu[-1] == 1
+    td, _ = supertrend_state(mkbars([220.0 - i for i in range(120)]))
+    assert td[-1] == -1
+    # supertrend: a decline then a strong recovery must flip -1 -> +1 somewhere
+    tv, _ = supertrend_state(mkbars([200.0 - i * 0.8 for i in range(90)]
+                                    + [130.0 + i * 2.0 for i in range(60)]))
+    assert any(tv[i - 1] == -1 and tv[i] == 1 for i in range(1, len(tv))
+               if tv[i - 1] is not None)
+    # SMA pullback: uptrend where the last bar dips to the 20-day and closes back above
+    up = [100.0 + i * 0.5 for i in range(260)]
+    pb = mkbars(up)
+    s20_now = sma([b["c"] for b in pb], 20)
+    pb[-1]["l"] = s20_now - 0.01          # touch
+    assert pb[-1]["c"] > s20_now          # close back above
+    ok, meta = entry_sma_pullback(pb)
+    assert ok and meta["rank_metric"] <= 1.0
+    # Bollinger revert: uptrend with a sharp last-bar break below the lower band
+    bb = mkbars(up)
+    closes_bb = [b["c"] for b in bb]
+    sd_now = stdev_pop(closes_bb[-20:])
+    bb[-1]["c"] = sma(closes_bb, 20) - 2.5 * sd_now
+    assert bb[-1]["c"] > sma(closes_bb, 200)   # still above SMA200
+    ok, meta = entry_bollinger_revert(bb)
+    assert ok and meta["z"] < -2.0
+    # NR7: uptrend whose last bar has the narrowest range of the final 7
+    nr = mkbars(up)
+    nr[-1]["h"], nr[-1]["l"] = nr[-1]["c"] * 1.0001, nr[-1]["c"] * 0.9999
+    ok, meta = entry_nr7_uptrend(nr)
+    assert ok
+    # stdev sanity
+    assert abs(stdev_pop([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0]) - 2.0) < 1e-9
     # stats
     assert median([1, 2, 3]) == 2 and median([1, 2, 3, 4]) == 2.5
     assert abs(trimmed_mean([0, 1, 2, 3, 100], 0.2) - 2.0) < 1e-9
