@@ -1,0 +1,3 @@
+iso_week,computed_at,cohort,n_post,rho_absmae,rho_range,rho_ret1,rho_ret5,sig_absmae,sig_range,sig_ret1
+2026-W32,2026-08-07T01:00:40+00:00,v0.2-yf,14,-0.3789,0.0903,-0.0507,0.3348,0,0,0
+2026-W32,2026-08-07T01:00:40+00:00,v0.3-yf,10,-0.0920,0.3497,0.2025,0.5092,0,0,0
