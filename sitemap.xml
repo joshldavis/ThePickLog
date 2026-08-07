@@ -49,6 +49,18 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://thepicklog.vercel.app/experiment-04.html</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://thepicklog.vercel.app/experiment-05.html</loc>
+    <lastmod>2026-08-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://thepicklog.vercel.app/split-adjustment-trap.html</loc>
     <lastmod>2026-08-06</lastmod>
     <changefreq>monthly</changefreq>

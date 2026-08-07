@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Do stocks only go up overnight? A pre-registered forward test | Experiment 05 — ThePickLog</title>
+<meta name="description" content="In 27 years of QQQ, the overnight leg made ~$35 of $1 while the intraday leg lost money. Registered forward as an attribution claim — explicitly not a tradeable edge.">
+<link rel="canonical" href="https://thepicklog.vercel.app/experiment-05.html">
+<meta property="og:title" content="The market that only makes money while it's closed">
+<meta property="og:description" content="QQQ overnight vs intraday, frozen before the fact and graded forward. An attribution claim, not an edge — the ETFs that sold it died.">
+<meta property="og:type" content="article">
+<style>
+  :root{--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0;margin-left:auto}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.menu-btn{display:flex}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:34px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.14}
+  h2{font-size:22px;margin:1.8em 0 .5em;letter-spacing:-.015em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18px;color:var(--dim);margin-bottom:1.4em}
+  .status{border:1px solid #5a3a22;background:#2a1d10;border-radius:14px;padding:16px 20px;margin:22px 0}
+  .status .h{font-size:12px;letter-spacing:.1em;color:var(--amber);font-weight:800;margin-bottom:5px}
+  .status .b{font-size:19px;font-weight:700;margin-bottom:6px}
+  .status p{color:var(--dim);font-size:14.5px;margin:0}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:20px 0}
+  .box h3{margin:0 0 10px;font-size:17px}
+  .box p:last-child{margin-bottom:0}
+  dl{margin:0}
+  dt{font-weight:700;font-size:14px;color:var(--tx);margin-top:12px}
+  dd{margin:2px 0 0;color:var(--dim);font-size:14.5px}
+  dt:first-child{margin-top:0}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+<meta property="og:image" content="https://thepicklog.vercel.app/og/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.vercel.app/og/card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.vercel.app/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html" class="on">Experiments</a>
+      <a href="field-notes.html">Field notes</a>
+      <a href="index.html#performance">Track record</a>
+      <a href="index.html#validation">Validation</a>
+      <a href="method.html">Method</a>
+      <a href="guide.html">Vetting Guide</a>
+      <a href="about.html">About</a>
+      <a href="trust.html">Trust &amp; Data</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="index.html#validation">Validation</a>
+    <a href="method.html">Method</a>
+    <a href="guide.html">Vetting Guide</a>
+    <a href="about.html">About</a>
+    <a href="trust.html">Trust &amp; Data</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap">
+  <span class="no">EXPERIMENT 05 · REGISTERED 2026-08-06 · RUNNING</span>
+  <h1>The market that only makes money while it's closed</h1>
+  <p class="standfirst">Split every trading day in two: the overnight leg (yesterday's close to this morning's open) and the intraday leg (open to close). In 27 years of QQQ history, essentially <i>all</i> of the return came from the overnight leg — $1 compounded overnight-only grew to about $35 while intraday-only fell to 47 cents. Firms turned this into ETFs. The ETFs died. We froze the claim and are grading it forward.</p>
+
+  <div class="status">
+    <div class="h">STATUS</div>
+    <div class="b">Registered and running. No verdict yet.</div>
+    <p>Every session's two legs are graded automatically at the close. A verdict needs at least 30 post-registration sessions — about six weeks, so expect the first read around <b>mid-September 2026</b>. Running numbers live in the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>.</p>
+  </div>
+
+  <h2>Read this box before the numbers</h2>
+  <div class="box">
+    <h3>This is an attribution claim, not a trading claim</h3>
+    <p>We are testing <b>where returns happen</b>, not whether you can harvest them. Capturing the overnight leg costs one round trip <i>per session</i> — 250+ a year — so even small trading costs consume an effect of this size, before slippage and taxes. This isn't hypothetical: the NightShares "night effect" ETFs launched in 2022 to sell exactly this pattern and <b>shut down in July 2023</b>. If this experiment passes, the honest headline is "QQQ's returns accrue overnight," and nothing more. That scope is registered and binding, the same way our risk-score finding is bound to "volatility, not alpha."</p>
+  </div>
+
+  <h2>Why test it at all</h2>
+  <p>Because it is the strongest single structure in our 27-year exploratory sweep — the overnight leg beat the intraday leg in every five-year block since 1999, in the S&amp;P 500 as well as QQQ — and because it is a claim that was literally packaged and sold to retail investors. A structural fact this large, this persistent, and this monetised deserves a public forward test with the prediction written down first. It also has the cleanest control we have ever run: each day's intraday leg is the comparison for that same day's overnight leg. Same day, same asset, same news — the market's open hours are the only difference.</p>
+
+  <h2>The claim, frozen</h2>
+  <div class="box">
+    <dl>
+      <dt>The claim</dt>
+      <dd>Per session, QQQ's overnight return (previous close &rarr; open) exceeds its intraday return (open &rarr; close), on average, going forward.</dd>
+      <dt>Asset</dt>
+      <dd>QQQ decides. SPY graded in parallel as a replication read only.</dd>
+      <dt>Control</dt>
+      <dd>Paired, per session: each day's intraday leg. No universe, no benchmark model — the same day is its own control.</dd>
+      <dt>Costs</dt>
+      <dd>None apply to an attribution claim. The report carries a permanent tradeability footnote instead, so the result can never be quietly reframed as an edge.</dd>
+      <dt>Window</dt>
+      <dd>Only sessions strictly after 2026-08-06 count. The backtest — including the $35-vs-$0.47 figure above — is context, never evidence.</dd>
+    </dl>
+  </div>
+
+  <h2>What it has to clear</h2>
+  <div class="box">
+    <p><b>1.</b> At least 30 post-registration sessions graded.<br>
+    <b>2.</b> The mean <b>and</b> the median of the per-session difference (overnight minus intraday) both positive.<br>
+    <b>3.</b> A 95% confidence interval on that difference that excludes zero, computed treating each <i>week</i> as the unit of evidence.<br>
+    <b>4.</b> The direction holding across at least three consecutive weekly snapshots.</p>
+    <p style="margin-top:12px"><b>Win rate is reported but is explicitly not a pass criterion.</b></p>
+  </div>
+
+  <h2>What we expect to happen</h2>
+  <p>The direction has 27 years of history behind it, but the effect is roughly five basis points a day against a hundred basis points of daily noise — at 30 sessions, <b>statistical power is the risk, not direction</b>. Our registered expectation: the difference points positive but has maybe a <b>one in three</b> chance of clearing the full bar at the first snapshot, rising if it's allowed to accrue. And the gap has been narrowing: the intraday leg has been positive since 2010, so a fading effect is a live possibility and would itself be worth publishing.</p>
+  <p class="pull">The interesting outcome isn't only "real or not." It's watching, in public, whether a famous effect that killed two ETFs still exists at all once someone writes the prediction down first.</p>
+
+  <h2>How you'll be able to check it</h2>
+  <p>Every session's two legs are appended to <code>experiments/EXP0405-CAL-outcomes.csv</code> — public and append-only. The frozen claim lives in <a href="HYPOTHESES.md">HYPOTHESES.md</a> as H-EXP05, dated, with the constants in <code>calendar_eval.py</code>. Running numbers regenerate into the <a href="reports/calendar-experiments-LATEST.md">calendar experiments report</a>; the verdict goes to the <a href="AUDIT_LOG.md">audit log</a> and this page. If we change any constant, the test is void and we'll say so.</p>
+
+  <div class="box">
+    <h3>What this experiment is not</h3>
+    <p>It is not a tradeable edge, not a recommendation, and not advice — see the binding scope note above. It is not a claim about any fund or firm; the NightShares closure is cited as public context for why the scope stops at attribution. The verdict describes QQQ over this window, nothing broader.</p>
+  </div>
+
+
+  <!-- ===== FREE VERDICT-EMAIL LIST ===== -->
+  <div id="verdict-email" style="border:1px solid #1f6f6b55;background:var(--panel,#121826);border-radius:14px;padding:20px 22px;margin:34px 0 8px;scroll-margin-top:70px">
+    <h2 style="margin:0 0 6px;font-size:20px">Get every verdict by email</h2>
+    <p style="margin:0 0 12px;color:var(--dim,#8b97a7);font-size:14.5px">A verdict lands every few weeks. We'll email you each one, free, the day it publishes — and nothing else. No signals, no picks, no offers. Verdicts stay free and public for everyone either way; this just means you don't have to remember to check back.</p>
+    <form onsubmit="return tplVerdicts(event)" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails"
+        style="flex:1;min-width:200px;background:var(--panel2,#0f1521);border:1px solid var(--line,#1f2937);color:var(--tx,#e6edf3);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px">
+      <button type="submit" style="background:var(--a,#1f6f6b);border:0;color:#eafffb;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer">Email me each verdict</button>
+    </form>
+    <p class="vl-msg" role="status" aria-live="polite" style="margin:8px 0 0;font-size:13px"></p>
+    <p style="margin:8px 0 0;font-size:11.5px;color:var(--dim,#8b97a7)">One confirmation email first — you're not on the list until you click it. <a href="privacy.html" style="color:var(--dim,#8b97a7)">Privacy</a></p>
+  </div>
+
+<script>
+async function tplVerdicts(ev){
+  ev.preventDefault();
+  var f=ev.target, i=f.querySelector('input[name="email"]'), b=f.querySelector('button'),
+      m=f.parentElement.querySelector('.vl-msg');
+  var email=(i.value||'').trim();
+  var say=function(t,c){ if(m){ m.textContent=t; m.style.color=(c==='err')?'#f0506e':'#2ec27e'; } };
+  if(!email){ say('Enter an email first.','err'); return false; }
+  b.disabled=true; var lbl=b.textContent; b.textContent='Adding…'; say('');
+  try{
+    var ac=new AbortController(); var tmo=setTimeout(function(){ac.abort();},15000);
+      var r=await fetch('https://qkdgijiotxxndrfagexr.supabase.co/rest/v1/rpc/is_join_waitlist',{
+      method:'POST',
+      headers:{'content-type':'application/json','apikey':'sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3'},
+      body:JSON.stringify({p_email:email,p_tier:'any',p_source:'verdicts-experiment-05'}),signal:ac.signal});
+    clearTimeout(tmo);
+    var d=await r.json();
+    if(d && d.ok===false){
+      say(d.error==='invalid_email' ? "That doesn't look like an email address."
+        : d.error==='rate_limited' ? "We're getting an unusual number of signups right now — try again in a little while."
+        : "Couldn't add you just now — try again in a moment.",'err');
+    } else if(d && d.already){
+      say(d.confirmed ? "You're already confirmed on this list."
+                      : "You're already on this list — check for the confirmation email.",'ok');
+      f.style.display='none';
+    } else {
+      say("Almost — check your inbox and click the confirmation link. You're not on the list until you do.",'ok');
+      f.style.display='none';
+    }
+  }catch(e){ say("Couldn't add you just now — try again in a moment.",'err'); }
+  b.disabled=false; b.textContent=lbl;
+  return false;
+}
+</script>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida).
+    <br><a href="experiment-04.html">← Experiment 04: the turn-of-month effect</a>
+    <br><a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="experiments.html">All experiments</a>
+  </p>
+</div>
+</body>
+</html>
