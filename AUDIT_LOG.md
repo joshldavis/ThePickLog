@@ -1,5 +1,23 @@
 # ThePickLog — Audit Log
 
+## 2026-08-08 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+Live site fetched and every published number re-derived from the raw CSVs — all displayed claims verify. One integrity gap found in the grading apparatus: six picks past their 5-trading-day grading mark have silently never been graded.
+
+**The issue — silent grading gap, skewed toward A-tier.** These picks have no outcomes row and no VOID note, weeks past their grade date: WAI 07-16 (A), SLAI 07-17 (A), PRPL 07-20 (A), GREE 07-21 (B), GREE 07-22 (A), BNZI 07-31 (C). Cohort-mates on the same dates graded normally (e.g. the rest of the 07-31 cohort graded 08-07), so this is per-ticker — most likely halts/delistings where the grader can't fetch prices and skips without writing anything. Two problems: (1) the grader fails silently, the exact failure mode the pre-open gate was built to eliminate on the scan side; (2) **4 of the 6 are A-tier** — if ungradeable names (halts, delistings) concentrate in the hottest tier and drop out of the record, the published A-tier mean is flattered by survivorship. Prescribed fix: grader writes an explicit outcomes row (note=UNGRADEABLE, reason) for any pick it cannot price at grade time; CI check that fails loudly if any pick older than its grade window has no outcomes row; Track record page discloses the count.
+
+Data checks (recomputed in-browser from /picks.csv + /outcomes.csv):
+
+- **Data served:** picks.csv 200 (827 rows / 145 KB), outcomes.csv 200 (705 rows / 89 KB). ✅
+- **Real data shown:** srcBanner = "Live data"; Track record renders 582 real graded rows (real tickers/dates), no sample fallback. ✅
+- **No silent gaps (calendar):** 43 distinct trading dates 06-09 → 08-07, zero missing market weekdays (Juneteenth + observed 7/4 excepted). The 06-19 holiday cohort = the known phantom cohort, all 14 rows VOID — disclosed, not orphaned. Late-cohort derivation reproduces exactly: 699 timely / 128 late / 7 cohorts, matching the site's exclusion list to the pick. ✅
+- **Claims == data (timely, non-VOID):** picks logged 699 ✅ · graded 582 ✅ · win 30.6% → "31%" ✅ · median net −2.96 → "−3.0%" ✅ · mean net −3.58 → "−3.6%" ✅ · avg worst dip −18.96 → "−19.0%" ✅ · avg 5d-swing −6.85 → "−6.8%" ✅ · tier table exact match (A 125/−5.3, B 53/−3.1, C 195/−3.3, D 209/−3.0) ✅. Note: the tier table now leads with MEAN NET + clustered CIs, not win rate — the old P1 win-rate/mean-net mismatch is resolved.
+- **Honest grading:** spot checks PW 06-09 (+5.0 = (10.40−9.72)/9.72·100−2) and GCDT 06-09 (−5.32) recompute exactly; win flags consistent; zero duplicate pick_ids in either CSV, zero regrades. ✅
+- **Disclaimers:** educational + not-advice + no-broker-dealer present on index; educational/not-advice on method; not-advice/broker-dealer on disclaimer. ✅
+- **Validity (six aspects):** (a) tiers presented as heat ("⚠ hot"/"○ cool") and the tier table explicitly states A does NOT beat B/C — no quality-ranking implication ✅; (b) model labelling honest: index leads with "EXPERIMENT 01 FAILED" (published Gate-1 FAIL supersedes "unvalidated"); method.html still carries "unvalidated" ✅; (c) all three Messick docs return 200 and are linked from method.html §9 ✅.
+
+Grading forward this week: 08-03 (19, late cohort — grades for the record, excluded from headline) → grades 08-10; 08-04 (24) → 08-11; 08-05 (24) → 08-12; 08-06 (24) → 08-13; 08-07 (25) → 08-14. Plus the 6 stragglers above, which need the fix before they'll ever grade.
+
 ## 2026-08-04 — **❌ CORRECTION: 128 picks were logged after the opening bell**
 
 **Severity: HIGH — this contradicted the site's central claim.** Found by an outside review of the public `picks.csv`, not by us. Full public write-up: `/late-cohorts.html`.
