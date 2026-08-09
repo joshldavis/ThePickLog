@@ -1372,8 +1372,23 @@
   ThePickLog — a public testing lab for trading claims, operated by AMD Ventures, LLC (Florida).
   Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. Simulated (paper) trading only; no real money is ever placed.
   <br><a href="experiments.html">Experiments</a> · <a href="method.html">Method</a> · <a href="guide.html">Vetting Guide</a> · <a href="about.html">About</a> · <a href="trust.html">Trust &amp; Data</a> · <a href="disclaimer.html">Disclaimer</a> · <a href="privacy.html">Privacy</a>
-  <!-- BUILD STAMP: __BUILDSTAMP__ is auto-filled at deploy by scripts/stamp-build.mjs (commit SHA + deploy time) -->
-  <br><span style="opacity:.55;font-size:11px">Build __BUILDSTAMP__</span>
+  <!-- BUILD STAMP: __BUILDSTAMP__ is auto-filled at deploy by scripts/stamp-build.mjs (commit SHA + deploy time).
+       The sha is linked to its commit — the repo is public, so "recomputable from public data"
+       now includes the code that does the computing. -->
+  <br><span style="opacity:.55;font-size:11px" id="buildStamp">Build __BUILDSTAMP__</span>
+  &nbsp;·&nbsp;<a href="https://github.com/joshldavis/thepicklog" style="opacity:.55;font-size:11px">source</a>
+  <script>
+  /* Turn the sha in the build stamp into a link to its commit. Done in JS because the
+     stamp is injected at deploy time by scripts/stamp-build.mjs. */
+  (function(){
+    var el=document.getElementById("buildStamp"); if(!el) return;
+    var m=el.textContent.match(/([0-9a-f]{7,40})\s*$/);
+    if(!m) return;
+    el.innerHTML=el.textContent.replace(m[1],
+      '<a href="https://github.com/joshldavis/thepicklog/commit/'+m[1]+
+      '" style="color:inherit">'+m[1]+'</a>');
+  })();
+  </script>
   <br><br>
 </div></footer>
 
@@ -2152,8 +2167,22 @@ async function renderPerformance(){
     return;
   }
   const g=aggregateReal(tr.picks,tr.outcomes);
+  /* AWAITING-OUTCOME DISCLOSURE (2026-08-09). Picks that pass their grading window
+     without an outcome are usually halts or delistings — and those concentrate in the
+     hottest tier, so letting them sit invisible flatters the A-tier mean by survivorship.
+     The weekly audit caught 5 of them (4 A-tier) sitting unreported for weeks. Count them
+     on the page rather than waiting for the grader to give up. */
+  const _graded = new Set((tr.outcomes||[]).map(o=>o.pick_id));
+  const _tdSince = (d)=>{ let n=0, c=new Date(d+"T00:00:00Z"), end=new Date();
+    while(c<end){ c.setUTCDate(c.getUTCDate()+1); const w=c.getUTCDay(); if(w>0&&w<6) n++; }
+    return n; };
+  const _await = (tr.picks||[]).filter(p=>!_graded.has(p.pick_id) && _tdSince(p.trading_date)>5);
+  const _awaitTier = {};
+  _await.forEach(p=>{ const t=(p.tier||"?").toUpperCase(); _awaitTier[t]=(_awaitTier[t]||0)+1; });
+  const awaitNote = _await.length ? `<br><br><b>${_await.length} pick${_await.length>1?'s are':' is'} past the 5-session mark with no outcome yet</b> (${Object.entries(_awaitTier).map(([t,n])=>t+': '+n).join(', ')}) — almost always a halt or a delisting our price source can no longer quote. We count them here rather than letting them disappear: names that become unpriceable skew toward the hottest tier, so quietly dropping them would flatter it. Each one gets an explicit <code>UNGRADEABLE</code> row once the grader stops retrying, and none of them are in the averages above either way.` : "";
+
   const lateNote = tr.lateCount ? `<br><br><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a)">What happened, and what it did to the numbers →</a>` : "";
-  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a> — every number on this page re-derives from them.${lateNote}`;
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a> — every number on this page re-derives from them.${lateNote}${awaitNote}`;
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}

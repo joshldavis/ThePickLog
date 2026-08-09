@@ -43,6 +43,14 @@ jobs:
         run: python market_time.py
       - name: Run ${{ steps.cmd.outputs.cmd }}
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
+      # Grading-integrity gate (added 2026-08-09 after the weekly audit found five
+      # picks weeks past their grade date with no outcomes row and no note, four of
+      # them A-tier). The grader may defer a pick while a fetch is transient; it may
+      # never defer one forever. Ungradeable names (halts, delistings) concentrate in
+      # the hottest tier, so silently dropping them flatters it by survivorship.
+      - name: Verify no pick was silently dropped
+        if: steps.cmd.outputs.cmd == 'grade'
+        run: python ignitionscan.py check-grading
       # v0.3 market-wide scan (H-UNIV1, registered 2026-07-08; free-feed amendment
       # 2026-07-09): criteria-defined universe. Default source = FREE Yahoo screeners
       # (UNIV_SOURCE=yahoo, cohort tag v0.3-yf) -- no keys, no cost. Setting

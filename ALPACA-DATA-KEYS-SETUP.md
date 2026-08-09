@@ -26,7 +26,7 @@ Yahoo. You'll (1) turn on the data plan, (2) copy two keys, (3) paste them into 
 
 ## Step 3 — Paste them into GitHub
 
-1. Go to **github.com/joshldavis/ignitionscan**
+1. Go to **github.com/joshldavis/thepicklog**
 2. Click **Settings** (top menu).
 3. In the left menu: **Secrets and variables → Actions**.
 4. Click **New repository secret**, then add the first one:

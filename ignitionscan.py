@@ -479,6 +479,16 @@ def cmd_grade():
             # session hasn't closed yet (e.g., a market-holiday week), defer rather than
             # grade off a short window — which would mis-state the return. [H2]
             if len(window) < GRADE+1:
+                # PERMANENT HOLE, closed 2026-08-09. A name that halts or delists
+                # mid-window keeps an entry bar but never accumulates GRADE+1
+                # sessions, so this branch used to `continue` forever and the pick
+                # vanished from the record with no row and no note. Ungradeable
+                # names concentrate in the hottest tier, so silently dropping them
+                # flatters the A-tier mean by survivorship. Write a terminal row.
+                if stale:
+                    append_outcome(p, f"UNGRADEABLE: only {len(window)} of {GRADE+1} sessions "
+                                      f"ever printed — halted or delisted mid-window")
+                    graded += 1
                 continue
             o = float(window.iloc[0]["Open"]); c = float(window.iloc[0]["Close"])
             close_5d = float(window.iloc[GRADE]["Close"])
@@ -497,7 +507,66 @@ def cmd_grade():
             graded += 1
         except Exception as e:
             print(f"  grade error {p['ticker']} {p['trading_date']}: {type(e).__name__} {str(e)[:80]}")
+            # Same hole as above: a symbol that throws on every run (common for
+            # delisted tickers) would otherwise retry silently forever.
+            if stale:
+                append_outcome(p, f"UNGRADEABLE: repeated fetch failure after "
+                                  f"{tds} trading days ({type(e).__name__})")
+                graded += 1
     print(f"Graded {graded} picks -> {OUTCOMES_CSV}")
+
+def cmd_check_grading():
+    """Fail loudly if the grader has silently dropped anything.
+
+    Added 2026-08-09 after the weekly audit found five picks weeks past their
+    grade date with no outcomes row and no note — four of them A-tier. The
+    grader is allowed to defer a pick while a fetch is transient, but it is
+    never allowed to defer one forever: past the staleness threshold every pick
+    must carry either a real outcome or an explicit UNGRADEABLE row.
+
+    Exit 1 on anything overdue past the terminal threshold, so CI goes red
+    instead of the record quietly losing rows.
+    """
+    GRADE = CONFIG["GRADE_AFTER_DAYS"]
+    TERMINAL = 22          # a couple of sessions of slack past the stale>20 cutoff
+    picks = read_rows(PICKS_CSV)
+    done = {o["pick_id"] for o in read_rows(OUTCOMES_CSV)}
+
+    overdue, lost = [], []
+    for p in picks:
+        if p["pick_id"] in done:
+            continue
+        tds = _trading_days_since(p["trading_date"])
+        if tds < GRADE + 1:
+            continue                      # legitimately still inside the window
+        (lost if tds > TERMINAL else overdue).append((p, tds))
+
+    def by_tier(rows):
+        out = {}
+        for p, _ in rows:
+            t = (p.get("tier") or "?").upper()
+            out[t] = out.get(t, 0) + 1
+        return dict(sorted(out.items()))
+
+    if overdue:
+        print(f"NOTE: {len(overdue)} pick(s) past the {GRADE}-session mark still awaiting "
+              f"an outcome (transient-retry window). By tier: {by_tier(overdue)}")
+        for p, t in sorted(overdue, key=lambda r: r[0]["trading_date"]):
+            print(f"    {p['trading_date']}  {p['ticker']:<6} tier {p.get('tier','?')}  {t} trading days")
+
+    if lost:
+        print(f"\nERROR: {len(lost)} pick(s) are more than {TERMINAL} trading days old with "
+              f"NO outcomes row and no UNGRADEABLE note. By tier: {by_tier(lost)}")
+        for p, t in sorted(lost, key=lambda r: r[0]["trading_date"]):
+            print(f"    {p['trading_date']}  {p['ticker']:<6} tier {p.get('tier','?')}  {t} trading days")
+        print("\nThe grader must write a terminal row for every pick it cannot price. "
+              "Silently dropping ungradeable names biases the record: halts and delistings "
+              "concentrate in the hottest tier, so their absence flatters it.")
+        sys.exit(1)
+
+    print(f"Grading integrity OK — every pick past its window has an outcome row "
+          f"({len(overdue)} in the transient-retry window).")
+
 
 def persist_path(p, window):
     """Append the daily-OHLC path of a graded pick to paths.csv. Purely additive and
@@ -702,7 +771,8 @@ SAMPLE_QUOTES = [
 
 def main():
     ap = argparse.ArgumentParser(description="ThePickLog logger/grader (v0.2, Yahoo Finance)")
-    ap.add_argument("command", choices=["scan","scan-market","grade","report","brief","demo"])
+    ap.add_argument("command", choices=["scan","scan-market","grade","report","brief","demo",
+                                        "check-grading"])
     args = ap.parse_args()
     if   args.command=="scan":   cmd_scan()
     elif args.command=="scan-market": cmd_scan_market()
@@ -710,6 +780,7 @@ def main():
     elif args.command=="grade":  cmd_grade()
     elif args.command=="report": cmd_report()
     elif args.command=="brief":  cmd_brief()
+    elif args.command=="check-grading": cmd_check_grading()
 
 if __name__ == "__main__":
     main()
