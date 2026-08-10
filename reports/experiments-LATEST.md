@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-08-07
+# ThePickLog — experiments under test · 2026-08-10
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
