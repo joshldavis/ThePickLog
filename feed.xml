@@ -2,59 +2,59 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <title>ThePickLog — verdicts &amp; field notes</title>
-  <link>https://thepicklog.vercel.app/</link>
+  <link>https://thepicklog.com/</link>
   <description>We test what's being sold to traders. Rules frozen before the fact, graded forward against a control, verdicts published either way — starting with our own strategy, which failed.</description>
   <language>en-us</language>
   <lastBuildDate>Thu, 06 Aug 2026 12:00:00 GMT</lastBuildDate>
-  <atom:link href="https://thepicklog.vercel.app/feed.xml" rel="self" type="application/rss+xml"/>
+  <atom:link href="https://thepicklog.com/feed.xml" rel="self" type="application/rss+xml"/>
 
   <!-- New items go at the TOP. One item per published verdict, field note,
        correction, or experiment registration. Keep guids stable forever. -->
 
   <item>
     <title>About ThePickLog — who runs this, and why he tested his own strategy first</title>
-    <link>https://thepicklog.vercel.app/about.html</link>
-    <guid isPermaLink="true">https://thepicklog.vercel.app/about.html</guid>
+    <link>https://thepicklog.com/about.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/about.html</guid>
     <pubDate>Wed, 05 Aug 2026 12:00:00 GMT</pubDate>
     <description>The operator, the standard the site applies (define the rule before the outcome is known, test forward, compare to a pre-specified benchmark, publish either way), and why the first strategy tested was his own — which failed.</description>
   </item>
 
   <item>
     <title>Correction: we logged 128 picks after the opening bell</title>
-    <link>https://thepicklog.vercel.app/late-cohorts.html</link>
-    <guid isPermaLink="true">https://thepicklog.vercel.app/late-cohorts.html</guid>
+    <link>https://thepicklog.com/late-cohorts.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/late-cohorts.html</guid>
     <pubDate>Tue, 04 Aug 2026 12:00:00 GMT</pubDate>
     <description>The record rests on picks being written down before the market opens. On seven sessions our scheduler drifted past the bell and logged anyway — and an outside reader found it in our public CSV before we did. 128 picks excluded, headline restated −2.68% → −3.40%, and a hard pre-open gate so it cannot recur.</description>
   </item>
 
   <item>
     <title>Field note: the bug that makes your backtest look good</title>
-    <link>https://thepicklog.vercel.app/split-adjustment-trap.html</link>
-    <guid isPermaLink="true">https://thepicklog.vercel.app/split-adjustment-trap.html</guid>
+    <link>https://thepicklog.com/split-adjustment-trap.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/split-adjustment-trap.html</guid>
     <pubDate>Fri, 31 Jul 2026 12:00:00 GMT</pubDate>
     <description>Price history is silently rewritten every time a company splits. Mix a stored price with a re-downloaded one and you invent returns that never happened — and in cheap stocks the error is always in your favour. We found it in our own code, where it had turned a −2.9% baseline into +8.0%. Six checks that catch it.</description>
   </item>
 
   <item>
     <title>Experiment 03 registered: is the MACD bullish crossover profitable?</title>
-    <link>https://thepicklog.vercel.app/experiment-03.html</link>
-    <guid isPermaLink="true">https://thepicklog.vercel.app/experiment-03.html</guid>
+    <link>https://thepicklog.com/experiment-03.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-03.html</guid>
     <pubDate>Fri, 31 Jul 2026 12:00:00 GMT</pubDate>
     <description>The most widely taught indicator signal in retail trading, frozen as an exact rule with a day-matched control before any of the data it will be judged on exists. Registered prior: no edge — roughly 1 in 6 that it clears.</description>
   </item>
 
   <item>
     <title>Experiment 02 registered: does the 2-period RSI strategy actually work?</title>
-    <link>https://thepicklog.vercel.app/experiment-02.html</link>
-    <guid isPermaLink="true">https://thepicklog.vercel.app/experiment-02.html</guid>
+    <link>https://thepicklog.com/experiment-02.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-02.html</guid>
     <pubDate>Wed, 29 Jul 2026 12:00:00 GMT</pubDate>
     <description>One of the most published retail setups of the last twenty years, almost always sold on its win rate. We're testing whether a high win rate survives contact with expectancy — on liquid names, where costs can't be blamed for the answer. First verdict expected ~September 2026.</description>
   </item>
 
   <item>
     <title>Experiment 01 verdict: we tested our own stock screener. It lost money.</title>
-    <link>https://thepicklog.vercel.app/experiment-01.html</link>
-    <guid isPermaLink="true">https://thepicklog.vercel.app/experiment-01.html</guid>
+    <link>https://thepicklog.com/experiment-01.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-01.html</guid>
     <pubDate>Wed, 29 Jul 2026 12:00:00 GMT</pubDate>
     <description>We pre-registered the edge we believed in and ran it forward for seven weeks. It failed — significantly, in the opposite direction to our prediction. n=309, −3.0pp versus baseline, 95% CI [−4.4, −1.5]. At 30 trades it looked like it worked; that early read was noise.</description>
   </item>
