@@ -1,0 +1,2 @@
+signal_id,ticker,signal_date,entry_date,graded_at,entry_open,same_day_close,ret_1d_net,ret_5d_net,ret_rsiexit_net,exit_session,bench_1d_net,bench_5d_net,excess_1d,excess_5d,excess_rsiexit,win_1d,note
+EXP02-RSI2-2026-07-31-AAPL,AAPL,2026-07-31,2026-08-03,2026-08-10T21:36:46+00:00,309.58,303.42,-2.0898,-0.5264,1.1113,4,0.0244,2.0675,-2.1142,-2.5938,-0.9561,0,
