@@ -37,7 +37,10 @@
   function show(title, html, cls){ h.textContent=title; if(cls) h.className=cls; body.innerHTML=html; }
 
   (async ()=>{
-    const token=new URLSearchParams(location.search).get("t");
+    const _q=new URLSearchParams(location.search);
+    // Accept both spellings: the site has always used ?t=, but confirmation
+    // emails have gone out with ?token=. Honour either so no link is dead.
+    const token=_q.get("t")||_q.get("token");
     if(!token){
       show("That link looks incomplete","<p>The confirmation link needs its token. Try clicking the link in the email again, or paste the whole URL into the address bar.</p><a class=\"btn\" href=\"index.html\">Back to the site</a>","err");
       return;
