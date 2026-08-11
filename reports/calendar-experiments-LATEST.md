@@ -1,4 +1,4 @@
-# ThePickLog — calendar experiments (EXP04, EXP05) · 2026-08-10
+# ThePickLog — calendar experiments (EXP04, EXP05) · 2026-08-11
 
 Both experiments are forward-only from **2026-08-06** and scored against **time-matched controls** (see the `calendar_eval.py` header for why the harness's cross-sectional control does not apply to timing claims). Mean, median and a clustered 95% CI are reported together. **Win rate is reported but is never a pass criterion.** SPY is a replication read only — QQQ decides.
 
