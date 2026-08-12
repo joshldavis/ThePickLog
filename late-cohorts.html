@@ -134,7 +134,8 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <p>The scanner had guards. It refuses to run on NYSE holidays. It refuses to run when the quote feed returns the previous session's prices unchanged — a check we added after a phantom Juneteenth cohort. What it never did was <b>look at the clock</b>. It checked what the market was doing and what the data looked like, and never asked the one question that its own core claim depended on.</p>
 
   <h2>What it did to the numbers</h2>
-  <p>Excluding the late cohorts, on the 596 graded picks:</p>
+  <p><b>Figures below are a snapshot taken on 2026-08-04, the day of the correction</b>, when 596 picks had been graded. The log grows every session, so these will not match a fresh download — the <a href="index.html#performance">track record page</a> always shows the current numbers, computed live. We date them rather than quietly restating them, because a corrected number that silently drifts is the same problem in a new coat.</p>
+  <p>Excluding the late cohorts, on the 596 graded picks as of that date:</p>
 
   <table>
     <thead><tr><th>Group</th><th class="num">n</th><th class="num">Mean net</th><th class="num">Median net</th><th class="num">Win rate</th></tr></thead>
@@ -152,6 +153,13 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <p>We don't think it's true, and the honest thing is to say so.</p>
   <p>The <b>median</b> late pick returned −2.48% against −2.76% for timely picks. That gap is a quarter of a percentage point. The mean gap is entirely one trade: <b>JLHL, +241%</b> on 2026-07-09. Remove that single position and the late group's mean falls to −1.67%. Remove the top three and it is −2.99% — indistinguishable from the timely group. The six late cohorts have median returns of −4.07%, −2.88%, −1.10%, −1.65%, −2.83% and −2.26%: all negative, all ordinary.</p>
   <p class="pull">A four-point gap that vanishes when you delete one row is not evidence of bias. It is one lucky microcap.</p>
+
+  <div class="box">
+    <h3>What has happened since — the prediction held</h3>
+    <p>We said the apparent gap was one trade, not contamination. That was a falsifiable claim, so here is the follow-up.</p>
+    <p>As more of the late cohorts finished grading, the late group's mean fell from <b>+0.55%</b> (n=109, at correction) to <b class="neg">−0.25%</b> (n=127, on 2026-08-12) — moving toward the timely group rather than away from it. The medians are now <b>−2.72%</b> late against <b>−2.87%</b> timely: a gap of 0.15 of a percentage point.</p>
+    <p style="margin-bottom:0">If the lateness had been buying us a look-ahead advantage, the gap would have persisted or widened as the sample filled in. It shrank. The protocol failure was real; the contamination still isn't measurable. Recompute it yourself from <a href="picks.csv" download>picks.csv</a> with the snippet below.</p>
+  </div>
   <p>Which is a lesson this project has already published once. <a href="experiment-01.html">Experiment 01</a>'s central finding was that a mean on financial data can be a single trade wearing a statistic's clothing, and that the way to check is to delete your best result and look again. Here that test says the protocol failure was real and the contamination was not measurable.</p>
   <p>So: <b>we broke the rule, the rule matters, and we cannot show you that breaking it helped us.</b> Both halves of that are the finding.</p>
 

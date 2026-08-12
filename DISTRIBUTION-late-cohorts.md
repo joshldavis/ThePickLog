@@ -1,6 +1,8 @@
 # Distribution drafts — the late-cohort correction
 
-**Link:** https://thepicklog.vercel.app/late-cohorts.html
+**Link:** https://thepicklog.com/late-cohorts.html
+
+> ⚠️ **Before posting, re-check the two numbers.** The pick log grows every session, so any figure quoted below is a snapshot. The correction figures (−2.68% → −3.40%, late group +0.55%) are dated on the page as of 2026-08-04 and are correct *as of that date* — but if you post weeks later and someone downloads picks.csv, they will get different totals. Current live figures are on the track record page. Every draft below has been written so the dated framing survives; keep it.
 
 Everything below is ready to send as-is. I can't post on your behalf, so these are yours to fire.
 
@@ -26,7 +28,9 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 >
 > A reader checking our public picks.csv found that our scan had drifted past the 09:30 open on seven occasions and logged anyway, 2 to 72 minutes late. The headline metric is the same-day open→close return, so those picks were scored against an opening price that had already printed.
 >
-> The part I found most instructive: the tempting story is "our protocol broke in a way that flattered us." Late picks show +0.55% mean vs −3.40% for timely ones. But the *median* gap is a quarter of a point, and the entire mean difference is one microcap that ran +241%. Delete it and the gap evaporates. So the honest statement is: we broke the rule, the rule matters, and we can't demonstrate that breaking it helped us. Both halves are in the write-up.
+> The part I found most instructive: the tempting story is "our protocol broke in a way that flattered us." At the time of the correction the late picks showed +0.55% mean vs −3.40% for timely ones. But the *median* gap was a quarter of a point, and the entire mean difference was one microcap that ran +241%. Delete it and the gap evaporates. So the honest statement is: we broke the rule, the rule matters, and we can't demonstrate that breaking it helped us. Both halves are in the write-up.
+>
+> Follow-up, since that was a falsifiable claim: as the rest of those cohorts finished grading, the late group's mean fell from +0.55% to −0.25% — toward the clean group, not away from it. The medians are now 0.15 of a point apart. If lateness had been buying a look-ahead edge, that gap would have widened.
 >
 > Root cause is boring and general: we guarded the market (holiday calendar) and the data (stale-feed detector) and never guarded the deadline. GitHub Actions cron is documented as best-effort; we'd treated a schedule as a guarantee. There's now a hard gate that refuses to write anything after 09:20 ET, and the exclusion is derived from the public timestamps rather than a flag we set, so anyone can reproduce it.
 
@@ -51,7 +55,7 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 > Two things worth stealing:
 >
 > 1. **Verify the deadline at write time, not in review.** A gap in your record is a fact you can work with. A silently late entry is a lie that propagates into every summary statistic until someone else finds it. My scanner now refuses to write anything after 09:20 ET and exits non-zero.
-> 2. **Check whether the contamination is actually measurable before you claim it.** The late picks averaged +0.55% vs −3.40% for the clean ones, which looks damning. But the medians are a quarter-point apart and the whole gap is one ticker that ran +241%. Delete your single best trade and re-run — if your finding evaporates, it was never there.
+> 2. **Check whether the contamination is actually measurable before you claim it.** The late picks averaged +0.55% vs −3.40% for the clean ones, which looks damning. But the medians were a quarter-point apart and the whole gap was one ticker that ran +241%. Delete your single best trade and re-run — if your finding evaporates, it was never there. (Postscript: as the rest of those cohorts graded, the late mean drifted to −0.25%, i.e. toward the clean group. The gap really was noise.)
 >
 > Full write-up with the numbers and reproducible code: [link]
 >
@@ -111,8 +115,10 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 >
 > If a deadline is load-bearing, verify it at write time and refuse to write when you miss it.
 
+> 10b/ Postscript worth adding when you post: as the rest of those cohorts finished grading, the late group's mean drifted from +0.55% to −0.25% — toward the clean group, not away. The prediction that it was noise held up.
+
 > 11/ Full write-up, the numbers, and runnable code to check us:
-> https://thepicklog.vercel.app/late-cohorts.html
+> https://thepicklog.com/late-cohorts.html
 >
 > Found by a reader in a file we'd published for weeks. Embarrassing, and exactly why the file is public.
 
@@ -130,7 +136,7 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 >
 > If you maintain any dataset where a deadline is load-bearing, verify it at write time rather than trusting the scheduler. A gap in the record is something you can work with. A silently late entry propagates into every downstream number until someone else finds it.
 >
-> Write-up: https://thepicklog.vercel.app/late-cohorts.html
+> Write-up: https://thepicklog.com/late-cohorts.html
 
 ---
 
@@ -142,7 +148,7 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 >
 > A reader found it in the public CSV. We hadn't run the check on our own data.
 >
-> The full post-mortem is here, including the part where we decline to claim the mistake flattered us — the entire apparent effect is one lucky microcap: https://thepicklog.vercel.app/late-cohorts.html
+> The full post-mortem is here, including the part where we decline to claim the mistake flattered us — the entire apparent effect is one lucky microcap: https://thepicklog.com/late-cohorts.html
 >
 > Nothing about the published verdicts changes. Experiment 01 still failed, slightly harder.
 
@@ -150,6 +156,10 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 
 ## Sequencing
 
+0. **Consider leading with the split-adjustment trap instead** — see DISTRIBUTION-split-adjustment.md
+   for the argument. Short version: that piece teaches the reader something useful whether or not
+   they care about this project, which is what travels on HN. This correction lands harder as the
+   follow-up, once people already know the record exists.
 1. **Hacker News first**, on its own. If it lands, everything else rides that.
 2. **r/algotrading the next day**, regardless of how HN went.
 3. **X thread the same day as Reddit** — it's the one that keeps working later when people search the incident.
@@ -158,6 +168,11 @@ Everything below is ready to send as-is. I can't post on your behalf, so these a
 
 **Do not** post the same day as a market event that will bury it, and don't cross-post to a second subreddit within 24 hours.
 
-## One caveat before you post
+## Pre-flight check (was a blocker, now resolved)
 
-The site is currently anonymous. Every one of these drafts is written in first person, and the first question a good HN or r/algotrading commenter asks is "who is this?" Getting your bio and an About page up first would materially improve how this lands — it's the difference between "a person publishing their mistakes" and "an anonymous site publishing its mistakes."
+**The About page is live** at https://thepicklog.com/about.html — this draft's original blocker is cleared. The first question a good HN or r/algotrading commenter asks is "who is this?", and there is now an answer: a named operator with a stated methods background, who tested his own strategy first and published its failure. That is the difference between "a person publishing their mistakes" and "an anonymous site publishing its mistakes."
+
+Two things to know before posting:
+
+- **The site is first-name-only by choice.** If someone presses on identity, answering plainly is fine; being cagey reads worse than being brief.
+- **The verdict email list is live.** Don't pitch it in the post — these drafts work *because* they don't sell. The field-note pages already carry the signup, so anyone who finds the writing convincing will meet it on the way out.
