@@ -529,6 +529,7 @@ def cmd_check_grading():
     """
     GRADE = CONFIG["GRADE_AFTER_DAYS"]
     TERMINAL = 22          # a couple of sessions of slack past the stale>20 cutoff
+    SLACK    = 3           # normal grader lag: daily cadence + weekends/holidays
     picks = read_rows(PICKS_CSV)
     done = {o["pick_id"] for o in read_rows(OUTCOMES_CSV)}
 
@@ -537,8 +538,11 @@ def cmd_check_grading():
         if p["pick_id"] in done:
             continue
         tds = _trading_days_since(p["trading_date"])
-        if tds < GRADE + 1:
-            continue                      # legitimately still inside the window
+        # Three sessions of slack past the window before a pick counts as overdue.
+        # The grader runs once a day after the close, so without slack every
+        # afternoon's ungraded cohort shows up here as if something were wrong.
+        if tds <= GRADE + SLACK:
+            continue
         (lost if tds > TERMINAL else overdue).append((p, tds))
 
     def by_tier(rows):
@@ -549,8 +553,9 @@ def cmd_check_grading():
         return dict(sorted(out.items()))
 
     if overdue:
-        print(f"NOTE: {len(overdue)} pick(s) past the {GRADE}-session mark still awaiting "
-              f"an outcome (transient-retry window). By tier: {by_tier(overdue)}")
+        print(f"NOTE: {len(overdue)} pick(s) more than {SLACK} sessions past the "
+              f"{GRADE}-session mark still awaiting an outcome (transient-retry window). "
+              f"By tier: {by_tier(overdue)}")
         for p, t in sorted(overdue, key=lambda r: r[0]["trading_date"]):
             print(f"    {p['trading_date']}  {p['ticker']:<6} tier {p.get('tier','?')}  {t} trading days")
 
@@ -564,8 +569,8 @@ def cmd_check_grading():
               "concentrate in the hottest tier, so their absence flatters it.")
         sys.exit(1)
 
-    print(f"Grading integrity OK — every pick past its window has an outcome row "
-          f"({len(overdue)} in the transient-retry window).")
+    print(f"Grading integrity OK — no pick is more than {TERMINAL} trading days old "
+          f"without an outcome row ({len(overdue)} in the transient-retry window).")
 
 
 def persist_path(p, window):
