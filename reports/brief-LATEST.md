@@ -1,39 +1,39 @@
-# ThePickLog — Morning Brief · 2026-08-11
+# ThePickLog — Morning Brief · 2026-08-12
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **JWEL** (tier A, score 100.0) — very high relative volume (61×); thin float (2.0M); large up-gap (+97%). Watch level (reference only, +20%): $3.6596.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **ZJYL** (tier A, score 100.0) — very high relative volume (21×); thin float (1.9M); large up-gap (+21%). Watch level (reference only, +20%): $3.132.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **XHLD** (tier A, score 99.8) — very high relative volume (21×); large up-gap (+47%). Watch level (reference only, +20%): $3.564.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **AUUD** (tier A, score 98.8) — very high relative volume (24×); large up-gap (+63%). Watch level (reference only, +20%): $1.6076.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SCKT** (tier A, score 98.5) — very high relative volume (57×); large up-gap (+257%). Watch level (reference only, +20%): $1.656.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **WXM** (tier A, score 100.0) — very high relative volume (52×); thin float (0.5M); large up-gap (+28%). Watch level (reference only, +20%): $6.12.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **MSGY** (tier A, score 100.0) — very high relative volume (302×); thin float (0.8M); large up-gap (+30%). Watch level (reference only, +20%): $3.6.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **GRI** (tier A, score 100.0) — very high relative volume (38×); thin float (1.8M); large up-gap (+21%). Watch level (reference only, +20%): $2.472.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **AIFA** (tier A, score 99.4) — very high relative volume (53×); large up-gap (+27%). Watch level (reference only, +20%): $3.228.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **KPLT** (tier A, score 98.9) — very high relative volume (30×); large up-gap (+22%). Watch level (reference only, +20%): $9.336.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **JWEL**: already extended pre-market — chasing buys the top.
-- **ZJYL**: already extended pre-market — chasing buys the top.
-- **XHLD**: already extended pre-market — chasing buys the top.
-- **AUUD**: already extended pre-market — chasing buys the top.
-- **SCKT**: already extended pre-market — chasing buys the top.
-- **SQFTP**: ultra-thin float — spreads and slippage can be severe.
-- **RDGT**: sub-$1 — heightened manipulation / delisting risk.
-- **HUDI**: sub-$1 — heightened manipulation / delisting risk.
-- **MTEN**: already extended pre-market — chasing buys the top.
+- **WXM**: already extended pre-market — chasing buys the top.
+- **WXM**: ultra-thin float — spreads and slippage can be severe.
+- **MSGY**: already extended pre-market — chasing buys the top.
+- **MSGY**: ultra-thin float — spreads and slippage can be severe.
+- **GRI**: already extended pre-market — chasing buys the top.
+- **AIFA**: already extended pre-market — chasing buys the top.
+- **KPLT**: already extended pre-market — chasing buys the top.
+- **NTHI**: already extended pre-market — chasing buys the top.
+- **PLAG**: already extended pre-market — chasing buys the top.
+- **FRTT**: ultra-thin float — spreads and slippage can be severe.
+- **FF**: already extended pre-market — chasing buys the top.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **JAGX**: sub-$1 — heightened manipulation / delisting risk.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
-- **CUPR**: ultra-thin float — spreads and slippage can be severe.
-- **BJDX**: high short interest (59% of float) — squeeze-prone and violent both ways.
 - **BJDX**: ultra-thin float — spreads and slippage can be severe.
-- **BJDX**: sub-$1 — heightened manipulation / delisting risk.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
-- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
+- **SUGP**: ultra-thin float — spreads and slippage can be severe.
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
 - **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: ultra-thin float — spreads and slippage can be severe.
+- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **732** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 28%) vs **-13%** (rug 11%) for C/D.
