@@ -5,11 +5,27 @@
   <link>https://thepicklog.com/</link>
   <description>We test what's being sold to traders. Rules frozen before the fact, graded forward against a control, verdicts published either way — starting with our own strategy, which failed.</description>
   <language>en-us</language>
-  <lastBuildDate>Thu, 06 Aug 2026 12:00:00 GMT</lastBuildDate>
+  <lastBuildDate>Wed, 12 Aug 2026 12:00:00 GMT</lastBuildDate>
   <atom:link href="https://thepicklog.com/feed.xml" rel="self" type="application/rss+xml"/>
 
   <!-- New items go at the TOP. One item per published verdict, field note,
        correction, or experiment registration. Keep guids stable forever. -->
+
+  <item>
+    <title>Experiment 05 registered: does the market only make money while it's closed?</title>
+    <link>https://thepicklog.com/experiment-05.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-05.html</guid>
+    <pubDate>Thu, 06 Aug 2026 12:00:00 GMT</pubDate>
+    <description>Split every trading day into its overnight leg and its intraday leg. Across 27 years of QQQ, essentially all of the return came from the overnight leg — $1 compounded overnight-only grew to about $35 while intraday-only fell to 47 cents. Firms turned this into ETFs; the ETFs died. An attribution claim, not a trading claim, with the verdict locked to a single pre-declared date.</description>
+  </item>
+
+  <item>
+    <title>Experiment 04 registered: does the turn-of-month effect exist?</title>
+    <link>https://thepicklog.com/experiment-04.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-04.html</guid>
+    <pubDate>Thu, 06 Aug 2026 12:00:00 GMT</pubDate>
+    <description>One of the oldest claims in the calendar-effect literature — returns clustering at the turn of each month — in journals since the 1980s and still sold in seasonality newsletters. The window was frozen before the fact and is graded forward on QQQ. It comes out of an exploratory sweep of 25 calendar patterns in which, corrected for multiple testing, none survived.</description>
+  </item>
 
   <item>
     <title>About ThePickLog — who runs this, and why he tested his own strategy first</title>
