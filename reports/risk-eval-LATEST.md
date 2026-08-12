@@ -4,22 +4,22 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 **H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant.
 
-### v0.2-yf — n_post = 40
+### v0.2-yf — n_post = 48
 
-- score -> |MAE| (drawdown depth): rho=+0.024 CI[-0.362,+0.356] n=40 tickers=14 ns
-- score -> range (MFE-MAE): rho=+0.232 CI[-0.140,+0.512] n=40 tickers=14 ns
-- score -> same-day return *(must stay ns)*: rho=-0.093 CI[-0.456,+0.293] n=40 tickers=14 ns
-- score -> 5-day return *(must stay ns)*: rho=+0.106 CI[-0.217,+0.458] n=40 tickers=14 ns
+- score -> |MAE| (drawdown depth): rho=-0.021 CI[-0.341,+0.265] n=48 tickers=14 ns
+- score -> range (MFE-MAE): rho=+0.182 CI[-0.201,+0.493] n=48 tickers=14 ns
+- score -> same-day return *(must stay ns)*: rho=-0.110 CI[-0.407,+0.226] n=48 tickers=14 ns
+- score -> 5-day return *(must stay ns)*: rho=+0.101 CI[-0.190,+0.414] n=48 tickers=14 ns
 - consecutive weekly snapshots with positive |MAE| rho: **1** (need >= 3)
 
 **v0.2-yf verdict: not yet established**
 
-### v0.3-yf — n_post = 30
+### v0.3-yf — n_post = 36
 
-- score -> |MAE| (drawdown depth): rho=+0.103 CI[-0.279,+0.487] n=30 tickers=29 ns
-- score -> range (MFE-MAE): rho=+0.294 CI[-0.090,+0.649] n=30 tickers=29 ns
-- score -> same-day return *(must stay ns)*: rho=-0.066 CI[-0.455,+0.396] n=30 tickers=29 ns
-- score -> 5-day return *(must stay ns)*: rho=-0.039 CI[-0.439,+0.371] n=30 tickers=29 ns
+- score -> |MAE| (drawdown depth): rho=+0.135 CI[-0.217,+0.443] n=36 tickers=34 ns
+- score -> range (MFE-MAE): rho=+0.263 CI[-0.103,+0.604] n=36 tickers=34 ns
+- score -> same-day return *(must stay ns)*: rho=-0.053 CI[-0.423,+0.353] n=36 tickers=34 ns
+- score -> 5-day return *(must stay ns)*: rho=-0.020 CI[-0.362,+0.354] n=36 tickers=34 ns
 - consecutive weekly snapshots with positive |MAE| rho: **1** (need >= 3)
 
 **v0.3-yf verdict: not yet established**
@@ -28,16 +28,16 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 **H-RISK2** — is the gauge *calibrated*, not merely correlated? v0.2 cohort only; the frozen probabilities are explicitly NOT transferable to v0.3 (different score distributions — see H-STR3).
 
-- Brier (frozen model) **0.1945** vs no-skill baseline **0.1864** -> does NOT beat baseline
-- realised P(MAE <= -20%): Q1 30.0% vs Q5 33.3%
-- Q5-Q1 gap: 3.3% (need >= 15%) -> not met
+- Brier (frozen model) **0.2071** vs no-skill baseline **0.1945** -> does NOT beat baseline
+- realised P(MAE <= -20%): Q1 33.3% vs Q5 25.0%
+- Q5-Q1 gap: -8.3% (need >= 15%) -> not met
 - per-quintile realised / predicted / n:
 
-  - Q1: realised 30.0% · predicted 20.2% · n=10
-  - Q2: realised 14.3% · predicted 39.6% · n=7
-  - Q3: realised 16.7% · predicted 34.9% · n=6
+  - Q1: realised 33.3% · predicted 20.2% · n=12
+  - Q2: realised 12.5% · predicted 39.6% · n=8
+  - Q3: realised 30.0% · predicted 34.9% · n=10
   - Q4: realised 14.3% · predicted 38.2% · n=14
-  - Q5: realised 33.3% · predicted 48.3% · n=3
+  - Q5: realised 25.0% · predicted 48.3% · n=4
 
 **H-RISK2 verdict: not yet established**
 
