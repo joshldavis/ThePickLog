@@ -8,6 +8,7 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "@vercel/og": "^0.11.1"
   }
 }
