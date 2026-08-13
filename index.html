@@ -522,23 +522,56 @@
   <div class="wrap">
     <div class="hero">
       <h1>We test what's being sold to traders.<br>Starting with our own strategy.</h1>
-      <p class="lead">Retail trading runs on claims nobody checks: impressive win rates, screenshots of the good days, backtests fitted to the past. We take a claim, freeze the rule with a date <i>before</i> we look, grade it forward on public data, and publish the verdict — including when it's embarrassing. We started with our own screener. It failed, and we published that too.</p>
-      <p class="muted" style="color:var(--green);font-weight:600;margin:0 auto 26px">
-        Rule frozen before the fact &nbsp;•&nbsp; Graded forward, winners <i>and</i> losers &nbsp;•&nbsp; Recomputable from public data &nbsp;•&nbsp; Published either way
-      </p>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <button class="btn" onclick="location.href='experiments.html'">See the experiments &rarr;</button>
-        <button class="btn ghost" onclick="go('performance')">The raw track record &rarr;</button>
-      </div>
-      <!-- free verdict-email list -->
-      <form onsubmit="return tplVerdicts(event)" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px auto 0;max-width:440px">
-        <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails"
-          style="flex:1;min-width:180px;background:var(--panel2);border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px">
-        <button class="btn" type="submit" style="white-space:nowrap">Email me each verdict</button>
+      <p class="lead">Retail trading runs on claims nobody checks. We freeze a rule with a date <i>before</i> we look, grade it forward on public data, and publish the verdict either way. We started with our own screener &mdash; it failed, and we published that too.</p>
+      <p class="hero-strip">Rule frozen before the fact &nbsp;&bull;&nbsp; Graded forward, winners <i>and</i> losers &nbsp;&bull;&nbsp; Recomputable from public data &nbsp;&bull;&nbsp; Published either way</p>
+
+      <form class="hero-cta" onsubmit="return tplVerdicts(event)">
+        <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails">
+        <button class="btn" type="submit">Email me each verdict</button>
       </form>
-      <p class="vl-msg" role="status" aria-live="polite" style="margin:8px auto 0;font-size:13px;max-width:440px"></p>
-      <p class="dim" style="font-size:11.5px;margin:6px auto 0;max-width:52ch">Free, one email per verdict, nothing else — with a confirmation email first. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
-      <p class="dim" style="font-size:12.5px;margin:16px auto 0;max-width:62ch">We never execute trades, hold your money, or touch your brokerage — ThePickLog is the scoreboard, not the casino. <a href="trust.html" style="color:var(--blue);text-decoration:none">How your data's handled &rarr;</a> &nbsp;·&nbsp; <a href="guide.html" style="color:var(--blue);text-decoration:none">The 7 checks any service should pass &rarr;</a></p>
+      <p class="vl-msg" role="status" aria-live="polite" style="margin:8px auto 0;font-size:13px;max-width:460px"></p>
+      <p class="hero-fine">Free, one email per verdict, nothing else. <a href="privacy.html">Privacy</a> &nbsp;&middot;&nbsp; <a class="hero-jump" href="#experiments">Or just read the experiments &darr;</a></p>
+    </div>
+
+    <!-- ===== THE SERIES ===== -->
+    <div id="experiments" style="margin-top:30px;scroll-margin-top:80px">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0;font-size:19px">The experiments</h2>
+        <a href="experiments.html" style="margin-left:auto;font-size:13.5px;color:var(--blue);text-decoration:none">All experiments &amp; how they work &rarr;</a>
+      </div>
+      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch"><b>One finished. Four running in public right now.</b> Each is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control it has to beat.</p>
+      <div class="grid exp-cards">
+        <a class="panel exp-card" href="experiment-01.html">
+          <div class="exp-no">EXPERIMENT 01 <span class="exp-pill v-fail">FAILED</span></div>
+          <h3>Our own low-float momentum screen</h3>
+          <p>We pre-registered the edge we believed in and ran it forward for seven weeks. It lost — and at 30 trades it had looked like it was working. That early read was noise.</p>
+          <div class="exp-meta">verdict 2026-07-29 &middot; n=309 &middot; <b>&minus;3.0pp vs baseline</b></div>
+        </a>
+        <a class="panel exp-card" href="experiment-02.html">
+          <div class="exp-no">EXPERIMENT 02 <span class="exp-pill v-run">RUNNING</span></div>
+          <h3>The 2-period RSI "high win rate" trade</h3>
+          <p>The most published retail setup of the last twenty years, always sold on its win rate. We're testing whether a high win rate survives contact with expectancy.</p>
+          <div class="exp-meta">registered 2026-07-29 &middot; <b>verdict due Sep 2026</b></div>
+        </a>
+        <a class="panel exp-card" href="experiment-03.html">
+          <div class="exp-no">EXPERIMENT 03 <span class="exp-pill v-run">RUNNING</span></div>
+          <h3>The MACD bullish crossover</h3>
+          <p>The most widely taught indicator signal in retail trading — which makes it the least likely to still contain an edge, and exactly the claim nobody bothers to check.</p>
+          <div class="exp-meta">registered 2026-07-31 &middot; <b>verdict due 2 Nov 2026</b></div>
+        </a>
+        <a class="panel exp-card" href="experiment-04.html">
+          <div class="exp-no">EXPERIMENT 04 <span class="exp-pill v-run">RUNNING</span></div>
+          <h3>The turn-of-month effect</h3>
+          <p>A 40-year-old calendar claim still sold in seasonality newsletters. It was the strongest survivor of our 25-test sweep — in which, corrected honestly, nothing survived.</p>
+          <div class="exp-meta">registered 2026-08-06 &middot; <b>verdict due Sep 2027</b></div>
+        </a>
+        <a class="panel exp-card" href="experiment-05.html">
+          <div class="exp-no">EXPERIMENT 05 <span class="exp-pill v-run">RUNNING</span></div>
+          <h3>Overnight vs intraday</h3>
+          <p>Over 27 years, essentially all of QQQ's return arrived overnight. Firms sold this as "night effect" ETFs and the ETFs died. Registered as attribution, not a tradeable edge.</p>
+          <div class="exp-meta">registered 2026-08-06 &middot; <b>first read Jan 2027</b></div>
+        </a>
+      </div>
     </div>
 
     <!-- ===== OUR OWN RECORD — framed as the experiment it is ===== -->
@@ -551,47 +584,6 @@
       <div class="grid kpis" id="landingKpis" style="margin-top:14px"></div>
     </div>
 
-    <!-- ===== THE SERIES ===== -->
-    <div style="margin-top:34px">
-      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-        <h2 style="margin:0;font-size:19px">The experiments</h2>
-        <a href="experiments.html" style="margin-left:auto;font-size:13.5px;color:var(--blue);text-decoration:none">All experiments &amp; how they work &rarr;</a>
-      </div>
-      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch">Each one is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control. One is finished. Four are running in public right now.</p>
-      <div class="grid exp-cards">
-        <a class="panel exp-card" href="experiment-01.html">
-          <div class="exp-no">EXPERIMENT 01 <span class="exp-pill v-fail">FAILED</span></div>
-          <h3>Our own low-float momentum screen</h3>
-          <p>We pre-registered the edge we believed in and ran it forward for seven weeks. It lost — significantly, and in the opposite direction to our prediction. At 30 trades it looked like it was working; that early positive read was noise.</p>
-          <div class="exp-meta">verdict 2026-07-29 · n=309 · &Delta; &minus;3.0pp vs baseline</div>
-        </a>
-        <a class="panel exp-card" href="experiment-02.html">
-          <div class="exp-no">EXPERIMENT 02 <span class="exp-pill v-run">RUNNING</span></div>
-          <h3>The 2-period RSI "high win rate" trade</h3>
-          <p>One of the most published retail setups of the last twenty years, almost always sold on its win rate. We're testing whether a high win rate survives contact with expectancy — on liquid names, where costs can't be blamed for the answer.</p>
-          <div class="exp-meta">registered 2026-07-29 · first verdict ~2026-09</div>
-        </a>
-        <a class="panel exp-card" href="experiment-03.html">
-          <div class="exp-no">EXPERIMENT 03 <span class="exp-pill v-run">RUNNING</span></div>
-          <h3>The MACD bullish crossover</h3>
-          <p>The most widely taught indicator signal in retail trading — on every platform, in every beginner course. Which makes it the least likely thing to still contain an edge, and exactly the sort of claim nobody bothers to check.</p>
-          <div class="exp-meta">registered 2026-07-31 · day-matched control</div>
-        </a>
-        <a class="panel exp-card" href="experiment-04.html">
-          <div class="exp-no">EXPERIMENT 04 <span class="exp-pill v-run">RUNNING</span></div>
-          <h3>The turn-of-month effect</h3>
-          <p>A 40-year-old calendar claim, still sold in seasonality newsletters: returns cluster in the last few and first few trading days of the month. The strongest survivor of our 25-test calendar sweep — in which, corrected honestly, nothing survived. So it gets the real test: forward, window frozen in advance.</p>
-          <div class="exp-meta">registered 2026-08-06 · QQQ · first verdict ~2027-09</div>
-        </a>
-        <a class="panel exp-card" href="experiment-05.html">
-          <div class="exp-no">EXPERIMENT 05 <span class="exp-pill v-run">RUNNING</span></div>
-          <h3>Overnight vs intraday</h3>
-          <p>Over 27 years, essentially all of QQQ's return arrived between the close and the next open. Firms sold this as "night effect" ETFs — and the ETFs died. Registered forward as an attribution claim, explicitly not a tradeable edge, with each day's intraday leg as its own control.</p>
-          <div class="exp-meta">registered 2026-08-06 · attribution only · first read ~2027-01</div>
-        </a>
-      </div>
-    </div>
-
     <!-- ===== FIELD NOTES ===== -->
     <div style="margin-top:34px">
       <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
@@ -600,7 +592,7 @@
         <a href="field-notes.html" style="margin-left:auto;font-size:13.5px;color:var(--blue);text-decoration:none">All field notes &rarr;</a>
       </div>
       <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch">Both of these are our own errors. We publish them because a record that has never issued a correction isn't a careful record — it's an unaudited one.</p>
-      <div class="grid exp-cards" style="grid-template-columns:repeat(2,1fr)">
+      <div class="grid exp-cards two-up">
         <a class="panel exp-card" href="late-cohorts.html" style="border-color:#5a2a33;background:linear-gradient(180deg,#2a1218 0%,var(--panel) 60%)">
           <div class="exp-no">FIELD NOTE <span class="exp-pill v-fail">CORRECTION</span></div>
           <h3>We logged 128 picks after the opening bell</h3>
@@ -616,9 +608,17 @@
       </div>
     </div>
 
-    <!-- ===== HOW AN EXPERIMENT WORKS ===== -->
+    <p class="trust-strip">
+      We never execute trades, hold your money, or touch your brokerage &mdash; ThePickLog is the scoreboard, not the casino.
+      <a href="trust.html">How your data's handled &rarr;</a>
+      <a href="guide.html">The 7 checks any service should pass &rarr;</a>
+    </p>
+
+    <details class="mcol" open>
+      <summary><span class="mcol-t">How an experiment works here</span><span class="mcol-sub">five rules</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body"><!-- ===== HOW AN EXPERIMENT WORKS ===== -->
     <div class="panel" style="margin-top:26px">
-      <h2 style="margin-top:0">How an experiment works here</h2>
+      
       <p class="muted" style="font-size:14px;margin-bottom:14px">Five rules. They are the whole method, and they are what makes a verdict here mean something.</p>
       <div class="readrow">
         <div class="ri"><b>1 &middot; The claim gets written down first.</b> Rule, universe, entry, exit, cost assumption and the exact bar it has to clear — all frozen with a date, in a public file, before any of the data it will be judged on exists.</div>
@@ -630,9 +630,14 @@
       <p class="muted" style="font-size:13px;margin:14px 0 0">Every frozen rule is in <a href="HYPOTHESES.md" style="color:var(--a)">HYPOTHESES.md</a>; every verdict is recorded in the <a href="AUDIT_LOG.md" style="color:var(--a)">audit log</a>; the raw data is in <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a>. Nothing here has to be taken on faith.</p>
     </div>
 
-    <!-- ===== THE SCREENER, HONESTLY FRAMED ===== -->
+    </div>
+    </details>
+
+    <details class="mcol" open>
+      <summary><span class="mcol-t">Where this started: the screener</span><span class="mcol-sub">the origin</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body"><!-- ===== THE SCREENER, HONESTLY FRAMED ===== -->
     <div class="panel" style="margin-top:26px">
-      <h2 style="margin-top:0">Where this started: the screener</h2>
+      
       <p style="font-size:14px">Before it was a testing lab, this was a scanner. Every weekday morning a cloud job screens the market's tiniest stocks — <b>"low-float"</b> names with very few shares available to trade, which can spike 20% or 100% in a day and collapse just as fast — and ranks the ones showing early signs of ignition on a simple published score.</p>
       <p style="font-size:14px">That screen is <b>Experiment 01</b>, and it failed. We still run it, log it and grade it in public, for two reasons: the log is the raw material every rule here is tested against, and a scanner you can watch fail in real time is a more honest demonstration of the method than any description of it. <b>The screen is what we point the honesty machine at. The honesty machine is the product.</b></p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
@@ -642,27 +647,37 @@
       </div>
     </div>
 
-    <div class="panel" id="dashQualityPanel" style="margin-top:26px">
-      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <h2 style="margin:0">Quality check on today's top movers</h2>
-        <span class="pill" style="margin-left:auto">Quality Lens</span>
+    </div>
+    </details>
+
+    <div class="panel compete-band" style="margin-top:26px">
+      <div class="cb-in">
+        <div class="cb-copy">
+          <div class="cb-eyebrow">FREE &middot; PLAY MONEY &middot; NO CARD</div>
+          <h2>Trade the screen yourself, with $100,000 of nobody's money</h2>
+          <p class="muted">Every name we log, live prices, a public leaderboard, and your own graded record next to ours. It costs nothing and it never touches a brokerage &mdash; the point is to find out what your instincts are actually worth before they cost you anything.</p>
+        </div>
+        <div class="cb-act">
+          <button class="btn" onclick="go('compete');window.IS_SIM&amp;&amp;IS_SIM.openAuth()">Start competing &rarr;</button>
+          <button class="btn ghost" onclick="go('compete')">See the leaderboard &rarr;</button>
+        </div>
       </div>
-      <p class="muted" style="font-size:13px;margin:6px 0 14px">The highest-momentum names, screened for business
-        quality — so you can see at a glance which movers are real businesses and which are likely to rug you.
-        Click any row for the full scorecard.</p>
-      <p class="dim" style="font-size:11.5px;margin:-8px 0 12px">Fundamentals sourced from <a href="trust.html" style="color:var(--muted);text-decoration:underline">SEC EDGAR</a> (public filings); live price/market-cap is Yahoo-derived and may be delayed. Not affiliated with the SEC.</p>
-      <div id="dashQuality"><div class="dim" style="font-size:13px;padding:6px 2px">Scoring today's top movers…</div></div>
     </div>
 
-    <!-- ===== WHAT THIS COSTS ===== -->
+    <details class="mcol" open>
+      <summary><span class="mcol-t">What this costs, and what we won't sell</span><span class="mcol-sub">and what we refuse to sell</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body"><!-- ===== WHAT THIS COSTS ===== -->
     <div class="panel" style="margin-top:26px">
-      <h2 style="margin-top:0">What this costs, and what we won't sell</h2>
+      
       <div class="readrow">
         <div class="ri"><b>Every verdict is free, permanently.</b> Each experiment, each write-up, the full pick log, the validation dashboard and the raw CSVs. Publishing a verdict only some people can read defeats the point of publishing it.</div>
         <div class="ri"><b>We will never sell you a signal.</b> No picks, no alerts, no "our system says buy." We tested our own signal in public and it lost — selling it anyway is the exact behaviour this project exists to check.</div>
         <div class="ri"><b>What we'd charge for is the machinery, not the answers.</b> Choosing what gets tested next, the working notes behind each experiment, and eventually running your own frozen rule through the same harness. <b>Never earlier access to a verdict</b> — those land free and public on the same day for everyone. Priced so it can't pretend to be a trading edge.</div>
       </div>
     </div>
+
+    </div>
+    </details>
 
     <div class="grid price-cards">
       <div class="panel price-card feat">
@@ -746,6 +761,19 @@
       exactly why it screened. <span class="dim" id="asof"></span></p>
 
     <div class="grid stat-row" id="wlStats" style="margin:18px 0"></div>
+
+    <div class="panel" id="dashQualityPanel" style="margin-top:26px">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">Quality check on today's top movers</h2>
+        <span class="pill" style="margin-left:auto">Quality Lens</span>
+      </div>
+      <p class="muted" style="font-size:13px;margin:6px 0 14px">The highest-momentum names, screened for business
+        quality — so you can see at a glance which movers are real businesses and which are likely to rug you.
+        Click any row for the full scorecard.</p>
+      <p class="dim" style="font-size:11.5px;margin:-8px 0 12px">Fundamentals sourced from <a href="trust.html" style="color:var(--muted);text-decoration:underline">SEC EDGAR</a> (public filings); live price/market-cap is Yahoo-derived and may be delayed. Not affiliated with the SEC.</p>
+      <div id="dashQuality"><div class="dim" style="font-size:13px;padding:6px 2px">Scoring today's top movers…</div></div>
+    </div>
+
 
     <div class="panel tscroll" style="padding:6px 6px 0">
       <table id="wlTable" class="sortable">
@@ -969,7 +997,71 @@
       .ar-mine-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line,#2a3240);font-size:13px}
       .ar-mine-row code{font-size:11.5px}
       @media(max-width:680px){.pt-how{grid-template-columns:1fr}.ar-grid{grid-template-columns:1fr}.ar-pred{grid-template-columns:1fr 1fr;}}
-    </style>
+    
+  /* ---- homepage restructure 2026-08-13 ---- */
+  .hero h1{text-wrap:balance;text-shadow:0 1px 0 #0006}
+  .hero .lead{max-width:60ch;font-size:16.5px}
+  .hero-strip{color:var(--green);font-weight:600;margin:0 auto 22px;max-width:76ch;font-size:14px;line-height:1.7}
+  .hero-cta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 auto;max-width:460px}
+  .hero-cta input{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:12px 13px;font:inherit;font-size:16px}
+  .hero-cta input:focus{outline:2px solid var(--a);outline-offset:1px;border-color:var(--a)}
+  .hero-cta .btn{white-space:nowrap;padding:12px 18px}
+  .hero-fine{font-size:12.5px;color:var(--dim);margin:10px auto 0;max-width:60ch}
+  .hero-fine a{color:var(--dim)}
+  .hero-fine a.hero-jump{color:var(--blue);text-decoration:none;font-weight:600}
+
+  .trust-strip{margin:22px 0 0;padding:11px 15px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);color:var(--muted);font-size:12.5px;line-height:1.7;text-align:center}
+  .trust-strip a{color:var(--blue);text-decoration:none;font-weight:600;margin-left:14px;white-space:nowrap}
+
+  .exp-meta b{color:var(--text);font-weight:700}
+  .exp-cards.two-up{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:900px){.exp-cards.two-up{grid-template-columns:1fr}}
+
+  .compete-band{border-color:#1f6f6b66;background:linear-gradient(180deg,#10201f 0%,var(--panel) 70%)}
+  .cb-in{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .cb-copy{flex:1;min-width:280px}
+  .cb-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--green)}
+  .compete-band h2{margin:6px 0 6px;font-size:19px}
+  .compete-band p{font-size:13.5px;margin:0;max-width:70ch}
+  .cb-act{display:flex;gap:10px;flex-wrap:wrap}
+  @media(max-width:720px){.cb-act{width:100%}.cb-act .btn{flex:1;min-width:140px}}
+
+  /* progressive disclosure — ships open, JS closes on phones */
+  details.mcol{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin-top:26px}
+  details.mcol>summary{list-style:none;cursor:default;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  details.mcol>summary::-webkit-details-marker{display:none}
+  .mcol-t{font-size:19px;font-weight:700;letter-spacing:-.01em}
+  .mcol-sub{color:var(--dim);font-size:13px}
+  .mcol-x{margin-left:auto;display:none;color:var(--blue);font-size:13px;font-weight:600}
+  .mcol-x::after{content:"Show"}
+  details.mcol[open] .mcol-x::after{content:"Hide"}
+  details.mcol>.mcol-body{margin-top:10px}
+  @media(max-width:760px){
+    details.mcol>summary{cursor:pointer}
+    .mcol-x{display:inline}
+    .hero{padding:18px 0 4px}
+    .hero .lead{font-size:15.5px;margin-bottom:18px}
+    .hero-strip{font-size:13px;text-align:left;margin-bottom:18px}
+    .hero-cta{max-width:none}
+    .hero-cta input,.hero-cta .btn{width:100%;flex:none}
+    .trust-strip{text-align:left}
+    .trust-strip a{display:block;margin-left:0;margin-top:6px}
+  }
+  @media(max-width:420px){.hero h1{font-size:24px}}
+
+  /* status banner: full text on desktop; clamped + tappable on phones, where it was
+     eating ~180px of an 844px first screen before the visitor reached the headline */
+  @media(max-width:760px){
+    #srcBanner{position:relative}
+    #srcBanner.clamped{max-height:42px;overflow:hidden;cursor:pointer}
+    #srcBanner.clamped::after{content:"more";position:absolute;left:0;right:0;bottom:0;height:20px;
+      text-align:right;color:var(--blue);font-weight:600;font-size:12.5px;line-height:20px;
+      background:linear-gradient(180deg,transparent,var(--bg) 70%)}
+  }
+</style>
     <div id="competeTest" style="display:none">
       <p class="lead"><b>Make a call the market can't let you take back.</b> Freeze a rule with today's timestamp
         and it gets graded <b>out-of-sample</b> against the same append-only pick log the whole site runs on. The app gives you no way to edit, delete, or backdate it &mdash; only calls logged <i>after</i> you register count. Beat the baseline
@@ -4222,6 +4314,37 @@ window.addEventListener("hashchange",goHash);
 
   sb.auth.getSession().then(({data})=>applySession(data.session));
   sb.auth.onAuthStateChange((_e,session)=>applySession(session));
+})();
+</script>
+
+<script>
+/* Mobile progressive disclosure: sections ship open (so no-JS and desktop see everything),
+   and are collapsed only on narrow viewports. Never collapses a section the user opened. */
+(function(){
+  var mq = window.matchMedia('(max-width:760px)');
+  function apply(){
+    document.querySelectorAll('details.mcol').forEach(function(d){
+      if (d.dataset.touched === '1') return;
+      d.open = !mq.matches;
+    });
+  }
+  document.querySelectorAll('details.mcol').forEach(function(d){
+    d.addEventListener('toggle', function(){ d.dataset.touched = '1'; });
+  });
+  apply();
+  (mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply));
+
+  /* Status banner: clamp to two lines on phones, tap to expand. Nothing is removed —
+     the full text is still in the DOM and fully shown on desktop and to screen readers. */
+  var b = document.getElementById('srcBanner');
+  if (b) {
+    var clamp = function(){ if (mq.matches && b.dataset.open !== '1') b.classList.add('clamped');
+                            else b.classList.remove('clamped'); };
+    b.addEventListener('click', function(){ b.dataset.open = '1'; b.classList.remove('clamped'); });
+    clamp();
+    (mq.addEventListener ? mq.addEventListener('change', clamp) : mq.addListener(clamp));
+    new MutationObserver(clamp).observe(b, {childList:true, subtree:true});
+  }
 })();
 </script>
 </body>
