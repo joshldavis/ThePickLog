@@ -1,0 +1,2 @@
+signal_id,experiment,captured_at,signal_date,ticker,rank_in_day,meta
+EXP06-SUPERTREND-2026-08-12-WMT,EXP06-SUPERTREND,2026-08-13T11:37:41+00:00,2026-08-12,WMT,1,close=116.01;dist_pct=7.5796;st_line=107.2169
