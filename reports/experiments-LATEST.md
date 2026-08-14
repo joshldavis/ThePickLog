@@ -7,11 +7,11 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP03-MACD — The MACD bullish crossover
 
 - status: **registered**, registered 2026-07-31, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **5** (need 30) over **5** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.355%**, median **-0.490%**, 10% trimmed **-0.355%**, clustered 95% CI n/a
-- day-matched excess, 5 sessions: mean **-0.667%**, median **-0.719%**
-- win rate 40% *(reported only — not a pass criterion)*
-- **read: accruing — 5/30 graded signals over 5/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- graded signals: **6** (need 30) over **6** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.841%**, median **-0.844%**, 10% trimmed **-0.841%**, clustered 95% CI n/a
+- day-matched excess, 5 sessions: mean **-0.924%**, median **-1.467%**
+- win rate 33% *(reported only — not a pass criterion)*
+- **read: accruing — 6/30 graded signals over 6/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
 
 > Registered prior: The most widely taught indicator signal in retail trading — on every platform, in every beginner course. Published, universally known, and therefore the least likely thing in the world to still contain an edge. Registered expectation: the day-matched excess is indistinguishable from zero. Estimated probability it clears the bar: ~1 in 6. Being widely believed is not evidence, which is the point of testing it.
 
