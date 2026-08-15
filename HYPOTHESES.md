@@ -1084,12 +1084,26 @@ forecaster, the same defect the 2026-08-09 grading-gap fix closed in `cmd_grade`
 exclusion is counted and classified, and the realised outcome of the excluded set (which
 survives in `paths.csv` regardless) is compared against the included set on every run.
 
-**Measured at registration, before any model was run:** 681 complete 6-session paths /
-144 tickers; **579 scoreable**; exclusions = 74 missing session dates, **27 restated (split
-detector fired)**, 1 context too short. **The survivorship check fired: included names average
-−2.03% over 5 sessions against −10.38% for the excluded 102.** Any H-TSFM1 result is therefore
-measured on a survivor-biased subset that understates the fade by roughly 8 points, and every
-statement of the result must carry that sentence.
+**The evaluation set is PINNED to `trading_date <= 2026-08-05`.** `paths.csv` is append-only and
+grows every time the grader runs — it went from 681 to 731 picks within hours of this
+registration being written. An unpinned harness would score a different population on every
+invocation, and a later re-run on a larger set is a second look wearing a disguise. **Moving
+the pin is a new hypothesis with its own row, not a re-read of H-TSFM1.**
+
+**Measured at registration, before any model was run** (pinned set, reproducible):
+690 complete 6-session paths / 147 tickers; **579 scoreable**; exclusions = 74 missing session
+dates, **29 restated (the split detector firing)**, 7 non-consecutive sessions, 1 context too
+short. **The survivorship check fired: included names average −2.03% over 5 sessions against
+−9.43% for the excluded 111.** Any H-TSFM1 result is therefore measured on a survivor-biased
+subset that understates the fade by roughly 7 points, and every statement of the result must
+carry that sentence.
+
+*Honesty note on these counts.* An earlier draft of this section said 681 paths / 144 tickers
+and 27 restatements, from a snapshot taken hours before. The grader back-filled picks dated on
+or before the pin, so the totals moved. The **scored set is identical either way — 579 cases,
+`naive_rw` mean pinball 0.052670 to six figures** — because every back-filled pick landed in the
+exclusions. The counts are restated here rather than quietly overwritten, on the same principle
+as the 2026-08-04 late-cohort correction: the record moves, and the movement is disclosed.
 
 **The evaluator was tested before it was trusted** — the calendar_eval lesson, applied on the
 day of registration rather than the day after. Running the decision rule 200× on synthetic data

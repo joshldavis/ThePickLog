@@ -119,6 +119,12 @@ PRE_DECLARED = {
     "context_max_bars": 512,
     "context_min_bars": 60,
     "split_tol": 0.01,
+    # The evaluation set is PINNED to the snapshot that existed at registration.
+    # paths.csv grows every time the grader runs, so an unpinned harness would
+    # score a different population on every invocation -- and a later re-run on a
+    # larger set is a second look wearing a disguise. Moving this date is a NEW
+    # hypothesis with its own row, not a re-read of H-TSFM1.
+    "eval_through_trading_date": "2026-08-05",
     "notes": (
         "Secondary metrics are REPORT-ONLY and are declared here so they cannot be "
         "promoted to the pass bar after the fact. A pass on a secondary metric with "
@@ -155,8 +161,10 @@ def read_paths():
                 }
             except (ValueError, KeyError):
                 pass
-    # keep only complete 6-session paths
-    return {k: v for k, v in picks.items() if len(v["bars"]) == 6}
+    # keep only complete 6-session paths, pinned to the registered snapshot
+    through = PRE_DECLARED["eval_through_trading_date"]
+    return {k: v for k, v in picks.items()
+            if len(v["bars"]) == 6 and v["trading_date"] <= through}
 
 
 def fetch_bars(tickers, start, end, use_cache=True):
@@ -372,7 +380,9 @@ def main():
 
     picks = read_paths()
     print(f"paths.csv: {len(picks)} complete 6-session paths, "
-          f"{len({p['ticker'] for p in picks.values()})} distinct tickers")
+          f"{len({p['ticker'] for p in picks.values()})} distinct tickers "
+          f"(PINNED to trading_date <= {PRE_DECLARED['eval_through_trading_date']}; "
+          f"paths.csv keeps growing, the registered set does not)")
 
     dates = sorted(p["trading_date"] for p in picks.values())
     start = (datetime.strptime(dates[0], "%Y-%m-%d")
