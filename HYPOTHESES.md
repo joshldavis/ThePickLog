@@ -1019,3 +1019,104 @@ evaluation date before looking.
 
 **Unchanged:** every registered rule, universe, entry condition, exit, cost assumption and
 registration date. No stored signal or outcome row was altered by this amendment.
+
+---
+
+## Registration batch #11 — H-TSFM1 (foundation-model exit-path forecast), frozen 2026-08-13
+
+**This is not an experiment and gets no EXP number.** Every EXP row in the harness asks
+"does this rule make money" — it has an entry, an exit, a cost model and a P&L. H-TSFM1 asks
+whether the *path* is forecastable at all. There is no rule, nothing is traded, and nothing
+reaches the site. Filing it as EXP10 would be a category error and would also collide with the
+gap experiment already earmarked for that slot. **EXP10 (gap) and EXP11 (squeeze) remain free.**
+
+**Why it is worth running.** Selection is closed (Gate 1 FAIL). The exit family is closed
+(H-EX1 REFUTED — no rule beat the same-day close). The one durable, repeatedly-measured
+feature of the record is spike-then-fade: median MFE **+16.4%** against **−2.8%** at the close.
+The remaining question in that family is not "can we trade the fade" but "is the fade
+forecastable at all". If a 200M-parameter time-series foundation model cannot beat a random
+walk at it, that closes the question cheaply and permanently. **A null is the expected outcome
+and is the point** — this is a cheap way to lose, not a search for a win.
+
+| id | hypothesis | direction assumed | data |
+|---|---|---|---|
+| **H-TSFM1** | does zero-shot **TimesFM 2.5 (200M)** produce a better-calibrated 5-session forward path for a graded pick than a random walk with trailing-volatility quantiles? | **none.** The prior is that it does not: microcap returns are near-efficient and unlike the model's training distribution (Google Trends / Wikipedia pageviews). Stated so the null is not read as a surprise. | `paths.csv` (immutable, hash-chained) as validator; daily closes re-downloaded per ticker as the forecast input |
+
+**Decision point.** The position is already held and session 0 (entry day) has closed. Context
+is daily closes through the session-0 close; the target is `log(C_h / C_0)` for h = 1…5. No
+look-ahead is possible by construction — the context ends at a session that is fully realised
+before the forecast is scored.
+
+**Pre-declared, frozen before any result was computed:**
+
+- **Primary metric:** mean pinball loss over q ∈ {.1, .25, .5, .75, .9} and h ∈ 1…5.
+- **Baseline:** `naive_rw` — random walk, quantiles from trailing 60-day volatility scaled by
+  √h. *Not* "tomorrow = today": a point forecast has no dispersion and cannot be scored on
+  pinball loss, so beating it would be meaningless. `naive_flat` is retained as a
+  point-accuracy reference only.
+- **Pass bar — all three must hold:** (i) ≥ **5%** lower mean pinball loss than `naive_rw`;
+  (ii) a 95% bootstrap CI on the paired difference that excludes zero, **resampled by ticker,
+  not by row**; (iii) ≥ **20 distinct tickers**. (ii) and (iii) are the H-IND1 effective-N
+  lesson applied directly: 681 paths carry only **144 distinct tickers**, and BJDX alone
+  appears 36 times. Repeated bets on one name are not independent evidence.
+- **Report-only secondaries, declared here so they cannot be promoted after the fact:** point
+  accuracy vs `naive_flat`; MFE-timing hit rate implied by the q90 path. **A pass on a
+  secondary with a fail on the primary is a FAIL.**
+- **One configuration, one look.** Context 512 bars (min 60), TimesFM 2.5 zero-shot, quantiles
+  as above. Any other configuration — different context length, a fine-tune, a different
+  quantile set — is a **new hypothesis with its own row**, not a re-read of this one. The
+  verdict is written once to `experiments/H-TSFM1-verdict.json` and never recomputed.
+
+**The split-adjustment defence** (the trap from the field note — the one whose error *flips
+sign by universe*). `paths.csv` holds prices as of grade time; a vendor restates the whole
+history on every split. This harness therefore **never mixes the two sources**. Context and
+forward window come from a single call per ticker in a single adjustment basis, so they are
+self-consistent whatever has happened since; `paths.csv` is then used **only as a validator**,
+by comparing the fresh bars against the immutable stored bars on the six known session dates.
+Disagreement beyond 1% means the history was restated → the pick is excluded and counted.
+**`paths.csv` is the split detector, not a data source.** Scoring is in log-return space
+relative to C₀, which is invariant to a uniform rescaling of a self-consistent series.
+
+**Survivorship is measured, not assumed.** Microcaps halt and delist, and a name that cannot be
+downloaded today is not missing at random — it is disproportionately a name that died, which is
+exactly where the fade is most violent. Silently dropping those names would flatter any
+forecaster, the same defect the 2026-08-09 grading-gap fix closed in `cmd_grade`. Every
+exclusion is counted and classified, and the realised outcome of the excluded set (which
+survives in `paths.csv` regardless) is compared against the included set on every run.
+
+**Measured at registration, before any model was run:** 681 complete 6-session paths /
+144 tickers; **579 scoreable**; exclusions = 74 missing session dates, **27 restated (split
+detector fired)**, 1 context too short. **The survivorship check fired: included names average
+−2.03% over 5 sessions against −10.38% for the excluded 102.** Any H-TSFM1 result is therefore
+measured on a survivor-biased subset that understates the fade by roughly 8 points, and every
+statement of the result must carry that sentence.
+
+**The evaluator was tested before it was trusted** — the calendar_eval lesson, applied on the
+day of registration rather than the day after. Running the decision rule 200× on synthetic data
+carrying **this record's actual cluster structure** (144 tickers, 681 rows, BJDX 36×):
+
+| decision rule | false "TimesFM is better" rate under a true null |
+|---|---|
+| bootstrap clustered **by ticker** (registered) | **3.5%** |
+| bootstrap resampling **rows** (rejected) | **29.0%** |
+
+A row-resampling bootstrap would have called a coin-flip a win nearly a third of the time. This
+is the H-IND1 finding reappearing as a property of the *evaluator* rather than the data.
+
+**Power — and the limit on what a null here can claim.** Against the full pre-declared bar:
+
+| true improvement | pass bar fires |
+|---|---|
+| 5% | 30.5% |
+| 8% | 64.0% |
+| 12% | 93.5% |
+| 20% | 100% |
+
+So H-TSFM1 reliably detects a **≥12%** improvement and is underpowered at its own 5% threshold.
+**A FAIL therefore means "no large effect", not "no effect."** Any write-up that states the null
+must state that sentence with it; claiming H-TSFM1 rules out a modest real edge would be an
+overclaim of exactly the kind this project exists to catch.
+
+**Disclosure rule if anything is ever shown publicly:** a TimesFM output is a **model
+forecast**, not a track-record claim, and must be labelled as such. Nothing from H-TSFM1 goes
+near a receipt page, the leaderboard, or the track record.

@@ -19,3 +19,10 @@ hypotheses/user_rules.json
 
 # One-off patch scripts used to edit files in place; never part of the project.
 patch*.py
+
+# H-TSFM1 price cache. Re-downloadable, and restated by the vendor on every split.
+# Committing it would create a SECOND price source alongside paths.csv that a later
+# reader could mix with the sealed record — which is the split-adjustment trap itself.
+# paths.csv stays the only committed price history.
+tsfm_bars_cache.json
+experiments/H-TSFM1-verdict.json.tmp
