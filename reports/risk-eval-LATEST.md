@@ -1,6 +1,6 @@
-# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-08-14
+# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-08-17
 
-Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W33**.
+Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W34**.
 
 **H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant.
 
@@ -10,7 +10,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> range (MFE-MAE): rho=+0.154 CI[-0.103,+0.354] n=75 tickers=15 ns
 - score -> same-day return *(must stay ns)*: rho=-0.118 CI[-0.381,+0.169] n=75 tickers=15 ns
 - score -> 5-day return *(must stay ns)*: rho=-0.032 CI[-0.253,+0.248] n=75 tickers=15 ns
-- consecutive weekly snapshots with positive |MAE| rho: **1** (need >= 3)
+- consecutive weekly snapshots with positive |MAE| rho: **2** (need >= 3)
 
 **v0.2-yf verdict: not yet established**
 
@@ -20,7 +20,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> range (MFE-MAE): rho=+0.276 CI[+0.003,+0.529] n=59 tickers=56 SIG
 - score -> same-day return *(must stay ns)*: rho=+0.052 CI[-0.228,+0.342] n=59 tickers=56 ns
 - score -> 5-day return *(must stay ns)*: rho=-0.054 CI[-0.311,+0.221] n=59 tickers=56 ns
-- consecutive weekly snapshots with positive |MAE| rho: **1** (need >= 3)
+- consecutive weekly snapshots with positive |MAE| rho: **2** (need >= 3)
 
 **v0.3-yf verdict: not yet established**
 

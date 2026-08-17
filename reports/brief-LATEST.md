@@ -1,36 +1,42 @@
-# ThePickLog — Morning Brief · 2026-08-14
+# ThePickLog — Morning Brief · 2026-08-17
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **DFSC** (tier A, score 100.0) — very high relative volume (58×); thin float (2.0M); large up-gap (+105%). Watch level (reference only, +20%): $3.048.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **LNSR** (tier A, score 96.3) — very high relative volume (22×); large up-gap (+41%). Watch level (reference only, +20%): $10.656.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **GXAI** (tier A, score 95.5) — very high relative volume (20×); large up-gap (+23%). Watch level (reference only, +20%): $1.284.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **LEXX** (tier A, score 92.7) — elevated relative volume (7.9×); thin float (1.6M); large up-gap (+29%). Watch level (reference only, +20%): $9.456.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **PSQH** (tier A, score 92.3) — very high relative volume (39×); thin float (2.5M). Watch level (reference only, +20%): $4.891.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **YYAI** (tier A, score 100.0) — very high relative volume (30×); thin float (0.8M); large up-gap (+1668%). Watch level (reference only, +20%): $1.356.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **WETO** (tier A, score 100.0) — very high relative volume (48×); thin float (0.2M); large up-gap (+168%). Watch level (reference only, +20%): $11.628.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **SXTC** (tier A, score 100.0) — very high relative volume (21×); thin float (0.4M); large up-gap (+20%). Watch level (reference only, +20%): $4.752.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **DFSC** (tier A, score 100.0) — very high relative volume (12×); thin float (2.0M); large up-gap (+38%). Watch level (reference only, +20%): $3.8388.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **HHS** (tier A, score 99.8) — very high relative volume (57×); large up-gap (+51%). Watch level (reference only, +20%): $5.1.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
+- **YYAI**: already extended pre-market — chasing buys the top.
+- **YYAI**: ultra-thin float — spreads and slippage can be severe.
+- **WETO**: already extended pre-market — chasing buys the top.
+- **WETO**: ultra-thin float — spreads and slippage can be severe.
+- **SXTC**: already extended pre-market — chasing buys the top.
+- **SXTC**: ultra-thin float — spreads and slippage can be severe.
 - **DFSC**: already extended pre-market — chasing buys the top.
-- **LNSR**: already extended pre-market — chasing buys the top.
-- **GXAI**: already extended pre-market — chasing buys the top.
-- **LEXX**: already extended pre-market — chasing buys the top.
-- **PRHI**: already extended pre-market — chasing buys the top.
-- **INAB**: already extended pre-market — chasing buys the top.
-- **FFAI**: high short interest (46% of float) — squeeze-prone and violent both ways.
-- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
-- **SVRN**: ultra-thin float — spreads and slippage can be severe.
+- **HHS**: already extended pre-market — chasing buys the top.
+- **SST**: already extended pre-market — chasing buys the top.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **JAGX**: sub-$1 — heightened manipulation / delisting risk.
-- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
+- **TPCS**: already extended pre-market — chasing buys the top.
+- **JAGX**: ultra-thin float — spreads and slippage can be severe.
+- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
+- **SPAI**: already extended pre-market — chasing buys the top.
+- **VWAV**: already extended pre-market — chasing buys the top.
+- **RKDA**: sub-$1 — heightened manipulation / delisting risk.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **SVRN**: ultra-thin float — spreads and slippage can be severe.
 - **CUPR**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **BJDX**: ultra-thin float — spreads and slippage can be severe.
 - **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **SUGP**: ultra-thin float — spreads and slippage can be severe.
+- **BJDX**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **796** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 26%) vs **-13%** (rug 11%) for C/D.
