@@ -6,14 +6,14 @@
 <meta name="robots" content="noindex,nofollow">
 <title>ThePickLog — Disclaimer</title>
 <style>
-  :root{--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+  :root{--a-text:#31b3aa;--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
         --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
   .top{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
   .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
-  .logo:hover{color:var(--a)}
+  .logo:hover{color:var(--a-text)}
   .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
   nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
   nav.tabs::-webkit-scrollbar{display:none}
@@ -21,7 +21,7 @@
   nav.tabs a:hover{color:var(--tx);background:#ffffff08}
   .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
   .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
-  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  .menu-btn:hover{color:var(--a-text);border-color:var(--a)}
   #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
   #mobileMenu.open{display:block}
   #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
@@ -37,6 +37,17 @@
   a{color:var(--blue)}
   .foot{color:var(--dim);font-size:12px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
   .foot a{color:var(--dim)}
+
+  /* ===== a11y baseline — UI audit 2026-08-19 =====
+     3.1 a visible focus ring everywhere (there were 2 :focus rules on the whole site)
+     3.2 footer links to a 24px touch target (they were 14px)
+     3.7 skip-to-content, so keyboard users don't tab 12 nav links on every page */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
 </style>
 <meta property="og:image" content="https://thepicklog.com/og/card.png">
 <meta property="og:image:width" content="1200">
@@ -48,6 +59,7 @@
 <link rel="canonical" href="https://thepicklog.com/disclaimer.html">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <div class="top">
   <div class="top-in">
     <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
@@ -91,7 +103,7 @@ function toggleMenu(force){
 }
 </script>
 
-<div class="wrap">
+<div class="wrap" id="main" tabindex="-1">
   <h1>Disclaimer</h1>
   <p class="lead">Please read this before using ThePickLog.</p>
 

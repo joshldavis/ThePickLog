@@ -15,9 +15,9 @@
 <meta name="twitter:title" content="We test what's being sold to traders. Starting with our own strategy." />
 <meta name="twitter:description" content="Rule frozen before the fact, graded forward on public data, verdict published either way. Experiment 01 was our own screener. It lost, and we published it." />
 <style>
-  :root{
+  :root{--a-text:#31b3aa;
     --bg:#0a0e14; --panel:#121826; --panel-2:#0f1521; --line:#1f2937;
-    --text:#e6edf3; --muted:#8b97a7; --dim:#5b6675;
+    --text:#e6edf3; --muted:#8b97a7; --dim:#8b97a7;
     --a:#1f6f6b; --a-soft:#1f6f6b22; --green:#2ec27e; --green-soft:#2ec27e22;
     --red:#f0506e; --red-soft:#f0506e22; --amber:#f5b14c; --blue:#4c9ff5;
     --radius:14px; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -35,7 +35,7 @@
   .wrap.top-in{max-width:1280px}   /* header gets extra room so the menu fits on one line */
   .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;
     cursor:pointer;white-space:nowrap;flex-shrink:0}
-  .logo:hover{color:var(--a)}
+  .logo:hover{color:var(--a-text)}
   .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);
     display:grid;place-items:center;color:#1a0f0a;font-size:14px}
   nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
@@ -105,7 +105,7 @@
   @media(max-width:720px){.risk-grid{grid-template-columns:repeat(2,1fr)}}
   .tk-qtyrow{display:flex;gap:8px;align-items:center}
   .tk-qtyrow .tk-in{flex:1}
-  .tk-size{white-space:nowrap;background:var(--a-soft);color:var(--a);border:1px solid #1f6f6b55;
+  .tk-size{white-space:nowrap;background:var(--a-soft);color:var(--a-text);border:1px solid #1f6f6b55;
     border-radius:9px;padding:9px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
   .tk-size:hover{filter:brightness(1.1)}
   /* data-source banner */
@@ -146,7 +146,7 @@
      Deliberately NOT green=good — the live log shows hotter tiers draw down deeper (Finding A). */
   .tier.A{background:var(--a);color:#eafffb}
   .tier.B{background:#1f6f6b88;color:#eafffb}
-  .tier.C{background:var(--a-soft);color:var(--a)}
+  .tier.C{background:var(--a-soft);color:var(--a-text)}
   .tier.D{background:#ffffff10;color:var(--dim)}
   /* conviction chip — the verified read on a pick (see Method / Finding A). Never a buy signal. */
   .cvrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 0}
@@ -205,7 +205,7 @@
   .wl-form{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
   .wl-form input{flex:1 1 150px;min-width:0;background:var(--panel-2);border:1px solid var(--line);
     color:var(--text);border-radius:9px;padding:9px 10px;font:inherit;font-size:13.5px}
-  .wl-form input:focus{outline:none;border-color:var(--a)}
+  .wl-form input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
   .wl-form button{flex:0 0 auto;white-space:nowrap}
   .wl-msg{font-size:12.5px;margin:8px 0 0;min-height:1em}
   .wl-msg.ok{color:var(--green)}
@@ -231,7 +231,7 @@
   footer.foot{border-top:1px solid var(--line);padding:24px 0;color:var(--dim);font-size:12.5px}
   /* ===== Quality Lens (deep analysis) ===== */
   .tlink{cursor:pointer;border-bottom:1px dashed #ffffff33}
-  .tlink:hover{border-bottom-color:currentColor;color:var(--a)}
+  .tlink:hover{border-bottom-color:currentColor;color:var(--a-text)}
 
   /* ===== ticker info drawer ===== */
   #infoDrawer{position:fixed;top:0;right:0;height:100%;width:420px;max-width:92vw;z-index:70;
@@ -255,7 +255,7 @@
   .idr-links{display:flex;flex-wrap:wrap;gap:8px}
   .idr-links a{font-size:12.5px;color:var(--text);text-decoration:none;background:#ffffff0d;
     border:1px solid var(--line);border-radius:8px;padding:7px 11px;font-weight:600}
-  .idr-links a:hover{border-color:var(--a);color:var(--a)}
+  .idr-links a:hover{border-color:var(--a);color:var(--a-text)}
   .idr-links a::after{content:" ↗";color:var(--dim);font-weight:400}
   .idr-actions{display:flex;gap:9px;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--line)}
   .idr-actions .btn{flex:1;min-width:120px;text-align:center;font-size:13px;padding:9px 10px}
@@ -279,7 +279,7 @@
   .chat-chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 12px}
   .chat-chip{background:#ffffff0d;border:1px solid var(--line);color:var(--text);border-radius:999px;
     padding:7px 12px;font:inherit;font-size:12.5px;cursor:pointer}
-  .chat-chip:hover{border-color:var(--a);color:var(--a)}
+  .chat-chip:hover{border-color:var(--a);color:var(--a-text)}
   .chat-input{display:flex;gap:9px;padding:12px 14px;border-top:1px solid var(--line)}
   .chat-input textarea{flex:1;resize:none;background:var(--panel);border:1px solid var(--line);
     color:var(--text);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;max-height:120px}
@@ -354,7 +354,7 @@
   .readrow .ri{font-size:13.5px;line-height:1.62;padding:11px 0;border-bottom:1px solid #ffffff08;color:var(--muted)}
   .readrow .ri b{display:block;font-family:inherit;font-size:14px;font-weight:700;
     color:var(--text);letter-spacing:-.005em;margin:0 0 3px}
-  .gcat{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--a);margin:20px 0 9px;font-weight:700}
+  .gcat{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--a-text);margin:20px 0 9px;font-weight:700}
   .gloss{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:720px){.gloss{grid-template-columns:1fr}}
   .gterm{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
@@ -366,13 +366,13 @@
   .steps{counter-reset:st;list-style:none;padding:0;margin:0}
   .steps li{position:relative;padding:0 0 16px 42px;font-size:14px}
   .steps li:before{counter-increment:st;content:counter(st);position:absolute;left:0;top:-2px;
-    width:28px;height:28px;border-radius:50%;background:var(--a-soft);color:var(--a);font-weight:800;
+    width:28px;height:28px;border-radius:50%;background:var(--a-soft);color:var(--a-text);font-weight:800;
     display:grid;place-items:center;font-size:14px}
   .steps li b{color:var(--text)}
   .steps li:not(:last-child):after{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:2px;background:var(--line)}
   /* ===== info tooltips (metric explainers) ===== */
-  .info{font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:9px;line-height:0;
-    vertical-align:super;margin-left:1px;padding:5px 4px;color:var(--a);cursor:help;user-select:none}
+  .info{font-family:Georgia,serif;font-style:italic;font-weight:700;font-size:10.5px;line-height:0;
+    vertical-align:super;margin-left:1px;padding:7px 6px;color:var(--muted);cursor:help;user-select:none}
   .info:hover{color:var(--text)}
   th .info,.cat-row .info,.da-mos .info,.stat .info{text-transform:none;letter-spacing:normal}
   #infopop{position:fixed;z-index:90;max-width:300px;background:var(--panel);border:1px solid var(--line);
@@ -383,10 +383,10 @@
   /* ===== sortable tables ===== */
   table.sortable th{cursor:pointer}
   table.sortable th:hover{color:var(--text)}
-  .sortcaret{color:var(--a);font-size:10px;font-weight:700}
+  .sortcaret{color:var(--a-text);font-size:10px;font-weight:700}
   /* ---- multiplayer / compete layer ---- */
   #isAuthBar{display:flex;align-items:center;gap:8px;font-size:13px}
-  #isAuthBar .who{color:var(--a);font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #isAuthBar .who{color:var(--a-text);font-weight:600;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .is-modal-back{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999}
   .is-modal-back.show{display:flex}
   .is-modal{background:var(--panel,#12161d);border:1px solid var(--line,#222);border-radius:14px;padding:22px;width:360px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.5)}
@@ -405,7 +405,7 @@
   .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--text);
     border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;
     align-items:center;gap:7px;white-space:nowrap}
-  .menu-btn:hover{color:var(--a);border-color:var(--a)}
+  .menu-btn:hover{color:var(--a-text);border-color:var(--a)}
   #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;z-index:30;background:#0a0e14;
     backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;
     box-shadow:0 18px 40px #000a;max-height:calc(100vh - 60px);overflow-y:auto}
@@ -413,7 +413,7 @@
   #mobileMenu button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--text);
     font:inherit;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px;cursor:pointer}
   #mobileMenu button:hover{background:#ffffff08}
-  #mobileMenu button.active{color:var(--a);background:var(--a-soft)}
+  #mobileMenu button.active{color:var(--a-text);background:var(--a-soft)}
   #mobileMenu button .ext{color:var(--dim);font-weight:400;font-size:12px}
   .grid>*{min-width:0}           /* let grid items shrink below content min-width */
   .risk-grid>div{min-width:0}
@@ -458,6 +458,17 @@
     /* 16px inputs prevent iOS focus-zoom */
     .chat-input textarea,.tk-in,.config input,.is-modal input{font-size:16px}
   }
+
+  /* ===== a11y baseline — UI audit 2026-08-19 =====
+     3.1 a visible focus ring everywhere (there were 2 :focus rules on the whole site)
+     3.2 footer links to a 24px touch target (they were 14px)
+     3.7 skip-to-content, so keyboard users don't tab 12 nav links on every page */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
 </style>
 <!-- Supabase JS client (multiplayer demo layer) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -475,6 +486,7 @@
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 <header class="top">
   <div class="wrap top-in">
     <div class="logo" role="link" tabindex="0" title="ThePickLog home" onclick="go('landing')"
@@ -516,6 +528,7 @@
   </div>
   <div class="wrap"><div id="srcBanner"></div></div>
 </header>
+<a id="main" tabindex="-1"></a>
 
 <!-- ============ LANDING ============ -->
 <section class="view active" id="view-landing">
@@ -627,7 +640,7 @@
         <div class="ri"><b>4 &middot; The statistics are done properly.</b> Confidence intervals, a correction for the fact that repeated bets on the same names are not independent, and a count of how many results you'd expect to look good by chance alone.</div>
         <div class="ri"><b>5 &middot; The verdict is published either way.</b> A method we hoped would work and didn't is a more useful result than one more success story.</div>
       </div>
-      <p class="muted" style="font-size:13px;margin:14px 0 0">Every frozen rule is in <a href="HYPOTHESES.md" style="color:var(--a)">HYPOTHESES.md</a>; every verdict is recorded in the <a href="AUDIT_LOG.md" style="color:var(--a)">audit log</a>; the raw data is in <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a>. Nothing here has to be taken on faith.</p>
+      <p class="muted" style="font-size:13px;margin:14px 0 0">Every frozen rule is in <a href="HYPOTHESES.md" style="color:var(--a-text)">HYPOTHESES.md</a>; every verdict is recorded in the <a href="AUDIT_LOG.md" style="color:var(--a-text)">audit log</a>; the raw data is in <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a>. Nothing here has to be taken on faith.</p>
     </div>
 
     </div>
@@ -791,7 +804,7 @@
 
     <div class="panel" style="margin-top:18px">
       <h3 style="margin:0 0 6px;font-size:15px">Where these numbers come from</h3>
-      <p class="note" style="margin:0">Fundamentals are read from <a href="trust.html" style="color:var(--a)">SEC EDGAR</a> public filings. Live quotes come from a market-data vendor whose terms don't permit public redistribution, so today's screen shows clearly-labeled <b>sample prices</b> to visitors — the banner at the top of the page says so whenever that's the case. <b>The pick log, the track record and every experiment on this site are unaffected:</b> they have never used this feed, and they re-derive from <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a>. One known limit worth stating: <b>float</b> here is approximated from shares outstanding; true public float and short interest need a paid feed.</p>
+      <p class="note" style="margin:0">Fundamentals are read from <a href="trust.html" style="color:var(--a-text)">SEC EDGAR</a> public filings. Live quotes come from a market-data vendor whose terms don't permit public redistribution, so today's screen shows clearly-labeled <b>sample prices</b> to visitors — the banner at the top of the page says so whenever that's the case. <b>The pick log, the track record and every experiment on this site are unaffected:</b> they have never used this feed, and they re-derive from <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a>. One known limit worth stating: <b>float</b> here is approximated from shares outstanding; true public float and short interest need a paid feed.</p>
     </div>
 
     <div id="ownerPanels" hidden>
@@ -975,7 +988,7 @@
       .pt-mode.active{background:var(--a,#1f6f6b);color:#fff}
       .pt-mode-sub{font-size:11px;font-weight:400;opacity:.85;margin-top:1px}
       .pt-how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
-      .pt-step .n{color:var(--a,#1f6f6b);font-weight:700;font-size:12px;letter-spacing:.04em}
+      .pt-step .n{color:var(--a-text,#4c9ff5);font-weight:700;font-size:12px;letter-spacing:.04em}
       .pt-step p{margin:6px 0 0;font-size:13px;color:var(--muted,#8b98a8)}
       .pt-banner{background:#2a1d10;border:1px solid #5a3a22;border-radius:12px;padding:13px 16px;margin:16px 0;font-size:13.5px}
       .pt-banner b{color:#f5b14c}
@@ -1005,7 +1018,7 @@
   .hero-cta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 auto;max-width:460px}
   .hero-cta input{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
     border-radius:10px;padding:12px 13px;font:inherit;font-size:16px}
-  .hero-cta input:focus{outline:2px solid var(--a);outline-offset:1px;border-color:var(--a)}
+  .hero-cta input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
   .hero-cta .btn{white-space:nowrap;padding:12px 18px}
   .hero-fine{font-size:12.5px;color:var(--dim);margin:10px auto 0;max-width:60ch}
   .hero-fine a{color:var(--dim)}
@@ -1134,7 +1147,7 @@
         over the shared same-day-close baseline, on <i>post-registration picks only</i>;
         <span class="pt-flag">ns</span> means the 95% interval still spans zero &mdash; directional, not proven.
         Exit fills assumed exact at +10%; thin floats gap through, so live results run worse.
-        Each row's <b>verify ↗</b> re-derives that rule from the raw CSVs. <a href="method.html" style="color:var(--a,#5aa0ff)">Full scoring method →</a> · <a href="gate.html" style="color:var(--a,#5aa0ff)">Live Gate-1 status →</a>
+        Each row's <b>verify ↗</b> re-derives that rule from the raw CSVs. <a href="method.html" style="color:var(--a-text,#4c9ff5)">Full scoring method →</a> · <a href="gate.html" style="color:var(--a-text,#4c9ff5)">Live Gate-1 status →</a>
       </div>
       <div class="note pt-dim" id="ptProv" style="font-size:11.5px;border-top:1px solid var(--line,#2a3240);padding-top:12px;margin-top:14px"></div>
     </div>
@@ -1207,7 +1220,7 @@
           if(r.rule_spec){ try{ vurl='dashboard.html#verify='+encodeURIComponent(JSON.stringify(
             {id:r.id,title:r.title,author:r.author,rule_str:r.rule_str,kind:r.rule_spec.kind,
              exit:r.rule_spec.exit,registered_at:r.rule_spec.registered_at,op:r.rule_spec.op,predicates:r.rule_spec.predicates})); }catch(e){} }
-          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+authorHtml+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="/r/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px;font-weight:600">receipt ↗</a><br><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px">verify ↗</a></td></tr>';
+          h+='<tr><td class="num">'+(r.rank!=null?r.rank:'—')+'</td><td class="l">'+qchip+'<b>'+r.id+'</b> · '+r.title+'<div class="pt-rule">'+authorHtml+' · reg '+r.registered_at+' · <code>'+r.rule_str+'</code></div></td><td><span class="pt-chip '+r.state+'">'+r.state+'</span>'+stab+'</td><td class="num">'+r.n_post+'</td><td class="num">'+r.win_post+'%</td><td class="num '+cls(r.avg_post)+'">'+fp(r.avg_post)+'</td><td class="num"><span class="'+cls(r.delta_post)+'">'+(r.delta_post>0?'+':'')+r.delta_post+'pp</span><br><span class="pt-ci">'+ci+'</span> '+flag+'</td><td class="num">'+r.weeks_live+'w</td><td><a href="/r/'+encodeURIComponent(r.id)+'" target="_blank" rel="noopener" style="color:var(--a-text,#4c9ff5);font-size:12px;font-weight:600">receipt ↗</a><br><a href="'+vurl+'" target="_blank" rel="noopener" style="color:var(--a-text,#4c9ff5);font-size:12px">verify ↗</a></td></tr>';
         });
         document.getElementById('ptRows').innerHTML=h;
         document.getElementById('ptProv').innerHTML='Computed from the live append-only log on <b>'+d.generated_at+'</b> — the sealed <b>v0.2 cohort</b> these house rules are scored on: picks.csv (n='+d.log.picks+') × outcomes.csv (n='+d.log.graded+' graded) by hypo_eval.py, parity-locked to weekly_report.py §4c/§4d. This board covers the v0.2 cohort only, so its count is smaller than the all-cohort Track record. Anyone can re-run it from the public CSVs. Signed-in players can register their own hypotheses above — same evaluator, same math, graded out-of-sample alongside the house rules.';
@@ -1234,7 +1247,7 @@
         itself. A second, independent check reads the company's actual financial statements to ask whether
         there's a real business behind the ticker. Then the honesty machinery takes over: every pick is written
         to a permanent, append-only log <b>before the market opens</b> — enforced by a hard gate that refuses
-        to log anything after 09:20 ET, <a href="late-cohorts.html" style="color:var(--a)">added after we
+        to log anything after 09:20 ET, <a href="late-cohorts.html" style="color:var(--a-text)">added after we
         found seven sessions where it hadn't been</a> — and graded automatically at prices you could
         realistically get — including how badly it fell, not just how high it
         spiked. Any new rule must be registered with a date in advance and proves itself only on future picks.
@@ -1414,9 +1427,9 @@
     <p class="muted" style="font-size:13px;margin:.4em 0 0">In August 2026 we found that our scheduler had
       drifted past the opening bell on seven occasions and logged 128 picks late. Those picks are excluded
       from every number here and the rows were kept, not deleted.
-      <a href="late-cohorts.html" style="color:var(--a)">Read the correction &rarr;</a></p>
+      <a href="late-cohorts.html" style="color:var(--a-text)">Read the correction &rarr;</a></p>
     <p class="muted" style="font-size:13px;margin:.4em 0 0">Want the deeper cut? The
-      <a href="#validation" onclick="go('validation');return false;" style="color:var(--a)">model validation dashboard</a> tracks every
+      <a href="#validation" onclick="go('validation');return false;" style="color:var(--a-text)">model validation dashboard</a> tracks every
       pre-registered hypothesis (exit rules, filters, a Bayesian read-out) out-of-sample — recomputed
       live in your browser from the same raw CSVs, so nothing here has to be taken on faith.</p>
     <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
@@ -2249,10 +2262,10 @@ async function renderLandingKpis(){
   if(!tr.real){ const g=gradeAll(SAMPLE_PICKS);
     // The live pick log didn't load. Say so rather than let a worked sample sit
     // under a caption claiming these are our published results.
-    if(cap) cap.innerHTML=`<b class="neg">The live pick log couldn't be loaded just now, so these are worked <i>sample</i> numbers, not our record.</b> The real ones are on the <a href="#" onclick="go('performance');return false" style="color:var(--a)">Track record</a> tab and in <a href="picks.csv" download style="color:var(--a)">picks.csv</a>.`;
+    if(cap) cap.innerHTML=`<b class="neg">The live pick log couldn't be loaded just now, so these are worked <i>sample</i> numbers, not our record.</b> The real ones are on the <a href="#" onclick="go('performance');return false" style="color:var(--a-text)">Track record</a> tab and in <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a>.`;
     el.innerHTML=`${stat("Picks (sample)",g.total)}${stat("Blended win rate",g.winRate+"%")}${stat("Data","sample")}`; return; }
   if(cap) cap.innerHTML='These are not results we are advertising. They are the published outcome of Experiment 01, recomputed in your browser from the raw pick log every time this page loads.'
-    + (tr.lateCount ? ` <b class="neg">${tr.lateCount} picks are excluded</b> — our scanner logged them after the opening bell, so they were never a real forecast. <a href="late-cohorts.html" style="color:var(--a)">Why →</a>` : '');
+    + (tr.lateCount ? ` <b class="neg">${tr.lateCount} picks are excluded</b> — our scanner logged them after the opening bell, so they were never a real forecast. <a href="late-cohorts.html" style="color:var(--a-text)">Why →</a>` : '');
   const g=aggregateReal(tr.picks,tr.outcomes);
   // [Charter P4] Headline the honest distribution, never a lone win rate or a
   // cherry-picked best call: pair win rate with median net return AND the average
@@ -2318,8 +2331,8 @@ async function renderPerformance(){
   _await.forEach(p=>{ const t=(p.tier||"?").toUpperCase(); _awaitTier[t]=(_awaitTier[t]||0)+1; });
   const awaitNote = _await.length ? `<br><br><b>${_await.length} pick${_await.length>1?'s are':' is'} more than three sessions past the grading window with no outcome</b> (${Object.entries(_awaitTier).sort().map(([t,n])=>t+': '+n).join(', ')}) — almost always a halt or a delisting our price source can no longer quote. We count them here rather than letting them disappear: names that become unpriceable skew toward the hottest tier, so quietly dropping them would flatter it. Each gets an explicit <code>UNGRADEABLE</code> row once the grader stops retrying, and none of them are in the averages above either way.` : "";
 
-  const lateNote = tr.lateCount ? `<br><br><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a)">What happened, and what it did to the numbers →</a>` : "";
-  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a)">outcomes.csv</a> — every number on this page re-derives from them.${lateNote}${awaitNote}`;
+  const lateNote = tr.lateCount ? `<br><br><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a-text)">What happened, and what it did to the numbers →</a>` : "";
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.${lateNote}${awaitNote}`;
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}
@@ -2406,7 +2419,7 @@ async function renderPerformance(){
       <td class="num">${isFinite(sc)?sc.toFixed(1):'—'}</td>
       <td class="num">$${isFinite(px)?px.toFixed(2):'—'}</td>
       <td class="num">$${isFinite(watch)?watch.toFixed(2):'—'}</td>
-      ${gainCell}${dipCell}<td>${resCell} <a href="/r/p-${encodeURIComponent(p.pick_id)}" target="_blank" rel="noopener" title="Shareable receipt" style="color:var(--a);font-size:11px;white-space:nowrap;text-decoration:none">↗</a></td></tr>`;
+      ${gainCell}${dipCell}<td>${resCell} <a href="/r/p-${encodeURIComponent(p.pick_id)}" target="_blank" rel="noopener" title="Shareable receipt" style="color:var(--a-text);font-size:11px;white-space:nowrap;text-decoration:none">↗</a></td></tr>`;
   };
   const _pfState = { f:"graded", tier:"" };
   const _pfMatch = u => {
@@ -3557,7 +3570,7 @@ function renderDeep(res){
       ? `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${cik}&type=10-K&dateb=&owner=include&count=40`
       : `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&ticker=${encodeURIComponent(f.symbol)}&type=10-K`;
     const xbrl=cik?`https://data.sec.gov/api/xbrl/companyfacts/CIK${cik}.json`:null;
-    const L='style="color:var(--a)" target="_blank" rel="noopener"';
+    const L='style="color:var(--a-text)" target="_blank" rel="noopener"';
     srcLine=`Fundamentals: live from <b>SEC EDGAR</b> filings${per?` (${per})`:""} — the exact figures behind every category score, drawn from this company's own annual reports. `
       +`Verify at the source: <a href="${co}" ${L}>SEC&nbsp;10-K&nbsp;filings&nbsp;↗</a>`
       +(xbrl?` · <a href="${xbrl}" ${L}>raw&nbsp;XBRL&nbsp;data&nbsp;↗</a>`:"")
@@ -3802,7 +3815,7 @@ function chatFocus(sym){ CHAT_FOCUS=sym; updateChatCtx(); }
 function updateChatCtx(){
   const el=document.getElementById("chatCtx"); if(!el) return;
   el.innerHTML = CHAT_FOCUS
-    ? `Context: focused on <b>${escHtml(CHAT_FOCUS)}</b> · <a href="#" onclick="CHAT_FOCUS=null;updateChatCtx();return false" style="color:var(--a)">clear</a>`
+    ? `Context: focused on <b>${escHtml(CHAT_FOCUS)}</b> · <a href="#" onclick="CHAT_FOCUS=null;updateChatCtx();return false" style="color:var(--a-text)">clear</a>`
     : "";
 }
 
@@ -4274,7 +4287,7 @@ window.addEventListener("hashchange",goHash);
         const retired=r.status==="retired";
         const rid='U-'+String(r.id).slice(0,8);
         const rcpt=onBoard.has(rid.toUpperCase())
-          ? '<a href="/r/'+encodeURIComponent(rid)+'" target="_blank" rel="noopener" style="color:var(--a,#5aa0ff);font-size:12px;font-weight:600;white-space:nowrap">Get your receipt ↗</a>'
+          ? '<a href="/r/'+encodeURIComponent(rid)+'" target="_blank" rel="noopener" style="color:var(--a-text,#4c9ff5);font-size:12px;font-weight:600;white-space:nowrap">Get your receipt ↗</a>'
           : '<span class="pt-ci" title="Your receipt goes live once the rule reaches the public board — usually within a day.">receipt pending</span>';
         return '<div class="ar-mine-row"><div><b>'+escapeHtml(r.title)+'</b> '+
           (retired?'<span class="pt-flag">retired</span>':'<span class="pt-chip ranked" style="opacity:.85">active</span>')+
