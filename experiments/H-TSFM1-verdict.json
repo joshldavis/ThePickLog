@@ -1,0 +1,52 @@
+{
+  "pre_declared": {
+    "hypothesis_id": "H-TSFM1",
+    "registered_utc": null,
+    "question": "Does a zero-shot time-series foundation model produce a better-calibrated 5-session forward path for a graded pick than a random walk with trailing-volatility quantiles?",
+    "primary_metric": "mean pinball loss over q in {0.1,0.25,0.5,0.75,0.9}, h in 1..5",
+    "baseline": "naive_rw",
+    "pass_bar": {
+      "relative_improvement_min": 0.05,
+      "clustered_ci_excludes_zero": true,
+      "distinct_ticker_floor": 20
+    },
+    "secondary_report_only": [
+      "point accuracy (MAE of median log-return) vs naive_flat",
+      "MFE-timing hit rate implied by the q90 path"
+    ],
+    "quantiles": [
+      0.1,
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "horizons": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "context_max_bars": 512,
+    "context_min_bars": 60,
+    "split_tol": 0.01,
+    "eval_through_trading_date": "2026-08-05",
+    "notes": "Secondary metrics are REPORT-ONLY and are declared here so they cannot be promoted to the pass bar after the fact. A pass on a secondary metric with a fail on the primary is a FAIL."
+  },
+  "computed_utc": "2026-08-19T15:59:17.687594+00:00",
+  "n_paired": 579,
+  "relative_improvement": 0.09664528020897183,
+  "clustered_ci": {
+    "lo": 0.00021981195849430824,
+    "hi": 0.009932831372748932,
+    "n_tickers": 133
+  },
+  "verdict": "PASS",
+  "exclusions": {
+    "restated_split": 29,
+    "session_date_missing": 74,
+    "context_too_short": 1,
+    "nonconsecutive_sessions": 7
+  }
+}

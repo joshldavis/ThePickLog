@@ -1134,3 +1134,66 @@ overclaim of exactly the kind this project exists to catch.
 **Disclosure rule if anything is ever shown publicly:** a TimesFM output is a **model
 forecast**, not a track-record claim, and must be labelled as such. Nothing from H-TSFM1 goes
 near a receipt page, the leaderboard, or the track record.
+
+---
+
+### H-TSFM1 RESULT — run 2026-08-19, verdict sealed, one look taken
+
+**The pre-declared bar was cleared.** Against the registered configuration and the pinned set:
+
+| backend | mean pinball | mean MAE (median forecast) |
+|---|---|---|
+| `naive_flat` | 0.061618 | 0.123237 |
+| **`naive_rw`** (registered baseline) | **0.052670** | 0.123237 |
+| **`timesfm`** | **0.047580** | 0.121215 |
+
+Relative improvement **+9.66%** against a **≥5%** bar; clustered 95% CI **[+0.00033, +0.00969]**
+excluding zero; **133 distinct tickers** against a floor of 20; n = 579 paired. Sealed to
+`experiments/H-TSFM1-verdict.json` and not recomputed.
+
+**What the pass is NOT.** This is a calibration result, not a directional one, and the
+decomposition is not ambiguous:
+
+- Pinball loss improved **+9.66%**. Point accuracy of the median forecast improved **+1.64%**.
+  The pinball gain is **5.9× the median gain**.
+- The internal control settles it. `naive_flat` and `naive_rw` have **identical medians and
+  identical MAE to six figures** — they differ only in dispersion — and their pinball loss
+  differs by **14.5%**. On this data pinball loss is dominated by the width and shape of the
+  bands, not by where the middle of the forecast sits.
+- TimesFM's median is barely distinguishable from "no change from the session-0 close." **The
+  model cannot tell you which way the fade goes.** What it does better than a constant-σ
+  Gaussian random walk is say *how far* the name is likely to travel — and post-spike
+  volatility decaying in a predictable way is a known property of volatility, not an edge.
+
+**This is H-RISK1/H-RISK2 arriving a second time by a different road:** the record carries
+information about **magnitude, not direction**. That finding is binding here in exactly the same
+way. H-TSFM1 **does not** reopen Gate 1, **does not** imply anything is tradeable, **does not**
+disturb H-EX1 (REFUTED — no exit rule beat the same-day close), and is **not** alpha. A
+better-calibrated volatility band on an instrument with no forecastable direction has no
+monetisable use here.
+
+**Four caveats that travel with the number, and must travel with it anywhere it is repeated:**
+
+1. **Survivor-biased subset.** 111 of 690 pinned picks are unscoreable; the excluded names
+   average **−9.43%** over five sessions against **−2.03%** for the included. The result is
+   measured on the names that survived to be downloadable.
+2. **The CI lower bound is not stable.** The sealed run gave `lo = +0.00022`; an independent
+   re-run of the same configuration gave `lo = +0.00033`. TimesFM inference is not
+   bit-deterministic. The point estimate reproduces to two decimals; the bound nearest zero
+   moves by ~50% of itself between runs. **The pass is real but it is not comfortable.**
+3. **Possible training contamination, unverified.** The picks are dated June–August 2026. The
+   training cutoff of TimesFM 2.5 has **not** been established here, so leakage of 2026 equity
+   history into the model cannot presently be ruled out. Until someone checks the model card
+   this stays an open hole in the claim, not a footnote.
+4. **Underpowered at its own threshold**, as registered: the bar fires 30.5% of the time at a
+   true 5% effect. The observed +9.66% sits in a region where the test has roughly 64–93%
+   power, so the estimate should be treated as noisy in magnitude even though the sign is clear.
+
+**What this closes.** The remaining open question in the exit family was whether the fade path
+is forecastable at all. The answer is: **its width is, its direction is not.** That is the same
+answer the risk work gave, and the exit family can now be treated as closed on both counts.
+
+**No follow-on configuration is authorised under this row.** A fine-tune, a longer context, or a
+different quantile set is a new hypothesis with its own registration — and given the result
+above, the burden on any such proposal is to explain what a better volatility band would be
+*used for* before it is run.
