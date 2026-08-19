@@ -48,7 +48,7 @@
   .top-cta .btn{white-space:nowrap}
   .badge-proto{font-size:11px;color:var(--amber);border:1px solid #f5b14c44;
     padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap}
-  .btn{background:var(--a);color:#1a0f0a;border:0;font:inherit;font-weight:700;font-size:14px;
+  .btn{background:var(--a);color:#fff;border:0;font:inherit;font-weight:700;font-size:14px;
     padding:9px 16px;border-radius:10px;cursor:pointer}
   .btn.ghost{background:#ffffff0d;color:var(--text);border:1px solid var(--line)}
   .btn:hover{filter:brightness(1.05)}
@@ -263,7 +263,7 @@
   .idr-news li{margin:0 0 7px;font-size:13px;line-height:1.35}
 
   /* ===== assistant chat ===== */
-  #chatFab{position:fixed;right:20px;bottom:20px;z-index:55;background:var(--a);color:#1a0f0a;
+  #chatFab{position:fixed;right:20px;bottom:20px;z-index:55;background:var(--a);color:#fff;
     border:0;border-radius:999px;padding:12px 18px;font:inherit;font-weight:800;font-size:14px;
     cursor:pointer;box-shadow:0 10px 30px #000a;display:flex;align-items:center;gap:8px}
   #chatFab:hover{filter:brightness(1.06)}
@@ -923,18 +923,18 @@
   <div class="wrap">
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <h1 style="margin:.2em 0">Compete <span class="is-pill">SIM</span></h1>
-      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+      <div id="competeTradeCtl" style="margin-left:auto;display:none;gap:8px;flex-wrap:wrap">
         <button class="btn ghost" onclick="go('portfolio')">My portfolio &rarr;</button>
         <button class="btn ghost" onclick="IS_SIM&&IS_SIM.refreshLeaderboard()">↻ Refresh</button>
       </div>
     </div>
 
     <div class="pt-modes" role="tablist" aria-label="Compete mode">
-      <button id="modeTradeBtn" class="pt-mode active" role="tab" onclick="setCompeteMode('trade')">Trade<span class="pt-mode-sub">play-money sim</span></button>
-      <button id="modeTestBtn" class="pt-mode" role="tab" onclick="setCompeteMode('test')">Test<span class="pt-mode-sub">beat the baseline</span></button>
+      <button id="modeTradeBtn" class="pt-mode" role="tab" aria-selected="false" onclick="setCompeteMode('trade')">Trade<span class="pt-mode-sub">play-money sim</span></button>
+      <button id="modeTestBtn" class="pt-mode active" role="tab" aria-selected="true" onclick="setCompeteMode('test')">Test<span class="pt-mode-sub">beat the baseline</span></button>
     </div>
 
-    <div id="competeTrade">
+    <div id="competeTrade" style="display:none">
     <p class="lead">Each player starts with <b>$100,000</b> in simulated cash. Buy and sell the screened
       names from the Watchlist tab at live prices — your portfolio and everyone else's are ranked below by total return.</p>
 
@@ -1062,7 +1062,7 @@
       background:linear-gradient(180deg,transparent,var(--bg) 70%)}
   }
 </style>
-    <div id="competeTest" style="display:none">
+    <div id="competeTest">
       <p class="lead"><b>Make a call the market can't let you take back.</b> Freeze a rule with today's timestamp
         and it gets graded <b>out-of-sample</b> against the same append-only pick log the whole site runs on. The app gives you no way to edit, delete, or backdate it &mdash; only calls logged <i>after</i> you register count. Beat the baseline
         and you climb. Whiff and everyone sees that too. That's the point.</p>
@@ -1155,20 +1155,44 @@
       var loaded=false;
       window.setCompeteMode=function(m){
         var test=(m==='test');
-        var tr=document.getElementById('competeTrade'),te=document.getElementById('competeTest'),rb=document.getElementById('competeRefreshBtn');
+        var tr=document.getElementById('competeTrade'),te=document.getElementById('competeTest'),ct=document.getElementById('competeTradeCtl');
         if(tr)tr.style.display=test?'none':'';
         if(te)te.style.display=test?'':'none';
-        if(rb)rb.style.display=test?'none':'';
-        document.getElementById('modeTradeBtn').classList.toggle('active',!test);
-        document.getElementById('modeTestBtn').classList.toggle('active',test);
+        /* My-portfolio / Refresh are Trade-mode controls; they mean nothing in Test. */
+        if(ct)ct.style.display=test?'none':'flex';
+        var tb=document.getElementById('modeTradeBtn'),sb=document.getElementById('modeTestBtn');
+        tb.classList.toggle('active',!test); tb.setAttribute('aria-selected',String(!test));
+        sb.classList.toggle('active',test);  sb.setAttribute('aria-selected',String(test));
         if(test&&!loaded){loaded=true;load();}
         if(test){ setTimeout(function(){ window.IS_SIM&&IS_SIM.onArenaOpen&&IS_SIM.onArenaOpen(); },0); }
       };
       function fp(x){return x==null?'—':(x>0?'+':'')+Number(x).toFixed(1)+'%';}
       function cls(x){return x>0?'pt-pos':(x<0?'pt-neg':'pt-dim');}
       function render(d){
-        var s=d.summary,b=d.baseline;
-        document.getElementById('ptBanner').innerHTML='<b>⚠ Honesty check.</b> <b>'+s.n_live+'</b> hypotheses are live. <b>'+s.n_positive_point+'</b> show a positive point estimate — but <b>'+s.n_significant+'</b> clear the noise bar (every edge’s 95% interval still includes zero). At these sample sizes, roughly <b>'+s.expected_positive_by_chance+'</b> positive deltas are expected from chance alone. Nothing here is an edge yet; these are <i>maturing</i>, and that’s the point.';
+        var s=d.summary||{},b=d.baseline;
+        /* The honesty check is DERIVED from the rows, never hardcoded. An earlier
+           version asserted "every edge's 95% interval still includes zero" as fixed
+           text; when the first significant result landed, the page contradicted its
+           own table. Everything asserted below is recomputed on each render. */
+        var rows=d.rows||[];
+        var nLive=rows.length||s.n_live||0;
+        var nPos=rows.filter(function(r){return (r.delta_post||0)>0;}).length;
+        var sig=rows.filter(function(r){return r.significant;});
+        var sigPos=sig.filter(function(r){return (r.delta_post||0)>0;}).length;
+        var sigNeg=sig.length-sigPos;
+        var expected=(s.expected_positive_by_chance!=null)?s.expected_positive_by_chance:(nLive/2).toFixed(1);
+        var bar,tail;
+        if(!sig.length){
+          bar='but <b>none</b> clear the noise bar — every interval still includes zero.';
+          tail='Nothing here is an edge yet; these are <i>maturing</i>, and that’s the point.';
+        }else if(!sigPos){
+          bar='and <b>'+sig.length+'</b> clear'+(sig.length===1?'s':'')+' the noise bar — in the <b>wrong direction</b> ('+(sig.length===1?'one significant negative':sig.length+' significant negatives')+'). Every other interval still includes zero.';
+          tail='No positive edge here yet; these are <i>maturing</i>, and that’s the point.';
+        }else{
+          bar='and <b>'+sigPos+'</b> clear'+(sigPos===1?'s':'')+' the noise bar in the positive direction'+(sigNeg?(' ('+sigNeg+' clear'+(sigNeg===1?'s':'')+' it negatively)'):'')+'.';
+          tail='A positive result still has to survive more out-of-sample data before we would call it an edge.';
+        }
+        document.getElementById('ptBanner').innerHTML='<b>⚠ Honesty check.</b> <b>'+nLive+'</b> hypotheses are live. <b>'+nPos+'</b> show a positive point estimate — '+bar+' At these sample sizes, roughly <b>'+expected+'</b> positive deltas are expected from chance alone. '+tail;
         var h='<tr style="color:var(--muted,#8b98a8)"><td></td><td class="l">Baseline — all picks, same-day open→close (net 2% haircut)</td><td>—</td><td class="num">'+b.n_post+'</td><td class="num">'+b.win_post+'%</td><td class="num">'+fp(b.avg_post)+'</td><td class="num pt-dim">reference</td><td class="num"></td><td></td></tr>';
         d.rows.forEach(function(r){
           var ci=r.ci95?('CI ['+(r.ci95[0]>0?'+':'')+r.ci95[0]+', '+(r.ci95[1]>0?'+':'')+r.ci95[1]+']'):'';
@@ -2543,6 +2567,9 @@ function go(v){
     else if(!go._pfLoaded){ go._pfLoaded=true; loadPortfolio(); } // alpaca: lazy once
   }
   if(v==="compete" && window.IS_SIM){ IS_SIM.onView(); }
+  /* Compete opens on Test: it is the pane a signed-out visitor can actually read.
+     Fire once so leaderboard.json stays lazy, and don't fight a later tab choice. */
+  if(v==="compete" && !go._cmInit && window.setCompeteMode){ go._cmInit=true; setCompeteMode('test'); }
   if(v==="validation"||v==="calculator"){ loadEmbedTab("embed-"+v); }
 }
 /* Lazy-load the Validation/Calculator iframes on first open, then keep them
