@@ -1428,18 +1428,29 @@
     <h1>Track record</h1>
     <p class="lead">Every pick logged before the open, graded on that day's open→close return — <b>all of them</b>,
       winners and losers. This is the page most scanners won't show you.</p>
-    <p class="muted" style="font-size:13px;margin:.4em 0 0">In August 2026 we found that our scheduler had
-      drifted past the opening bell on seven occasions and logged 128 picks late. Those picks are excluded
-      from every number here and the rows were kept, not deleted.
-      <a href="late-cohorts.html" style="color:var(--a-text)">Read the correction &rarr;</a></p>
+
+    <!-- 2.2 (audit 2026-08-19): the numbers used to sit ~1,000px down on a phone, under
+         ~330 words of exclusions. Every one of those words still ships — they moved below
+         the figures they qualify, into a panel that is open on desktop and collapsed under
+         760px by the same handler the landing sections use. Order changed, nothing cut. -->
+    <div class="grid stat-row" id="perfStats" style="margin:18px 0"></div>
+    <p id="perfDist" class="muted" style="font-size:13px;margin:-4px 0 18px;max-width:90ch"></p>
+    <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
     <p class="muted" style="font-size:13px;margin:.4em 0 0">Want the deeper cut? The
       <a href="#validation" onclick="go('validation');return false;" style="color:var(--a-text)">model validation dashboard</a> tracks every
       pre-registered hypothesis (exit rules, filters, a Bayesian read-out) out-of-sample — recomputed
       live in your browser from the same raw CSVs, so nothing here has to be taken on faith.</p>
-    <p id="perfNote" class="muted" style="font-size:13px;margin:.2em 0 0">Loading the live pick log…</p>
 
-    <div class="grid stat-row" id="perfStats" style="margin:18px 0"></div>
-    <p id="perfDist" class="muted" style="font-size:13px;margin:-4px 0 18px;max-width:90ch"></p>
+    <details class="mcol" id="perfExclWrap" open>
+      <summary><span class="mcol-t">What's excluded, and why</span><span class="mcol-sub">the corrections behind these numbers</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body">
+        <p class="muted" style="font-size:13px;margin:.4em 0 0">In August 2026 we found that our scheduler had
+          drifted past the opening bell on seven occasions and logged 128 picks late. Those picks are excluded
+          from every number here and the rows were kept, not deleted.
+          <a href="late-cohorts.html" style="color:var(--a-text)">Read the correction &rarr;</a></p>
+        <div id="perfExcl"></div>
+      </div>
+    </details>
 
     <div class="grid two">
       <div class="panel">
@@ -2290,6 +2301,7 @@ async function renderPerformance(){
   const note=document.getElementById("perfNote");
   if(!tr.real){
     if(note) note.innerHTML=`<span class="dim">Showing a worked <b>sample</b> (live pick log couldn't be loaded: ${tr.err}). The grading logic below is identical to production.</span>`;
+    const ew=document.getElementById("perfExclWrap"); if(ew) ew.style.display="none";
     const g=gradeAll(SAMPLE_PICKS);
     document.getElementById("perfStats").innerHTML=`${stat("Total tracked",g.total)}${stat("Win rate",g.winRate+"%")}${stat("Best call","+"+g.best+"%")}${stat("Data","sample")}`;
     const bt=document.getElementById("byTier"); bt.innerHTML="";
@@ -2335,10 +2347,15 @@ async function renderPerformance(){
                                        && _tdSince(p.trading_date) > 5 + AWAIT_SLACK);
   const _awaitTier = {};
   _await.forEach(p=>{ const t=(p.tier||"?").toUpperCase(); _awaitTier[t]=(_awaitTier[t]||0)+1; });
-  const awaitNote = _await.length ? `<br><br><b>${_await.length} pick${_await.length>1?'s are':' is'} more than three sessions past the grading window with no outcome</b> (${Object.entries(_awaitTier).sort().map(([t,n])=>t+': '+n).join(', ')}) — almost always a halt or a delisting our price source can no longer quote. We count them here rather than letting them disappear: names that become unpriceable skew toward the hottest tier, so quietly dropping them would flatter it. Each gets an explicit <code>UNGRADEABLE</code> row once the grader stops retrying, and none of them are in the averages above either way.` : "";
+  const awaitNote = _await.length ? `<p class="muted" style="font-size:13px;margin:.9em 0 0"><b>${_await.length} pick${_await.length>1?'s are':' is'} more than three sessions past the grading window with no outcome</b> (${Object.entries(_awaitTier).sort().map(([t,n])=>t+': '+n).join(', ')}) — almost always a halt or a delisting our price source can no longer quote. We count them here rather than letting them disappear: names that become unpriceable skew toward the hottest tier, so quietly dropping them would flatter it. Each gets an explicit <code>UNGRADEABLE</code> row once the grader stops retrying, and none of them are in the averages above either way.</p>` : "";
 
-  const lateNote = tr.lateCount ? `<br><br><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a-text)">What happened, and what it did to the numbers →</a>` : "";
-  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.${lateNote}${awaitNote}`;
+  const lateNote = tr.lateCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a-text)">What happened, and what it did to the numbers →</a></p>` : "";
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.`;
+  /* The exclusions render into the panel below the figures, not above them. */
+  const excl=document.getElementById("perfExcl");
+  if(excl) excl.innerHTML=`${lateNote}${awaitNote}`;
+  const exclWrap=document.getElementById("perfExclWrap");
+  if(exclWrap) exclWrap.style.display=(lateNote||awaitNote)?"":"none";
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}
