@@ -177,7 +177,18 @@
   .hero{text-align:center;padding:40px 0 10px}
   .hero h1{font-size:40px;max-width:34ch;margin:.2em auto .3em}
   .hero .lead{margin:0 auto 22px}
-  .price-cards{grid-template-columns:repeat(3,1fr);margin-top:26px}
+  .price-cards{grid-template-columns:repeat(2,1fr);margin-top:26px}
+  /* ===== 2.6 pricing reframe — UI audit 2026-08-19 =====
+     A three-column price grid where two columns say COMING SOON reads as a stalled
+     product, and the one real action competed with two dead ones. Same tiers, same
+     prices, same copy — the free tier now owns the row and the two planned tiers
+     read as a roadmap underneath it. */
+  .price-card.feat{grid-column:1/-1}
+  .roadmap-label{grid-column:1/-1;margin:10px 0 -12px;font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--dim);font-weight:700}
+  .roadmap-label span{text-transform:none;letter-spacing:normal;font-weight:400;color:var(--muted)}
+  .price-card.soon{opacity:.88}
+  .price-card.soon .p{color:var(--muted)}
   @media(max-width:820px){.price-cards{grid-template-columns:1fr}.hero h1{font-size:30px}}
   .price-card h3{margin:.1em 0 .2em;font-size:16px}
   .price-card .p{font-size:30px;font-weight:800;font-family:var(--mono)}
@@ -421,6 +432,17 @@
   #dashQuality{overflow-x:auto;-webkit-overflow-scrolling:touch}
   #dashQuality table{min-width:460px}
   .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* ===== 2.4 scroll affordance — UI audit 2026-08-19 =====
+     These tables are up to 972px wide inside a 352px container on a phone: ~64% of
+     the columns were off-screen with nothing to say so, and chips sliced at the edge
+     read as a rendering bug rather than an invitation to swipe. A right-edge fade
+     marks "there is more", and JS clears it once you reach the end. */
+  .tscroll{position:relative}
+  .tscroll.has-more::after{content:"";position:absolute;top:0;right:0;bottom:0;width:44px;
+    pointer-events:none;background:linear-gradient(90deg,transparent,var(--panel) 85%)}
+  .tscroll-hint{display:none;font-size:12px;color:var(--muted);margin:2px 0 8px}
+  .tscroll-hint::before{content:"\2192\00a0"}
+  .tscroll.has-more+.tscroll-hint,.tscroll-wrap.has-more .tscroll-hint{display:block}
   .tscroll>#wlTable{min-width:940px}
   .tscroll>#perfTable{min-width:780px}
   .tscroll>#posTable,.tscroll>#ordTable,.tscroll>#histTable{min-width:620px}
@@ -709,7 +731,8 @@
         </ul>
         <button class="btn" style="width:100%;margin-top:14px" onclick="go('compete');window.IS_SIM&amp;&amp;IS_SIM.openAuth()">Sign up for free &rarr;</button>
       </div>
-      <div class="panel price-card">
+      <div class="roadmap-label">Where this is going &nbsp;<span>planned, not for sale today</span></div>
+      <div class="panel price-card soon">
         <h3>Member <span class="badge-proto">COMING SOON</span></h3>
         <div class="p">$9.99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
         <p class="muted" style="font-size:13px">For people who want the lab to keep running. Planned, not for sale today.</p>
@@ -727,7 +750,7 @@
         <p class="wl-msg" role="status" aria-live="polite"></p>
         <p class="wl-fine">We'll send one confirmation email — you're not on the list until you click it. After that, one email when it opens. Nothing else, ever. <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
       </div>
-      <div class="panel price-card">
+      <div class="panel price-card soon">
         <h3>Lab access <span class="badge-proto">COMING SOON</span></h3>
         <div class="p">$19.99<span style="font-size:14px;color:var(--muted)">/mo</span></div>
         <p class="muted" style="font-size:13px">Point the machinery at your own rule. Planned, not for sale today.</p>
@@ -1299,6 +1322,9 @@
     </div>
 
     <!-- model 1 detail -->
+    <details class="mcol" open>
+      <summary><span class="mcol-t">Model 1 &mdash; the Momentum score</span><span class="mcol-sub">how the 0&ndash;100 score is built</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body">
     <h2 style="margin-top:34px">Model 1 — the Momentum score</h2>
     <div class="grid two" style="margin-top:6px">
       <div class="panel">
@@ -1325,6 +1351,12 @@
     </div>
 
     <!-- model 2 detail -->
+      </div>
+    </details>
+
+    <details class="mcol" open>
+      <summary><span class="mcol-t">Model 2 &mdash; the Quality Lens</span><span class="mcol-sub">the rule-based business check</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body">
     <h2 style="margin-top:34px">Model 2 — the Quality Lens <span class="badge-proto">RULE-BASED</span></h2>
     <p class="lead" style="margin-top:4px">A deterministic, rule-based second opinion — no AI in the score —
       layered on as a defensive filter. It reads the income statement, balance sheet and cash-flow statement
@@ -1353,6 +1385,12 @@
     </div>
 
     <!-- glossary -->
+      </div>
+    </details>
+
+    <details class="mcol" open>
+      <summary><span class="mcol-t">Metric glossary</span><span class="mcol-sub">every term on the screen</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body">
     <h2 style="margin-top:34px">Metric glossary</h2>
     <p class="muted" style="font-size:14px;margin-top:0">Plain-English definitions for every metric in the
       screen and the deep-analysis scorecard — what it is, and how to read it.</p>
@@ -1404,6 +1442,12 @@
     </div>
 
     <!-- how to use it -->
+      </div>
+    </details>
+
+    <details class="mcol" open>
+      <summary><span class="mcol-t">Putting it together</span><span class="mcol-sub">how to actually use it</span><span class="mcol-x" aria-hidden="true"></span></summary>
+      <div class="mcol-body">
     <h2 style="margin-top:34px">Putting it together — a sane workflow</h2>
     <div class="panel">
       <ol class="steps">
@@ -1419,6 +1463,9 @@
       buy; it describes how a stock ranks on these public criteria. Both models are deterministic, rule-based
       research tooling — not investment advice, and not a buy/sell/hold signal. Verify everything in primary
       filings before acting.</p>
+      </div>
+    </details>
+
   </div>
 </section>
 
@@ -4385,6 +4432,27 @@ window.addEventListener("hashchange",goHash);
    and are collapsed only on narrow viewports. Never collapses a section the user opened. */
 (function(){
   var mq = window.matchMedia('(max-width:760px)');
+
+  /* 2.4: mark horizontally-scrollable tables, and stop marking them at the end. */
+  function markScrollers(){
+    document.querySelectorAll('.tscroll').forEach(function(el){
+      var more = el.scrollWidth > el.clientWidth + 4 &&
+                 el.scrollLeft + el.clientWidth < el.scrollWidth - 4;
+      el.classList.toggle('has-more', more);
+      if (el.scrollWidth > el.clientWidth + 4 && !el.dataset.hinted) {
+        el.dataset.hinted = '1';
+        var h = document.createElement('div');
+        h.className = 'tscroll-hint';
+        h.textContent = 'swipe for more columns';
+        if (el.parentNode) el.parentNode.insertBefore(h, el.nextSibling);
+        el.addEventListener('scroll', markScrollers, {passive:true});
+      }
+    });
+  }
+  window.addEventListener('resize', markScrollers);
+  document.addEventListener('click', function(){ setTimeout(markScrollers, 350); }, true);
+  setInterval(markScrollers, 1500);
+  setTimeout(markScrollers, 800);
   function apply(){
     document.querySelectorAll('details.mcol').forEach(function(d){
       if (d.dataset.touched === '1') return;

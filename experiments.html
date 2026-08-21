@@ -119,23 +119,11 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 </script>
 
 <div class="wrap" id="main" tabindex="-1">
-  <h1>We test what's being sold to traders.</h1>
+  <h1>Every experiment, and how each one is scored</h1>
   <p class="lead">Retail trading runs on claims that are almost never checked: strategies with impressive win rates, screenshots of the good days, backtests fitted to the past. So we take a claim, write the rule down with a date <i>before</i> we look, grade it forward on public data, and publish the verdict — including when the answer is embarrassing.</p>
   <p class="strip">Rule frozen before the fact &nbsp;•&nbsp; Graded forward, winners <i>and</i> losers &nbsp;•&nbsp; Recomputable from public data &nbsp;•&nbsp; Published either way</p>
 
-  <a class="card" href="late-cohorts.html" style="border-color:#5a2a3355">
-    <span class="no">FIELD NOTE</span><span class="verdict-pill v-fail">CORRECTION</span>
-    <h2>We logged 128 picks after the opening bell</h2>
-    <p>The whole record rests on picks being written down before the market opens. On seven occasions our scheduler drifted past the bell and logged anyway, and we didn't notice for six weeks — an outside reader found it in our public CSV. What broke, what it did to the numbers, why we won't claim it flattered us, and the gate that makes it impossible now.</p>
-    <div class="meta">found 2026-08-04 by an outside review · 128 picks / 7 cohorts excluded · headline −2.68% → −3.40%</div>
-  </a>
 
-  <a class="card" href="split-adjustment-trap.html" style="border-color:#5a3a2255">
-    <span class="no">FIELD NOTE</span>
-    <h2>The bug that makes your backtest look good — and why you can't see it</h2>
-    <p>Historical prices are silently rewritten every time a company splits. Mix a price you stored with one you download later and you invent returns that never happened — and in cheap stocks the error is <i>always</i> in your favour. We found it in our own code, where it had been inflating our numbers for weeks. How it works, why it survives review, and the six checks that catch it.</p>
-    <div class="meta">found 2026-07-29 while auditing Experiment 01 · cost us a +8.0% baseline that was really −2.9%</div>
-  </a>
 
   <a class="card" href="experiment-01.html">
     <span class="no">EXPERIMENT 01</span><span class="verdict-pill v-fail">FAILED</span>
@@ -173,7 +161,27 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   </a>
 
   <div class="how">
-    <h2>How an experiment works here</h2>
+    <h2 style="margin-top:2em">Field notes — the mistakes, written up</h2>
+  <p class="lead" style="font-size:16px">Errors we found in our own record. Both of these made our numbers
+    look better than they were, and both are written up in full.</p>
+
+  <a class="card" href="late-cohorts.html" style="border-color:#5a2a3355">
+    <span class="no">FIELD NOTE</span><span class="verdict-pill v-fail">CORRECTION</span>
+    <h2>We logged 128 picks after the opening bell</h2>
+    <p>The whole record rests on picks being written down before the market opens. On seven occasions our scheduler drifted past the bell and logged anyway, and we didn't notice for six weeks — an outside reader found it in our public CSV. What broke, what it did to the numbers, why we won't claim it flattered us, and the gate that makes it impossible now.</p>
+    <div class="meta">found 2026-08-04 by an outside review · 128 picks / 7 cohorts excluded · headline −2.68% → −3.40%</div>
+  </a>
+
+  <a class="card" href="split-adjustment-trap.html" style="border-color:#5a3a2255">
+    <span class="no">FIELD NOTE</span>
+    <h2>The bug that makes your backtest look good — and why you can't see it</h2>
+    <p>Historical prices are silently rewritten every time a company splits. Mix a price you stored with one you download later and you invent returns that never happened — and in cheap stocks the error is <i>always</i> in your favour. We found it in our own code, where it had been inflating our numbers for weeks. How it works, why it survives review, and the six checks that catch it.</p>
+    <div class="meta">found 2026-07-29 while auditing Experiment 01 · cost us a +8.0% baseline that was really −2.9%</div>
+  </a>
+
+  <p style="margin:.4em 0 0"><a href="field-notes.html">All field notes &rarr;</a></p>
+
+  <h2>How an experiment works here</h2>
     <ol>
       <li><b>The claim gets written down first.</b> Rule, universe, entry, exit, cost assumption, and the exact bar it has to clear — all frozen with a date, in a public file, before any of the data it will be judged on exists.</li>
       <li><b>It runs forward only.</b> No backtest ever counts as evidence. Only outcomes that happen after the registration date are scored.</li>

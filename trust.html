@@ -41,6 +41,16 @@
   a{color:var(--blue)}
   code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:12.5px}
   table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0}
+  /* 2.4: three columns compressed to one or two words a line at 390px. Below 560px
+     the table becomes stacked cards, each cell labelled by its column header. */
+  @media(max-width:560px){
+    table.srcs,table.srcs thead,table.srcs tbody,table.srcs tr,table.srcs th,table.srcs td{display:block}
+    table.srcs thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    table.srcs tr{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+    table.srcs td{border:0;padding:4px 0}
+    table.srcs td::before{content:attr(data-l);display:block;font-size:11px;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--dim);margin-bottom:2px}
+  }
   th,td{padding:8px 8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
   thead th{color:var(--dim);font-weight:600}
   .q{font-weight:700;margin:22px 0 2px;font-size:15.5px}
@@ -73,6 +83,26 @@
      the article text, and a translucent background left it unreadable wherever
      backdrop-filter did not apply. Opaque and lifted. */
   #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+
+  /* ===== 2.3 one long-form type scale — UI audit 2026-08-19 =====
+     Body copy ran 15px in an 820px column on the proof pages: ~113 characters a
+     line, the smallest text on the site on the pages that most need careful
+     reading. method.html set its section headings at 16px against 15px body, so
+     its hierarchy had effectively collapsed. H1 ranged 26–36px with no scale.
+     One scale now: 17px/1.65 in a 720px column (~80ch), H1 34 / H2 23 / H3 17.5. */
+  body{font-size:17px;line-height:1.65}
+  .wrap{max-width:720px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:.15em 0 .3em}
+  h2{font-size:23px;line-height:1.25;letter-spacing:-.015em;margin:1.7em 0 .45em}
+  h3{font-size:17.5px;line-height:1.35;margin:1.5em 0 .35em}
+  p{margin:0 0 1.05em}
+  .lead,.standfirst{font-size:18.5px;line-height:1.5}
+  @media(max-width:560px){
+    body{font-size:16.5px}
+    h1{font-size:28px}
+    h2{font-size:20.5px}
+    .lead,.standfirst{font-size:17px}
+  }
 </style>
 <script type="application/ld+json">
 {
@@ -147,28 +177,28 @@ function toggleMenu(force){
 
   <div class="q">Where does ThePickLog's data come from?</div>
   <p>Four sources, each doing one job:</p>
-  <table>
+  <table class="srcs">
     <thead><tr><th>Source</th><th>What it provides</th><th>Notes</th></tr></thead>
     <tbody>
       <tr>
-        <td><b>SEC EDGAR</b> <span class="badge pub">public domain</span></td>
-        <td>Company fundamentals, filings, and the dilution/catalyst read behind the Quality Lens; also the free-float proxy.</td>
-        <td>U.S.-government public information, explicitly redistributable. The verifiable core of the site.</td>
+        <td data-l="Source"><b>SEC EDGAR</b> <span class="badge pub">public domain</span></td>
+        <td data-l="What it provides">Company fundamentals, filings, and the dilution/catalyst read behind the Quality Lens; also the free-float proxy.</td>
+        <td data-l="Notes">U.S.-government public information, explicitly redistributable. The verifiable core of the site.</td>
       </tr>
       <tr>
-        <td><b>Yahoo</b> (via <code>yfinance</code>)</td>
-        <td>Prices, previous close, volume, average volume, short interest, and daily OHLC used to grade picks.</td>
-        <td>Runs <b>server-side only</b>. It never streams to your browser — it's baked into our own published <code>picks.csv</code> / <code>paths.csv</code> / <code>outcomes.csv</code>.</td>
+        <td data-l="Source"><b>Yahoo</b> (via <code>yfinance</code>)</td>
+        <td data-l="What it provides">Prices, previous close, volume, average volume, short interest, and daily OHLC used to grade picks.</td>
+        <td data-l="Notes">Runs <b>server-side only</b>. It never streams to your browser — it's baked into our own published <code>picks.csv</code> / <code>paths.csv</code> / <code>outcomes.csv</code>.</td>
       </tr>
       <tr>
-        <td><b>Alpaca</b> (paper)</td>
-        <td>The owner's simulated (paper) trading account. Compete uses play-money via our own database.</td>
-        <td>No real money, no order routing to any real venue.</td>
+        <td data-l="Source"><b>Alpaca</b> (paper)</td>
+        <td data-l="What it provides">The owner's simulated (paper) trading account. Compete uses play-money via our own database.</td>
+        <td data-l="Notes">No real money, no order routing to any real venue.</td>
       </tr>
       <tr>
-        <td><b>Anthropic</b></td>
-        <td>Powers the site assistant.</td>
-        <td>Language model, not a market-data feed.</td>
+        <td data-l="Source"><b>Anthropic</b></td>
+        <td data-l="What it provides">Powers the site assistant.</td>
+        <td data-l="Notes">Language model, not a market-data feed.</td>
       </tr>
     </tbody>
   </table>
@@ -243,7 +273,7 @@ function toggleMenu(force){
   <p>ThePickLog is a transparency-first research project operated by <b>AMD Ventures, LLC</b> (Florida, USA).
   Missing a question? <a href="about.html#corrections">Send it through the contact form</a> — we read every message.</p>
 
-  <h1 id="standard" style="margin-top:44px">The Verified-by-ThePickLog Standard</h1>
+  <h2 id="standard" style="margin-top:44px">The Verified-by-ThePickLog Standard</h2>
   <p class="lead">An open standard for a track record a stranger can trust. Free to read, free to adopt, free to hold us to — including ThePickLog itself.</p>
 
   <div class="panel">
@@ -286,7 +316,7 @@ function toggleMenu(force){
 
   <p class="foot">
     <b>Prototype — sample copy pending legal review.</b> Research and educational information only, not investment
-    advice. Past performance does not predict future results.<br><span style="opacity:.55;font-size:11px">Build 2026-08-04 01:43 ET · fa46a8a</span>
+    advice. Past performance does not predict future results.<br><span style="opacity:.55;font-size:11px">Build and commit stamp on the <a href="index.html" style="color:inherit">home page</a></span>
   
   <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">How it&rsquo;s scored</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
   <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a></span>

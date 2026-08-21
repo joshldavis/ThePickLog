@@ -73,6 +73,26 @@
      the article text, and a translucent background left it unreadable wherever
      backdrop-filter did not apply. Opaque and lifted. */
   #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+
+  /* ===== 2.3 one long-form type scale — UI audit 2026-08-19 =====
+     Body copy ran 15px in an 820px column on the proof pages: ~113 characters a
+     line, the smallest text on the site on the pages that most need careful
+     reading. method.html set its section headings at 16px against 15px body, so
+     its hierarchy had effectively collapsed. H1 ranged 26–36px with no scale.
+     One scale now: 17px/1.65 in a 720px column (~80ch), H1 34 / H2 23 / H3 17.5. */
+  body{font-size:17px;line-height:1.65}
+  .wrap{max-width:720px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:.15em 0 .3em}
+  h2{font-size:23px;line-height:1.25;letter-spacing:-.015em;margin:1.7em 0 .45em}
+  h3{font-size:17.5px;line-height:1.35;margin:1.5em 0 .35em}
+  p{margin:0 0 1.05em}
+  .lead,.standfirst{font-size:18.5px;line-height:1.5}
+  @media(max-width:560px){
+    body{font-size:16.5px}
+    h1{font-size:28px}
+    h2{font-size:20.5px}
+    .lead,.standfirst{font-size:17px}
+  }
 </style>
 <meta property="og:image" content="https://thepicklog.com/og/card.png">
 <meta property="og:image:width" content="1200">
@@ -126,7 +146,7 @@ function toggleMenu(force){
   <div class="kbar">
     <a href="picks.csv" download>⬇ picks.csv</a>
     <a href="outcomes.csv" download>⬇ outcomes.csv</a>
-    <a href="dashboard.html">Validation dashboard ↗</a>
+    <a href="dashboard.html">Validation dashboard ↗</a> &middot; <a href="calculator.html">Exit-rule scenario calculator &#8599;</a>
     <a href="index.html#compete">Test-mode leaderboard ↗</a>
     <a href="gate.html">Live Gate-1 status ↗</a>
   </div>
