@@ -1,4 +1,4 @@
-# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-08-20
+# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-08-21
 
 Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W34**.
 
