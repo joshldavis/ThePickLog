@@ -64,6 +64,18 @@
   .skip:focus{left:0}
   :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
   .foot a,footer a{display:inline-block;padding:5px 2px}
+
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 =====
+     There were FIVE different navs across 19 pages. Method/Trust/Guide/Privacy were
+     unreachable from the homepage nav, and Compete existed ONLY on the homepage.
+     Both marker classes are styled so a page's own CSS can use either. */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  /* The mobile menu had no z-index on 16 of 19 pages, so the panel painted BEHIND
+     the article text, and a translucent background left it unreadable wherever
+     backdrop-filter did not apply. Opaque and lifted. */
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
 </style>
 <meta property="og:image" content="https://thepicklog.com/og/split-adjustment-trap.png">
 <meta property="og:image:width" content="1200">
@@ -81,26 +93,24 @@
     <nav class="tabs">
       <a href="index.html">Overview</a>
       <a href="experiments.html">Experiments</a>
-      <a href="field-notes.html" class="on">Field notes</a>
-      <a href="index.html#performance">Track record</a>
-      <a href="method.html">Method</a>
-      <a href="guide.html">Vetting Guide</a>
+      <a href="field-notes.html" class="active">Field notes</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
       <a href="about.html">About</a>
-      <a href="trust.html">Trust &amp; Data</a>
-      <a href="privacy.html">Privacy</a>
     </nav>
     <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
   </div>
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <a href="index.html">Overview</a>
     <a href="experiments.html">Experiments</a>
-    <a href="field-notes.html" class="on">Field notes</a>
-    <a href="index.html#performance">Track record</a>
-    <a href="method.html">Method</a>
-    <a href="guide.html">Vetting Guide</a>
+    <a href="field-notes.html" class="active">Field notes</a>
+    <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+    <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+    <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+    <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
     <a href="about.html">About</a>
-    <a href="trust.html">Trust &amp; Data</a>
-    <a href="privacy.html">Privacy</a>
   </div>
 </div>
 <script>
@@ -259,7 +269,11 @@ async function tplVerdicts(ev){
 
   <p class="foot">
     Educational and informational only — not investment advice, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). The diagnosis above is the explanation consistent with our evidence: picks with a stored grade-time price reconciled exactly, and only the re-downloaded subset disagreed. Vendor adjustment behaviour varies, so check your own provider's documentation rather than assuming ours applies.
-    <br><a href="experiments.html">All experiments</a> &middot; <a href="guide.html">The 7 checks every service should pass</a> &middot; <a href="disclaimer.html">Disclaimer</a>
+    <br>If you are checking someone else&rsquo;s track record for this, start with <a href="guide.html">the 7 checks every service should pass</a>.
+  
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">How it&rsquo;s scored</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a></span>
   </p>
 </div>
 </body>

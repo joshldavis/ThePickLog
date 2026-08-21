@@ -61,6 +61,18 @@
   .skip:focus{left:0}
   :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
   .foot a,footer a{display:inline-block;padding:5px 2px}
+
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 =====
+     There were FIVE different navs across 19 pages. Method/Trust/Guide/Privacy were
+     unreachable from the homepage nav, and Compete existed ONLY on the homepage.
+     Both marker classes are styled so a page's own CSS can use either. */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  /* The mobile menu had no z-index on 16 of 19 pages, so the panel painted BEHIND
+     the article text, and a translucent background left it unreadable wherever
+     backdrop-filter did not apply. Opaque and lifted. */
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
 </style>
 <meta property="og:image" content="https://thepicklog.com/og/card.png">
 <meta property="og:image:width" content="1200">
@@ -79,31 +91,23 @@
       <a href="index.html">Overview</a>
       <a href="experiments.html">Experiments</a>
       <a href="field-notes.html">Field notes</a>
-      <a href="index.html#watchlist">Today&rsquo;s screen</a>
-      <a href="index.html#performance">Track record</a>
-      <a href="index.html#validation">Validation</a>
-      <a href="index.html#calculator">Calculator</a>
-      <a href="method.html" class="active">Method</a>
-      <a href="guide.html">Vetting Guide</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" class="active" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
       <a href="about.html">About</a>
-      <a href="trust.html">Trust &amp; Data</a>
-      <a href="privacy.html">Privacy</a>
     </nav>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">☰ Menu</button>
   </div>
   <div id="mobileMenu" role="menu" aria-label="Site menu">
     <a href="index.html">Overview</a>
-      <a href="experiments.html">Experiments</a>
-      <a href="field-notes.html">Field notes</a>
-    <a href="index.html#watchlist">Today&rsquo;s screen</a>
-    <a href="index.html#performance">Track record</a>
-    <a href="index.html#validation">Validation</a>
-    <a href="index.html#calculator">Calculator</a>
-    <a href="method.html" class="active">Method</a>
-    <a href="guide.html">Vetting Guide</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+    <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+    <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+    <a href="method.html" class="active" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
     <a href="about.html">About</a>
-    <a href="trust.html">Trust &amp; Data</a>
-    <a href="privacy.html">Privacy</a>
   </div>
 </div>
 <script>
@@ -201,7 +205,12 @@ python log_integrity.py --verify-head   # also confirm current files match the l
   <h2 id="validity"><span class="n">9</span>The validity argument — including where it fails</h2>
   <p>The full construct-validity case behind this method is published too, mapped to Messick's six aspects (content, substantive, structural, generalizability, external, consequential) with an open gap register and a Uniform Guidelines cross-check — and it does <b>not</b> hide the parts that currently fall short. The headline finding is a structural one: the momentum tiers rank <i>intensity</i> (and drawdown), <b>not</b> forward return — the top tier historically has the worst mean net and the deepest drawdowns — which is exactly why tiers are labelled as a heat scale, not a quality grade. Read it in full: <a href="ThePickLog-Validity-Framework-Messick-2026-07-06.md">Validity framework &amp; gap analysis</a>, with its <a href="ThePickLog-Domain-Coverage-Spec-2026-07-06.md">domain / coverage spec</a> and <a href="ThePickLog-Structural-Justification-2026-07-06.md">structural monotonicity check</a> (reproducible from the two CSVs above). Four empirical studies extend it — <a href="ThePickLog-Empirical-Validity-Studies-2026-07-07.md">substantive, structural &amp; discriminant tests</a> (incl. the near-inert rvol weight and the screen being indistinguishable from the broad pool), a <a href="ThePickLog-Generalizability-and-Consequential-2026-07-07.md">generalizability &amp; consequential</a> write-up (regime-dependence, intended-use/misuse, reflexivity), and a <a href="ThePickLog-Validity-Dossier-UG15-2026-07-07.md">§15 validity dossier</a> that indexes the whole record. Findings feed pre-registered forward tests (H-SUB1, H-STR1/2, H-REG, H-CTRL, H-REFLEX) — never fit in-sample. The method specs are public too: the <a href="VALIDATION-PLAN.md">validation plan &amp; pick-log spec</a>, the <a href="TEST-PLAN-quality-downside.md">Quality-Lens downside test plan</a>, and an independent <a href="QA_REPORT.md">code-fidelity QA report</a>.</p>
 
-  <p class="foot"><b>Educational / informational only — not investment advice.</b> ThePickLog is a personal research instrument. The model is unvalidated until the sample and out-of-sample bars above are cleared. Low-float, low-priced stocks are highly volatile and carry substantial risk of loss. Past performance does not predict future results. <i>(Prototype — sample copy pending legal review.)</i><br><a href="disclaimer.html" style="color:var(--dim)">Disclaimer</a> · <a href="privacy.html" style="color:var(--dim)">Privacy</a></p>
+  <p class="foot"><b>Educational / informational only — not investment advice.</b> ThePickLog is a personal research instrument. The model is unvalidated until the sample and out-of-sample bars above are cleared. Low-float, low-priced stocks are highly volatile and carry substantial risk of loss. Past performance does not predict future results. <i>(Prototype — sample copy pending legal review.)</i>
+  
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">How it&rsquo;s scored</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a></span>
+  </p>
 </div>
 </body>
 </html>
