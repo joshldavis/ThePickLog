@@ -1,34 +1,35 @@
-# ThePickLog — Morning Brief · 2026-08-21
+# ThePickLog — Morning Brief · 2026-08-24
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **JZ** (tier A, score 100.0) — very high relative volume (47×); thin float (0.3M); large up-gap (+24%). Watch level (reference only, +20%): $2.532.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **ARBB** (tier A, score 100.0) — very high relative volume (21×); thin float (1.1M); large up-gap (+21%). Watch level (reference only, +20%): $5.88.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **NXTT** (tier A, score 100.0) — very high relative volume (39×); thin float (1.5M); large up-gap (+25%). Watch level (reference only, +20%): $9.96.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BRLS** (tier A, score 97.8) — very high relative volume (60×); large up-gap (+68%). Watch level (reference only, +20%): $1.836.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **INDP** (tier A, score 97.6) — elevated relative volume (9.5×); large up-gap (+42%). Watch level (reference only, +20%): $1.6051.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **SUGP** (tier A, score 100.0) — very high relative volume (16×); thin float (0.4M); large down-gap (-42%). Watch level (reference only, +20%): $1.92.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **EXYN** (tier A, score 99.0) — very high relative volume (28×); large up-gap (+28%). Watch level (reference only, +20%): $2.436.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **LSTA** (tier A, score 97.4) — very high relative volume (29×); large up-gap (+39%). Watch level (reference only, +20%): $1.872.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **ZJK** (tier A, score 95.7) — very high relative volume (40×); large up-gap (+21%). Watch level (reference only, +20%): $2.64.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **GAME** (tier A, score 93.1) — elevated relative volume (9.5×); large up-gap (+673%). Watch level (reference only, +20%): $4.0541.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **JZ**: already extended pre-market — chasing buys the top.
-- **JZ**: ultra-thin float — spreads and slippage can be severe.
-- **ARBB**: already extended pre-market — chasing buys the top.
-- **NXTT**: already extended pre-market — chasing buys the top.
-- **BRLS**: already extended pre-market — chasing buys the top.
-- **INDP**: already extended pre-market — chasing buys the top.
-- **BIVI**: already extended pre-market — chasing buys the top.
-- **BTCT**: already extended pre-market — chasing buys the top.
-- **GNLN**: ultra-thin float — spreads and slippage can be severe.
-- **CLPS**: already extended pre-market — chasing buys the top.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **EXYN**: already extended pre-market — chasing buys the top.
+- **LSTA**: already extended pre-market — chasing buys the top.
+- **ZJK**: already extended pre-market — chasing buys the top.
+- **GAME**: already extended pre-market — chasing buys the top.
+- **CANG**: already extended pre-market — chasing buys the top.
+- **SKYE**: already extended pre-market — chasing buys the top.
+- **NCTY**: already extended pre-market — chasing buys the top.
+- **USDE**: already extended pre-market — chasing buys the top.
+- **VCIG**: already extended pre-market — chasing buys the top.
+- **VCIG**: ultra-thin float — spreads and slippage can be severe.
+- **NTRB**: already extended pre-market — chasing buys the top.
+- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
 - **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
-- **VMAR**: sub-$1 — heightened manipulation / delisting risk.
-- **CUPR**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: sub-$1 — heightened manipulation / delisting risk.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 
