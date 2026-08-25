@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-24",
+  "generated_at": "2026-08-25",
   "log": {
-    "picks": 686,
+    "picks": 700,
     "graded": 592
   },
   "baseline": {
@@ -38,7 +38,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 6.0,
+      "weeks_live": 6.1,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -82,7 +82,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 9.0,
+      "weeks_live": 9.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -131,7 +131,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 9.0,
+      "weeks_live": 9.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -180,7 +180,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 9.0,
+      "weeks_live": 9.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -232,7 +232,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 9.0,
+      "weeks_live": 9.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -299,7 +299,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 3.7,
+      "weeks_live": 3.9,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -348,7 +348,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 9.0,
+      "weeks_live": 9.1,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -397,7 +397,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 6.0,
+      "weeks_live": 6.1,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -441,7 +441,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 6.0,
+      "weeks_live": 6.1,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -485,7 +485,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 6.0,
+      "weeks_live": 6.1,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -529,7 +529,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 8.9,
+      "weeks_live": 9.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -573,7 +573,7 @@
       "significant": true,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 6.0,
+      "weeks_live": 6.1,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy",
         "stop ordering unknown from MFE/MAE: when both the +T target and -S stop are reached, the stop is assumed to trigger first (conservative)"
