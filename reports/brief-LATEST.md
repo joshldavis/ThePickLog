@@ -1,41 +1,45 @@
-# ThePickLog — Morning Brief · 2026-08-25
+# ThePickLog — Morning Brief · 2026-08-26
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **DAIC** (tier A, score 100.0) — very high relative volume (31×); thin float (0.7M); large up-gap (+693%). Watch level (reference only, +20%): $4.056.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **GIPR** (tier A, score 100.0) — very high relative volume (51×); thin float (1.0M); large up-gap (+74%). Watch level (reference only, +20%): $0.6275.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **XPON** (tier A, score 100.0) — very high relative volume (53×); thin float (0.9M); large up-gap (+41%). Watch level (reference only, +20%): $5.7961.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **PMI** (tier A, score 100.0) — very high relative volume (19×); thin float (1.1M); large up-gap (+85%). Watch level (reference only, +20%): $7.14.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **INCR** (tier A, score 97.1) — very high relative volume (15×); large up-gap (+34%). Watch level (reference only, +20%): $6.84.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **AIXI** (tier A, score 100.0) — very high relative volume (160×); thin float (0.9M); large up-gap (+180%). Watch level (reference only, +20%): $1.536.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **DAIC** (tier A, score 100.0) — very high relative volume (47×); thin float (0.7M); large up-gap (+270%). Watch level (reference only, +20%): $7.6795.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **PMI** (tier A, score 100.0) — very high relative volume (33×); thin float (1.1M); large up-gap (+81%). Watch level (reference only, +20%): $11.136.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **OFAL** (tier A, score 100.0) — very high relative volume (22×); thin float (2.7M); large up-gap (+34%). Watch level (reference only, +20%): $1.1651.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **TNMG** (tier A, score 100.0) — very high relative volume (18×); thin float (1.9M); large up-gap (+33%). Watch level (reference only, +20%): $0.6331.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
+- **AIXI**: already extended pre-market — chasing buys the top.
+- **AIXI**: ultra-thin float — spreads and slippage can be severe.
 - **DAIC**: already extended pre-market — chasing buys the top.
 - **DAIC**: ultra-thin float — spreads and slippage can be severe.
-- **GIPR**: already extended pre-market — chasing buys the top.
-- **GIPR**: ultra-thin float — spreads and slippage can be severe.
-- **GIPR**: sub-$1 — heightened manipulation / delisting risk.
-- **XPON**: already extended pre-market — chasing buys the top.
-- **XPON**: ultra-thin float — spreads and slippage can be severe.
 - **PMI**: already extended pre-market — chasing buys the top.
-- **INCR**: already extended pre-market — chasing buys the top.
-- **APRE**: already extended pre-market — chasing buys the top.
-- **APRE**: sub-$1 — heightened manipulation / delisting risk.
-- **LUCY**: already extended pre-market — chasing buys the top.
-- **BTCT**: already extended pre-market — chasing buys the top.
-- **GGR**: already extended pre-market — chasing buys the top.
-- **TJGC**: already extended pre-market — chasing buys the top.
+- **OFAL**: high short interest (71% of float) — squeeze-prone and violent both ways.
+- **OFAL**: already extended pre-market — chasing buys the top.
+- **OFAL**: sub-$1 — heightened manipulation / delisting risk.
+- **TNMG**: already extended pre-market — chasing buys the top.
+- **TNMG**: sub-$1 — heightened manipulation / delisting risk.
+- **SWVL**: already extended pre-market — chasing buys the top.
+- **AMIX**: already extended pre-market — chasing buys the top.
+- **AMIX**: ultra-thin float — spreads and slippage can be severe.
+- **PRZO**: already extended pre-market — chasing buys the top.
+- **PRZO**: sub-$1 — heightened manipulation / delisting risk.
+- **BRNX**: high short interest (35% of float) — squeeze-prone and violent both ways.
+- **BRNX**: already extended pre-market — chasing buys the top.
+- **BRNX**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 - **VMAR**: sub-$1 — heightened manipulation / delisting risk.
-- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **CUPR**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **SVRN**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: sub-$1 — heightened manipulation / delisting risk.
+- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **971** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-19%** (rug rate 26%) vs **-12%** (rug 11%) for C/D.
