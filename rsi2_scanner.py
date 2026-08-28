@@ -31,6 +31,10 @@ PASS BAR (frozen, and deliberately strict)
     n >= 30 post-registration graded signals; BOTH the mean AND the median day-matched
     excess return positive net of costs; ticker-clustered 95% CI on the excess excluding
     zero; direction holding across >= 3 consecutive weekly snapshots.
+    AMENDED 2026-08-28 (tightening only, both directions harder): also >= 20 DISTINCT
+    TICKERS, and the verdict is read ONCE on VERDICT_ON below. Before that date this
+    script reports state and nothing else -- no verdict is written, by hand or
+    otherwise. See the amendment at the end of HYPOTHESES.md.
     WIN RATE IS REPORTED BUT IS NOT A PASS CRITERION — that is the entire point of the
     experiment, and it is frozen here so it cannot be quietly substituted later.
 
@@ -69,6 +73,11 @@ HOLD_SESSIONS = 5        # time exit if the RSI exit never triggers
 MAX_PER_DAY = 5          # cap so one day cannot dominate the sample
 COST_ROUNDTRIP = 0.10    # % — realistic for liquid large caps (vs 2.0% for microcaps)
 MIN_N = 30
+MIN_TICKERS = 20         # amended 2026-08-28: repeated bets on one name are not
+                         # independent evidence (H-IND1). Tightening only.
+VERDICT_ON = "2026-11-02"  # amended 2026-08-28: ONE pre-declared read date, aligned to
+                         # EXP03/EXP06-09 so the declared family FDR is computable.
+                         # Fixed before any outcome was read.
 
 # Frozen universe: 40 liquid US large caps across sectors. Chosen for liquidity and
 # survivability, fixed at registration. Adding or removing a name voids the test.
@@ -316,9 +325,25 @@ def cmd_grade():
         if ex1:
             ex1s = sorted(ex1)
             med = ex1s[len(ex1s) // 2]
-            print(f"  n={len(ex1)} | day-matched excess (1d): mean={sum(ex1)/len(ex1):+.3f}% "
-                  f"median={med:+.3f}% | win rate={100.0*sum(wins)/max(1,len(wins)):.0f}% "
-                  f"| {'MATURE' if len(ex1) >= MIN_N else f'immature, need {MIN_N}'}")
+            ntick = len({r["ticker"] for r in graded if _f(r["excess_1d"]) is not None})
+            floors = len(ex1) >= MIN_N and ntick >= MIN_TICKERS
+            today = datetime.now(timezone.utc).date().isoformat()
+            print(f"  n={len(ex1)} | tickers={ntick} | day-matched excess (1d): "
+                  f"mean={sum(ex1)/len(ex1):+.3f}% median={med:+.3f}% "
+                  f"| win rate={100.0*sum(wins)/max(1,len(wins)):.0f}%")
+            print(f"  floors: n>={MIN_N} {'ok' if len(ex1) >= MIN_N else 'NOT MET'}; "
+                  f"tickers>={MIN_TICKERS} {'ok' if ntick >= MIN_TICKERS else 'NOT MET'}")
+            # One pre-declared read. Before VERDICT_ON this is state, not a verdict --
+            # printing it earlier is exactly the multiple-looks problem we criticise.
+            if today < VERDICT_ON:
+                print(f"  VERDICT: not due. Read once on {VERDICT_ON} "
+                      f"(today {today}). Numbers above are state, NOT a verdict.")
+            elif not floors:
+                print(f"  VERDICT: due since {VERDICT_ON}, floors NOT met -- "
+                      f"no verdict is written; report it as underpowered, not as a fail.")
+            else:
+                print(f"  VERDICT: due and floors met. Write it ONCE, today, "
+                      f"then never revise it.")
             print("  reminder: win rate is NOT a pass criterion (frozen at registration).")
     return 0
 

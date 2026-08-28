@@ -659,6 +659,10 @@ day-matched excess return positive net of costs (not either — both; Experiment
 means on financial data can be a single lucky trade); a ticker-clustered 95% CI on the excess
 excluding zero; and the direction holding across ≥ 3 consecutive weekly snapshots.
 
+**Amended 2026-08-28 — see the amendment at the end of this file.** This bar now also requires
+**≥ 20 distinct tickers**, and the verdict is read once, on **2026-11-02**. The original text above is
+left exactly as registered.
+
 **WIN RATE IS REPORTED BUT IS EXPLICITLY NOT A PASS CRITERION.** Frozen here so it cannot later be
 substituted for the result if expectancy disappoints. That substitution is the exact failure mode
 the experiment exists to expose.
@@ -1197,3 +1201,58 @@ answer the risk work gave, and the exit family can now be treated as closed on b
 different quantile set is a new hypothesis with its own registration — and given the result
 above, the burden on any such proposal is to explain what a better volatility band would be
 *used for* before it is run.
+
+---
+
+## Amendment to batch #7 — H-EXP02 gets one pre-declared evaluation date, frozen 2026-08-28
+
+**Written before looking.** No H-EXP02 outcome file was opened in the course of writing this
+amendment. The only H-EXP02 artefacts read were its registration text above and the declaration
+block of `rsi2_scanner.py` — neither contains a result.
+
+**What was missing.** Batch #10's amendment gave every harness experiment (EXP03, EXP06–09) one
+pre-declared `verdict_on`, computed once, written to an append-only file and never recomputed. It
+deliberately exempted H-EXP02, on the grounds that `rsi2_scanner.py` "prints a maturity flag only
+and declares no automated verdict, so it never had the republishing problem" — and noted that the
+same one-look discipline applies "when its verdict is written up by hand: fix the evaluation date
+before looking."
+
+That was right about the mechanism and incomplete as a control. Removing the *automated*
+republishing problem does not remove the *human* one, and the date it told us to fix was never
+actually fixed. H-EXP02's pass bar requires "the direction holding across ≥ 3 consecutive weekly
+snapshots" — a criterion checked repeatedly by construction. With no date declared, nothing stood
+between us and writing the verdict on whichever week the bar first happened to be met. That is the
+multiple-looks problem in a hand-written coat, and it is the specific failure this project exists
+to point at in other people's records.
+
+**The amendment — two changes, both tightening.**
+
+1. **H-EXP02's evaluation date is 2026-11-02.** The verdict is written once, from the state of
+   `rsi2_outcomes.csv` at the first read on or after that date at which the floors are met, and is
+   not revised afterwards. Weekly snapshots keep being recorded — the ≥ 3-consecutive-snapshot
+   condition remains part of the bar — but observing one is not an occasion to declare a verdict.
+
+2. **A cluster floor of ≥ 20 distinct tickers is added to the pass bar**, matching the floor batch
+   #10 applied to the harness experiments. `n` counts trades, but the clustered CI's precision is
+   governed by the number of distinct names, since repeated bets on one ticker are not independent
+   evidence. Thirty trades spread over four names is not thirty pieces of evidence. This is the
+   H-IND1 effective-sample-size finding, applied here as it already is everywhere else.
+
+**Why 2026-11-02, and why that is not a choice made from the data.** It is the date already
+recorded for EXP03 and EXP06–09, fixed in batch #10 at a moment when *zero* graded harness outcome
+rows existed. It is carried over here rather than picked now. It also makes the family policy
+computable: that policy names **EXP02–EXP09** as one concurrently-registered family and applies
+Benjamini–Hochberg FDR across it. A family correction across experiments read on different dates is
+not a correction at all — aligning EXP02's read to the family's is what lets the declared FDR
+actually be applied. Registration was 2026-07-29, so this is registration + 96 days, comfortably
+past the registration + 90 fallback batch #10 declared for any future entry that omits a date.
+
+**Why this is safe by this project's own test.** Both changes can only make a pass *harder*: one
+removes looks, the other adds a floor. There is no configuration of the data under which either
+makes "clears the bar" easier to print. A mid-flight amendment that can only reduce the chance of
+declaring your own success is safe in a way a loosening one never is — and if we ever propose one
+that runs the other way, it should be refused.
+
+**Unchanged:** every registered rule, universe, entry condition, exit, cost assumption and
+registration date. The win rate remains reported and remains explicitly not a pass criterion. No
+stored signal or outcome row was altered by this amendment.
