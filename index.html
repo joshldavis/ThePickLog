@@ -2189,23 +2189,112 @@ function isTimelyPick(p){
   if(et>td) return false;
   return (+part.hour*60 + +part.minute) < 570;    // 09:30 ET
 }
+/* STALE-QUOTE SEAL (2026-08-29) — the browser mirror of quote_integrity.py.
+   A halted stock keeps returning its last quote forever. BNZI was screened for
+   twelve consecutive sessions on a quote that never moved: price $1.91, gap
+   exactly 0.00%, RVOL 0.59, float 1,352,833 — byte-identical every session from
+   08-11 to 08-26. A live stock does not gap exactly 0.00% twelve times running.
+   Those were not forecasts; the scanner was reading a corpse.
+
+   Same defect as the phantom 06-19 cohort, one level down: the scanner's existing
+   guard compares a WHOLE cohort to the prior session, so it catches a dead feed
+   but not a single dead ticker inside a live cohort.
+
+   DERIVED, not stored — every input is already public in picks.csv, so a stranger
+   recomputes the same set, and nothing is deleted. Restricted to real sessions so
+   the 06-19 holiday rows (already void) don't drag their innocent 06-22 twins in.
+   Conservative: the first appearance of a frozen quote is never flagged, only
+   repeats. Requiring 2 or 3 repeats gives the identical answer on the current log,
+   so the finding is not an artifact of the threshold. */
+const _QUOTE_KEY=["price_at_screen","gap_pct","rvol","float_shares"];
+const _NYSE_HOLIDAYS=new Set(["2026-01-01","2026-01-19","2026-02-16","2026-04-03",
+  "2026-05-25","2026-06-19","2026-07-03","2026-09-07","2026-11-26","2026-12-25",
+  "2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18",
+  "2027-07-05","2027-09-06","2027-11-25","2027-12-24"]);
+function _isSession(d){
+  if(!d) return false;
+  if(_NYSE_HOLIDAYS.has(d)) return false;
+  const dow=new Date(d+"T12:00:00Z").getUTCDay();
+  return dow>=1 && dow<=5;
+}
+function staleQuoteIds(rows){
+  const groups=new Map();
+  rows.forEach(r=>{
+    const td=(r.trading_date||"").trim();
+    if(!_isSession(td)) return;
+    const k=[r.ticker].concat(_QUOTE_KEY.map(f=>(r[f]||"").trim())).join("");
+    if(!groups.has(k)) groups.set(k,[]);
+    groups.get(k).push(r);
+  });
+  const out=new Set();
+  groups.forEach(members=>{
+    if(new Set(members.map(m=>m.trading_date)).size>=2)
+      members.forEach(m=>out.add(m.pick_id));
+  });
+  return out;
+}
+/* DERIVED TIER-ORDERING SENTENCE (2026-08-29).
+   This paragraph used to hardcode "If the score ranked edge, A would beat B would
+   beat C here — it doesn't." That was true when written and false by 2026-08-29:
+   on mean net A (-1.7%) > B (-1.8%) > C (-3.3%), monotone across the first three
+   tiers. The claim ran AGAINST our own interest, so nobody was misled toward the
+   product — but it was still a sentence a stranger could falsify from the table
+   printed directly above it, which is exactly the North Star test.
+
+   The 2026-08-19 UI audit's generalisable lesson, arriving a second time: prose
+   asserting a statistical fact must be COMPUTED from the same data as the table
+   under it. A hardcoded ranking claim beneath a live table will always eventually
+   invert. So this reads the ordering off tierStats and says what is actually true
+   today, including the part that matters most — that no interval separates the
+   tiers, so the ordering is not evidence of anything in either direction. */
+function tierOrderingSentence(ts){
+  const order=["A","B","C","D"];
+  const have=order.filter(t=>(ts||{})[t]&&ts[t].n);
+  if(have.length<2) return "";
+  const mean=t=>ts[t].mean;
+  // Is mean net monotonically better as the tier gets hotter?
+  let monotone=true;
+  for(let i=1;i<have.length;i++) if(mean(have[i-1])<mean(have[i])) { monotone=false; break; }
+  const chain=have.join(" ≥ ");
+  // None of this means anything unless some interval clears zero — say so either way.
+  const sep=have.filter(t=>ts[t].ci && !(ts[t].ci[0]<=0 && ts[t].ci[1]>=0));
+  const neg=sep.filter(t=>ts[t].ci[1]<0);
+  const caveat = sep.length
+    ? `Only ${sep.map(t=>t).join(" and ")} separate from zero at all${neg.length===sep.length?", and both are significantly negative":""} — the rest are indistinguishable from no effect, so the ordering above is not established.`
+    : `Every interval still spans zero, so this ordering is not evidence of a ranking in either direction.`;
+  return monotone
+    ? `On this column the tiers currently fall in score order (${chain}) — but that is a ranking of ${have.length} noisy numbers, not a demonstrated edge. ${caveat}`
+    : `If the score ranked edge, mean net would fall in tier order here — it doesn't. ${caveat}`;
+}
 let _trCache=null;
 function getTrackRecord(){
   if(_trCache) return _trCache;
   _trCache=(async()=>{
     try{
-      const [pT,oT]=await Promise.all([
+      const [pT,oT,sT]=await Promise.all([
         fetch("picks.csv",{cache:"no-store"}).then(r=>r.ok?r.text():Promise.reject("picks "+r.status)),
-        fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
+        fetch("outcomes.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>""),
+        /* Sessions the pre-open gate refused. Optional by design: absent file =
+           no skipped sessions, which is the correct reading for any date before
+           the ledger existed (2026-08-29). */
+        fetch("skipped_sessions.csv",{cache:"no-store"}).then(r=>r.ok?r.text():"").catch(()=>"")
       ]);
       const all=parseCSV(pT).filter(p=>p.pick_id&&p.ticker);
       if(!all.length) throw new Error("empty picks.csv");
-      const picks=[], late=[];
-      all.forEach(p=>(isTimelyPick(p)?picks:late).push(p));
+      const echoIds=staleQuoteIds(all);
+      const picks=[], late=[], stale=[];
+      all.forEach(p=>{
+        if(echoIds.has(p.pick_id)) stale.push(p);
+        else (isTimelyPick(p)?picks:late).push(p);
+      });
       const lateCohorts={}; late.forEach(p=>{const d=p.trading_date||"?"; lateCohorts[d]=(lateCohorts[d]||0)+1;});
+      const staleTickers={}; stale.forEach(p=>{const t=p.ticker||"?"; staleTickers[t]=(staleTickers[t]||0)+1;});
       if(!picks.length) throw new Error("no timely picks in picks.csv");
+      const skipped = sT?parseCSV(sT).filter(r=>r.trading_date):[];
       return {real:true, picks, outcomes: oT?parseCSV(oT):[],
-              late, lateCohorts, lateCount:late.length};
+              late, lateCohorts, lateCount:late.length,
+              stale, staleTickers, staleCount:stale.length,
+              skipped, skippedCount:skipped.length};
     }catch(e){ return {real:false, err:String(e)}; }
   })();
   return _trCache;
@@ -2401,13 +2490,15 @@ async function renderPerformance(){
   _await.forEach(p=>{ const t=(p.tier||"?").toUpperCase(); _awaitTier[t]=(_awaitTier[t]||0)+1; });
   const awaitNote = _await.length ? `<p class="muted" style="font-size:13px;margin:.9em 0 0"><b>${_await.length} pick${_await.length>1?'s are':' is'} more than three sessions past the grading window with no outcome</b> (${Object.entries(_awaitTier).sort().map(([t,n])=>t+': '+n).join(', ')}) — almost always a halt or a delisting our price source can no longer quote. We count them here rather than letting them disappear: names that become unpriceable skew toward the hottest tier, so quietly dropping them would flatter it. Each gets an explicit <code>UNGRADEABLE</code> row once the grader stops retrying, and none of them are in the averages above either way.</p>` : "";
 
+  const skipNote = tr.skippedCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">${tr.skippedCount} session${tr.skippedCount>1?'s':''} missing from the log entirely</b> (${tr.skipped.map(r=>r.trading_date).join(', ')}). Our scheduler fired hours late, so the pre-open gate refused to log anything — a pick written after the opening bell was never a forecast, and cannot be backfilled. Those sessions are simply gone. We count them here because a record that quietly skips the days it failed on is not a record: <a href="skipped_sessions.csv" style="color:var(--a-text)">skipped_sessions.csv</a> carries the timestamp and reason for each.</p>` : "";
+  const staleNote = tr.staleCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Also excluded: ${tr.staleCount} picks on a quote that never moved</b> (${Object.entries(tr.staleTickers).map(([t,n])=>t+' ('+n+')').join(', ')}). The stock halted, our price source kept returning its last quote, and the scanner logged a fresh pick each session against a price that no longer existed — byte-identical price, gap of exactly 0.00%, and RVOL, every session. A screen of a stock that did not trade is not a forecast. Same defect as the ${'’'}phantom cohort${'’'} below, one level down: the old guard compared a whole cohort to the previous session, so it caught a dead feed but not a single dead ticker inside a live one. The rows stay in the log, the exclusion re-derives from picks.csv, and no graded pick is affected — so no return, win rate or tier figure on this page moves.</p>` : "";
   const lateNote = tr.lateCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a-text)">What happened, and what it did to the numbers →</a></p>` : "";
   if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.`;
   /* The exclusions render into the panel below the figures, not above them. */
   const excl=document.getElementById("perfExcl");
-  if(excl) excl.innerHTML=`${lateNote}${awaitNote}`;
+  if(excl) excl.innerHTML=`${lateNote}${staleNote}${skipNote}${awaitNote}`;
   const exclWrap=document.getElementById("perfExclWrap");
-  if(exclWrap) exclWrap.style.display=(lateNote||awaitNote)?"":"none";
+  if(exclWrap) exclWrap.style.display=(lateNote||staleNote||skipNote||awaitNote)?"":"none";
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}
@@ -2447,7 +2538,7 @@ async function renderPerformance(){
         <th class="num">Mean net</th><th class="num">Median net</th>
         <th class="num">95% CI (clustered)</th>
       </tr></thead><tbody>${rows}</tbody></table></div>
-      <p class="muted" style="font-size:12.5px;margin:10px 0 0"><b>Mean net is the column that matters.</b> If the score ranked edge, A would beat B would beat C here — it doesn't. <b>Tickers</b> is the count of distinct companies: the log revisits the same names daily, so repeated bets are not independent evidence and the real sample is closer to that number than to the graded count. The interval resamples <i>companies</i>, not trades, which is why it is wide; <b>ns</b> means it spans zero.</p>`;
+      <p class="muted" style="font-size:12.5px;margin:10px 0 0"><b>Mean net is the column that matters.</b> ${tierOrderingSentence(g.tierStats)} <b>Tickers</b> is the count of distinct companies: the log revisits the same names daily, so repeated bets are not independent evidence and the real sample is closer to that number than to the graded count. The interval resamples <i>companies</i>, not trades, which is why it is wide; <b>ns</b> means it spans zero.</p>`;
   } else {
     bt.innerHTML=`<p class="muted" style="font-size:13px;margin-top:8px">No graded outcomes yet — the earliest picks reach the 5-trading-day mark shortly, and this table fills in automatically.</p>`;
   }

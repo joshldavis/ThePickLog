@@ -67,8 +67,30 @@ jobs:
       - name: Verify pre-open timing rules
         run: python market_time.py
       - name: Run ${{ steps.cmd.outputs.cmd }}
+        id: run
         if: steps.cmd.outputs.cmd != 'noop'
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
+      # A refused scan exits 1 by design, which skips every step below — including
+      # the commit. That is how 2026-08-27 and 08-28 left no public trace at all:
+      # the scanner recorded the refusal, then the job died before anything could
+      # be pushed. The skipped-session ledger is the one artifact that MUST survive
+      # a failed scan, so it gets its own committer that runs on failure.
+      - name: Publish skipped-session ledger (runs even when the scan is refused)
+        if: failure() && steps.cmd.outputs.cmd == 'scan'
+        run: |
+          [ -f skipped_sessions.csv ] || exit 0
+          git config user.name "joshldavis"
+          git config user.email "davis1163@gmail.com"
+          git add skipped_sessions.csv
+          if git diff --cached --quiet; then
+            echo "No new skipped session to record."
+          else
+            git commit -m "data: skipped session $(TZ=America/New_York date +%F)"
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed; retrying"; sleep 5
+            done
+          fi
       # Grading-integrity gate (added 2026-08-09 after the weekly audit found five
       # picks weeks past their grade date with no outcomes row and no note, four of
       # them A-tier). The grader may defer a pick while a fetch is transient; it may
@@ -182,6 +204,7 @@ jobs:
           [ -f edgar_snapshot.csv ] && git add edgar_snapshot.csv || true
           [ -f leaderboard.json ] && git add leaderboard.json || true
           [ -f integrity_ledger.csv ] && git add integrity_ledger.csv || true
+          [ -f skipped_sessions.csv ] && git add skipped_sessions.csv || true
           [ -f reports/brief-LATEST.md ] && git add reports/brief-LATEST.md || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."
@@ -238,12 +261,21 @@ jobs:
             integrity_ledger.csv
           if-no-files-found: warn
           retention-days: 90
-      # Dead-man's-switch: ping a healthchecks.io monitor on success. If a run is
-      # ever skipped, disabled (GitHub auto-disables cron after 60 days of repo
-      # inactivity), or errors out, the ping stops and healthchecks.io emails Josh.
-      # Set HEALTHCHECK_URL in repo Settings → Secrets → Actions. See INTEGRITY.md.
+      # Dead-man's-switch: ping a healthchecks.io monitor when the SCAN succeeds.
+      # If a run is ever skipped, disabled (GitHub auto-disables cron after 60 days
+      # of repo inactivity), or errors out, the ping stops and healthchecks.io
+      # emails Josh. Set HEALTHCHECK_URL in repo Settings → Secrets → Actions.
+      # See INTEGRITY.md.
+      #
+      # NARROWED TO THE SCAN, 2026-08-29. This was `if: success()`, which meant the
+      # nightly GRADE run pinged the monitor too — so through the 08-27/08-28 scan
+      # outage the monitor stayed green while the thing it exists to watch was not
+      # running. Same defect as the old watchdog: a health signal that a healthy
+      # sibling job can satisfy tells you nothing about the job that died. The scan
+      # is the load-bearing half (a missed session is unrecoverable; a missed grade
+      # just retries tomorrow), so the scan alone owns the ping.
       - name: Dead-man's-switch ping (healthchecks.io)
-        if: success()
+        if: success() && steps.cmd.outputs.cmd == 'scan'
         run: |
           if [ -n "${{ secrets.HEALTHCHECK_URL }}" ]; then
             curl -fsS -m 10 "${{ secrets.HEALTHCHECK_URL }}" >/dev/null && echo "healthcheck pinged"

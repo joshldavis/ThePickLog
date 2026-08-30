@@ -30,7 +30,9 @@ import argparse, csv, os, sys, uuid, statistics, time
 from datetime import datetime, timedelta, timezone
 # One shared definition of "before the open" — see market_time.py and the
 # 2026-08-04 late-cohort correction in AUDIT_LOG.md.
-from market_time import pre_open_guard, trading_date_et
+from market_time import pre_open_guard, trading_date_et, sessions_between
+from quote_integrity import is_stale_candidate, stale_quote_ids
+from collections import defaultdict
 
 MODEL_VERSION = "v0.2-yf"
 # v0.3 (H-UNIV1, registered 2026-07-08): market-wide criteria-defined universe via
@@ -234,6 +236,7 @@ def cmd_scan(sample=False):
         # NOTHING rather than a cohort that quietly contaminates the headline.
         blocked, why = pre_open_guard(today)
         if blocked:
+            record_skipped_session(today, why)
             sys.exit(f"ERROR: refusing to scan — {why}. A pick logged at or after the "
                      f"opening auction cannot be graded against that session's open, so "
                      f"no rows were written. Re-run before the bell, or skip the session.")
@@ -287,6 +290,20 @@ def cmd_scan(sample=False):
     rows = [s for s in rows if (s["ticker"], today) not in already]
     if skipped:
         print(f"Dedupe guard: skipped {len(skipped)} already-logged picks for {today}: {', '.join(skipped)}")
+    # FROZEN-QUOTE GUARD (added 2026-08-29). The cohort-level phantom detector below
+    # compares the WHOLE screen to the prior session, so it catches a dead feed but is
+    # blind to a single dead ticker inside a live cohort: the other 23 names moved, so
+    # the cohort looks fine. BNZI slipped through exactly that way for 13 sessions —
+    # halted, Yahoo returning its last quote forever, gap printing 0.00% every day,
+    # and a new pick logged each session off a price that no longer existed. A quote
+    # that has not moved since we last screened it is not a screen. See
+    # quote_integrity.py and AUDIT_LOG.md 2026-08-29.
+    _prior_all = read_rows(PICKS_CSV)
+    frozen = [s for s in rows if is_stale_candidate(s["ticker"], s, _prior_all)]
+    if frozen:
+        rows = [s for s in rows if s not in frozen]
+        print(f"Frozen-quote guard: dropped {len(frozen)} candidate(s) whose quote has not "
+              f"moved since the last screen: {', '.join(s['ticker'] for s in frozen)}")
     # Forward-only SEC-EDGAR enrichment: dilution_flag/catalyst_type (into the existing
     # picks.csv columns, like short_interest did) + a quality snapshot into a sidecar so
     # Finding B stays testable OOS. NON-FATAL: if edgar_lens or SEC is unavailable, every
@@ -339,6 +356,7 @@ def cmd_scan_market():
     # NOTHING rather than a cohort that quietly contaminates the headline.
     blocked, why = pre_open_guard(today)
     if blocked:
+        record_skipped_session(today, why)
         sys.exit(f"ERROR: refusing to scan — {why}. A pick logged at or after the "
              f"opening auction cannot be graded against that session's open, so "
              f"no rows were written. Re-run before the bell, or skip the session.")
@@ -434,13 +452,56 @@ def cmd_scan_market():
     print(f"Logged {len(to_publish)} picks -> {PICKS_CSV}; {n_cand} candidates -> {CANDIDATES_CSV}")
 
 
+# ------------------------------------------------------------------ skipped sessions
+# SESSION LEDGER (added 2026-08-29). When the pre-open gate refuses, the session is
+# gone: a pick written after the bell was never a forecast, so it can never be
+# backfilled. Until now the only trace was a red run in the Actions tab, which is
+# not public and not permanent — the site could say "49 trading days" while a
+# stranger had no way to learn that two more sessions were attempted and refused.
+# The gap now lives in the data, on the same terms as everything else: append-only,
+# public, and disclosed on the Track record.
+SKIPPED_CSV = os.path.join(HERE, "skipped_sessions.csv")
+SKIPPED_FIELDS = ["trading_date", "attempted_at", "reason", "detail"]
+
+
+def record_skipped_session(trading_date, why, reason="pre-open gate"):
+    """Append one row recording a session the scanner refused to log.
+
+    Idempotent per date: a session skipped twice (both crons dispatched late) gets
+    one row, not two, so the public count is sessions-missed and not runs-failed.
+    Never raises — a bookkeeping failure must not mask the refusal itself, which is
+    the thing the caller is about to exit loudly on.
+    """
+    try:
+        existing = {r.get("trading_date") for r in read_rows(SKIPPED_CSV)}
+        if trading_date in existing:
+            return
+        append_row(SKIPPED_CSV, SKIPPED_FIELDS, {
+            "trading_date": trading_date,
+            "attempted_at": datetime.now(timezone.utc).isoformat(),
+            "reason": reason,
+            "detail": why,
+        })
+        print(f"Recorded skipped session {trading_date} -> {SKIPPED_CSV}")
+    except Exception as e:
+        print(f"  WARNING: could not record skipped session: {type(e).__name__} {e}")
+
+
 def _trading_days_since(date_str):
-    d0 = datetime.strptime(date_str,"%Y-%m-%d").date(); d1 = datetime.now().date()
-    days, cur = 0, d0
-    while cur < d1:
-        cur += timedelta(days=1)
-        if cur.weekday() < 5: days += 1
-    return days
+    """Trading SESSIONS elapsed since date_str, exclusive of it.
+
+    Counted weekdays until 2026-08-29, which silently treated market holidays as
+    sessions. That made every threshold expressed in this unit run fast across a
+    holiday week — the grade window, and more importantly the retry cap, which is
+    what decides when a name is declared dead. The downstream window check meant
+    no pick was ever graded off a short window, so no published return was wrong;
+    the unit was just not the one the comments claimed. Now shares one calendar
+    with the scanner and the watchdog via market_time.
+    """
+    d1 = datetime.now().date().strftime("%Y-%m-%d")
+    if d1 <= date_str:
+        return 0
+    return max(0, len(sessions_between(date_str, d1)) - 1)
 
 def cmd_grade():
     yf = _yf()
@@ -448,14 +509,25 @@ def cmd_grade():
     done = {o["pick_id"] for o in read_rows(OUTCOMES_CSV)}
     haircut = CONFIG["COST_HAIRCUT_PCT"]; graded = 0
     GRADE = CONFIG["GRADE_AFTER_DAYS"]
+    failed_by_ticker = defaultdict(list)
+    # Stale-quote echoes are not forecasts and are excluded from every published
+    # figure, so grading them would be inventing a result for a screen that never
+    # happened. Skip them here and in check-grading; the exclusion is derived from
+    # the public CSV, so it stays reproducible. See quote_integrity.py.
+    echoes = stale_quote_ids(picks)
+    if echoes:
+        print(f"Skipping {len(echoes)} stale-quote echo pick(s) — excluded from the record.")
     for p in picks:
         if p["pick_id"] in done: continue
+        if p["pick_id"] in echoes: continue
         tds = _trading_days_since(p["trading_date"])
         if tds < GRADE: continue
-        # Past ~4 weeks of weekdays with still-no-gradeable-data, treat the symbol as
+        # Past ~4 weeks of sessions with still-no-gradeable-data, treat the symbol as
         # genuinely dead (delisted/halted) and record a terminal note. Before that, a
         # missing fetch is treated as TRANSIENT: skip and retry next run rather than
         # permanently dropping a real win/loss from the record (survivorship bias). [H1]
+        # The per-ticker rule after the loop is the faster path when the evidence is
+        # about the SYMBOL rather than about one fetch.
         stale = tds > 20
         try:
             start = p["trading_date"]
@@ -463,12 +535,14 @@ def cmd_grade():
             df = yf.Ticker(p["ticker"]).history(start=start, end=end, auto_adjust=False)
             if df is None or len(df)==0:
                 if stale: append_outcome(p, "no history (gave up after retries)"); graded += 1
+                else: failed_by_ticker[p["ticker"]].append((p, tds))
                 continue  # transient: leave ungraded so the next run retries
             df = df.reset_index()
             df["d"] = df["Date"].astype(str).str[:10]
             idx = df.index[df["d"]==start]
             if len(idx)==0:
                 if stale: append_outcome(p, "no entry bar"); graded += 1
+                else: failed_by_ticker[p["ticker"]].append((p, tds))
                 continue
             i0 = idx[0]
             window = df.iloc[i0:i0+GRADE+1]
@@ -486,6 +560,8 @@ def cmd_grade():
                     append_outcome(p, f"UNGRADEABLE: only {len(window)} of {GRADE+1} sessions "
                                       f"ever printed — halted or delisted mid-window")
                     graded += 1
+                else:
+                    failed_by_ticker[p["ticker"]].append((p, tds))
                 continue
             o = float(window.iloc[0]["Open"]); c = float(window.iloc[0]["Close"])
             close_5d = float(window.iloc[GRADE]["Close"])
@@ -510,6 +586,33 @@ def cmd_grade():
                 append_outcome(p, f"UNGRADEABLE: repeated fetch failure after "
                                   f"{tds} trading days ({type(e).__name__})")
                 graded += 1
+            else:
+                failed_by_ticker[p["ticker"]].append((p, tds))
+
+    # PER-TICKER DEATH RULE (added 2026-08-29). The per-pick cap above waits
+    # ~20 sessions before declaring a name dead, which is right for ONE pick
+    # whose fetch might be transient. But it is the wrong evidence to weigh when
+    # the SAME ticker has failed across many consecutive cohorts: six separate
+    # picks failing on six separate sessions is not six transient outages, it is
+    # one dead ticker. Waiting the full per-pick timer on each of them parks a
+    # dozen picks in the publicly-disclosed "awaiting outcome" bucket for twelve
+    # sessions longer than the evidence warrants — which is what BNZI did.
+    #
+    # Conservative by construction: the ticker must have failed on at least
+    # DEAD_TICKER_COHORTS distinct past-due sessions IN THIS RUN, so a single bad
+    # fetch day can never trigger it, and only past-due picks are written.
+    DEAD_TICKER_COHORTS = 6
+    for tkr, items in failed_by_ticker.items():
+        sessions = {p["trading_date"] for p, _ in items}
+        if len(sessions) < DEAD_TICKER_COHORTS:
+            continue
+        oldest = max(t for _, t in items)
+        print(f"  {tkr}: {len(sessions)} past-due cohorts all unpriceable this run "
+              f"(oldest {oldest} sessions) — declaring the symbol dead")
+        for p, t in items:
+            append_outcome(p, f"UNGRADEABLE: {tkr} unpriceable across {len(sessions)} "
+                              f"consecutive past-due cohorts — halted or delisted")
+            graded += 1
     print(f"Graded {graded} picks -> {OUTCOMES_CSV}")
 
 def cmd_check_grading():
@@ -529,10 +632,14 @@ def cmd_check_grading():
     SLACK    = 3           # normal grader lag: daily cadence + weekends/holidays
     picks = read_rows(PICKS_CSV)
     done = {o["pick_id"] for o in read_rows(OUTCOMES_CSV)}
+    # Excluded from the record entirely, so they are not "lost" rows — demanding a
+    # terminal note for a screen that never happened would make this gate cry wolf
+    # forever. See quote_integrity.py.
+    echoes = stale_quote_ids(picks)
 
     overdue, lost = [], []
     for p in picks:
-        if p["pick_id"] in done:
+        if p["pick_id"] in done or p["pick_id"] in echoes:
             continue
         tds = _trading_days_since(p["trading_date"])
         # Three sessions of slack past the window before a pick counts as overdue.
