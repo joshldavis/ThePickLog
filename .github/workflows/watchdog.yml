@@ -3,6 +3,23 @@
 # GitHub issue so a silent failure of the daily job can't go unnoticed. Needs
 # no external service or secret — it uses the built-in GITHUB_TOKEN.
 # (For push-style email alerts, also set HEALTHCHECK_URL — see INTEGRITY.md.)
+#
+# REWRITTEN 2026-08-29, after the weekly audit found it had slept through a
+# real two-session outage. It used to alert when picks.csv OR outcomes.csv OR
+# paths.csv had gone 4 days without a commit. On 08-27 and 08-28 the scan never
+# ran, but the GRADE half of the daily job kept committing outcomes.csv and
+# paths.csv every night — so the watched signal never went stale and nothing
+# was filed. Tripping it would have required a four-day scan outage AND a
+# simultaneous grader outage.
+#
+# The lesson, which is the same one the 08-08 audit learned about the grader:
+# a freshness check that ANY job can satisfy cannot tell you that a PARTICULAR
+# job stopped. So this now asserts CONTENT, not commit recency — the newest
+# trading_date in picks.csv must be the last completed market session — and it
+# watches picks.csv alone, because picks.csv is the file the scan alone writes.
+# Threshold is one session, not four days: a missed cohort is unrecoverable
+# (a pick logged after the bell was never a forecast), so the alarm has to fire
+# while the next morning's run can still be dispatched by hand.
 name: ThePickLog watchdog
 
 on:
@@ -19,41 +36,61 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          fetch-depth: 0          # need full history to read commit timestamps
-      - name: Check forward-log freshness
+          python-version: "3.11"
+      - name: Check the forward log covers the last completed session
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Weekday scans mean the longest legitimate gap is Fri→Mon (3 days).
-          # Alert at 4 so a genuinely missed weekday run trips it the next morning.
-          STALE_DAYS: "4"
+          # Sessions of drift tolerated before filing. 1 = "yesterday's cohort is
+          # missing, say so this morning". market_time knows about weekends and
+          # NYSE holidays, so a long weekend is 0 sessions of drift, not 3 days.
+          MAX_SESSION_GAP: "1"
         run: |
           set -euo pipefail
-          LAST=$(git log -1 --format=%ct -- picks.csv outcomes.csv paths.csv 2>/dev/null || echo 0)
-          NOW=$(date -u +%s)
-          if [ "$LAST" -eq 0 ]; then AGE_DAYS=999; else AGE_DAYS=$(( (NOW - LAST) / 86400 )); fi
-          echo "Last forward-log commit was ${AGE_DAYS} day(s) ago (threshold ${STALE_DAYS})."
+
+          # market_time.py is dependency-free (datetime + zoneinfo) and is the
+          # SAME module the scanner's pre-open gate uses. Sharing it is the point:
+          # a watchdog with its own private holiday calendar would eventually
+          # disagree with the scanner, and the copy that disagreed would be the
+          # one deciding whether to stay quiet.
+          python market_time.py              # selftest: the calendar itself must be sane
+          python watchdog_check.py > /tmp/wd_state.env
+          . /tmp/wd_state.env
+          echo "picks.csv newest trading_date=${NEWEST:-none}; last completed session=${EXPECTED}; gap=${GAP} session(s) (threshold ${MAX_SESSION_GAP})."
 
           EXISTING=$(gh issue list --label watchdog --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
 
-          if [ "$AGE_DAYS" -ge "$STALE_DAYS" ]; then
-            TITLE="⚠️ ThePickLog log is stale (${AGE_DAYS}d) — daily job may have stopped"
+          if [ "${GAP:-999}" -ge "$MAX_SESSION_GAP" ]; then
+            TITLE="⚠️ ThePickLog scan has missed ${GAP} session(s) — newest cohort is ${NEWEST:-none}"
             printf '%s\n' \
-              "The forward log (picks/outcomes/paths.csv) has not been updated in ${AGE_DAYS} days." \
+              "**picks.csv does not cover the last completed market session.**" \
               "" \
-              "The daily scan/grade workflow may be failing or disabled. Note: GitHub auto-disables scheduled workflows after 60 days of repo inactivity — that is the most common silent cause. Check the **Actions** tab and re-enable / re-run if needed." \
+              "| | |" \
+              "|---|---|" \
+              "| Newest \`trading_date\` in picks.csv | \`${NEWEST:-none}\` |" \
+              "| Last completed session | \`${EXPECTED}\` |" \
+              "| Sessions missing | \`${MISSING:-unknown}\` |" \
+              "" \
+              "**A missed cohort cannot be recovered.** A pick written down after the opening bell was never a forecast, so backfilling is not an option — the session is simply gone from the record. If a scan is still dispatchable before today's open, run it by hand now: Actions → *ThePickLog daily* → Run workflow → \`scan\`." \
+              "" \
+              "Most likely causes, in the order they have actually happened here:" \
+              "" \
+              "1. **GitHub dropped or badly delayed the scan cron.** Best-effort scheduling; on 2026-08-27 and 08-28 the 11:00 UTC dispatch arrived ~10 hours late and the pre-open gate correctly refused to log. Two scan crons (10:00 and 11:00 UTC) now guard against this, so if both were missed, check for a wider Actions incident." \
+              "2. **The workflow was auto-disabled.** GitHub disables scheduled workflows after 60 days of repo inactivity. Check the Actions tab for a re-enable banner." \
+              "3. **The scan ran and failed.** Look for a red *ThePickLog daily* run; the pre-open gate exits 1 by design rather than logging a contaminated cohort." \
               "" \
               "_Filed automatically by watchdog.yml._" > /tmp/wd_body.md
             if [ -n "$EXISTING" ]; then
-              gh issue comment "$EXISTING" --body "Still stale: ${AGE_DAYS} days as of $(date -u +%F)."
+              gh issue comment "$EXISTING" --body "Still behind as of $(date -u +%F): newest cohort \`${NEWEST:-none}\`, last completed session \`${EXPECTED}\`, gap ${GAP} session(s). Missing: \`${MISSING:-unknown}\`."
             else
               gh label create watchdog --color B60205 --description "Automated staleness alerts" 2>/dev/null || true
               gh issue create --title "$TITLE" --body-file /tmp/wd_body.md --label watchdog
             fi
           else
-            echo "Fresh — no alert."
+            echo "Log covers the last completed session — no alert."
             if [ -n "$EXISTING" ]; then
-              gh issue comment "$EXISTING" --body "Resolved: log is fresh again as of $(date -u +%F). Closing."
+              gh issue comment "$EXISTING" --body "Resolved: picks.csv now covers the last completed session (\`${EXPECTED}\`) as of $(date -u +%F). Closing."
               gh issue close "$EXISTING"
             fi
           fi

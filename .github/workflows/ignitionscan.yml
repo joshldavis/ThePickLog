@@ -13,6 +13,16 @@ on:
     # best-effort cron had drifted past the 09:30 opening bell on 7 occasions and
     # logged anyway. Moving it earlier buys ~2h20m of margin before the hard
     # pre-open gate in market_time.py, which is what actually enforces the rule.
+    #
+    # TWO scan crons since 2026-08-29. Earlier margin was not enough: on 08-27 and
+    # 08-28 GitHub did not merely delay the 11:00 dispatch, it delivered it ~10
+    # hours late (20:49 and 21:16 UTC). The gate refused both, correctly, and the
+    # cost was two sessions permanently missing from the record — a pick logged
+    # after the bell can never be backfilled. Margin cannot fix a dropped
+    # dispatch; only a second independent one can. Whichever cron lands first
+    # logs the cohort, and the "Decide command" step below makes the other a
+    # clean no-op. Both must be dropped to lose a session.
+    - cron: "0 10 * * 1-5"    # ~6:00am ET scan — redundant trigger
     - cron: "0 11 * * 1-5"    # ~7:00am ET scan (UTC; shifts 1h in winter)
     - cron: "0 21 * * 1-5"    # ~5:00pm ET grade
 
@@ -35,6 +45,21 @@ jobs:
           CMD=scan
           if [ "${{ github.event.schedule }}" = "0 21 * * 1-5" ]; then CMD=grade; fi
           if [ -n "${{ github.event.inputs.command }}" ]; then CMD="${{ github.event.inputs.command }}"; fi
+          # Same-day idempotency guard (2026-08-29), the other half of the twin
+          # scan crons above. The scanner already dedupes on (ticker, date), but
+          # that is not enough: a second scan an hour later screens a moved market
+          # and would append DIFFERENT tickers to the same cohort, inflating it
+          # with names chosen later in the morning. The cohort must be whatever
+          # the first successful run saw. Keyed on the ET trading date — the
+          # runner clock is UTC, and a late-evening UTC run would otherwise stamp
+          # tomorrow's date on a session that has already closed.
+          if [ "$CMD" = "scan" ] && [ -f picks.csv ]; then
+            TODAY=$(TZ=America/New_York date +%F)
+            if cut -d, -f3 picks.csv | grep -qxF "$TODAY"; then
+              echo "Cohort for $TODAY is already logged — this scan is a no-op."
+              CMD=noop
+            fi
+          fi
           echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
       # The pre-open rule is load-bearing for every claim on the site, so its
       # selftest gates the run rather than merely reporting. If timeliness logic
@@ -42,6 +67,7 @@ jobs:
       - name: Verify pre-open timing rules
         run: python market_time.py
       - name: Run ${{ steps.cmd.outputs.cmd }}
+        if: steps.cmd.outputs.cmd != 'noop'
         run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
       # Grading-integrity gate (added 2026-08-09 after the weekly audit found five
       # picks weeks past their grade date with no outcomes row and no note, four of
@@ -132,6 +158,7 @@ jobs:
         # Records SHA-256 of picks/outcomes/paths into integrity_ledger.csv, chained
         # to the prior row so any later edit to a past entry is provable. Non-fatal:
         # a hashing hiccup must never block the data commit.
+        if: steps.cmd.outputs.cmd != 'noop'
         run: python log_integrity.py --event=${{ steps.cmd.outputs.cmd }} || echo "integrity seal skipped (non-fatal)"
       - name: Commit data
         id: commit

@@ -176,17 +176,14 @@ def read_rows(path):
 
 # ----------------------------------------------------------------------------- commands
 # NYSE full-day closures. Weekends are already excluded by the cron (Mon-Fri); this catches
-# weekday holidays. A PRE-MARKET scan can't infer "is the market open" from a daily bar (today's
-# bar doesn't exist yet at 7:30am ET), so an explicit list is needed. The stale/duplicate-quote
-# guard below is the SOURCE-AGNOSTIC backstop for anything this list misses (future years, half
-# days, feed outages): on a closed market the feed returns the prior session's quotes unchanged —
-# exactly the bug that logged a phantom 2026-06-19 (Juneteenth) cohort identical to the 06-22 session.
-NYSE_HOLIDAYS = {
-    "2026-01-01","2026-01-19","2026-02-16","2026-04-03","2026-05-25","2026-06-19",
-    "2026-07-03","2026-09-07","2026-11-26","2026-12-25",
-    "2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18",
-    "2027-07-05","2027-09-06","2027-11-25","2027-12-24",
-}
+# weekday holidays. Moved into market_time.py on 2026-08-29 so the watchdog can consult the
+# SAME calendar (it now asserts the log contains the last completed session, which requires
+# knowing which days were sessions). Re-exported here because the scanner's stale/duplicate-quote
+# guard message refers to it by name. That guard remains the SOURCE-AGNOSTIC backstop for anything
+# the list misses (future years, half days, feed outages): on a closed market the feed returns the
+# prior session's quotes unchanged — exactly the bug that logged a phantom 2026-06-19 (Juneteenth)
+# cohort identical to the 06-22 session.
+from market_time import NYSE_HOLIDAYS
 
 
 def _is_stale_duplicate_scan(today, rows):

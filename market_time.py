@@ -31,7 +31,7 @@ DST is handled properly via zoneinfo. 09:30 ET is 13:30 UTC in summer and
 the year.
 """
 
-from datetime import datetime, time as _time
+from datetime import datetime, time as _time, timedelta
 from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
@@ -45,6 +45,86 @@ MARKET_OPEN = _time(9, 30)
 # jitter fails loudly instead of silently producing a contaminated cohort.
 SCAN_CUTOFF = _time(9, 20)
 
+# NYSE regular-session close. Used only to decide whether a session has finished,
+# never to grade — grading reads real bars.
+MARKET_CLOSE = _time(16, 0)
+
+# NYSE full-day closures. Moved here from ignitionscan.py on 2026-08-30 so the
+# scanner, the watchdog and any future surface share ONE calendar. A watchdog that
+# disagrees with the scanner about what a trading day is will either cry wolf every
+# holiday or stay silent through a real outage.
+NYSE_HOLIDAYS = {
+    "2026-01-01","2026-01-19","2026-02-16","2026-04-03","2026-05-25","2026-06-19",
+    "2026-07-03","2026-09-07","2026-11-26","2026-12-25",
+    "2027-01-01","2027-01-18","2027-02-15","2027-03-26","2027-05-31","2027-06-18",
+    "2027-07-05","2027-09-06","2027-11-25","2027-12-24",
+}
+
+
+def _as_date(d):
+    """Accept 'YYYY-MM-DD' or a date; return a date, or None if unparseable."""
+    if d is None:
+        return None
+    if isinstance(d, str):
+        try:
+            return datetime.strptime(d, "%Y-%m-%d").date()
+        except ValueError:
+            return None
+    return getattr(d, "date", lambda: d)()
+
+
+def is_session(d):
+    """True if d is a US equity trading day (weekday, not a full-day closure).
+
+    Half days are still sessions: they open, so a pick logged for one is gradeable.
+    """
+    dd = _as_date(d)
+    if dd is None:
+        return False
+    return dd.weekday() < 5 and dd.strftime("%Y-%m-%d") not in NYSE_HOLIDAYS
+
+
+def prev_session(d):
+    """The trading day strictly before d."""
+    dd = _as_date(d)
+    if dd is None:
+        return None
+    dd -= timedelta(days=1)
+    for _ in range(30):                       # 30 is far beyond any real closure run
+        if is_session(dd):
+            return dd
+        dd -= timedelta(days=1)
+    return None
+
+
+def sessions_between(a, b):
+    """Sorted 'YYYY-MM-DD' trading days in the inclusive range [a, b]."""
+    a, b = _as_date(a), _as_date(b)
+    if a is None or b is None or a > b:
+        return []
+    out, cur = [], a
+    while cur <= b:
+        if is_session(cur):
+            out.append(cur.strftime("%Y-%m-%d"))
+        cur += timedelta(days=1)
+    return out
+
+
+def last_expected_scan_session(now=None):
+    """The most recent session the scanner should already have logged (or refused).
+
+    NOT "the last completed session" — the scanner logs BEFORE the open, so today
+    counts the moment the pre-open window has closed. Before that, today is still
+    legitimately unlogged and the answer is the prior session. Getting this wrong in
+    either direction is what makes a freshness alarm useless: too eager and it fires
+    every morning, too lazy and it sleeps through a real miss.
+    """
+    now = (now or now_et()).astimezone(ET)
+    today = now.date()
+    if is_session(today) and now >= datetime.combine(today, SCAN_CUTOFF, tzinfo=ET):
+        return today.strftime("%Y-%m-%d")
+    p = prev_session(today) if not is_session(today) else prev_session(today)
+    return p.strftime("%Y-%m-%d") if p else None
 
 def now_et():
     """Current wall-clock time in US market time, regardless of runner TZ."""
@@ -188,6 +268,55 @@ if __name__ == "__main__":
     check("guard 09:57 ET block", pre_open_guard("2026-07-09", at("2026-07-09T13:57:00+00:00"))[0], True)
     check("guard past session",   pre_open_guard("2026-07-08", at("2026-07-09T11:00:00+00:00"))[0], True)
     check("guard future session", pre_open_guard("2026-07-10", at("2026-07-09T11:00:00+00:00"))[0], False)
+
+    # Session calendar — exercised by the watchdog rewrite of 2026-08-29, which
+    # asks "has the scanner logged every session it should have?" rather than
+    # "has any file been committed lately". These are the cases where a naive
+    # "yesterday" makes the dead-man's-switch either cry wolf every pre-open
+    # morning or sleep through a holiday weekend.
+    check("weekday is a session",   is_session("2026-08-28"), True)
+    check("saturday is not",        is_session("2026-08-29"), False)
+    check("Juneteenth is not",      is_session("2026-06-19"), False)
+    check("observed Jul 4 is not",  is_session("2026-07-03"), False)
+    check("accepts a date object",  is_session(datetime(2026, 8, 28).date()), True)
+    check("junk date is not",       is_session("not-a-date"), False)
+
+    check("prev of Monday",         prev_session("2026-08-31").strftime("%Y-%m-%d"), "2026-08-28")
+    check("prev skips Memorial Day", prev_session("2026-05-26").strftime("%Y-%m-%d"), "2026-05-22")
+
+    # The scanner logs BEFORE the open, so a session counts as "should already be
+    # logged" once the 09:20 pre-open cutoff has passed — not at the 09:30 bell.
+    check("before cutoff, prior day", last_expected_scan_session(at("2026-08-28T11:00:00+00:00")), "2026-08-27")
+    check("after cutoff, today",      last_expected_scan_session(at("2026-08-28T14:00:00+00:00")), "2026-08-28")
+    check("saturday looks back",      last_expected_scan_session(at("2026-08-29T14:00:00+00:00")), "2026-08-28")
+    check("holiday looks back",       last_expected_scan_session(at("2026-06-19T14:00:00+00:00")), "2026-06-18")
+
+    # Inclusive list of sessions; this is what turns "newest logged cohort" plus
+    # "session we expected" into the actual list of missing dates.
+    check("range spans the gap",   sessions_between("2026-08-26", "2026-08-28"),
+          ["2026-08-26", "2026-08-27", "2026-08-28"])
+    check("range of one day",      sessions_between("2026-08-28", "2026-08-28"), ["2026-08-28"])
+    check("range skips Juneteenth", sessions_between("2026-06-18", "2026-06-22"),
+          ["2026-06-18", "2026-06-22"])
+    check("inverted range empty",  sessions_between("2026-08-28", "2026-08-26"), [])
+
+    # Calendar. Weekends and full-day closures are not sessions; half days are.
+    check("sat not session",      is_session("2026-08-29"), False)
+    check("sun not session",      is_session("2026-08-30"), False)
+    check("juneteenth closed",    is_session("2026-06-19"), False)
+    check("observed jul4 closed", is_session("2026-07-03"), False)
+    check("normal thu session",   is_session("2026-08-27"), True)
+    check("prev of monday",       prev_session("2026-08-31").strftime("%Y-%m-%d"), "2026-08-28")
+    check("prev skips holiday",   prev_session("2026-06-22").strftime("%Y-%m-%d"), "2026-06-18")
+    check("range excludes both",  sessions_between("2026-06-17", "2026-06-22"),
+          ["2026-06-17", "2026-06-18", "2026-06-22"])
+
+    # last_expected_scan_session: the hinge is SCAN_CUTOFF, not the close.
+    check("before cutoff -> prior", last_expected_scan_session(at("2026-08-31T12:00:00+00:00")), "2026-08-28")
+    check("after cutoff -> today",  last_expected_scan_session(at("2026-08-31T14:00:00+00:00")), "2026-08-31")
+    check("saturday -> friday",     last_expected_scan_session(at("2026-08-29T18:00:00+00:00")), "2026-08-28")
+    check("sunday -> friday",       last_expected_scan_session(at("2026-08-30T18:00:00+00:00")), "2026-08-28")
+    check("holiday -> prior",       last_expected_scan_session(at("2026-06-19T18:00:00+00:00")), "2026-06-18")
 
     if fails:
         print("SELFTEST FAILED:"); [print("  -", f) for f in fails]; sys.exit(1)
