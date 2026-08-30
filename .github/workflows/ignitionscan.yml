@@ -29,6 +29,25 @@ on:
 permissions:
   contents: write
 
+# Two scan crons (10:00 and 11:00 UTC) plus the grade cron share this one workflow,
+# and GitHub runs concurrent dispatches in PARALLEL by default. Under the same drift
+# the second cron exists to survive, the two scan dispatches can arrive a minute
+# apart: both check out a picks.csv that has no cohort for today, both therefore PASS
+# the same-day idempotency guard in "Decide command" (it reads the file, and cannot
+# see another runner mid-scan), and the second appends a DIFFERENT set of tickers to
+# the same session — screened minutes later against a market that has moved. That is
+# precisely the cohort inflation the guard was added to prevent, and the guard alone
+# cannot prevent it, because the state it tests is only true after the first run has
+# PUSHED. Serialising the workflow is what makes that guard sound: the queued run
+# starts after the first has pushed, sees the cohort, and no-ops.
+#
+# cancel-in-progress is false on purpose — a scan already in flight is the one worth
+# keeping, and cancelling it mid-write is how you get a half-written cohort.
+concurrency:
+  group: thepicklog-daily-${{ github.ref }}
+  cancel-in-progress: false
+
+
 jobs:
   run:
     runs-on: ubuntu-latest
