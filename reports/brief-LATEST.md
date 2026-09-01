@@ -42,7 +42,7 @@ _Impersonal, educational watchlist — identical for all readers. Market regime:
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
-- Across **1041** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 26%) vs **-12%** (rug 11%) for C/D.
+- Across **1061** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-19%** (rug rate 26%) vs **-12%** (rug 11%) for C/D.
 - **Actionable read:** a top-of-leaderboard A/B name is the part most likely to gut you. Treat a high score as a *warning label on the downside*, not a green light.
 
 ## How to read this
