@@ -1,5 +1,33 @@
 # ThePickLog — Audit Log
 
+## 2026-09-02 — Scheduler correction — **⚠️ the 08-29 fix did not work, and its diagnosis was wrong**
+
+Three more sessions are gone: **08-31, 09-01, 09-02**, on top of 08-27 and 08-28. `picks.csv` still ends 2026-08-26. Five sessions, all permanently unfillable, one lost per trading day for a week.
+
+**The 08-29 diagnosis was wrong, and this entry exists to correct it on the record.** That audit concluded GitHub had *dropped* the `0 11` dispatch, and reasoned from there: *"margin cannot fix a dropped dispatch, only a second independent one can"* → ship a redundant `0 10` cron. The post-fix data refutes the premise. Every dispatch fires. They are all delayed by roughly the same amount:
+
+| session | `0 10` fired | `0 11` fired | delay | outcome |
+|---|---|---|---|---|
+| 08-31 | 17:22:48Z (+7h23m) | 17:43:21Z (+6h43m) | ~7h | both refused |
+| 09-01 | 14:30:03Z (+4h30m) | 15:14:36Z (+4h15m) | ~4.5h | both refused |
+| 09-02 | 14:03:35Z (+4h03m) | 14:44:56Z (+3h45m) | ~4h | both refused |
+
+**Redundancy was the wrong axis; margin was the right one — the exact opposite of what was concluded.** A second trigger reading the same delayed clock inherits the delay. Note how narrow it is: on 09-02 the first dispatch landed 14:03Z against a 13:20Z cutoff, **missing by 43 minutes**. Each additional hour of margin genuinely buys back a session. This is a documented GitHub-wide problem, and community reports specifically note that changing the cron minute does not help.
+
+**⭐ Generalisable lesson: a fix inherits the failure mode of the diagnosis it was built on.** "Dropped" and "delayed" produce identical symptoms in the Actions tab — a red run and a missing cohort — and are distinguished only by the *dispatch timestamps*, which nobody looked at until after the fix had shipped and failed. Before designing around a failure mode, confirm which one it is from data that can tell them apart.
+
+**What shipped now**
+
+- **Primary trigger moved off GitHub's scheduler.** `api/cron-scan.js` + a `crons` entry in `vercel.json` fire `workflow_dispatch` from Vercel Cron — a different scheduler on a different clock, which is the only change that actually addresses the cause. Hobby precision is per-hour (±59 min); scheduled at 11:00 UTC it lands 07:00–07:59 ET, inside a 3h20m window. The schedule is deliberately daily rather than Mon–Fri because Hobby rejects expressions it judges to run more than once a day and a rejected cron fails the whole deployment; weekend dispatches are harmless now (see below).
+- **The GitHub crons stay as a backup, laddered** to `0 07`/`0 08`/`0 09`/`0 10`/`0 11`. Whichever trigger arrives first logs the cohort; the same-day idempotency guard makes every later arrival a clean no-op, so the ladder is free.
+- **The scan window now has a FLOOR as well as a ceiling** (`market_time.SCAN_FLOOR`, 06:00 ET). An early rung — or a punctual Vercel dispatch — can now arrive before pre-market quotes exist, and scanning then would log a cohort priced off the prior session: the 2026-06-19 phantom bug with a new cause. **Too-early is a clean no-op (exit 0, no ledger row); too-late remains a refusal (exit 1, ledger row).** The asymmetry is deliberate — nothing is lost by being early, so it must not consume a session in the public count. A selftest asserts the two guards are disjoint at every hour.
+- **The scanner enforces the trading calendar itself** (`is_session`), instead of relying on the cron's `1-5` day field. An external trigger can dispatch any day; the calendar check belongs with the scanner, not the caller.
+
+**Still owner-only:** the Vercel trigger is inert until two env vars exist — `GITHUB_DISPATCH_TOKEN` (fine-grained PAT, this repo only, Actions: Read and write) and `CRON_SECRET`. The endpoint fails loudly with HTTP 500 and names the missing variable rather than silently doing nothing, because a trigger that quietly stops firing is the failure mode this whole exercise exists to eliminate. **Until those are set, the laddered GitHub crons are the only trigger.**
+
+**Not touched:** the grade cron still runs on GitHub's scheduler. Grading has no deadline — a late grade is simply a late grade — and the grader is delicate enough that it should not be changed in the same pass as the thing that is actually broken.
+
+
 ## 2026-08-29 — Weekly verifiability audit — **⚠️ Issues found (3)**
 
 Every published number still re-derives exactly from the raw CSVs — no displayed claim is false. The issues are all in the apparatus and its disclosure: **two trading sessions are simply absent from the log and the site never says so, the watchdog built to catch exactly that could not see it, and one prose sentence now contradicts the table printed directly beneath it.**

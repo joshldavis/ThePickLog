@@ -22,6 +22,28 @@ on:
     # dispatch; only a second independent one can. Whichever cron lands first
     # logs the cohort, and the "Decide command" step below makes the other a
     # clean no-op. Both must be dropped to lose a session.
+    #
+    # LADDERED 2026-09-02. The twin-cron fix above was built on a wrong diagnosis.
+    # It assumed GitHub was DROPPING dispatches, so a second independent trigger
+    # would survive. The week of data says otherwise: every dispatch fires, and
+    # they are all delayed by roughly the SAME amount (08-31 ~7h, 09-01 ~4.5h,
+    # 09-02 ~4h), so both rungs landed past the 09:20 ET cutoff and 08-31, 09-01
+    # and 09-02 were lost on top of 08-27 and 08-28. Redundancy was the wrong axis;
+    # MARGIN is the right one. On 09-02 the first dispatch missed the cutoff by
+    # only 43 minutes, so each extra hour of margin genuinely buys a session.
+    #
+    # These rungs are a BACKUP now. The primary trigger is Vercel Cron calling
+    # workflow_dispatch (api/cron-scan.js) — a different scheduler on a different
+    # clock, which is the only thing that actually addresses the failure. Whichever
+    # trigger arrives first logs the cohort; the same-day idempotency guard below
+    # makes every later arrival a clean no-op, so the ladder is free.
+    #
+    # The early rungs are safe because the scanner now has a FLOOR as well as a
+    # ceiling: a dispatch that lands before 06:00 ET exits 0 without logging and
+    # without writing a skipped-session row (market_time.SCAN_FLOOR).
+    - cron: "0 07 * * 1-5"    # ~3:00am ET — only useful under heavy drift
+    - cron: "0 08 * * 1-5"    # ~4:00am ET
+    - cron: "0 09 * * 1-5"    # ~5:00am ET
     - cron: "0 10 * * 1-5"    # ~6:00am ET scan — redundant trigger
     - cron: "0 11 * * 1-5"    # ~7:00am ET scan (UTC; shifts 1h in winter)
     - cron: "0 21 * * 1-5"    # ~5:00pm ET grade

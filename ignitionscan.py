@@ -30,7 +30,7 @@ import argparse, csv, os, sys, uuid, statistics, time
 from datetime import datetime, timedelta, timezone
 # One shared definition of "before the open" — see market_time.py and the
 # 2026-08-04 late-cohort correction in AUDIT_LOG.md.
-from market_time import pre_open_guard, trading_date_et, sessions_between
+from market_time import pre_open_guard, before_scan_floor, is_session, trading_date_et, sessions_between
 from quote_integrity import is_stale_candidate, stale_quote_ids
 from collections import defaultdict
 
@@ -234,6 +234,23 @@ def cmd_scan(sample=False):
         # occasions before anyone noticed. The entire record rests on picks being
         # written down before the outcome could be known, so a late run must produce
         # NOTHING rather than a cohort that quietly contaminates the headline.
+        # NOT A TRADING DAY (added 2026-09-02). NYSE_HOLIDAYS above catches weekday
+        # closures, but weekends were excluded only by the cron's `1-5` day field. An
+        # EXTERNAL trigger can now dispatch this workflow on any day, so the scanner
+        # enforces the calendar itself instead of trusting whoever called it.
+        if not is_session(today):
+            print(f"{today} is not a trading day — no scan; nothing logged.")
+            return
+        
+        # SCAN-WINDOW FLOOR (added 2026-09-02). The cron ladder can dispatch at 03:00 ET
+        # on the days GitHub is punctual, and pre-market quotes do not exist that early.
+        # This is a clean no-op, NOT a refusal: nothing is lost and a later rung will run
+        # the scan, so it must never write a skipped-session row. See market_time.SCAN_FLOOR.
+        early, why_early = before_scan_floor(today)
+        if early:
+            print(f"Too early — {why_early}. Nothing logged; a later dispatch will scan.")
+            return
+        
         blocked, why = pre_open_guard(today)
         if blocked:
             record_skipped_session(today, why)
@@ -354,6 +371,23 @@ def cmd_scan_market():
     # occasions before anyone noticed. The entire record rests on picks being
     # written down before the outcome could be known, so a late run must produce
     # NOTHING rather than a cohort that quietly contaminates the headline.
+    # NOT A TRADING DAY (added 2026-09-02). NYSE_HOLIDAYS above catches weekday
+    # closures, but weekends were excluded only by the cron's `1-5` day field. An
+    # EXTERNAL trigger can now dispatch this workflow on any day, so the scanner
+    # enforces the calendar itself instead of trusting whoever called it.
+    if not is_session(today):
+        print(f"{today} is not a trading day — no scan; nothing logged.")
+        return
+    
+    # SCAN-WINDOW FLOOR (added 2026-09-02). The cron ladder can dispatch at 03:00 ET
+    # on the days GitHub is punctual, and pre-market quotes do not exist that early.
+    # This is a clean no-op, NOT a refusal: nothing is lost and a later rung will run
+    # the scan, so it must never write a skipped-session row. See market_time.SCAN_FLOOR.
+    early, why_early = before_scan_floor(today)
+    if early:
+        print(f"Too early — {why_early}. Nothing logged; a later dispatch will scan.")
+        return
+    
     blocked, why = pre_open_guard(today)
     if blocked:
         record_skipped_session(today, why)

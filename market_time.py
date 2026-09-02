@@ -45,6 +45,20 @@ MARKET_OPEN = _time(9, 30)
 # jitter fails loudly instead of silently producing a contaminated cohort.
 SCAN_CUTOFF = _time(9, 20)
 
+# ...and a FLOOR. Added 2026-09-02, after GitHub's scheduler spent a week delivering
+# every dispatch ~4h late and five sessions were lost. The response is a ladder of
+# scan crons plus an external trigger, which means a dispatch can now arrive at 03:00
+# ET on the days the scheduler is punctual. Pre-market quotes do not exist that early,
+# and the entire record was screened between 06:00 and 07:30 ET, so a scan run before
+# the floor would either fail on absent data or, worse, log a cohort priced off the
+# prior session -- the 2026-06-19 phantom bug with a new cause.
+#
+# Hitting the floor is a CLEAN NO-OP, not a refusal, and that asymmetry is the point:
+# too-late means a session is permanently lost and must be disclosed; too-early means
+# nothing is lost and a later rung will do the work. Collapsing the two would spam the
+# skipped-session ledger with sessions that were never actually missed.
+SCAN_FLOOR = _time(6, 0)
+
 # NYSE regular-session close. Used only to decide whether a session has finished,
 # never to grade — grading reads real bars.
 MARKET_CLOSE = _time(16, 0)
@@ -232,6 +246,27 @@ def pre_open_guard(trading_date=None, now=None):
     return False, ""
 
 
+def before_scan_floor(trading_date=None, now=None):
+    """(too_early, detail) — is this dispatch ahead of the pre-market window?
+
+    Deliberately separate from pre_open_guard: the two boundaries have opposite
+    consequences and must not share a return path. See SCAN_FLOOR above.
+    """
+    now = (now or now_et()).astimezone(ET)
+    trading_date = trading_date or trading_date_et(now)
+    try:
+        session = datetime.strptime(trading_date, "%Y-%m-%d").date()
+    except ValueError:
+        return False, ""                      # malformed dates belong to pre_open_guard
+    if now.date() != session:
+        return False, ""                      # only today's session can be "early"
+    floor = datetime.combine(session, SCAN_FLOOR, tzinfo=ET)
+    if now < floor:
+        return True, (f"scan started {now:%H:%M:%S %Z}, before the {SCAN_FLOOR:%H:%M} ET "
+                      f"pre-market floor for {trading_date}")
+    return False, ""
+
+
 if __name__ == "__main__":
     # Selftest — runs without network. `python3 market_time.py`
     import sys
@@ -317,6 +352,19 @@ if __name__ == "__main__":
     check("saturday -> friday",     last_expected_scan_session(at("2026-08-29T18:00:00+00:00")), "2026-08-28")
     check("sunday -> friday",       last_expected_scan_session(at("2026-08-30T18:00:00+00:00")), "2026-08-28")
     check("holiday -> prior",       last_expected_scan_session(at("2026-06-19T18:00:00+00:00")), "2026-06-18")
+
+    # Scan-window FLOOR. Early is a no-op, late is a refusal — never the same path.
+    check("floor 03:00 ET early",  before_scan_floor("2026-09-03", at("2026-09-03T07:00:00+00:00"))[0], True)
+    check("floor 05:59 ET early",  before_scan_floor("2026-09-03", at("2026-09-03T09:59:00+00:00"))[0], True)
+    check("floor 06:00 ET open",   before_scan_floor("2026-09-03", at("2026-09-03T10:00:00+00:00"))[0], False)
+    check("floor 07:00 ET open",   before_scan_floor("2026-09-03", at("2026-09-03T11:00:00+00:00"))[0], False)
+    check("floor ignores late",    before_scan_floor("2026-09-03", at("2026-09-03T18:00:00+00:00"))[0], False)
+    check("floor other session",   before_scan_floor("2026-09-04", at("2026-09-03T07:00:00+00:00"))[0], False)
+    # The window is bounded on BOTH sides and the two guards never both fire.
+    for iso in ("2026-09-03T07:00:00+00:00", "2026-09-03T11:00:00+00:00", "2026-09-03T18:00:00+00:00"):
+        e = before_scan_floor("2026-09-03", at(iso))[0]
+        l = pre_open_guard("2026-09-03", at(iso))[0]
+        check(f"guards disjoint {iso[11:16]}Z", e and l, False)
 
     if fails:
         print("SELFTEST FAILED:"); [print("  -", f) for f in fails]; sys.exit(1)
