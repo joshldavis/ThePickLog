@@ -3,3 +3,4 @@ trading_date,attempted_at,reason,detail
 2026-08-28,2026-08-28T21:16:43+00:00,pre-open gate,"scan started 17:16:43 EDT, at or past the 09:20 ET cutoff for 2026-08-28 (+467 min relative to the 09:30 open) — RECONSTRUCTED 2026-08-29 from GitHub Actions run 33211832966; the ledger did not exist when this session was refused"
 2026-08-31,2026-08-31T17:23:06.500249+00:00,pre-open gate,"scan started 13:23:06 EDT, at or past the 09:20 ET cutoff for 2026-08-31 (+233 min relative to the 09:30 open)"
 2026-09-01,2026-09-01T14:30:22.155626+00:00,pre-open gate,"scan started 10:30:22 EDT, at or past the 09:20 ET cutoff for 2026-09-01 (+60 min relative to the 09:30 open)"
+2026-09-02,2026-09-02T14:03:53.085282+00:00,pre-open gate,"scan started 10:03:53 EDT, at or past the 09:20 ET cutoff for 2026-09-02 (+34 min relative to the 09:30 open)"
