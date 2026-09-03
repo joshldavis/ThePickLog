@@ -4,3 +4,4 @@ trading_date,attempted_at,reason,detail
 2026-08-31,2026-08-31T17:23:06.500249+00:00,pre-open gate,"scan started 13:23:06 EDT, at or past the 09:20 ET cutoff for 2026-08-31 (+233 min relative to the 09:30 open)"
 2026-09-01,2026-09-01T14:30:22.155626+00:00,pre-open gate,"scan started 10:30:22 EDT, at or past the 09:20 ET cutoff for 2026-09-01 (+60 min relative to the 09:30 open)"
 2026-09-02,2026-09-02T14:03:53.085282+00:00,pre-open gate,"scan started 10:03:53 EDT, at or past the 09:20 ET cutoff for 2026-09-02 (+34 min relative to the 09:30 open)"
+2026-09-03,2026-09-03T13:23:51.646154+00:00,pre-open gate,"scan started 09:23:51 EDT, at or past the 09:20 ET cutoff for 2026-09-03 (-6 min relative to the 09:30 open)"
