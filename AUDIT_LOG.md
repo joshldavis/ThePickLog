@@ -1,5 +1,32 @@
 # ThePickLog — Audit Log
 
+## 2026-09-03 — The scheduler fix worked, and uncovered a second failure underneath
+
+**The trigger ladder did its job.** All five scan rungs dispatched, ~43 minutes apart (the concurrency group serialising them exactly as intended), and **the first two landed inside the pre-open window**:
+
+| cron | fired (UTC) | ET | inside window? |
+|---|---|---|---|
+| `0 07` | 11:56:55 | **07:56** | ✅ yes |
+| `0 08` | 12:39:54 | **08:39** | ✅ yes |
+| `0 09` | 13:23:36 | 09:23 | ✗ (+3m51s past the cutoff) |
+| `0 10` | 14:06:45 | 10:06 | ✗ |
+| `0 11` | 14:44:45 | 10:44 | ✗ |
+
+Replaying the guards against those exact timestamps returns `early=False, late=False` for the first two: they were cleared to scan.
+
+**They failed anyway.** Run 131's step list: *Verify pre-open timing rules* — success. ***Run scan* — failure.** Whole job 28 seconds, of which ~15 is `pip install`. The scan body died in roughly five seconds, at 07:57 ET, with nothing wrong with the clock.
+
+So a **second, independent failure has been sitting underneath the scheduler problem**, invisible for a week because the pre-open gate refused before the scan body ever executed. `quote_integrity.py` shipped 08-29; the last successful scan was 08-26; **it has therefore never once run in a successful scan** — today was its first real execution. That is suggestive, not proven.
+
+**The diagnosis is INCOMPLETE and this entry says so rather than guessing.** Two hypotheses were raised and both were killed by evidence: a throttled universe fetch cannot be it (16 symbols failing all their retries burns ~144 s in backoff alone, against a 28 s job), and `market_regime()` cannot be it (it catches `Exception` and returns `"unknown"`). What remains needs the run log, and **the run log is unreadable**: GitHub gates Actions logs behind a login, `GET /actions/jobs/{id}/logs` returns 403 unauthenticated, and the browser session available here is signed out.
+
+**⭐ Generalisable lesson, and the reason for the fix below: an apparatus that can explain only ONE failure mode will quietly mislead you about every other one.** The session ledger was built for late dispatches and does that well — five sessions are disclosed in public because of it. But a session lost to a *broken scanner* is exactly as absent from the record as one lost to a late cron, and until today only the second kind left a trace. The record could say *"we were late"* and could not say *"we were broken"*, which reads from outside as though lateness were the only thing that ever goes wrong.
+
+**Shipped:** the scan step now tees its output (`set -o pipefail` is load-bearing — without it `tee`'s exit code wins and a failed scan reports success), and a new `ignitionscan.py record-failure` step writes a `reason=scan error` row into `skipped_sessions.csv` carrying the last error line, for any scan failure the pre-open gate did not already explain. It is idempotent per session, never raises (it runs on the failure path and must not mask the failure it describes), and runs before the existing `if: failure()` committer that pushes the row. **Tomorrow's failure, if there is one, explains itself in public data instead of behind a login.**
+
+**Still open:** the actual cause of the 09-03 scan failure. Six sessions now missing — 08-27, 08-28, 08-31, 09-01, 09-02, 09-03.
+
+
 ## 2026-09-02 — Scheduler correction — **⚠️ the 08-29 fix did not work, and its diagnosis was wrong**
 
 Three more sessions are gone: **08-31, 09-01, 09-02**, on top of 08-27 and 08-28. `picks.csv` still ends 2026-08-26. Five sessions, all permanently unfillable, one lost per trading day for a week.

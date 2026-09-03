@@ -212,6 +212,48 @@ def _is_stale_duplicate_scan(today, rows):
     return False, ""
 
 
+def cmd_record_failure():
+    """Record a scan that failed for a reason OTHER than the pre-open gate.
+
+    Until now the only lost session the public record could EXPLAIN was a late
+    dispatch: the gate wrote a skipped_sessions row and exited loudly. Every other
+    failure — a throttled feed, an unhandled exception, a bad deploy — produced a red
+    run and a missing session with no public trace at all, readable only by someone
+    with repo access. On 2026-09-03 that cost a full day of diagnosis: two dispatches
+    landed INSIDE the pre-open window, the scan died in seconds, and the reason was
+    unreadable because GitHub gates run logs behind a login.
+
+    A session lost to a broken scanner is exactly as absent from the record as one
+    lost to a late cron. It belongs in the same ledger, on the same terms. Reads the
+    captured scan output from $SCAN_LOG; never raises, because this runs on the
+    failure path and must not mask the failure it is describing.
+    """
+    try:
+        today = trading_date_et()
+        if not is_session(today):
+            print(f"{today} is not a trading day — nothing to record.")
+            return
+        if today in {r.get("trading_date") for r in read_rows(SKIPPED_CSV)}:
+            print(f"{today} is already in {os.path.basename(SKIPPED_CSV)} — leaving it alone.")
+            return
+        detail, path = "", os.environ.get("SCAN_LOG", "")
+        if path and os.path.exists(path):
+            try:
+                with open(path, encoding="utf-8", errors="replace") as fh:
+                    lines = [l.strip() for l in fh.read().splitlines() if l.strip()]
+                keys = ("ERROR", "Error", "Traceback", "Exception", "error:")
+                hits = [l for l in lines if any(k in l for k in keys)]
+                detail = (hits[-1] if hits else (lines[-1] if lines else ""))[:400]
+            except Exception as e:
+                detail = f"(scan log unreadable: {type(e).__name__})"
+        record_skipped_session(
+            today,
+            detail or "scan failed with no captured output",
+            reason="scan error")
+    except Exception as e:                      # never mask the real failure
+        print(f"record-failure bookkeeping failed ({type(e).__name__}) — ignored.")
+
+
 def cmd_scan(sample=False):
     today = trading_date_et()   # market time, not the CI runner's clock
     now_iso = datetime.now(timezone.utc).isoformat()
@@ -915,7 +957,7 @@ SAMPLE_QUOTES = [
 def main():
     ap = argparse.ArgumentParser(description="ThePickLog logger/grader (v0.2, Yahoo Finance)")
     ap.add_argument("command", choices=["scan","scan-market","grade","report","brief","demo",
-                                        "check-grading"])
+                                        "check-grading","record-failure"])
     args = ap.parse_args()
     if   args.command=="scan":   cmd_scan()
     elif args.command=="scan-market": cmd_scan_market()
@@ -924,6 +966,7 @@ def main():
     elif args.command=="report": cmd_report()
     elif args.command=="brief":  cmd_brief()
     elif args.command=="check-grading": cmd_check_grading()
+    elif args.command=="record-failure": cmd_record_failure()
 
 if __name__ == "__main__":
     main()

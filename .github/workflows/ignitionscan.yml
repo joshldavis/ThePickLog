@@ -110,7 +110,23 @@ jobs:
       - name: Run ${{ steps.cmd.outputs.cmd }}
         id: run
         if: steps.cmd.outputs.cmd != 'noop'
-        run: python ignitionscan.py ${{ steps.cmd.outputs.cmd }}
+        # Output is teed so a FAILED scan can explain itself in public data. pipefail is
+        # load-bearing: without it tee's exit code wins and a failed scan reports success.
+        run: |
+          set -o pipefail
+          python ignitionscan.py ${{ steps.cmd.outputs.cmd }} 2>&1 | tee scan_output.log
+      # Added 2026-09-03. The pre-open gate was the ONLY failure the public record could
+      # explain; every other one — a throttled feed, an unhandled exception, a bad deploy —
+      # produced a red run and a missing session with no public trace, readable only with a
+      # GitHub login. That cost a full day on 09-03: two dispatches landed INSIDE the window,
+      # the scan died in seconds, and nobody outside the repo could see why. A session lost
+      # to a broken scanner is exactly as absent as one lost to a late cron, so it goes in
+      # the same ledger. Runs BEFORE the committer below, which pushes the row.
+      - name: Explain an unexplained scan failure in the session ledger
+        if: failure() && steps.cmd.outputs.cmd == 'scan'
+        env:
+          SCAN_LOG: scan_output.log
+        run: python ignitionscan.py record-failure
       # A refused scan exits 1 by design, which skips every step below — including
       # the commit. That is how 2026-08-27 and 08-28 left no public trace at all:
       # the scanner recorded the refusal, then the job died before anything could
