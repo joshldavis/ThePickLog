@@ -357,8 +357,21 @@ def cmd_scan(sample=False):
     # and a new pick logged each session off a price that no longer existed. A quote
     # that has not moved since we last screened it is not a screen. See
     # quote_integrity.py and AUDIT_LOG.md 2026-08-29.
+    # NON-FATAL BY CONSTRUCTION (2026-09-03). This is a HYGIENE filter — it removes
+    # candidates whose quote has not moved. On 09-03 it raised AttributeError on the
+    # first candidate and destroyed a complete, timely, 14-name screen taken at 07:57
+    # ET: a session lost not to a bad quote, but to a bug in the thing checking the
+    # quotes. A guard that ADDS safety must never be able to SUBTRACT availability.
+    # If it cannot run, log the cohort and say so loudly; the cohort-level phantom
+    # detector above is still the backstop for a genuinely dead feed, and the derived
+    # exclusion re-applies at read time from the public CSV anyway.
     _prior_all = read_rows(PICKS_CSV)
-    frozen = [s for s in rows if is_stale_candidate(s["ticker"], s, _prior_all)]
+    try:
+        frozen = [s for s in rows if is_stale_candidate(s["ticker"], s, _prior_all)]
+    except Exception as e:
+        frozen = []
+        print(f"WARNING: frozen-quote guard failed ({type(e).__name__}: {e}) — cohort "
+              f"logged UNFILTERED; phantom-scan backstop and read-time exclusion still apply.")
     if frozen:
         rows = [s for s in rows if s not in frozen]
         print(f"Frozen-quote guard: dropped {len(frozen)} candidate(s) whose quote has not "

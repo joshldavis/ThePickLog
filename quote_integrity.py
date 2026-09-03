@@ -62,8 +62,42 @@ QUOTE_KEY = ("price_at_screen", "gap_pct", "rvol", "float_shares")
 MIN_REPEATS = 2
 
 
+def _num(v):
+    """One quote field in canonical numeric form, from EITHER row shape."""
+    if v is None:
+        return None
+    if isinstance(v, str):
+        v = v.strip()
+        if not v:
+            return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
 def _tuple(row):
-    return tuple((row.get(k) or "").strip() for k in QUOTE_KEY)
+    """The quote key, normalised so the two row shapes compare correctly.
+
+    This function is handed rows from two places that do NOT look alike:
+      * picks.csv via csv.DictReader — every field is a STRING;
+      * a live screen from score_inputs() — price/gap/rvol are FLOAT, float_shares INT.
+
+    It originally did `(row.get(k) or "").strip()`, which works only for the first.
+    Production calls it with the second (is_stale_candidate, from cmd_scan), so it
+    raised AttributeError on the very first candidate of every scan from the day it
+    shipped, 2026-08-29 — unseen until 09-03 because the pre-open gate had refused
+    every scan in between, so the scan body never ran. Its selftest fed only strings.
+
+    Comparing numerically also fixes a second, quieter bug: string-comparing a live
+    float 4.9 against the stored "4.90" could never match, so the guard would have
+    silently never fired even without the crash. score_inputs() already rounds to the
+    precision picks.csv stores (price 4dp, rvol/gap 2dp, float int), so the normalised
+    values are exact on both sides. Verified against the live log: the derived
+    exclusion set is byte-identical under both comparisons (12 rows), so no published
+    number moves and index.html's JS mirror stays correct.
+    """
+    return tuple(_num(row.get(k)) for k in QUOTE_KEY)
 
 
 def stale_quote_ids(rows, min_repeats=MIN_REPEATS):
@@ -93,6 +127,12 @@ def is_stale_candidate(ticker, quote, prior_rows):
     not moved since the last time we screened this name, so it must not be logged.
     """
     want = _tuple(quote)
+    # A quote we cannot read is not evidence of staleness. Fail OPEN here on purpose:
+    # the cost of wrongly dropping a live pick is a hole in the record, while a stale
+    # one that slips through is still caught by the cohort-level phantom detector and
+    # by the derived exclusion applied at read time.
+    if any(v is None for v in want):
+        return False
     for r in prior_rows:
         if r.get("ticker") != ticker:
             continue
@@ -113,6 +153,23 @@ def _selftest():
         return {"pick_id": pid, "ticker": tkr, "trading_date": td,
                 "price_at_screen": px, "gap_pct": gap, "rvol": rvol,
                 "float_shares": flt}
+
+    # REGRESSION 2026-09-03 — the shape production actually passes. is_stale_candidate
+    # is called from cmd_scan with a LIVE row (floats/ints), never with CSV strings.
+    # Every test below this point used strings only, so a crash on the real caller's
+    # input went unseen from 08-29 until it destroyed a valid 14-name screen on 09-03.
+    live_row = {"ticker": "NCT", "price_at_screen": 4.9, "gap_pct": -6.13,
+                "rvol": 13.75, "float_shares": 400000}
+    prior_same = [row("p", "NCT", "2026-09-02", "4.9", "-6.13", "13.75", "400000")]
+    prior_moved = [row("p", "NCT", "2026-09-02", "4.9", "1.20", "13.75", "400000")]
+    check("live float row does not raise",
+          is_stale_candidate("NCT", live_row, []), False)
+    check("live float row matches stored string quote",
+          is_stale_candidate("NCT", live_row, prior_same), True)
+    check("live float row vs moved gap is not stale",
+          is_stale_candidate("NCT", live_row, prior_moved), False)
+    check("unreadable quote is never stale",
+          is_stale_candidate("NCT", {"ticker": "NCT"}, prior_same), False)
 
     # A frozen ticker across three sessions: every member flagged.
     frozen = [row("a", "DEAD", "2026-08-11", "1.91", "0.0"),

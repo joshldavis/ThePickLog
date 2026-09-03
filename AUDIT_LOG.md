@@ -1,5 +1,37 @@
 # ThePickLog — Audit Log
 
+## 2026-09-03 (later) — CAUSE FOUND: the frozen-quote guard was destroying valid cohorts
+
+The run log, readable once signed in, ends the guesswork. **The scan worked.** Run 131, dispatched 07:56 ET and inside the window, printed a complete screen — *"2026-09-03 | 14 names screened | regime: risk-on"*, NCT/VMAR/SUGP/PW/CUPR/ATPC/JAGX/BNZI/HKIT/CODX/IOTR/RKDA and the rest, fully scored and tiered. The feed was fine. Yahoo was fine. The clock was fine.
+
+Then it died:
+
+```
+File "ignitionscan.py", line 319, in cmd_scan
+  frozen = [s for s in rows if is_stale_candidate(s["ticker"], s, _prior_all)]
+File "quote_integrity.py", line 95, in is_stale_candidate
+  want = _tuple(quote)
+File "quote_integrity.py", line 66, in _tuple
+AttributeError: 'float' object has no attribute 'strip'
+```
+
+**A valid, timely, 14-name cohort was thrown away by a bug in the thing checking it.**
+
+**Root cause: `_tuple()` was written for one row shape and called with another.** `picks.csv` read through `csv.DictReader` gives every field as a **string**, so `(row.get(k) or "").strip()` is fine. But `is_stale_candidate` is called from `cmd_scan` with a **live screen row** from `score_inputs()`, where price/gap/rvol are floats and float_shares is an int. It therefore raised on the *first* candidate of *every* scan from the day it shipped (**08-29**) — invisible until **09-03** because the pre-open gate refused every scan in between, so the scan body never executed. **Its selftest fed only strings, and never called `is_stale_candidate` at all.**
+
+There was a second, quieter bug in the same line: even without the crash, string-comparing a live `4.9` against a stored `"4.90"` could never match, so the guard would have silently **never fired**. Both are the same mistake — a function that mixes two row shapes and worked for neither across the boundary.
+
+**Fixed:**
+- `_tuple` now normalises via `_num()` to canonical floats, so both shapes compare correctly. `score_inputs()` already rounds to the precision picks.csv stores (price 4dp, rvol/gap 2dp, float int), so values are exact on both sides. **Verified against the live log: the derived exclusion set is byte-identical under the old and new comparison — 12 rows either way — so no published number moves and index.html's JS mirror stays correct.**
+- `is_stale_candidate` fails **open** on an unreadable quote: a quote we cannot parse is not evidence of staleness, and the cost of wrongly dropping a live pick is a hole in the record.
+- **The call site is now non-fatal.** A hygiene filter must never be able to destroy a valid cohort — if it raises, the cohort is logged unfiltered with a loud warning, and the cohort-level phantom detector plus the read-time derived exclusion remain the backstops.
+- **Regression test added for the shape production actually passes** — a live typed row through `is_stale_candidate`, the case the original selftest never exercised.
+
+**⭐ Generalisable lesson: a guard that ADDS integrity must never be able to SUBTRACT availability.** `quote_integrity.py` was written to stop bad data entering the record and instead stopped *all* data entering it — strictly worse than the problem it solved, because a phantom pick is visible and correctable while a missing session is gone forever. Any filter on the write path needs a failure mode that degrades to *"log it and complain"*, not *"log nothing."*
+
+**Second lesson, on testing: a selftest that only feeds the shape the author had in hand tests the author, not the caller.** `_selftest()` exercised `stale_quote_ids` (CSV strings) thoroughly and never once called `is_stale_candidate`, which is the only function production uses.
+
+
 ## 2026-09-03 — The scheduler fix worked, and uncovered a second failure underneath
 
 **The trigger ladder did its job.** All five scan rungs dispatched, ~43 minutes apart (the concurrency group serialising them exactly as intended), and **the first two landed inside the pre-open window**:
