@@ -1,5 +1,74 @@
 # ThePickLog — Audit Log
 
+## 2026-09-05 — Weekly verifiability audit — **⚠️ Issues found (2)**
+
+Every arithmetic check passes — all 983 graded rows reproduce the 2% haircut exactly, no duplicates, no silent gaps, no sample fallback. Both issues are about **inputs and prose, not arithmetic**. The new one is the more serious: a reverse split walked through the screener undetected for seven sessions, and the track record currently displays a pre-split screen price next to a post-split return. The second is last week's Issue 1, still unfixed.
+
+**Issue 1 — a 1:10 reverse split contaminated seven graded picks, and the frozen-quote guard cannot see it.** `VMAR` reverse-split roughly 1:10 around 2026-08-18. The market moved to the new scale immediately; the scanner's quote feed did not. For **seven consecutive graded sessions — 08-18, 08-19, 08-20, 08-21, 08-24, 08-25, 08-26** — `price_at_screen` sat at $0.67–$0.72 while the stock's actual regular-session open was $6.48–$7.56.
+
+**The float column dates the split precisely, and proves the two feeds disagreed with each other:**
+
+| session | price_at_screen | entry_open | ratio | float_shares | tier |
+|---|---|---|---|---|---|
+| 08-17 | $0.665 | $0.66 | 0.99 | 2,270,087 | D |
+| **08-18** | **$0.714** | **$7.20** | **10.08** | 2,270,087 | C |
+| 08-19 | $0.703 | $7.095 | 10.09 | 2,270,087 | D |
+| 08-20 | $0.668 | $6.48 | 9.70 | 2,270,087 | C |
+| 08-21 | $0.7035 | $7.00 | 9.95 | 2,270,087 | C |
+| 08-24 | $0.671 | $6.70 | 9.99 | 2,270,087 | C |
+| 08-25 | $0.7082 | $6.51 | 9.19 | 2,270,087 | C |
+| **08-26** | **$0.7182** | **$7.56** | **10.53** | **227,009** | C |
+| 09-04 | $8.56 | *(ungraded)* | — | 227,006 | D |
+
+The float divides by ten on **08-26** while the price does not, so that row screened a **227K float against a $0.72 price at the same instant** — two mutually contradictory scales inside one record, and precisely the combination the score rewards most. By 09-04 both fields agree again ($8.56 / 227,006): the feed self-healed, which is why nothing downstream ever complained.
+
+**What is and isn't damaged.** The *returns* are sound — `entry_open` and `same_day_close` come from the same post-split series, and all seven reconcile to `(close/open − 1) × 100 − 2` within 0.005pp like every other row. What is damaged is **selection**: `gap_pct` for these sessions (7.37%, −1.54%, −4.98%, 5.31%, −4.62%, 5.54%, 1.41%) was computed against a stale prior close, and gap is the *dominant* score input on the corrected structural finding. So the score and tier on these seven rows do not describe the stock that actually traded. They are not evidence about the screen — the same standing as BNZI's twelve.
+
+**Excluding them moves no published number, and moves the record *against* us** — state it that way, as with the late cohorts:
+
+| | n | win | mean net | median net | avg MAE |
+|---|---|---|---|---|---|
+| as published | 983 | 33.06% | −2.37% | −2.69% | −17.65% |
+| excl. 7 split rows | 976 | 32.89% | **−2.41%** | −2.69% | −17.67% |
+| excl. all 10 rows >2× | 973 | 32.99% | −2.30% | −2.68% | −17.56% |
+
+Every displayed figure survives at published precision (33%, −2.7%, −2.4%, −17.7%). Tier C is the only visible move: n 296 → 290, mean −3.14% → −3.30%. **Do not report this as a defect that flattered the record.**
+
+**But one row is wrong on the page right now.** The track record renders VMAR 08-26 as `SCREEN PX $0.72 · WATCH $0.86 · NET +21.0% · WIN`. The watch level is a +20% target on a price that no longer existed, and the +21.0% was earned from a $7.56 open. A stranger reading that row cannot reconcile its own columns — which is the North Star test failing in the most visible place on the site.
+
+**Three more rows fail the same test** and want the same treatment: `SUGP 2026-06-16` (2.73×), `CPHI 2026-07-22` (0.40×), `SLE 2026-08-18` (2.30×) — single sessions, same class of corporate action.
+
+Prescribed fix, in order:
+
+1. **Add a derived scale-reconciliation exclusion**, exactly like the late-cohort and frozen-quote seals: flag any pick whose `entry_open / price_at_screen` falls outside `[0.5, 2.0]`. Both inputs are already public, so a stranger recomputes the identical set and nothing is deleted. The threshold is not delicate — the whole log runs **p1 = 0.84 to p99 = 1.78**, and only **10 of 983 rows** exceed 2×, of which the 7 VMAR rows sit at 9.19–10.53×.
+2. **Catch it at scan time, not grade time:** refuse a candidate whose `float_shares` moves by a factor >2 from the prior session without a matching inverse move in price. That is the corporate-action signature, and it was sitting in our own CSV.
+3. **Until (1) ships, the table must not print a pre-split screen price and watch level beside a post-split return.**
+
+⭐ **Generalisable lesson: the frozen-quote guard tests whether a quote *changed*; it cannot test whether the quote is on the *right scale*.** A stale scale moves every session and passes every staleness test ever written — VMAR's price ticked $0.714 → $0.703 → $0.668 → $0.7035 like a living stock. The only thing that catches it is **reconciling the screen-time observation against an independent later observation of the same quantity**, and `entry_open` had been sitting in `outcomes.csv` the whole time. ⭐ Second lesson, and it is the *same* one as Issue 2 below: **this exact defect class was already found and fixed on 2026-07-29 — in `exit_sim.py`, where a split injected a four-figure return and inflated every bar-priced exit rule.** It was fixed in the study and never in the log. Fixing the instance is not fixing the class; the remedy is a repo-wide sweep for *every* place two price observations are compared.
+
+**Issue 2 — last week's Issue 1 is still live on method.html, unchanged.** §9 still reads: *"the top tier historically has the worst mean net and the deepest drawdowns."* Recomputed today from the live CSVs, half of that is exactly right and half is false:
+
+| tier | n | mean net | median net | avg MAE | avg MFE |
+|---|---|---|---|---|---|
+| A | 293 | **−1.61%** | −3.24% | **−23.30%** | +43.10% |
+| B | 69 | −1.88% | −3.57% | −19.16% | +36.79% |
+| C | 296 | **−3.14%** | −2.35% | −15.45% | +20.99% |
+| D | 325 | −2.46% | −2.66% | −14.24% | +16.26% |
+
+"Deepest drawdowns" is **perfectly monotone A→D**, and so is MFE — the H-RISK finding rendering cleanly: the score predicts magnitude, not direction. "Worst mean net" is **false**: A is the best of the four, C the worst. index.html's derived caption reads correctly (it computes from `tierStats`); method.html restates it by hand. Fix as prescribed on 09-04 — replace with the two claims that *are* backed (deepest drawdowns, monotone; worst *median* net, −3.24% vs −2.66%), noting A's mean is lifted by a right tail and its clustered interval `[−3.7%, −0.0%]` overlaps every other tier, so no mean-net ordering is established in either direction. Better: make §9 read the computed values rather than restating them. **This is the fifth appearance of the standing rule that prose asserting a statistical fact must be COMPUTED from the data under it.**
+
+Data checks (recomputed in-browser from the live `/picks.csv` + `/outcomes.csv` with an independent parser, not by calling the page's own functions):
+
+- **Data served:** picks.csv **200, 1,169 rows**; outcomes.csv **200, 1,134 rows**; skipped_sessions.csv **200, 6 rows**. ✅
+- **Real data shown:** Track record renders **983 real graded rows** through 2026-08-26 with real tickers and prices. No sample-fallback badge anywhere — the only three "sample" strings on the page are *"out-of-sample"*, *"the real sample is close…"* and *"the interval resamples companies"*, all legitimate. ✅
+- **No silent gaps:** **57 distinct trading dates, 2026-06-09 → 2026-09-04.** Six market weekdays absent — **08-27, 08-28, 08-31, 09-01, 09-02, 09-03** — and **all six are declared, not silent**: each has a `skipped_sessions.csv` row with reason and minutes-past-cutoff, and index.html states the six-session hole verbatim. Every other weekday since 06-09 is present (Juneteenth 06-19 and observed 07-03 excepted). One cohort sits on a holiday — 06-19 — and **all 14 rows carry the VOID note**, so none sit orphaned in the ungraded pool. **No session was expected today: 2026-09-05 is a Saturday**, and 09-07 is Labor Day. Late-cohort derivation reproduces exactly from `published_at`: **7 cohorts / 128 picks**, unchanged for a sixth week. ✅
+- **Claims == data:** picks logged **1,029** ✅ (1,169 − 128 late − 12 frozen-quote) · graded **983** ✅ · blended win rate 33.06% → **"33%"** ✅ · median net −2.69 → **"−2.7%"** ✅ · mean net −2.37 → **"−2.4%"** ✅ · avg worst dip −17.65 → **"−17.7%"** ✅ · mean 5-day swing −5.93 → **"−5.9%"** ✅. Best single open→close net **+209.56%**; best 5d-swing net **+661.22%**. Tier table exact on every column: **A 293/224/39%/−1.6%/−3.2% · B 69/43/39%/−1.9%/−3.6% · C 296/18/33%/−3.1%/−2.4% · D 325/16/27%/−2.5%/−2.7%** ✅ (sums to 983, reconciles exactly). The frozen-quote exclusion still derives to **12 rows, BNZI only**, byte-identical to the set published on 08-29. ✅
+- **Honest grading:** **all 983 graded rows** reproduce `(same_day_close / entry_open − 1) × 100 − 2` — worst absolute deviation across the whole log **0.005pp**, zero violations above 0.05pp. Entry is the regular-session open, never the screen price. **Zero** rows where the stored `win` column disagrees with the return-derived win. **Zero** duplicate `pick_id`s in either CSV, so no regrades. Spot-checked SUGP/VMAR/CUPR 08-26 by hand against the raw rows. ✅
+- **Disclaimers:** educational / not investment advice / not a broker-dealer all present on index.html and disclaimer.html. method.html carries *"Educational / informational only — not investment advice"* plus the unvalidated label and links to disclaimer.html, but does not itself contain the broker-dealer clause — noted as the standing structure, not a new issue. ✅
+- **Validity claims (Messick, six aspects):** content (domain/coverage spec), substantive (empirical studies), generalizability + consequential (regime-dependence and misuse write-up) all published and 200. External: Gate-1 remains a published FAIL and the model carries **"unvalidated"** everywhere it matters — method.html §validity gates and the index.html conviction tag render *"Unvalidated — screen shows no proven edge."* ✅ All three required docs return 200 (**Framework 22,455B · Domain-Coverage 7,190B · Structural-Justification 7,071B**) and all three are linked from method.html §9. ✅ **Structural is the one aspect that fails:** tiers are correctly framed as an intensity/heat scale, never a quality ranking, on index.html — but the method.html sentence justifying that framing is half-false (Issue 2). No page anywhere implies higher tier = better. ⚠️
+
+**Grading in the coming week.** Lag runs 8–9 calendar days (5 sessions + weekend). The **2026-09-04 cohort — 22 picks, the only cohort awaiting a first grade** — clears 5 sessions on 09-14 (09-08, 09-09, 09-10, 09-11, 09-14; 09-07 is Labor Day) and should grade **2026-09-14/15**. Ten older picks remain permanently ungradeable and are disclosed as such (`no entry bar` on halted names — WAI, PRPL, GREE ×2, BNZI ×5 — plus SLAI `UNGRADEABLE: only 1 of 6 sessions ever printed`); one of them, BNZI 08-10, has no `outcomes.csv` row at all and should be given an explicit ungradeable row so the pool is fully accounted for. Next expected scan session: **Tuesday 2026-09-08**.
+
 ## 2026-09-04 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 Every number on the site reproduces exactly, and the scan is alive again — the 09-04 cohort is the first logged session since 08-26, and it landed timely. The one issue is a sentence: last week's Issue 3 fix was applied to the instance the audit sampled and not to the class, leaving an identical hardcoded claim on method.html.
