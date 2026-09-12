@@ -387,10 +387,13 @@ def cmd_scan(sample=False):
             hit, why = is_corporate_action(s["ticker"], s, _prior_all)
             if hit:
                 rescaled.append((s, why))
-        if rescaled:
-            rows = [s for s in rows if all(s is not r for r, _ in rescaled)]
-            for r, why in rescaled:
-                print(f"Corporate-action guard: dropped {r['ticker']} — {why}")
+        # WARN ONLY — do NOT drop. Replayed over the live log this signal fires 11 times
+        # against one genuine defect, because reported float is revised between sessions
+        # on these names. Dropping on it would be a selection distortion: the same harm
+        # class as the contamination it looks for. The precise instrument is the read-time
+        # scale exclusion, which reconciles against entry_open and has no false positives.
+        for r, why in rescaled:
+            print(f"NOTE: possible feed-scale disagreement on {r['ticker']} — {why}")
     except Exception as e:
         print(f"WARNING: corporate-action guard failed ({type(e).__name__}: {e}) — "
               f"cohort logged UNFILTERED; the read-time scale exclusion still applies.")

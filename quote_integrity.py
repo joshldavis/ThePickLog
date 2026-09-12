@@ -197,17 +197,37 @@ def scale_mismatch_ids(picks, outcomes):
     return out
 
 
+# Price band within which a price counts as "did not move" for the purposes below.
+FLAT_LO, FLAT_HI = 0.8, 1.25
+
+
 def is_corporate_action(ticker, quote, prior_rows, lo=SCALE_LO, hi=SCALE_HI):
-    """(flagged, detail) — scan-time guard for a re-scaled float without a re-scaled price.
+    """(suspected, detail) — scan-time SUSPICION that the float and price feeds disagree.
 
     The split signature was sitting in our own CSV and nothing read it: on 2026-08-26
     VMAR's float divided by ten while its price did not, so that row screened a 227K float
     against a $0.72 price at the same instant — two mutually contradictory scales inside
     one record, and precisely the combination the score rewards most.
 
-    A genuine re-scale moves float and price INVERSELY, so float_ratio * price_ratio ~= 1.
-    When the float re-scales and that product does not come back to 1, the two feeds
-    disagree with each other and the candidate is not describing one stock.
+    ⚠️ THIS IS A WARNING, NOT A FILTER, AND THAT IS DELIBERATE — SEE THE NUMBERS.
+    `float_shares` on these names is approximated from shares outstanding and is revised
+    between sessions, so it is a NOISY series. Replayed over the whole live log, a rule
+    that dropped candidates on this signal would have removed **11 picks** on the
+    flat-price form (16 on a float×price form) against exactly **one** genuine defect,
+    VMAR 08-26. Names like NCT (3.49x), BJDX (3.36x) and JAGX (8.57x) simply had their
+    reported float revised. Dropping those would be a selection distortion — the same
+    harm class as the contamination this exists to catch, and the same mistake the
+    frozen-quote guard made on 2026-09-03 when it destroyed a valid cohort.
+
+    The PRECISE instrument is `scale_mismatch_ids` at read time, which reconciles against
+    `entry_open` — a genuinely independent observation — and selects exactly the ten
+    contaminated rows with no false positives. This function exists to make the condition
+    VISIBLE in the run log on the morning it happens, rather than a week later in an audit.
+
+    Signature: the float re-scales while the price stays essentially flat. A real
+    corporate action large enough to move float by >2x necessarily moves the price too,
+    so a flat price alongside a re-scaled float means the two feeds are not describing
+    the same instant.
     """
     prev = None
     for r in prior_rows:
@@ -228,10 +248,12 @@ def is_corporate_action(ticker, quote, prior_rows, lo=SCALE_LO, hi=SCALE_HI):
     if lo <= fr <= hi:
         return False, ""                       # float did not re-scale; nothing to check
     pr = p_now / p_prev
-    if lo <= fr * pr <= hi:
-        return False, ""                       # float and price re-scaled together — fine
-    return True, (f"float moved {fr:.3f}x while price moved {pr:.3f}x since "
-                  f"{prev.get('trading_date')} — the two feeds are on different scales")
+    if not (FLAT_LO <= pr <= FLAT_HI):
+        return False, ""                       # price moved too — a real corporate action
+    return True, (f"float moved {fr:.3f}x since {prev.get('trading_date')} while the price "
+                  f"barely moved ({pr:.3f}x) — the float and price feeds may be on "
+                  f"different scales; if this name grades with entry_open far from "
+                  f"price_at_screen it will be excluded by scale_mismatch_ids")
 
 
 def _selftest():
@@ -274,6 +296,10 @@ def _selftest():
     check("float and price re-scale together is fine",
           is_corporate_action("VMAR", {"ticker": "VMAR", "price_at_screen": 7.082,
                                        "float_shares": 227009}, prior_v)[0], False)
+    # A dilutive offering moves the price materially and must NOT be flagged.
+    check("offering (float up, price down) is fine",
+          is_corporate_action("VMAR", {"ticker": "VMAR", "price_at_screen": 0.12,
+                                       "float_shares": 22700870}, prior_v)[0], False)
     check("ordinary day is fine",
           is_corporate_action("VMAR", {"ticker": "VMAR", "price_at_screen": 0.70,
                                        "float_shares": 2270087}, prior_v)[0], False)
