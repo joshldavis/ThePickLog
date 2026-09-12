@@ -1,4 +1,4 @@
-# ThePickLog — exit-rule study · 2026-09-05
+# ThePickLog — exit-rule study · 2026-09-12
 
 Daily-resolution replay of **631** graded picks (of 683). Conservative same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / exploratory** — a chosen rule must be pre-registered and validated forward.
 

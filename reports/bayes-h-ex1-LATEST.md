@@ -1,6 +1,6 @@
 # Bayesian read-out — H-EX1 +10% touch rate
 
-_Generated 2026-09-05 16:34Z by `bayes_h_ex1.py` (selftest passed). Priors frozen 2026-07-02 — see the
+_Generated 2026-09-12 16:47Z by `bayes_h_ex1.py` (selftest passed). Priors frozen 2026-07-02 — see the
 script docstring. This is a read-out, **not** the registered pass/fail judge —
 that remains `reports/LATEST.md` §4d. Slippage caveat (HYPOTHESES.md H-EX1) applies._
 
