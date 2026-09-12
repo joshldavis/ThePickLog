@@ -1,5 +1,26 @@
 # ThePickLog — Audit Log
 
+## 2026-09-12 (addendum) — Two footer links shipped pointing at 404s
+
+**Self-inflicted, live for about four hours, now fixed.** Commit `af791b8` above staged `index.html`
+and `method.html` for its own edits. Both files also carried *uncommitted* footer edits from a
+separate, concurrent session — links to `scorecard.html` and `terms.html`, two pages that were
+deliberately built-but-not-committed. `git add <file>` takes the whole file, so those links shipped
+while their targets did not. The live homepage and method page pointed at two 404s until `a2e569a`
+removed the links.
+
+Nothing about the record, the exclusions or any published figure is affected; this was navigation
+markup only. It is logged because the standing rule on this project is that the apparatus gets
+audited in public too, including when the apparatus is us.
+
+**Two checks failed together, and either alone would have caught it.** The pre-commit `git status`
+was run through the container's mount, where it reported a **clean tree against 19 dirty files** —
+so the concurrent writer was invisible. And the commit staged whole files rather than reviewing
+`git diff --cached`.
+
+⭐ **`git add <file>` is not a scoped action: it commits every edit in that file, including ones you
+did not make.** ⭐ **A link is shippable only in the same commit as its target.**
+
 ## 2026-09-12 — Split contamination sealed; the tier claim stops being restated
 
 Closes both open findings from the 09-04 and 09-05 audits, and the last item from the 08-29 audit.
