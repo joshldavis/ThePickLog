@@ -31,7 +31,8 @@ from datetime import datetime, timedelta, timezone
 # One shared definition of "before the open" — see market_time.py and the
 # 2026-08-04 late-cohort correction in AUDIT_LOG.md.
 from market_time import pre_open_guard, before_scan_floor, is_session, trading_date_et, sessions_between
-from quote_integrity import is_stale_candidate, stale_quote_ids
+from quote_integrity import (is_stale_candidate, stale_quote_ids,
+                             is_corporate_action, scale_mismatch_ids)
 from collections import defaultdict
 
 MODEL_VERSION = "v0.2-yf"
@@ -372,6 +373,27 @@ def cmd_scan(sample=False):
         frozen = []
         print(f"WARNING: frozen-quote guard failed ({type(e).__name__}: {e}) — cohort "
               f"logged UNFILTERED; phantom-scan backstop and read-time exclusion still apply.")
+    # CORPORATE-ACTION GUARD (2026-09-12). A stale SCALE passes every staleness test:
+    # VMAR reverse-split ~1:10 on 08-18, our feed did not follow, and for seven graded
+    # sessions we screened a $0.67-0.72 price against a stock opening at $6.48-7.56. The
+    # frozen-quote guard saw nothing wrong — correctly, the price was CHANGING, just on a
+    # scale that no longer existed. The signature was in our own CSV the whole time: on
+    # 08-26 the float divided by ten while the price did not, so that row screened a 227K
+    # float against a $0.72 price and the score rewards exactly that combination.
+    # Non-fatal for the same reason as the guard above.
+    try:
+        rescaled = []
+        for s in rows:
+            hit, why = is_corporate_action(s["ticker"], s, _prior_all)
+            if hit:
+                rescaled.append((s, why))
+        if rescaled:
+            rows = [s for s in rows if all(s is not r for r, _ in rescaled)]
+            for r, why in rescaled:
+                print(f"Corporate-action guard: dropped {r['ticker']} — {why}")
+    except Exception as e:
+        print(f"WARNING: corporate-action guard failed ({type(e).__name__}: {e}) — "
+              f"cohort logged UNFILTERED; the read-time scale exclusion still applies.")
     if frozen:
         rows = [s for s in rows if s not in frozen]
         print(f"Frozen-quote guard: dropped {len(frozen)} candidate(s) whose quote has not "

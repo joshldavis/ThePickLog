@@ -142,6 +142,98 @@ def is_stale_candidate(ticker, quote, prior_rows):
     return False
 
 
+# ---------------------------------------------------------------- scale reconciliation
+# A stale SCALE is invisible to every staleness test ever written. VMAR reverse-split
+# ~1:10 on 2026-08-18; the market moved, our quote feed did not, and for seven graded
+# sessions price_at_screen sat at $0.67-0.72 against a real opening price of $6.48-7.56.
+# The frozen-quote guard above saw nothing wrong, correctly: the price ticked 0.714 →
+# 0.703 → 0.668 → 0.7035 like a living stock. It was CHANGING. It was just changing on
+# a scale that no longer existed.
+#
+# The only thing that catches this is reconciling the screen-time observation against an
+# INDEPENDENT later observation of the same quantity — and entry_open had been sitting in
+# outcomes.csv the whole time. Both inputs are public, so a stranger recomputes the
+# identical set and nothing is deleted, exactly like the late-cohort and frozen-quote seals.
+#
+# The band is not delicate: the whole log runs p1 = 0.84 to p99 = 1.78, and only 10 of 983
+# graded rows fall outside [0.5, 2.0] — the 7 VMAR rows at 9.19-10.53x plus three single
+# sessions of the same class (SUGP 2.73x, CPHI 0.40x, SLE 2.30x).
+#
+# NOTE ON ORDERING: this exclusion is applied at READ time, never at grade time. It needs
+# entry_open, which only exists after a pick is graded, so the grader cannot consult it
+# without a circular dependency. Grade everything; exclude when reporting.
+SCALE_LO, SCALE_HI = 0.5, 2.0
+
+
+def scale_mismatch_ids(picks, outcomes):
+    """pick_ids whose screen price and grade-time entry_open are on different scales.
+
+    `picks` is picks.csv and `outcomes` outcomes.csv, both as lists of dicts. A pick with
+    no graded outcome cannot be checked and is never flagged.
+
+    What this does and does not impugn: the RETURN on these rows is sound — entry_open and
+    same_day_close come from the same post-split series and reconcile to the 2% haircut
+    like every other row. What is damaged is SELECTION: gap_pct was computed against a
+    stale prior close, and gap is the dominant score input, so the score and tier on these
+    rows do not describe the stock that actually traded. They are not evidence about the
+    screen.
+    """
+    entry = {}
+    for o in outcomes:
+        pid = (o.get("pick_id") or "").strip()
+        eo = _num(o.get("entry_open"))
+        if pid and eo:
+            entry[pid] = eo
+    out = set()
+    for p in picks:
+        pid = (p.get("pick_id") or "").strip()
+        px = _num(p.get("price_at_screen"))
+        eo = entry.get(pid)
+        if not pid or not px or not eo or px <= 0:
+            continue
+        ratio = eo / px
+        if ratio < SCALE_LO or ratio > SCALE_HI:
+            out.add(pid)
+    return out
+
+
+def is_corporate_action(ticker, quote, prior_rows, lo=SCALE_LO, hi=SCALE_HI):
+    """(flagged, detail) — scan-time guard for a re-scaled float without a re-scaled price.
+
+    The split signature was sitting in our own CSV and nothing read it: on 2026-08-26
+    VMAR's float divided by ten while its price did not, so that row screened a 227K float
+    against a $0.72 price at the same instant — two mutually contradictory scales inside
+    one record, and precisely the combination the score rewards most.
+
+    A genuine re-scale moves float and price INVERSELY, so float_ratio * price_ratio ~= 1.
+    When the float re-scales and that product does not come back to 1, the two feeds
+    disagree with each other and the candidate is not describing one stock.
+    """
+    prev = None
+    for r in prior_rows:
+        if (r.get("ticker") or "") != ticker:
+            continue
+        td = (r.get("trading_date") or "").strip()
+        if not td or not is_session(td):
+            continue
+        if prev is None or td > (prev.get("trading_date") or ""):
+            prev = r
+    if prev is None:
+        return False, ""
+    f_now, f_prev = _num(quote.get("float_shares")), _num(prev.get("float_shares"))
+    p_now, p_prev = _num(quote.get("price_at_screen")), _num(prev.get("price_at_screen"))
+    if not f_now or not f_prev or not p_now or not p_prev or f_prev <= 0 or p_prev <= 0:
+        return False, ""
+    fr = f_now / f_prev
+    if lo <= fr <= hi:
+        return False, ""                       # float did not re-scale; nothing to check
+    pr = p_now / p_prev
+    if lo <= fr * pr <= hi:
+        return False, ""                       # float and price re-scaled together — fine
+    return True, (f"float moved {fr:.3f}x while price moved {pr:.3f}x since "
+                  f"{prev.get('trading_date')} — the two feeds are on different scales")
+
+
 def _selftest():
     fails = []
 
@@ -153,6 +245,39 @@ def _selftest():
         return {"pick_id": pid, "ticker": tkr, "trading_date": td,
                 "price_at_screen": px, "gap_pct": gap, "rvol": rvol,
                 "float_shares": flt}
+
+    # SCALE RECONCILIATION 2026-09-12 — the VMAR reverse-split class.
+    def orow(pid, eo):
+        return {"pick_id": pid, "entry_open": eo}
+
+    split_pick = [row("v1", "VMAR", "2026-08-18", "0.714", "7.37"),
+                  row("v2", "VMAR", "2026-08-17", "0.665", "1.0")]
+    split_out = [orow("v1", "7.20"), orow("v2", "0.66")]
+    check("reverse split flagged", scale_mismatch_ids(split_pick, split_out), {"v1"})
+    check("same-scale row not flagged",
+          scale_mismatch_ids([row("ok", "X", "2026-08-18", "5.00", "1.0")], [orow("ok", "5.10")]), set())
+    check("ungraded pick never flagged",
+          scale_mismatch_ids([row("ng", "X", "2026-08-18", "5.00", "1.0")], []), set())
+    check("band edge 2.0 is inside",
+          scale_mismatch_ids([row("e", "X", "2026-08-18", "1.00", "1.0")], [orow("e", "2.0")]), set())
+    check("just past the band is flagged",
+          scale_mismatch_ids([row("e2", "X", "2026-08-18", "1.00", "1.0")], [orow("e2", "2.01")]), {"e2"})
+    check("forward split (0.4x) flagged",
+          scale_mismatch_ids([row("f", "X", "2026-08-18", "7.26", "1.0")], [orow("f", "2.89")]), {"f"})
+
+    # Scan-time corporate-action guard: float re-scales, price does not.
+    prior_v = [row("p", "VMAR", "2026-08-25", "0.7082", "5.54", "1.0", "2270087")]
+    now_v = {"ticker": "VMAR", "price_at_screen": 0.7182, "float_shares": 227009}
+    check("float/10 with flat price is flagged",
+          is_corporate_action("VMAR", now_v, prior_v)[0], True)
+    # A REAL split moves both together — float/10 and price*10 — and must pass.
+    check("float and price re-scale together is fine",
+          is_corporate_action("VMAR", {"ticker": "VMAR", "price_at_screen": 7.082,
+                                       "float_shares": 227009}, prior_v)[0], False)
+    check("ordinary day is fine",
+          is_corporate_action("VMAR", {"ticker": "VMAR", "price_at_screen": 0.70,
+                                       "float_shares": 2270087}, prior_v)[0], False)
+    check("unknown ticker is fine", is_corporate_action("ZZZZ", now_v, prior_v)[0], False)
 
     # REGRESSION 2026-09-03 — the shape production actually passes. is_stale_candidate
     # is called from cmd_scan with a LIVE row (floats/ints), never with CSV strings.

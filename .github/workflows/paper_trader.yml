@@ -21,6 +21,15 @@ on:
 permissions:
   contents: write
 
+# Serialised 2026-09-12 for the same reason as the daily workflow: GitHub dispatches
+# concurrent runs in parallel, and under multi-hour scheduler drift two dispatches can
+# arrive close enough together to both read pre-push state and race on the commit.
+# Lower stakes here than the scan (these rebase, and no cohort composition depends on
+# them) but the failure mode is identical, so the remedy is too.
+concurrency:
+  group: thepicklog-paper-trader-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest

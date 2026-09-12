@@ -1567,8 +1567,8 @@
   ThePickLog — a public testing lab for trading claims, operated by AMD Ventures, LLC (Florida).
   Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. Simulated (paper) trading only; no real money is ever placed.
   <br><span class="fnav"><b>Evidence</b> <a href="#validation">Validation</a> &middot; <a href="#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
-  <br><span class="fnav"><b>Tools</b> <a href="#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a></span>
-  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
   <!-- BUILD STAMP: __BUILDSTAMP__ is auto-filled at deploy by scripts/stamp-build.mjs (commit SHA + deploy time).
        The sha is linked to its commit — the repo is public, so "recomputable from public data"
        now includes the code that does the computing. -->
@@ -2233,6 +2233,35 @@ function staleQuoteIds(rows){
   });
   return out;
 }
+/* DERIVED SCALE-RECONCILIATION EXCLUSION (2026-09-12).
+   A stale SCALE is invisible to every staleness test ever written. VMAR reverse-split
+   ~1:10 on 2026-08-18; the market moved, our quote feed did not, and for seven graded
+   sessions price_at_screen sat at $0.67-0.72 while the stock actually opened at
+   $6.48-7.56. The frozen-quote guard above saw nothing wrong, and it was right to:
+   the price ticked 0.714 -> 0.703 -> 0.668 like a living stock. It WAS changing. It
+   was changing on a scale that no longer existed.
+
+   The only thing that catches that is reconciling the screen-time price against an
+   INDEPENDENT later observation of the same quantity — and entry_open was sitting in
+   outcomes.csv the whole time. Both columns are public, so you can recompute this
+   exact set yourself. Mirrors quote_integrity.scale_mismatch_ids; the two are kept
+   byte-identical in output on the live log. */
+const _SCALE_LO=0.5, _SCALE_HI=2.0;
+function scaleMismatchIds(picks, outcomes){
+  const entry=new Map();
+  (outcomes||[]).forEach(o=>{
+    const pid=(o.pick_id||"").trim(), eo=parseFloat(o.entry_open);
+    if(pid && isFinite(eo) && eo>0) entry.set(pid, eo);
+  });
+  const out=new Set();
+  (picks||[]).forEach(p=>{
+    const pid=(p.pick_id||"").trim(), px=parseFloat(p.price_at_screen), eo=entry.get(pid);
+    if(!pid || !isFinite(px) || px<=0 || !eo) return;      // ungraded can't be checked
+    const ratio=eo/px;
+    if(ratio<_SCALE_LO || ratio>_SCALE_HI) out.add(pid);
+  });
+  return out;
+}
 /* DERIVED TIER-ORDERING SENTENCE (2026-08-29).
    This paragraph used to hardcode "If the score ranked edge, A would beat B would
    beat C here — it doesn't." That was true when written and false by 2026-08-29:
@@ -2281,19 +2310,26 @@ function getTrackRecord(){
       ]);
       const all=parseCSV(pT).filter(p=>p.pick_id&&p.ticker);
       if(!all.length) throw new Error("empty picks.csv");
+      const outcomes = oT?parseCSV(oT):[];
       const echoIds=staleQuoteIds(all);
-      const picks=[], late=[], stale=[];
+      /* Needs outcomes, so it is computed at READ time — entry_open only exists once a
+         pick is graded, which is why the grader cannot apply this itself. */
+      const scaleIds=scaleMismatchIds(all, outcomes);
+      const picks=[], late=[], stale=[], rescaled=[];
       all.forEach(p=>{
         if(echoIds.has(p.pick_id)) stale.push(p);
+        else if(scaleIds.has(p.pick_id)) rescaled.push(p);
         else (isTimelyPick(p)?picks:late).push(p);
       });
       const lateCohorts={}; late.forEach(p=>{const d=p.trading_date||"?"; lateCohorts[d]=(lateCohorts[d]||0)+1;});
       const staleTickers={}; stale.forEach(p=>{const t=p.ticker||"?"; staleTickers[t]=(staleTickers[t]||0)+1;});
+      const rescaledTickers={}; rescaled.forEach(p=>{const t=p.ticker||"?"; rescaledTickers[t]=(rescaledTickers[t]||0)+1;});
       if(!picks.length) throw new Error("no timely picks in picks.csv");
       const skipped = sT?parseCSV(sT).filter(r=>r.trading_date):[];
-      return {real:true, picks, outcomes: oT?parseCSV(oT):[],
+      return {real:true, picks, outcomes,
               late, lateCohorts, lateCount:late.length,
               stale, staleTickers, staleCount:stale.length,
+              rescaled, rescaledTickers, rescaledCount:rescaled.length,
               skipped, skippedCount:skipped.length};
     }catch(e){ return {real:false, err:String(e)}; }
   })();
@@ -2492,13 +2528,14 @@ async function renderPerformance(){
 
   const skipNote = tr.skippedCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">${tr.skippedCount} session${tr.skippedCount>1?'s':''} missing from the log entirely</b> (${tr.skipped.map(r=>r.trading_date).join(', ')}). Our scheduler fired hours late, so the pre-open gate refused to log anything — a pick written after the opening bell was never a forecast, and cannot be backfilled. Those sessions are simply gone. We count them here because a record that quietly skips the days it failed on is not a record: <a href="skipped_sessions.csv" style="color:var(--a-text)">skipped_sessions.csv</a> carries the timestamp and reason for each.</p>` : "";
   const staleNote = tr.staleCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Also excluded: ${tr.staleCount} picks on a quote that never moved</b> (${Object.entries(tr.staleTickers).map(([t,n])=>t+' ('+n+')').join(', ')}). The stock halted, our price source kept returning its last quote, and the scanner logged a fresh pick each session against a price that no longer existed — byte-identical price, gap of exactly 0.00%, and RVOL, every session. A screen of a stock that did not trade is not a forecast. Same defect as the ${'’'}phantom cohort${'’'} below, one level down: the old guard compared a whole cohort to the previous session, so it caught a dead feed but not a single dead ticker inside a live one. The rows stay in the log, the exclusion re-derives from picks.csv, and no graded pick is affected — so no return, win rate or tier figure on this page moves.</p>` : "";
+  const rescaledNote = tr.rescaledCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Also excluded: ${tr.rescaledCount} picks screened on a stale price scale</b> (${Object.entries(tr.rescaledTickers).map(([t,n])=>t+' ('+n+')').join(', ')}). These names went through a split or reverse split and our quote feed kept quoting the old scale &mdash; in the worst case we screened a $0.72 price against a stock that actually opened at $7.56, a factor of ten. The <i>returns</i> on these rows are sound: entry and exit both come from the post-split series and reconcile like every other row. What is damaged is <b>selection</b> &mdash; the gap was measured against a prior close on the wrong scale, and gap is the single biggest input to the score, so the tier on these rows describes a stock that didn't trade. Note the direction: removing them makes our record very slightly <i>worse</i>, not better. Nothing is deleted, and the exclusion re-derives from two public columns &mdash; any row where <code>entry_open &divide; price_at_screen</code> falls outside 0.5&ndash;2.0 &mdash; so you can reproduce it exactly. A frozen-quote check cannot catch this: these prices moved every session, just on a scale that no longer existed.</p>` : "";
   const lateNote = tr.lateCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a-text)">What happened, and what it did to the numbers →</a></p>` : "";
   if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.`;
   /* The exclusions render into the panel below the figures, not above them. */
   const excl=document.getElementById("perfExcl");
-  if(excl) excl.innerHTML=`${lateNote}${staleNote}${skipNote}${awaitNote}`;
+  if(excl) excl.innerHTML=`${lateNote}${staleNote}${rescaledNote}${skipNote}${awaitNote}`;
   const exclWrap=document.getElementById("perfExclWrap");
-  if(exclWrap) exclWrap.style.display=(lateNote||staleNote||skipNote||awaitNote)?"":"none";
+  if(exclWrap) exclWrap.style.display=(lateNote||staleNote||rescaledNote||skipNote||awaitNote)?"":"none";
   const sgn=v=>v==null?"—":(v>=0?"+":"")+v.toFixed(1)+"%";
   document.getElementById("perfStats").innerHTML=`
     ${stat("Picks logged", g.total)}

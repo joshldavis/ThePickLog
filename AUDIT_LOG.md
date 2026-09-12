@@ -1,5 +1,30 @@
 # ThePickLog — Audit Log
 
+## 2026-09-12 — Split contamination sealed; the tier claim stops being restated
+
+Closes both open findings from the 09-04 and 09-05 audits, and the last item from the 08-29 audit.
+
+**1. Scale-reconciliation exclusion (09-05 Issue 1).** `quote_integrity.scale_mismatch_ids(picks, outcomes)` flags any pick whose `entry_open ÷ price_at_screen` falls outside **[0.5, 2.0]**. On the live log it selects **exactly the ten rows the audit named** — the seven VMAR sessions at 9.19–10.53×, plus `SUGP 06-16` (2.73×), `CPHI 07-22` (0.40×) and `SLE 08-18` (2.30×). Derived from two public columns, so a stranger reproduces the identical set; nothing is deleted.
+
+**The JS mirror in `index.html` was verified byte-identical to the Python on the live log** (both 10, same `pick_id`s) — the standing requirement whenever an exclusion exists on both surfaces.
+
+**Applied at READ time, never at grade time, and that ordering is forced:** the rule needs `entry_open`, which only exists once a pick is graded. The grader cannot consult it without a circular dependency. Grade everything; exclude when reporting.
+
+**Stated in the direction it actually runs:** removing these rows moves the record very slightly **against** us. The returns on them were always sound — entry and exit come from the same post-split series and reconcile to the 2% haircut like every other row. What was damaged is **selection**: `gap_pct` was measured against a prior close on a dead scale, and gap is the dominant score input, so the tier on those rows describes a stock that did not trade.
+
+**2. Scan-time corporate-action guard (09-05 Issue 1, prescription 2).** `is_corporate_action()` refuses a candidate whose float re-scales without a matching inverse price move. A genuine split moves both together, so `float_ratio × price_ratio ≈ 1`; when the float divides by ten and the price does not, the two feeds are on different scales and the candidate is not describing one stock. Verified against the real row: VMAR 08-26 flags (`float moved 0.100x while price moved 1.014x`), VMAR 08-17 does not. **Non-fatal by construction**, per the 09-03 lesson — a hygiene filter must never be able to destroy a cohort.
+
+**3. method.html §9 (09-04 Issue 1 / 09-05 Issue 2 / 08-29 Issue 3 — the fifth appearance).** The claim *"the top tier historically has the worst mean net and the deepest drawdowns"* was half true: drawdowns are monotone A→D and so is upside excursion; "worst mean net" became false when A rose to **best** of the four.
+
+**Fixed by removing the invertible claim, not by refreshing it.** The standing rule is that prose asserting a statistical fact must be computed from the data *under it* — but on method.html there is no table under it; the table lives on the Track record. So the correct application here is not to duplicate the grading pipeline onto a second page (two implementations of grading is precisely how surfaces drift) but to stop restating a number that has a live home. §9 now states the structural finding in terms that cannot inflect — both tails widen monotonically with heat, forward return has no established ordering because the intervals overlap — explicitly says it quotes no tier return figures and points at the live table, **and discloses the old claim and why it drifted.**
+
+⭐ **Generalisable lesson: a statistic restated on a page that cannot contradict it will always eventually drift.** The remedy is either to compute it from a table on the same page, or not to restate it at all. Refreshing the number just resets the clock — this claim had already been corrected once, on 08-29, and came back.
+
+**4. Concurrency groups** added to `paper_trader.yml` and `quotes.yml`, completing the set started on 09-02. `watchdog.yml` and `report.yml` are deliberately left without: a single daily/weekly cron cannot race itself.
+
+**Left open deliberately:** the Python analysis surfaces (`weekly_report.py`, `hypo_eval.py`, `risk_eval.py`, `exit_sim.py`, `bayes_h_ex1.py`) apply only the late-cohort exclusion via `split_timely`, not the frozen-quote or scale exclusions, so they can disagree with the site. **That gap pre-dates this work** — it arrived with the frozen-quote seal on 08-29 — and closing it means one shared exclusion pipeline rather than five call sites, which is a change worth making deliberately rather than inside a fix for something else.
+
+
 ## 2026-09-05 — Weekly verifiability audit — **⚠️ Issues found (2)**
 
 Every arithmetic check passes — all 983 graded rows reproduce the 2% haircut exactly, no duplicates, no silent gaps, no sample fallback. Both issues are about **inputs and prose, not arithmetic**. The new one is the more serious: a reverse split walked through the screener undetected for seven sessions, and the track record currently displays a pre-split screen price next to a post-split return. The second is last week's Issue 1, still unfixed.
