@@ -1,5 +1,35 @@
 # ThePickLog — Audit Log
 
+## 2026-09-12 — Weekly verifiability audit — **✅ All claims verify**
+
+Every published figure re-derives from the two CSVs, and **the scan is producing sessions again** — five consecutive clean cohorts since the 08-27 → 09-03 outage, all logged inside the window. No issues; four observations, none of which touches a number.
+
+**The headline: the scheduler and guard fixes hold.** `picks.csv` now runs to **2026-09-11**. The five post-recovery cohorts — 09-04 (22), 09-08 (22), 09-09 (21), 09-10 (21), 09-11 (21) — published at **07:59, 07:59, 08:10, 08:04 and 08:02 ET**: above the 06:00 ET `SCAN_FLOOR`, and 70+ minutes clear of the 09:20 cutoff. 09-07 (Labor Day) is correctly absent. That is the green scan the 09-03 entry was waiting on, and it closes both failure modes: the delayed dispatcher and the `_tuple` crash that was destroying cohorts.
+
+- **Data served.** `/picks.csv` 200, 221,135 bytes, 1,254 rows. `/outcomes.csv` 200, 1,135 rows. All 19 HTML pages 200.
+- **Real data shown.** Track record renders 1,104 real rows through 09-11. No sample fallback.
+- **No silent gaps.** 61 distinct `trading_date`s, 06-09 → 09-11. The six missing sessions (08-27, 08-28, 08-31, 09-01, 09-02, 09-03) are the **known, loudly-failed, unfillable** outage — not silent, and now closed. One cohort sits on a market holiday (**06-19 Juneteenth, 14 picks**); it is voided, rendered `VOID`, excluded from every statistic, and the `_NYSE_HOLIDAYS` guard prevents recurrence — 07-03 and 09-07 are both correctly absent.
+- **Claims == data.** Recomputed independently from the CSVs; every displayed figure matches to the precision shown. Picks logged **1,104**, graded **973**, win rate **33%** (321 W / 652 M), median net **−2.7%** (−2.68), mean net **−2.3%** (−2.30), avg worst dip **−17.6%** (−17.56). Tier row counts **A 291 / B 69 / C 289 / D 324** = 973. Filter chips reconcile exactly: 321 + 652 + 107 pending + 24 `VOID` = 1,104.
+- **Exclusions reproduce byte-for-byte.** Re-derived all three rules from scratch: **128 late picks across 7 cohorts** with per-date counts identical to the on-site note (06-15 13, 07-06 16, 07-07 16, 07-09 21, 07-13 21, 07-27 22, 08-03 19); **12 stale-quote (BNZI)**; **10 scale-mismatch** — the same ten rows and the same ticker tally the site publishes (VMAR 7, SUGP 1, CPHI 1, SLE 1). Union 150; 1,254 − 150 = 1,104.
+- **Honest grading.** All **1,110** rows carrying data reproduce open→close minus the 2% haircut to within rounding (0 exceptions). Zero duplicate `pick_id`s in either file, zero outcomes without a parent pick, `win` flag consistent on all 1,110. The 24 ungradeable rows carry explicit notes (`no entry bar`, `UNGRADEABLE: only N of 6 sessions ever printed — halted or delisted`) — the grader records its own failures rather than dropping them, which is the 08-09 survivorship fix still doing its job.
+- **Disclaimers.** Educational / not advice / not a broker-dealer all present on index and disclaimer. method.html carries "Educational / informational only — not investment advice" plus the disclaimer link (see observation 2).
+
+**Six-aspect validity check — all honest.**
+
+- **Content, substantive, generalizability, external, consequential** — all six aspects are stated on method.html §9 and the three validity docs return 200 and are linked from it: `-Validity-Framework-Messick-`, `-Domain-Coverage-Spec-`, `-Structural-Justification-`. The model carries the **unvalidated** label (index ×14, method ×2), with Gate-1 still published as FAIL.
+- **Structural — the tier claim is now un-driftable, and I re-checked the two facts §9 does assert.** Tiers render as a heat scale on both surfaces (`A ⚠ hot`, `C ○ cool`; §9: "a heat scale, not a quality grade"). §9 quotes **no** tier return figures and points at the live table. Its two standing assertions verify from the CSVs: both tails widen monotonically A→D — mean MAE **−23.11 / −19.16 / −15.32 / −14.22**, mean MFE **+43.33 / +36.79 / +19.92 / +16.05** — and **all six pairwise 95% CIs on mean net overlap**, so "no established ordering" holds. A is now *best* of the four on mean net (−1.43 vs B −1.88, C −3.12, D −2.44), which confirms the retired "top tier has the worst mean net" claim would indeed read false today. Removing it rather than refreshing it was the right call; this is the first week in five that the claim did not need correcting.
+
+**Observations — no action forced, none affects a published number.**
+
+1. **No `VOID` chip in the Track record filter row.** The chips read Graded 973 + Pending 107 = 1,080 against All 1,104; the 24 voided rows are reachable only by clicking All and reading the state column. The data is fully accounted for and the state is rendered honestly — this is a one-line addition (`VOID (24)`), not a defect.
+2. **method.html has no broker-dealer / not-an-RIA line** and never has (`git log -S` on that file returns nothing). It carries the educational and not-advice language and links to the full disclaimer. Worth one sentence for the reader who lands there from search.
+3. **`/terms` still 404s.** `terms.html` and `scorecard.html` are built but uncommitted, so the 404 stands — the counsel-brief item is unchanged. The working tree still holds **17 modified + 2 untracked** HTML files from the 09-12 build session; nothing was staged this run but `AUDIT_LOG.md`, verified via `git diff --cached`.
+4. **`perfNote` says "1,104 picks across 54 trading days".** 53 of those 54 dates are sessions; 06-19 is the voided holiday. Cosmetic.
+
+**Live deployment matches the repo:** build stamp `2026-09-12 02:23 ET · efb666d`, equal to HEAD. Footer 404 regression fully clean — all 19 pages checked, none links to `terms.html` or `scorecard.html`.
+
+**Grading in the coming week:** 09-04 (22 picks) → **09-14**; 09-08 (22) → **09-15**; 09-09 (21) → **09-16**; 09-10 (21) → **09-17**; 09-11 (21) → **09-18**. All 107 pending rows should clear by 09-18, taking the graded count to ~1,080. The 12 BNZI stale-quote rows and the 24 `VOID` rows will never grade and are excluded by design.
+
 ## 2026-09-12 (addendum) — Two footer links shipped pointing at 404s
 
 **Self-inflicted, live for about four hours, now fixed.** Commit `af791b8` above staged `index.html`
