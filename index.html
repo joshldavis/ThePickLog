@@ -4027,7 +4027,7 @@ function updateChatCtx(){
    ONLY this. */
 function buildAgentContext(){
   const w=CONFIG.WEIGHTS, fl=CONFIG.FILTERS;
-  let s = `IGNITIONSCAN METHOD (published):\n`+
+  let s = `THEPICKLOG METHOD (published):\n`+
     `- Universe: low-float names, price $${fl.priceMin}–$${fl.priceMax}, float < ${fl.floatMaxM}M shares.\n`+
     `- Composite score weights: float ${Math.round(w.float*100)}%, RVOL (relative volume) ${Math.round(w.rvol*100)}%, gap ${Math.round(w.gap*100)}%, price ${Math.round(w.price*100)}%. Tiers: A≥75, B≥60, C≥45, else D.\n`+
     `- The score measures momentum/structure for a SHORT pre-market trade window. It does NOT judge business quality or valuation.\n`+
