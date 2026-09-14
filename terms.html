@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="index,follow">
+<title>ThePickLog — Terms of Use &amp; Performance Disclosures</title>
+<meta name="description" content="The terms you accept by using ThePickLog, plus the formal hypothetical-performance disclosure that applies to every simulated result we publish.">
+<link rel="canonical" href="https://thepicklog.com/terms.html">
+<style>
+  :root{--a-text:#31b3aa;--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a-text)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn:hover{color:var(--a-text);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  #mobileMenu a:hover{background:#ffffff08}
+  @media(max-width:880px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:820px;margin:0 auto;padding:22px 16px 70px}
+  h1{font-size:26px;margin:.2em 0 .1em;letter-spacing:-.01em}
+  .lead{color:var(--dim);font-size:15px;margin:0 0 6px}
+  h2{font-size:16px;margin:30px 0 8px;letter-spacing:.1px}
+  p{margin:8px 0}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+  .muted{color:var(--dim)}
+  a{color:var(--blue)}
+  ul{margin:8px 0;padding-left:20px} li{margin:5px 0}
+  .foot{color:var(--dim);font-size:12px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+  .foot a{color:var(--dim)}
+
+  /* ===== a11y baseline — UI audit 2026-08-19 =====
+     3.1 a visible focus ring everywhere (there were 2 :focus rules on the whole site)
+     3.2 footer links to a 24px touch target (they were 14px)
+     3.7 skip-to-content, so keyboard users don't tab 12 nav links on every page */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
+
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 =====
+     There were FIVE different navs across 19 pages. Method/Trust/Guide/Privacy were
+     unreachable from the homepage nav, and Compete existed ONLY on the homepage.
+     Both marker classes are styled so a page's own CSS can use either. */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  /* The mobile menu had no z-index on 16 of 19 pages, so the panel painted BEHIND
+     the article text, and a translucent background left it unreadable wherever
+     backdrop-filter did not apply. Opaque and lifted. */
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+
+  /* ===== 2.3 one long-form type scale — UI audit 2026-08-19 =====
+     Body copy ran 15px in an 820px column on the proof pages: ~113 characters a
+     line, the smallest text on the site on the pages that most need careful
+     reading. method.html set its section headings at 16px against 15px body, so
+     its hierarchy had effectively collapsed. H1 ranged 26–36px with no scale.
+     One scale now: 17px/1.65 in a 720px column (~80ch), H1 34 / H2 23 / H3 17.5. */
+  body{font-size:17px;line-height:1.65}
+  .wrap{max-width:720px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:.15em 0 .3em}
+  h2{font-size:23px;line-height:1.25;letter-spacing:-.015em;margin:1.7em 0 .45em}
+  h3{font-size:17.5px;line-height:1.35;margin:1.5em 0 .35em}
+  p{margin:0 0 1.05em}
+  .lead,.standfirst{font-size:18.5px;line-height:1.5}
+  @media(max-width:560px){
+    body{font-size:16.5px}
+    h1{font-size:28px}
+    h2{font-size:20.5px}
+    .lead,.standfirst{font-size:17px}
+  }
+</style>
+<meta property="og:image" content="https://thepicklog.com/og/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.com/og/card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.com/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="field-notes.html">Field notes</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+    <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+    <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+    <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+<script>
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open); b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+</script>
+
+<div class="wrap" id="main" tabindex="-1">
+  <h1>Terms of Use</h1>
+  <p class="lead">Last updated: 12 September 2026. These terms govern your use of thepicklog.com.
+    They sit alongside the <a href="disclaimer.html">Disclaimer</a> and the
+    <a href="privacy.html">Privacy Policy</a>, which are part of these terms by reference.</p>
+
+  <div class="panel">
+    <p style="margin:0"><b>The short version.</b> ThePickLog is a public research project. Everything on
+    it is educational information about how strategies are tested — not advice, not a recommendation, and
+    not a service that manages, executes or holds anything for you. Every performance figure we publish is
+    simulated. You use the site at your own risk, and any decision you make with it is yours alone.</p>
+  </div>
+
+  <h2>1. Who you are agreeing with</h2>
+  <p>ThePickLog is operated by <b>AMD Ventures, LLC</b>, a Florida limited liability company
+    (&ldquo;ThePickLog&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;). By accessing the site you agree to
+    these terms. If you do not agree, do not use the site. You confirm you are at least 18 years old and
+    legally able to enter into this agreement, and that your use of the site is lawful where you are.</p>
+
+  <h2>2. What the site is</h2>
+  <p>The site publishes quantitative hypotheses about the stock market, the rules used to test them, the
+    resulting graded record, and write-ups of what went wrong. Its purpose is to let a stranger verify our
+    claims. It is a research and educational publication and nothing more.</p>
+  <p>We do not execute orders, place trades, route to any broker, hold custody of any funds or securities,
+    manage any account, or connect to any brokerage for execution. The
+    <a href="index.html#compete">Compete</a> simulation is paper trading with notional money only; no real
+    capital is involved and no position shown anywhere on this site exists.</p>
+  <p>The <a href="disclaimer.html">Disclaimer</a> sets out in full what this is not — it is not investment
+    advice and we are not a registered investment adviser, broker-dealer or financial planner. Read it; it
+    is the operative statement on that point and these terms do not repeat it.</p>
+
+  <h2>3. Hypothetical and simulated performance</h2>
+  <div class="panel">
+    <p style="margin:0 0 8px"><b>Hypothetical performance disclosure.</b> Hypothetical or simulated
+      performance results have inherent limitations. Unlike the results shown in an actual performance
+      record, these results do not represent actual trading. Because the trades have not actually been
+      executed, the results may have under- or over-compensated for the impact, if any, of certain market
+      factors such as lack of liquidity. Simulated trading programs in general are also subject to the fact
+      that they are designed with the benefit of hindsight. No representation is being made that any
+      account will or is likely to achieve profits or losses similar to those shown.</p>
+    <p style="margin:0"><b>Applies to everything.</b> Every number on this site — the track record, the
+      screener output, the experiment results, the leaderboard, the calculator and the paper-trading
+      simulation — is hypothetical in this sense.</p>
+  </div>
+  <p>Two further limits we hold ourselves to and want stated in the terms, not just the methodology pages.
+    First, our figures are computed from public price data and do not fully reflect commissions, spreads,
+    slippage, borrowing costs, taxes, partial fills, or the liquidity limits of thinly traded stocks —
+    each of which reduces what a real account would have earned. Second, where a result was produced
+    partly with hindsight, or where the sample is too small to distinguish from chance, we say so on the
+    page that shows it. If a page does not say so, the result is still hypothetical.</p>
+
+  <h2>4. What the published record does and does not claim</h2>
+  <p>We claim that each pick was logged at the stated time, graded by an automated job on a fixed schedule,
+    and left unedited in an append-only log whose hash chain is published. We claim you can re-derive our
+    figures from the raw files we publish.</p>
+  <p>We do not claim the strategies work. Several have been tested and refuted, and we publish those
+    verdicts. Nothing in the record is a representation that any strategy is profitable, will continue to
+    behave as it has, or is suitable for you.</p>
+  <p>We correct errors in public rather than quietly. Where a correction changes a headline number, the
+    prior number and the reason for the change stay on the site. A figure you saw earlier may therefore
+    have been superseded; the current page governs.</p>
+
+  <h2>5. No advisory or fiduciary relationship</h2>
+  <p>Using the site, subscribing to updates, or entering the paper-trading simulation creates no advisory,
+    fiduciary, agency or professional relationship between you and us. We do not know your circumstances,
+    objectives or risk tolerance, and nothing on the site is tailored to them. You are solely responsible
+    for evaluating the merits and risks of anything you do. Consult a licensed professional before making
+    an investment decision.</p>
+
+  <h2>6. Registration status</h2>
+  <p>Neither ThePickLog nor AMD Ventures, LLC is registered with the U.S. Securities and Exchange
+    Commission, the Commodity Futures Trading Commission, FINRA, the National Futures Association, or any
+    state securities regulator as an investment adviser, broker-dealer, commodity trading advisor,
+    associated person or fiduciary. No content on the site should be read as being offered by a registered
+    or licensed professional.</p>
+
+  <h2>7. Email updates and the simulation</h2>
+  <p>You may give us an email address to receive verdicts and updates. Confirmation is double opt-in and
+    every message carries an unsubscribe link that works. What we store and why is in the
+    <a href="privacy.html">Privacy Policy</a>.</p>
+  <p>If you take part in the paper-trading simulation, you are responsible for anything submitted from your
+    entry. We may reset, correct, exclude or remove entries where a result is produced by a data error, a
+    defect in our own code, or an attempt to game the scoring — and where we do, we will say so publicly
+    rather than silently adjust a leaderboard.</p>
+  <p>There is currently no paid subscription. If we ever offer one, its price, billing cycle, renewal and
+    cancellation terms will be published before anyone can be charged, and these terms will be updated
+    first.</p>
+
+  <h2>8. Acceptable use</h2>
+  <p>You may read, quote, cite and link to anything here. You may download and re-analyse the published
+    data files; that is what they are for. You may not misrepresent our results as your own or as an
+    endorsement of anything, present our figures without the qualifications attached to them on the page
+    they came from, attempt to interfere with the site or its automated jobs, or use the site to break the
+    law.</p>
+
+  <h2>9. Our content, your use of it, and the open standard</h2>
+  <p>The site&rsquo;s text, design, code and compiled datasets are owned by AMD Ventures, LLC or its
+    licensors. You are granted a personal, non-exclusive, revocable licence to use them as described above.</p>
+  <p>Two deliberate exceptions. The <a href="index.html#validation">Verified-by-ThePickLog</a> open
+    standard is published so that anyone may adopt it — that is its point. And the raw published data
+    files exist to be independently re-derived and checked. Neither exception is a transfer of ownership
+    or a licence to imply we endorse your use, and both are conditional on citing the source.</p>
+
+  <h2>10. Third-party data and links</h2>
+  <p>Market and reference data come from third-party providers and public filings. It may be delayed,
+    incomplete, revised or wrong, and we do not warrant it. Where a provider requires attribution, it is
+    given on the <a href="trust.html">Trust &amp; Data</a> page. Links to other sites are for reference; we
+    do not control or endorse them.</p>
+
+  <h2>11. Availability</h2>
+  <p>The site is provided as-is. Automated jobs can fail, and when they do the record has a gap that we
+    publish rather than backfill. We do not guarantee that the site will be available, current, or free of
+    errors, and we may change or discontinue any part of it.</p>
+
+  <h2>12. No warranty</h2>
+  <p>To the fullest extent permitted by law, the site and everything on it are provided
+    &ldquo;as is&rdquo; and &ldquo;as available&rdquo;, without warranty of any kind, express or implied,
+    including any implied warranty of merchantability, fitness for a particular purpose, accuracy, or
+    non-infringement.</p>
+
+  <h2>13. Limitation of liability</h2>
+  <p>To the fullest extent permitted by law, neither AMD Ventures, LLC nor its members, officers or
+    contractors will be liable for any trading or investment loss, or for any indirect, incidental,
+    special, consequential or punitive damages, arising out of your use of the site — including any
+    decision made in reliance on anything published here. Some jurisdictions do not allow certain
+    exclusions, in which case this section applies to the maximum extent they permit.</p>
+
+  <h2>14. Indemnity</h2>
+  <p>You agree to indemnify and hold harmless AMD Ventures, LLC and its members, officers and contractors
+    from any claim, loss or expense (including reasonable legal fees) arising out of your use of the site,
+    your breach of these terms, or your infringement of anyone else&rsquo;s rights.</p>
+
+  <h2>15. Governing law and disputes</h2>
+  <p>These terms are governed by the laws of the State of Florida, United States, without regard to its
+    conflict-of-law rules. You and we submit to the exclusive jurisdiction of the state and federal courts
+    located in Broward County, Florida for any dispute arising out of them.</p>
+  <p>Before starting any proceeding, please contact us and give us thirty days to resolve the matter. Most
+    things can be fixed by telling us what is wrong.</p>
+
+  <h2>16. Changes to these terms</h2>
+  <p>We may update these terms. The date at the top always reflects the current version. For material
+    changes we will note the change on the site and, if you are subscribed, by email. Continuing to use the
+    site after a change means you accept the updated terms.</p>
+
+  <h2>17. Severability and entire agreement</h2>
+  <p>If any provision is held unenforceable, it is limited or removed to the minimum extent necessary and
+    the rest stays in force. These terms, with the Disclaimer and the Privacy Policy, are the entire
+    agreement between you and us about the site.</p>
+
+  <h2>18. Contact</h2>
+  <p>AMD Ventures, LLC (Florida, USA) · <a href="about.html#corrections">Contact form</a></p>
+
+  <p class="foot">
+    <b>Prototype — sample copy pending legal review.</b>
+    ThePickLog is a research project, not investment advice.
+  
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
+  </p>
+</div>
+</body>
+</html>

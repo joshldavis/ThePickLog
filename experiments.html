@@ -46,6 +46,16 @@
   .v-fail{background:#3a1c22;color:#ffb3c0;border:1px solid #5a2a33}
   .v-run{background:#2a1d10;color:var(--amber);border:1px solid #5a3a22}
   .v-pass{background:#12331f;color:var(--green);border:1px solid #23543a}
+  .v-inc{background:#10202e;color:var(--blue);border:1px solid #24405a}
+  .v-thin{background:#1c2230;color:var(--dim);border:1px solid var(--line)}
+  .vkey{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:4px 20px 8px;margin:20px 0 4px}
+  .vkey summary{cursor:pointer;font-size:13.5px;font-weight:650;padding:13px 0;color:var(--blue);list-style:revert}
+  .vkey p{margin:2px 0 12px;color:var(--dim);font-size:14px;line-height:1.6}
+  .vkey .vrow{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-top:1px solid var(--line)}
+  .vkey .vrow:first-of-type{border-top:0}
+  .vkey .vrow .verdict-pill{margin-left:0;flex-shrink:0;min-width:172px;text-align:center}
+  .vkey .vrow span.d{font-size:14px;color:var(--dim);line-height:1.55}
+  @media(max-width:620px){.vkey .vrow{flex-direction:column;gap:5px}.vkey .vrow .verdict-pill{min-width:0}}
   .meta{margin-top:12px;font-size:12.5px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}
   .how{border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:20px 22px;margin:30px 0}
   .how h2{margin:0 0 10px;font-size:19px}
@@ -123,10 +133,28 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <p class="lead">Retail trading runs on claims that are almost never checked: strategies with impressive win rates, screenshots of the good days, backtests fitted to the past. So we take a claim, write the rule down with a date <i>before</i> we look, grade it forward on public data, and publish the verdict — including when the answer is embarrassing.</p>
   <p class="strip">Rule frozen before the fact &nbsp;•&nbsp; Graded forward, winners <i>and</i> losers &nbsp;•&nbsp; Recomputable from public data &nbsp;•&nbsp; Published either way</p>
 
+  <details class="vkey">
+    <summary>What a verdict is allowed to say &mdash; the five outcomes</summary>
+    <p>&ldquo;Failed&rdquo; is three different findings wearing one word, and the difference decides what
+      you should do next. A claim that was tested properly and lost is not the same as one the data was
+      never able to answer. These are the only five things we let ourselves conclude, and every one of them
+      gets published.</p>
+    <div class="vrow"><span class="verdict-pill v-pass">HELD UP</span><span class="d">Registered in advance, graded forward, and the effect survived out-of-sample. <b>Nothing has reached this yet.</b></span></div>
+    <div class="vrow"><span class="verdict-pill v-fail">DIDN&rsquo;T HOLD UP</span><span class="d">Registered in advance, graded forward, and the effect went to zero or the other way. The interval excludes zero on the wrong side. This is a real refutation, not an absence of evidence.</span></div>
+    <div class="vrow"><span class="verdict-pill v-inc">INCONCLUSIVE</span><span class="d">Ran to its verdict date, and the interval still includes zero. The claim is neither confirmed nor refuted &mdash; and saying so is not the same as saying it failed.</span></div>
+    <div class="vrow"><span class="verdict-pill v-thin">UNDERPOWERED</span><span class="d">Too few observations to detect the effect the registration said we were looking for. The honest answer is that this test could not have found the answer either way.</span></div>
+    <div class="vrow"><span class="verdict-pill v-run">RUNNING</span><span class="d">Registered, window open, no verdict yet. The result is not known to us either.</span></div>
+    <p style="margin-top:14px">One rule holds all five together: the label is chosen by the interval we
+      published in advance, not by how the number reads afterwards. Worked example, including the arithmetic:
+      <a href="gate.html">Gate 1</a>. The <span class="verdict-pill v-fail" style="margin-left:0">CORRECTION</span>
+      tag further down is not a sixth verdict &mdash; it marks a field note about a mistake in our own
+      apparatus, which is a different kind of finding from a verdict on a claim.</p>
+  </details>
+
 
 
   <a class="card" href="experiment-01.html">
-    <span class="no">EXPERIMENT 01</span><span class="verdict-pill v-fail">FAILED</span>
+    <span class="no">EXPERIMENT 01</span><span class="verdict-pill v-fail">DIDN&rsquo;T HOLD UP</span>
     <h2>Our own low-float momentum screen</h2>
     <p>We started with ourselves. We built a screener for low-float stocks gapping up on heavy volume, pre-registered the rule we believed in, and ran it forward for seven weeks. It lost — significantly, and in the opposite direction to the one we predicted. Here is the whole thing, including the number that flipped sign as the sample grew.</p>
     <div class="meta">registered 2026-06-23 · verdict 2026-07-29 · n=309 · Δ −3.0pp vs baseline · 95% CI [−4.4, −1.5]</div>
@@ -270,8 +298,8 @@ async function tplVerdicts(ev){
     <br>Educational and informational only — not investment advice, and not a broker-dealer.
   
   <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
-  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a></span>
-  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
   </p>
 </div>
 

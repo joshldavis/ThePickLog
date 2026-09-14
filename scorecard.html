@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="index,follow">
+<title>ThePickLog — The 7-Check Scorecard: vet any stock-alert service in 2 minutes</title>
+<meta name="description" content="Score any stock-alert service against the seven checks that separate a real track record from a screenshot. Free, no account, nothing sent anywhere — it all runs in your browser.">
+<link rel="canonical" href="https://thepicklog.com/scorecard.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The 7-Check Scorecard — vet any stock-alert service">
+<meta property="og:description" content="Seven checks, two minutes, no account. Score the service — then score us with the same yardstick.">
+<meta property="og:url" content="https://thepicklog.com/scorecard.html">
+<style>
+  :root{--a-text:#31b3aa;--bg:#0e1116;--panel:#161b22;--panel2:#1c2230;--line:#2a3240;--tx:#e6edf3;--dim:#8b98a8;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#5aa0ff;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  /* ===== site top bar (mirrors index.html header) ===== */
+  .top{position:sticky;top:0;z-index:20;background:rgba(14,17,22,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;
+    color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a-text)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);
+    display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;
+    text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;
+    padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);
+    border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;
+    align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  .menu-btn:hover{color:var(--a-text);border-color:var(--a)}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(14,17,22,.97);
+    backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;
+    box-shadow:0 18px 40px #000a;max-height:calc(100vh - 56px);overflow-y:auto}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;
+    padding:13px 12px;border-radius:10px}
+  #mobileMenu a:hover{background:#ffffff08}
+  @media(max-width:880px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+
+  .wrap{max-width:900px;margin:0 auto;padding:18px 14px 60px}
+  header.hd{margin-bottom:6px}
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.015em;line-height:1.2}
+  h1 .dot{color:var(--a-text)}
+  .lead{color:var(--dim);font-size:15.5px;margin:0 0 4px;line-height:1.55;max-width:70ch}
+  .strip{font-size:12.5px;color:var(--dim);border:1px solid var(--line);background:var(--panel2);
+    border-radius:999px;padding:7px 14px;display:inline-block;margin:12px 0 2px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:28px 0 10px;font-weight:600}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  a{color:var(--blue)}
+  .note{color:var(--dim);font-size:12.5px;margin-top:8px;line-height:1.55}
+
+  /* ===== the seven check rows ===== */
+  .chk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:10px 0}
+  .chk.gate{border-left:3px solid var(--a)}
+  .chk-h{display:flex;gap:10px;align-items:flex-start}
+  .chk-n{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);flex-shrink:0;
+    width:22px;height:22px;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;margin-top:1px}
+  .chk-q{font-size:15.5px;font-weight:650;line-height:1.4;margin:0}
+  .chk-gatetag{font-size:10px;font-weight:800;letter-spacing:.07em;color:var(--a-text);
+    border:1px solid #1f6f6b66;background:#1f6f6b1f;border-radius:999px;padding:2px 7px;margin-left:7px;
+    white-space:nowrap;vertical-align:2px}
+  .flags{margin:9px 0 0 32px;font-size:13px;line-height:1.6}
+  .flags .g{color:var(--green)} .flags .r{color:var(--red)}
+  .flags div{color:var(--dim)}
+  .ans{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0 32px}
+  .ans button{padding:7px 14px;border-radius:9px;font:inherit;font-size:13px;font-weight:650;cursor:pointer;
+    background:var(--panel2);border:1px solid var(--line);color:var(--dim)}
+  .ans button:hover{border-color:var(--a);color:var(--tx)}
+  .ans button[aria-pressed="true"][data-v="y"]{background:#12331f;border-color:#23543a;color:#7ee2ab}
+  .ans button[aria-pressed="true"][data-v="n"]{background:#3a1c22;border-color:#5a2a33;color:#ffb3c0}
+  .ans button[aria-pressed="true"][data-v="u"]{background:#2a1d10;border-color:#5a3a22;color:var(--amber)}
+  @media(max-width:560px){.flags,.ans{margin-left:0}}
+
+  /* ===== verdict ===== */
+  .vd{border-radius:14px;padding:18px 20px;border:1px solid var(--line);background:var(--panel);margin-top:6px}
+  .vd.v-pass{border-color:#23543a;background:#12331f}
+  .vd.v-part{border-color:#5a3a22;background:#2a1d10}
+  .vd.v-fail{border-color:#5a2a33;background:#3a1c22}
+  .vd.v-unk{border-color:#24405a;background:#10202e}
+  .vd .vt{font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+  .vd .vh{font-size:22px;font-weight:750;letter-spacing:-.015em;margin:5px 0 8px;line-height:1.25}
+  .vd .vb{font-size:14.5px;line-height:1.6;margin:0}
+  .vd.v-pass .vt,.vd.v-pass .vh{color:#7ee2ab}
+  .vd.v-part .vt,.vd.v-part .vh{color:var(--amber)}
+  .vd.v-fail .vt,.vd.v-fail .vh{color:#ffb3c0}
+  .vd.v-unk .vt,.vd.v-unk .vh{color:var(--blue)}
+  .tally{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;padding-top:13px;border-top:1px solid #ffffff1a}
+  .tally div{font-size:12.5px;color:var(--dim)}
+  .tally b{font-size:19px;font-weight:750;display:block;letter-spacing:-.3px}
+  .fails{margin:14px 0 0;padding:0;list-style:none;font-size:13.5px;line-height:1.55}
+  .fails li{padding:6px 0;border-top:1px solid #ffffff12}
+  .fails li:first-child{border-top:0}
+  .fails .lbl{font-weight:700}
+  .fails .lbl.n{color:#ffb3c0} .fails .lbl.u{color:var(--amber)}
+
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;font:inherit;
+    font-size:13px;font-weight:650;text-decoration:none;color:var(--tx);background:var(--panel2);
+    border:1px solid var(--line);cursor:pointer}
+  .btn:hover{border-color:var(--a);color:#fff}
+  .btn.pri{background:var(--a);border-color:var(--a);color:#fff}
+  .btn.pri:hover{background:#248079;border-color:#248079}
+  .row{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px;align-items:center}
+  .said{font-size:12.5px;color:var(--green)}
+
+  details.method{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 16px 6px}
+  details.method summary{cursor:pointer;font-size:13px;font-weight:600;padding:11px 0;color:var(--blue)}
+  details.method p,details.method li{font-size:13px;color:var(--dim);margin:6px 0;line-height:1.6}
+  details.method h3{font-size:13.5px;margin:15px 0 4px;color:var(--tx)}
+  .caveat{background:#2a1d10;border:1px solid #5a3a22;color:var(--amber);padding:11px 13px;border-radius:10px;
+    font-size:12.5px;margin-top:16px;line-height:1.6}
+  .ournotes{background:#2a1d10;border:1px solid #5a3a22;border-radius:12px;padding:16px 18px;margin:18px 0 0}
+  .ournotes h3{margin:0 0 8px;font-size:15.5px;color:var(--amber)}
+  .ournotes p{margin:0 0 10px;font-size:13.5px;color:var(--tx);line-height:1.65;opacity:.92}
+  .ournotes ul{margin:0 0 10px;padding-left:20px}
+  .ournotes li{font-size:13.5px;line-height:1.65;margin:0 0 9px;color:var(--tx);opacity:.92}
+  .self{background:var(--panel2);border:1px solid var(--line);border-left:3px solid var(--a);border-radius:12px;
+    padding:16px 18px;margin:26px 0 0}
+  .self h3{margin:0 0 7px;font-size:16px}
+  .self p{margin:0 0 9px;font-size:14px;color:var(--dim);line-height:1.6}
+
+  /* ===== a11y baseline — UI audit 2026-08-19 ===== */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 ===== */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="field-notes.html">Field notes</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu"
+      onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance">Track record</a>
+    <a href="index.html#watchlist">Today&rsquo;s screen</a>
+    <a href="index.html#compete">Compete</a>
+    <a href="method.html">Method</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+<script>
+function toggleMenu(force){
+  const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const open=(force!==undefined)?force:!m.classList.contains("open");
+  m.classList.toggle("open",open); b.setAttribute("aria-expanded",open);
+  b.textContent=open?"✕ Close":"☰ Menu";
+}
+</script>
+
+<div class="wrap" id="main" tabindex="-1">
+  <header class="hd">
+    <h1>The 7-Check Scorecard</h1>
+    <p class="lead">Answer seven questions about any stock-alert service and get a straight verdict on
+      whether its track record can actually be checked. Two minutes. No account, no email, nothing sent
+      anywhere — every answer stays in your browser.</p>
+    <span class="strip">Based on <a href="guide.html">the 7 checks</a> &nbsp;•&nbsp; Three of them are pass/fail &nbsp;•&nbsp; Score us with it too</span>
+  </header>
+
+  <div class="row">
+    <button class="btn" id="demoUs" type="button">Fill in ThePickLog&rsquo;s own answers</button>
+    <button class="btn" id="clearAll" type="button">Clear</button>
+    <span class="said" id="said" hidden></span>
+  </div>
+
+  <h2>The seven checks</h2>
+  <div id="checks"></div>
+
+  <h2>Verdict</h2>
+  <div id="verdict"></div>
+
+  <div class="row">
+    <button class="btn pri" id="copyBtn" type="button">Copy the result</button>
+    <button class="btn" id="linkBtn" type="button">Copy a link to this scorecard</button>
+    <a class="btn" href="guide.html">Read what each check means →</a>
+  </div>
+
+  <div class="ournotes" id="ourNotes" hidden>
+    <h3>Our seven yeses, with the asterisks</h3>
+    <p>We score ourselves Yes on all seven, and we would rather hand you the qualifications than have
+      you find them. Both are already published; neither is a footnote we invented for this page.</p>
+    <ul>
+      <li><b>Check 1 — published before the outcome.</b> True today, and there is a hard 09:20 ET cutoff
+        that makes a late entry impossible. It was <i>not</i> always true: our scheduler drifted past the
+        opening bell on seven occasions and logged 128 picks anyway. An outside reader found it in our
+        public CSV six weeks later. Those cohorts are excluded, the headline moved from &minus;2.68% to
+        &minus;3.40% when we did it, and <a href="late-cohorts.html">the whole thing is written up</a>.</li>
+      <li><b>Check 6 — immutable record.</b> The log opens 2026-06-09; the hash chain&rsquo;s genesis block
+        is 2026-07-06. <b>253 picks predate the seal.</b> Everything from the genesis block on is chained
+        and any edit to a sealed row is provable — but for those first four weeks you are trusting our git
+        history rather than checking a chain, and external archiving only began in late July 2026. We
+        cannot retrospectively seal them without defeating the point of sealing.
+        <a href="trust.html">The limits are stated on the Trust page</a>.</li>
+    </ul>
+    <p style="margin-bottom:0">Neither of these turns a Yes into a No. Both are the sort of thing a
+      service grading itself has every incentive to leave out — which is the argument for not letting
+      anyone grade themselves, us included.</p>
+  </div>
+
+  <div class="caveat">
+    <b>What this is not.</b> A scorecard is a checklist, not a measurement. Seven yeses mean the claims
+    are <i>checkable</i> — not that the strategy makes money. A service can pass all seven and still lose,
+    and that is a much better problem to have than one you cannot audit at all. Nothing here is investment
+    advice or an accusation about any particular service; you are recording your own reading of what a
+    service publishes.
+  </div>
+
+  <div class="self">
+    <h3>Now run it on us</h3>
+    <p>That button at the top fills in our own honest answers, including the ones that are uncomfortable.
+      We publish every pick before the open, grade winners and losers automatically five trading days
+      later, and keep the log append-only with a published hash chain. We also publish the times we broke
+      our own discipline — like the <a href="late-cohorts.html">128 picks logged after the opening bell</a>.
+      Bought and held, our picks as a group have <b>lost money</b>, and that is on the record too.</p>
+    <p style="margin-bottom:0">If a scorecard you can run on us is worth anything, it is because we did
+      not get to grade ourselves. <a href="index.html#performance">See the record →</a></p>
+  </div>
+
+  <details class="method">
+    <summary>How the verdict is computed</summary>
+    <h3>Three checks are gates</h3>
+    <p>Checks <b>1</b> (published before the outcome), <b>2</b> (losers shown next to winners) and
+      <b>7</b> (a stranger can verify it) are pass/fail. A hard <i>no</i> on any of them means the rest
+      cannot rescue it — if the record was written after the fact, or the losers are missing, or nothing
+      can be independently confirmed, then the other four answers are describing a document that has no
+      evidentiary value. This is the same rule stated at the end of the guide: <i>any hard no on #1, #2 or
+      #7 — keep your money.</i></p>
+    <h3>The four other checks are weighted equally</h3>
+    <p>Checks 3, 4, 5 and 6 each count once. They can move a service between <i>fully checkable</i> and
+      <i>checkable with named gaps</i>, but they cannot fail it on their own and they cannot rescue a
+      failed gate.</p>
+    <h3>&ldquo;Can&rsquo;t tell&rdquo; is a real answer, and it is not neutral</h3>
+    <p>If you cannot find the answer after looking, that is information about the service, not about you.
+      A record designed to be checked makes all seven answers easy to find. So unknowns are counted and
+      reported separately rather than being scored as passes — and if unknowns dominate, the verdict says
+      the service cannot be assessed from what it publishes, which is itself the finding.</p>
+    <h3>Nothing leaves your browser</h3>
+    <p>There is no account, no email gate and no analytics call on your answers. The
+      &ldquo;copy a link&rdquo; button encodes your seven answers into the URL itself so you can paste it
+      to someone — that link is the only place your answers ever go, and only if you press it.</p>
+  </details>
+
+  <p class="note" style="margin-top:22px">Educational / informational only. Not investment advice, not a
+    recommendation to buy or sell any security, and not a statement of fact about any service you score.
+    Past performance does not predict future results.</p>
+</div>
+
+<script>
+/* ===== the seven checks — text mirrors guide.html, which is the canonical source ===== */
+const CHECKS=[
+ {n:1,gate:true,
+  q:"Were the picks published <i>before</i> the outcome was known?",
+  g:"Every pick carries a timestamp earlier than its result — a public, dated log you can scroll back through.",
+  r:"Results described in the past tense with no pre-dated entry. A highlights reel, not a log."},
+ {n:2,gate:true,
+  q:"Are the losers shown right next to the winners?",
+  g:"A complete graded log where the worst calls sit beside the best.",
+  r:"&ldquo;Featured trades&rdquo; and testimonials, with no way to see the ones that failed."},
+ {n:3,gate:false,
+  q:"Is a &ldquo;win&rdquo; defined as a return you could actually get?",
+  g:"Wins are open-to-close or exit-rule based, net of costs and slippage.",
+  r:"Wins are &ldquo;ever touched +X%&rdquo; — an untradeable high-water mark."},
+ {n:4,gate:false,
+  q:"Were the rules fixed in advance — or fitted to the past?",
+  g:"Rules are dated and scored only on picks that came after the rule was frozen.",
+  r:"&ldquo;Backtested&rdquo; results with no forward, out-of-sample record."},
+ {n:5,gate:false,
+  q:"Is there enough of a sample to mean anything?",
+  g:"Hundreds of graded picks — our own rule of thumb is n &gt; 200.",
+  r:"A dazzling percentage built on a dozen trades."},
+ {n:6,gate:false,
+  q:"Is the record immutable — or could it be quietly edited?",
+  g:"Append-only, machine-graded, never edited. Strongest form: a published hash chain.",
+  r:"A curated page the operator can reshape at will."},
+ {n:7,gate:true,
+  q:"Can a total stranger verify it without trusting anyone?",
+  g:"Raw data published; every number re-derivable by someone with no reason to believe them.",
+  r:"&ldquo;Trust our verified results&rdquo; with nothing to check."}
+];
+/* ThePickLog's own answers. y = yes, n = no, u = can't tell.
+   Kept honest deliberately: see the self-assessment note on the page. */
+const OURS="yyyyyyy";
+const LBL={y:"Yes",n:"No",u:"Can't tell"};
+let A=Array(7).fill(null);
+
+const el=(h)=>{const d=document.createElement("div");d.innerHTML=h.trim();return d.firstElementChild;};
+
+function drawChecks(){
+  const root=document.getElementById("checks");
+  root.innerHTML="";
+  CHECKS.forEach((c,i)=>{
+    const card=el(`<div class="chk${c.gate?" gate":""}">
+      <div class="chk-h">
+        <span class="chk-n">${c.n}</span>
+        <p class="chk-q">${c.q}${c.gate?'<span class="chk-gatetag">PASS / FAIL</span>':''}</p>
+      </div>
+      <div class="flags">
+        <div><span class="g">✓</span> ${c.g}</div>
+        <div><span class="r">✕</span> ${c.r}</div>
+      </div>
+      <div class="ans" role="group" aria-label="Answer for check ${c.n}"></div>
+    </div>`);
+    const ans=card.querySelector(".ans");
+    ["y","n","u"].forEach(v=>{
+      const b=document.createElement("button");
+      b.type="button"; b.dataset.v=v; b.textContent=LBL[v];
+      b.setAttribute("aria-pressed", A[i]===v ? "true":"false");
+      b.onclick=()=>{A[i] = (A[i]===v ? null : v); render();};
+      ans.appendChild(b);
+    });
+    root.appendChild(card);
+  });
+}
+
+function verdict(){
+  const answered=A.filter(Boolean).length;
+  if(answered===0) return {c:"v-unk",t:"Not started",h:"Answer the seven checks above",
+    b:"Pick Yes, No or Can&rsquo;t tell for each one. You can leave a check blank if you have not looked yet — the verdict will say how many are still open."};
+
+  const gateIdx=[0,1,6];
+  const failedGates=gateIdx.filter(i=>A[i]==="n");
+  const unknownGates=gateIdx.filter(i=>A[i]==="u");
+  const yes=A.filter(v=>v==="y").length;
+  const no=A.filter(v=>v==="n").length;
+  const unk=A.filter(v=>v==="u").length;
+  const open=7-answered;
+
+  if(failedGates.length){
+    const which=failedGates.map(i=>"#"+CHECKS[i].n).join(", ");
+    return {c:"v-fail",t:"Failed a gate",h:"Not verifiable — keep your money",
+      b:`A hard <b>no</b> on ${which} means there is nothing here to audit. Whatever the other answers say, they are describing a document with no evidentiary value: either the record was written after the outcome was known, or the losing calls are not in it, or no outsider can confirm any of it. The remaining checks cannot rescue that.`};
+  }
+  if(unk>=4){
+    return {c:"v-unk",t:"Cannot be assessed",h:"Can&rsquo;t be checked from what they publish",
+      b:`You could not find an answer for <b>${unk} of 7</b> checks. That is a finding about the service, not a gap in your research: a record built to be verified makes all seven answers easy to find. Treat it as unproven until they publish enough for you to score it.`};
+  }
+  if(unknownGates.length){
+    const which=unknownGates.map(i=>"#"+CHECKS[i].n).join(", ");
+    return {c:"v-part",t:"A gate is unanswered",h:"Ask them these questions before you pay",
+      b:`Nothing failed outright, but ${which} — one of the three pass/fail checks — could not be answered from what is published. Ask directly, in writing. A service that cannot answer a gate question in one sentence has told you the answer.`};
+  }
+  if(yes===7){
+    return {c:"v-pass",t:"All seven",h:"Fully checkable — rare, and worth your attention",
+      b:`Every claim this service makes can be confirmed by a stranger from public data. That is not a prediction that it makes money — a fully checkable record can still show a losing strategy, and it should, when that is the truth. It means you can find out either way <i>before</i> you fund it.`};
+  }
+  const gaps=A.map((v,i)=>({v,i})).filter(x=>x.v==="n"||x.v==="u").map(x=>"#"+CHECKS[x.i].n).join(", ");
+  return {c:"v-part",t:"Gates passed, gaps remain",h:"Checkable, with named gaps",
+    b:`The three pass/fail checks are clear, so there is a real record underneath. But ${gaps} ${gaps.includes(",")?"are":"is"} not clean${open?`, and ${open} check${open>1?"s are":" is"} still unanswered`:""}. Those are the specific things to ask about — and the specific numbers to discount until they answer.`};
+}
+
+function render(){
+  drawChecks();
+  const v=verdict();
+  const yes=A.filter(x=>x==="y").length,no=A.filter(x=>x==="n").length,unk=A.filter(x=>x==="u").length;
+  const gaps=A.map((x,i)=>({x,i})).filter(o=>o.x==="n"||o.x==="u");
+  const list=gaps.length? `<ul class="fails">${gaps.map(o=>
+      `<li><span class="lbl ${o.x}">${o.x==="n"?"No":"Can't tell"}</span> &nbsp;#${CHECKS[o.i].n} — ${CHECKS[o.i].q.replace(/<\/?i>/g,"")}</li>`).join("")}</ul>` : "";
+  document.getElementById("verdict").innerHTML=
+    `<div class="vd ${v.c}">
+       <div class="vt">${v.t}</div>
+       <div class="vh">${v.h}</div>
+       <p class="vb">${v.b}</p>
+       ${A.some(Boolean)?`<div class="tally">
+         <div><b style="color:#7ee2ab">${yes}</b>passed</div>
+         <div><b style="color:#ffb3c0">${no}</b>failed</div>
+         <div><b style="color:var(--amber)">${unk}</b>can't tell</div>
+         <div><b style="color:var(--dim)">${7-yes-no-unk}</b>unanswered</div>
+       </div>`:""}
+       ${list}
+     </div>`;
+  const code=A.map(x=>x||"-").join("");
+  history.replaceState(null,"", code==="-------" ? location.pathname : location.pathname+"#"+code);
+}
+
+function say(msg){
+  const s=document.getElementById("said");
+  s.textContent=msg; s.hidden=false;
+  clearTimeout(say._t); say._t=setTimeout(()=>{s.hidden=true;},2600);
+}
+function copy(text,msg){
+  const done=()=>say(msg);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done,()=>fallback());
+  } else fallback();
+  function fallback(){
+    const ta=document.createElement("textarea");ta.value=text;ta.style.position="fixed";ta.style.left="-9999px";
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");done();}catch(e){say("Copy failed — select the text manually.");}
+    document.body.removeChild(ta);
+  }
+}
+
+function ourNotes(show){ document.getElementById("ourNotes").hidden=!show; }
+document.getElementById("demoUs").onclick=()=>{A=OURS.split("");render();ourNotes(true);
+  say("Filled in with our own answers — including the two that need an asterisk.");};
+document.getElementById("clearAll").onclick=()=>{A=Array(7).fill(null);render();ourNotes(false);};
+document.getElementById("linkBtn").onclick=()=>copy(location.href,"Link copied.");
+document.getElementById("copyBtn").onclick=()=>{
+  const v=verdict();
+  const lines=["The 7-Check Scorecard — thepicklog.com/scorecard.html","",
+    v.h.replace(/&rsquo;/g,"'").replace(/&ldquo;|&rdquo;/g,'"'),""];
+  CHECKS.forEach((c,i)=>{
+    const q=c.q.replace(/<[^>]+>/g,"").replace(/&ldquo;|&rdquo;/g,'"').replace(/&rsquo;/g,"'").replace(/&gt;/g,">");
+    lines.push(`${c.n}. [${A[i]?LBL[A[i]]:"—"}]${c.gate?" (pass/fail)":""} ${q}`);
+  });
+  lines.push("", location.href);
+  copy(lines.join("\n"),"Result copied.");
+};
+
+/* restore answers from the hash so a shared link reproduces the scorecard */
+function fromHash(){
+  const h=(location.hash||"").replace("#","");
+  if(!/^[ynu-]{7}$/.test(h)) return false;
+  const next=h.split("").map(c=>c==="-"?null:c);
+  if(next.join()===A.join()) return false;
+  A=next; return true;
+}
+/* a shared link pasted into the address bar of an already-open page is a
+   same-document navigation: without this the answers would not change. */
+addEventListener("hashchange",()=>{ if(fromHash()){render();ourNotes(false);} });
+(function init(){ fromHash(); render(); })();
+</script>
+
+<footer style="max-width:820px;margin:0 auto;padding:18px 16px 40px;color:#8b98a8;font-size:12px;border-top:1px solid #2a3240">
+  Research, not investment advice. Simulated (paper) trading only.
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
+  </footer>
+</body>
+</html>
