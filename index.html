@@ -2538,7 +2538,7 @@ async function renderPerformance(){
   const _sessDays = g.days.filter(_isSession);
   const _nonSessDays = g.days.length - _sessDays.length;
   const _holidayClause = _nonSessDays
-    ? ` A further <code>${_nonSessDays}</code> date${_nonSessDays>1?'s in the log are':' in the log is'} not a trading day at all — the scanner ran on a market holiday before that guard existed; those rows are marked <b>VOID</b> and excluded from every figure here.`
+    ? ` ${_nonSessDays>1?`A further <code>${_nonSessDays}</code> dates in the log are`:'One further date in the log is'} not a trading day at all — the scanner ran on a market holiday before that guard existed; those rows are marked <b>VOID</b> and excluded from every figure here.`
     : "";
   if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${_sessDays.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}).${_holidayClause} Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.`;
   /* The exclusions render into the panel below the figures, not above them. */
