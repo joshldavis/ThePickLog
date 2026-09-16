@@ -1543,6 +1543,7 @@
         <button type="button" data-f="wins">Wins <span class="c" data-c="wins"></span></button>
         <button type="button" data-f="misses">Misses <span class="c" data-c="misses"></span></button>
         <button type="button" data-f="pending">Pending <span class="c" data-c="pending"></span></button>
+        <button type="button" data-f="void" title="Rows that can never be graded — a scan on a market holiday, or a name that halted or delisted before it could print an entry bar. Excluded from every statistic, kept in the log.">Void <span class="c" data-c="void"></span></button>
         <button type="button" data-f="all">All <span class="c" data-c="all"></span></button>
       </div>
       <label class="pf-tier">Tier
@@ -1567,8 +1568,8 @@
   ThePickLog — a public testing lab for trading claims, operated by AMD Ventures, LLC (Florida).
   Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. Simulated (paper) trading only; no real money is ever placed.
   <br><span class="fnav"><b>Evidence</b> <a href="#validation">Validation</a> &middot; <a href="#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
-  <br><span class="fnav"><b>Tools</b> <a href="#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a></span>
-  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
   <!-- BUILD STAMP: __BUILDSTAMP__ is auto-filled at deploy by scripts/stamp-build.mjs (commit SHA + deploy time).
        The sha is linked to its commit — the repo is public, so "recomputable from public data"
        now includes the code that does the computing. -->
@@ -2530,7 +2531,16 @@ async function renderPerformance(){
   const staleNote = tr.staleCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Also excluded: ${tr.staleCount} picks on a quote that never moved</b> (${Object.entries(tr.staleTickers).map(([t,n])=>t+' ('+n+')').join(', ')}). The stock halted, our price source kept returning its last quote, and the scanner logged a fresh pick each session against a price that no longer existed — byte-identical price, gap of exactly 0.00%, and RVOL, every session. A screen of a stock that did not trade is not a forecast. Same defect as the ${'’'}phantom cohort${'’'} below, one level down: the old guard compared a whole cohort to the previous session, so it caught a dead feed but not a single dead ticker inside a live one. The rows stay in the log, the exclusion re-derives from picks.csv, and no graded pick is affected — so no return, win rate or tier figure on this page moves.</p>` : "";
   const rescaledNote = tr.rescaledCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Also excluded: ${tr.rescaledCount} picks screened on a stale price scale</b> (${Object.entries(tr.rescaledTickers).map(([t,n])=>t+' ('+n+')').join(', ')}). These names went through a split or reverse split and our quote feed kept quoting the old scale &mdash; in the worst case we screened a $0.72 price against a stock that actually opened at $7.56, a factor of ten. The <i>returns</i> on these rows are sound: entry and exit both come from the post-split series and reconcile like every other row. What is damaged is <b>selection</b> &mdash; the gap was measured against a prior close on the wrong scale, and gap is the single biggest input to the score, so the tier on these rows describes a stock that didn't trade. Note the direction: removing them makes our record very slightly <i>worse</i>, not better. Nothing is deleted, and the exclusion re-derives from two public columns &mdash; any row where <code>entry_open &divide; price_at_screen</code> falls outside 0.5&ndash;2.0 &mdash; so you can reproduce it exactly. A frozen-quote check cannot catch this: these prices moved every session, just on a scale that no longer existed.</p>` : "";
   const lateNote = tr.lateCount ? `<p class="muted" style="font-size:13px;margin:.2em 0 0"><b class="neg">Excluded from every number on this page: ${tr.lateCount} picks across ${Object.keys(tr.lateCohorts).length} cohorts</b> that our scanner logged <i>after</i> its own session had already opened (${Object.entries(tr.lateCohorts).map(([d,n])=>d+' ('+n+')').join(', ')}). Their headline return was measured against an opening price that had already printed, so they are not evidence. The rows stay in the log — nothing is deleted — and the exclusion re-derives from <code>published_at</code>, so you can reproduce it. <a href="late-cohorts.html" style="color:var(--a-text)">What happened, and what it did to the numbers →</a></p>` : "";
-  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${g.days.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}). Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.`;
+  // Count SESSIONS, not distinct dates: the log contains at least one cohort scanned
+  // on a market holiday (2026-06-19), which is not a trading day and can never grade.
+  // Calling it one is a small false claim on a page whose whole point is that the
+  // claims check out. [audit 2026-09-12]
+  const _sessDays = g.days.filter(_isSession);
+  const _nonSessDays = g.days.length - _sessDays.length;
+  const _holidayClause = _nonSessDays
+    ? ` A further <code>${_nonSessDays}</code> date${_nonSessDays>1?'s in the log are':' in the log is'} not a trading day at all — the scanner ran on a market holiday before that guard existed; those rows are marked <b>VOID</b> and excluded from every figure here.`
+    : "";
+  if(note) note.innerHTML=`Pulled live from the public pick log — <code>${g.total}</code> picks across <code>${_sessDays.length}</code> trading days (${g.days[0]} → ${g.days[g.days.length-1]}).${_holidayClause} Each pick is graded 5 trading days after it's logged; <b>the headline is that day's open→close return, net of costs</b> — the five-day wait exists so we can also measure how far it ran (MFE) and how hard it fell (MAE) along the way. <b>Check it yourself:</b> download the raw <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a> — every number on this page re-derives from them.`;
   /* The exclusions render into the panel below the figures, not above them. */
   const excl=document.getElementById("perfExcl");
   if(excl) excl.innerHTML=`${lateNote}${staleNote}${rescaledNote}${skipNote}${awaitNote}`;
@@ -2601,6 +2611,10 @@ async function renderPerformance(){
     wins: units.filter(u=>u.kind==="win").length,
     misses: units.filter(u=>u.kind==="miss").length,
     pending: units.filter(u=>u.kind==="pending").length,
+    // Rows that can never grade (phantom-holiday scans, halts/delistings with no
+    // entry bar). Given their own chip so Graded + Pending + Void reconciles to
+    // All — otherwise the chips silently lose count of them. [audit 2026-09-12]
+    void: units.filter(u=>u.kind==="void").length,
   };
   const rowHtml = u => {
     const p=u.p, o=u.o;
@@ -2630,7 +2644,8 @@ async function renderPerformance(){
       : _pfState.f==="graded" ? (u.kind==="win"||u.kind==="miss")
       : _pfState.f==="wins" ? u.kind==="win"
       : _pfState.f==="misses" ? u.kind==="miss"
-      : _pfState.f==="pending" ? u.kind==="pending" : true;
+      : _pfState.f==="pending" ? u.kind==="pending"
+      : _pfState.f==="void" ? u.kind==="void" : true;
     return okF && (!_pfState.tier || u.tier===_pfState.tier);
   };
   const body=document.getElementById("perfBody");
