@@ -1,0 +1,2 @@
+signal_id,experiment,ticker,signal_date,entry_date,graded_at,entry_open,ret_1d_net,ret_nd_net,bench_1d_net,bench_nd_net,excess_1d,excess_nd,win_1d,note
+EXP08-BOLLREVERT-2026-09-08-BLK,EXP08-BOLLREVERT,BLK,2026-09-08,2026-09-09,2026-09-16T23:29:26+00:00,1092.77,-1.9979,-5.1816,-0.4092,-1.7141,-1.5887,-3.4675,0,
