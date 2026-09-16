@@ -13,6 +13,8 @@
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/method", "destination": "/method.html" },
     { "source": "/trust", "destination": "/trust.html" },
-    { "source": "/scorecard", "destination": "/scorecard.html" }
+    { "source": "/scorecard", "destination": "/scorecard.html" },
+    { "source": "/guide", "destination": "/guide.html" },
+    { "source": "/about", "destination": "/about.html" }
   ]
 }
