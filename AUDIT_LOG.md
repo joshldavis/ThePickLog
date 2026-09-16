@@ -1,5 +1,25 @@
 # ThePickLog — Audit Log
 
+## 2026-09-15 — All four 09-12 observations closed
+
+The 09-12 audit found no failures and four observations. All four are now shipped (`0b5f459`, `55bb5ce`). None of them moved a published figure — they were about what the page *fails to say*, which is the class of defect this log exists to catch.
+
+**1. The Track record chips did not sum.** Graded 1013 + Pending 88 = 1101 against All 1125. The missing 24 are rows that can never grade — the 06-19 phantom-holiday cohort, plus halts and delistings that never printed an entry bar. They already rendered `VOID` under All, so nothing was hidden, but a stranger reconciling the chip counts came up 24 short and had no control that would show them. There is now a **Void (24)** chip, and Graded + Pending + Void = All exactly. ⭐ **A breakdown that does not add up to its own total is a verifiability defect even when every individual number is right** — the reader cannot tell the difference between "accounted for elsewhere" and "quietly dropped", and on this site that distinction is the entire product.
+
+**2. "55 trading days" counted a day the market was shut.** One of the 55 dates, 2026-06-19, is Juneteenth; the scanner ran before that guard existed. The note now counts **sessions (54)** and states outright that the extra date is a holiday whose rows are void. Small, but it was a false claim of exactly the kind the audit exists to find, sitting in the sentence that invites the reader to check our arithmetic.
+
+**3. method.html never stated our regulatory status.** It carried "educational / not investment advice" but not "not a registered investment adviser or broker-dealer" — index and disclaimer both do, and `git log -S` confirms method never has. Someone arriving on method.html from search saw a methodology page with no statement of what we are. Now added.
+
+**4. `/terms` returned 404.** `privacy` and `disclaimer` had extensionless rewrites and nothing else did, so the URL the counsel brief refers to did not resolve. Added rewrites for `terms`, `method`, `trust` and `scorecard`; a concurrent session then added `guide` and `about`. All now 200.
+
+**Verification.** Playwright is not installed in this session's container — the 09-12 note that it is was specific to that sandbox and should not be trusted again. Instead the edited `counts` and `_pfMatch` blocks were **extracted from `index.html` itself** and executed in Node against the live CSVs, which is stronger than retyping the logic: it tests what ships. Result before deploy: 1013 + 88 + 24 = 1125, every filter returning its expected row count, 55 distinct dates resolving to 54 sessions with `2026-06-19` the sole non-session. Confirmed again on the live site after deploy.
+
+**The 09-12 footer incident nearly repeated, and the pre-commit check caught it.** `git add index.html method.html` swept in footer links to `scorecard.html` and `terms.html` that a concurrent session had left uncommitted — the identical mechanism that shipped two live 404s on 09-12. This time `git diff --cached` was read before committing, the links were found, **and they were shipped deliberately**: both targets are committed and live, and these two pages were the only ones still missing the links after `3d15864` (they are precisely the two reverted in `a2e569a`). The commit message names them as inherited rather than letting them ride silently. `guide.html`, which the same session was actively editing, was left untouched and that session shipped it itself in `caf59d1`.
+
+⭐ **The rule that saved it is the cheap one: read `git diff --cached`, every time, before every commit.** The expensive rule — never let another session's edits into your commit — turned out to be the wrong rule anyway. The right one is: *know* what is in your commit, then decide. On 09-12 the same edits were wrong because their targets did not exist; today they were right for the same reason inverted.
+
+**Housekeeping:** the clone moved to `stock screener/thepicklog-LIVE/` on 09-14 (symlink left at the old archive path, which does not resolve inside the Linux container — use the real path). The git remote was repointed to the repo's canonical `joshldavis/ThePickLog` casing, so pushes no longer emit a "repository moved" redirect. Note for future runs: `git` through `osascript` fails whenever it writes to stderr, including that redirect notice — redirect to a log file and `cat` it.
+
 ## 2026-09-12 — Weekly verifiability audit — **✅ All claims verify**
 
 Every published figure re-derives from the two CSVs, and **the scan is producing sessions again** — five consecutive clean cohorts since the 08-27 → 09-03 outage, all logged inside the window. No issues; four observations, none of which touches a number.
