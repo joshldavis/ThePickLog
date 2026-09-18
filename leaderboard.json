@@ -2,12 +2,12 @@
   "generated_at": "2026-09-18",
   "log": {
     "picks": 812,
-    "graded": 729
+    "graded": 740
   },
   "baseline": {
-    "n_post": 622,
+    "n_post": 633,
     "win_post": 31,
-    "avg_post": -2.7,
+    "avg_post": -2.8,
     "since": "2026-06-22"
   },
   "summary": {
@@ -25,12 +25,12 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: float_shares < 3,000,000",
-      "n_post": 545,
+      "n_post": 553,
       "win_post": 32,
       "avg_post": -2.6,
       "median_post": -2.3,
-      "baseline_avg_post": -2.7,
-      "delta_post": 0.1,
+      "baseline_avg_post": -2.8,
+      "delta_post": 0.2,
       "ci95": [
         -0.7,
         1.0
@@ -54,7 +54,7 @@
         ]
       },
       "cluster_ci95": [
-        -0.1,
+        -0.0,
         0.5
       ],
       "cluster_significant": false,
@@ -63,7 +63,7 @@
       "ticker_against": 1,
       "ticker_majority": false,
       "established": false,
-      "kept_n_all": 636,
+      "kept_n_all": 644,
       "cohort": "v0.2",
       "rank": 1
     },
@@ -74,11 +74,11 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: gap_pct < 20",
-      "n_post": 612,
+      "n_post": 623,
       "win_post": 30,
       "avg_post": -2.7,
       "median_post": -2.4,
-      "baseline_avg_post": -2.7,
+      "baseline_avg_post": -2.8,
       "delta_post": 0.0,
       "ci95": [
         -0.8,
@@ -112,7 +112,7 @@
       "ticker_against": 4,
       "ticker_majority": false,
       "established": false,
-      "kept_n_all": 713,
+      "kept_n_all": 724,
       "cohort": "v0.2",
       "rank": 2
     },
@@ -123,14 +123,14 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: tier ∉ {A, B}",
-      "n_post": 573,
+      "n_post": 583,
       "win_post": 29,
       "avg_post": -2.8,
       "median_post": -2.4,
-      "baseline_avg_post": -2.7,
+      "baseline_avg_post": -2.8,
       "delta_post": -0.0,
       "ci95": [
-        -0.9,
+        -0.8,
         0.8
       ],
       "significant": false,
@@ -155,7 +155,7 @@
         ]
       },
       "cluster_ci95": [
-        -0.3,
+        -0.2,
         0.2
       ],
       "cluster_significant": false,
@@ -164,7 +164,7 @@
       "ticker_against": 10,
       "ticker_majority": false,
       "established": false,
-      "kept_n_all": 659,
+      "kept_n_all": 669,
       "cohort": "v0.2",
       "rank": 3
     },
@@ -175,15 +175,15 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: price_at_screen ≥ 1.0 ∧ float_shares < 3,000,000 ∧ gap_pct < 20 ∧ tier ∉ {A, B}",
-      "n_post": 412,
-      "win_post": 29,
+      "n_post": 419,
+      "win_post": 30,
       "avg_post": -2.9,
       "median_post": -2.4,
-      "baseline_avg_post": -2.7,
-      "delta_post": -0.2,
+      "baseline_avg_post": -2.8,
+      "delta_post": -0.1,
       "ci95": [
-        -1.1,
-        0.7
+        -1.0,
+        0.8
       ],
       "significant": false,
       "state": "ranked",
@@ -222,7 +222,7 @@
         ]
       },
       "cluster_ci95": [
-        -0.9,
+        -0.8,
         0.4
       ],
       "cluster_significant": false,
@@ -231,7 +231,7 @@
       "ticker_against": 9,
       "ticker_majority": false,
       "established": false,
-      "kept_n_all": 477,
+      "kept_n_all": 484,
       "cohort": "v0.2",
       "rank": 4
     },
@@ -242,15 +242,15 @@
       "registered_at": "2026-06-22",
       "kind": "filter",
       "rule_str": "keep: price_at_screen ≥ 1.0",
-      "n_post": 489,
+      "n_post": 498,
       "win_post": 29,
-      "avg_post": -3.0,
+      "avg_post": -3.1,
       "median_post": -2.5,
-      "baseline_avg_post": -2.7,
+      "baseline_avg_post": -2.8,
       "delta_post": -0.3,
       "ci95": [
         -1.2,
-        0.6
+        0.5
       ],
       "significant": false,
       "state": "ranked",
@@ -280,7 +280,7 @@
       "ticker_against": 5,
       "ticker_majority": false,
       "established": false,
-      "kept_n_all": 578,
+      "kept_n_all": 587,
       "cohort": "v0.2",
       "rank": 5
     },
@@ -291,15 +291,15 @@
       "registered_at": "2026-07-29",
       "kind": "filter",
       "rule_str": "keep: dilution_flag = none",
-      "n_post": 67,
-      "win_post": 46,
-      "avg_post": -0.7,
-      "median_post": -0.9,
-      "baseline_avg_post": 0.1,
-      "delta_post": -0.8,
+      "n_post": 68,
+      "win_post": 47,
+      "avg_post": -0.6,
+      "median_post": -0.8,
+      "baseline_avg_post": -0.2,
+      "delta_post": -0.4,
       "ci95": [
-        -4.7,
-        3.0
+        -4.2,
+        3.1
       ],
       "significant": false,
       "state": "ranked",
@@ -320,16 +320,16 @@
         ]
       },
       "cluster_ci95": [
-        -4.3,
-        2.4
+        -3.9,
+        2.7
       ],
       "cluster_significant": false,
-      "n_tickers": 57,
+      "n_tickers": 58,
       "ticker_favor": 0,
       "ticker_against": 0,
       "ticker_majority": false,
       "established": false,
-      "kept_n_all": 93,
+      "kept_n_all": 94,
       "cohort": "v0.3-yf",
       "rank": 6
     },
@@ -340,14 +340,14 @@
       "registered_at": "2026-06-23",
       "kind": "exit",
       "rule_str": "exit: mfe_5d ≥ +10% → +8% net, else 5d close",
-      "n_post": 607,
+      "n_post": 618,
       "win_post": 48,
       "avg_post": -3.8,
-      "median_post": -2.0,
+      "median_post": -1.8,
       "baseline_avg_post": -2.8,
       "delta_post": -1.0,
       "ci95": [
-        -2.0,
+        -1.9,
         -0.0
       ],
       "significant": false,
@@ -366,7 +366,7 @@
       },
       "cluster_ci95": [
         -2.4,
-        0.4
+        0.5
       ],
       "cluster_significant": false,
       "n_tickers": 16,
@@ -378,65 +378,21 @@
       "rank": 7
     },
     {
-      "id": "H-V3-EX4",
-      "title": "v0.3 cohort: +20% limit over 5-day hold",
-      "author": "house",
-      "registered_at": "2026-07-13",
-      "kind": "exit",
-      "rule_str": "exit: mfe_5d ≥ +20% → +18% net, else 5d close",
-      "n_post": 326,
-      "win_post": 47,
-      "avg_post": -3.5,
-      "median_post": -1.9,
-      "baseline_avg_post": -1.6,
-      "delta_post": -1.9,
-      "ci95": [
-        -4.5,
-        0.5
-      ],
-      "significant": false,
-      "state": "ranked",
-      "stability": "stable",
-      "weeks_live": 9.6,
-      "caveats": [
-        "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
-      ],
-      "rule_spec": {
-        "kind": "exit",
-        "exit": "target_20",
-        "registered_at": "2026-07-13",
-        "op": "and",
-        "predicates": []
-      },
-      "cluster_ci95": [
-        -4.5,
-        0.4
-      ],
-      "cluster_significant": false,
-      "n_tickers": 256,
-      "ticker_favor": 123,
-      "ticker_against": 133,
-      "ticker_majority": false,
-      "established": false,
-      "cohort": "v0.3",
-      "rank": 8
-    },
-    {
       "id": "H-V3-EX2",
       "title": "v0.3 cohort: +5% limit over 5-day hold",
       "author": "house",
       "registered_at": "2026-07-13",
       "kind": "exit",
       "rule_str": "exit: mfe_5d ≥ +5% → +3% net, else 5d close",
-      "n_post": 326,
+      "n_post": 335,
       "win_post": 76,
       "avg_post": -3.6,
       "median_post": 3.0,
-      "baseline_avg_post": -1.6,
-      "delta_post": -2.0,
+      "baseline_avg_post": -1.8,
+      "delta_post": -1.8,
       "ci95": [
-        -4.4,
-        0.2
+        -4.2,
+        0.4
       ],
       "significant": false,
       "state": "ranked",
@@ -453,14 +409,58 @@
         "predicates": []
       },
       "cluster_ci95": [
-        -4.5,
-        0.2
+        -4.4,
+        0.3
       ],
       "cluster_significant": false,
-      "n_tickers": 256,
-      "ticker_favor": 131,
-      "ticker_against": 125,
+      "n_tickers": 260,
+      "ticker_favor": 134,
+      "ticker_against": 126,
       "ticker_majority": true,
+      "established": false,
+      "cohort": "v0.3",
+      "rank": 8
+    },
+    {
+      "id": "H-V3-EX4",
+      "title": "v0.3 cohort: +20% limit over 5-day hold",
+      "author": "house",
+      "registered_at": "2026-07-13",
+      "kind": "exit",
+      "rule_str": "exit: mfe_5d ≥ +20% → +18% net, else 5d close",
+      "n_post": 335,
+      "win_post": 47,
+      "avg_post": -3.6,
+      "median_post": -2.0,
+      "baseline_avg_post": -1.8,
+      "delta_post": -1.8,
+      "ci95": [
+        -4.3,
+        0.7
+      ],
+      "significant": false,
+      "state": "ranked",
+      "stability": "stable",
+      "weeks_live": 9.6,
+      "caveats": [
+        "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
+      ],
+      "rule_spec": {
+        "kind": "exit",
+        "exit": "target_20",
+        "registered_at": "2026-07-13",
+        "op": "and",
+        "predicates": []
+      },
+      "cluster_ci95": [
+        -4.4,
+        0.5
+      ],
+      "cluster_significant": false,
+      "n_tickers": 260,
+      "ticker_favor": 124,
+      "ticker_against": 136,
+      "ticker_majority": false,
       "established": false,
       "cohort": "v0.3",
       "rank": 9
@@ -472,15 +472,15 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "rule_str": "exit: mfe_5d ≥ +10% → +8% net, else 5d close",
-      "n_post": 326,
-      "win_post": 60,
+      "n_post": 335,
+      "win_post": 61,
       "avg_post": -4.2,
       "median_post": 8.0,
-      "baseline_avg_post": -1.6,
-      "delta_post": -2.6,
+      "baseline_avg_post": -1.8,
+      "delta_post": -2.4,
       "ci95": [
-        -5.1,
-        -0.3
+        -4.8,
+        -0.2
       ],
       "significant": true,
       "state": "ranked",
@@ -497,13 +497,13 @@
         "predicates": []
       },
       "cluster_ci95": [
-        -5.2,
-        -0.3
+        -4.9,
+        -0.2
       ],
       "cluster_significant": true,
-      "n_tickers": 256,
-      "ticker_favor": 126,
-      "ticker_against": 130,
+      "n_tickers": 260,
+      "ticker_favor": 128,
+      "ticker_against": 132,
       "ticker_majority": false,
       "established": true,
       "cohort": "v0.3",
@@ -516,15 +516,15 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "rule_str": "exit: mfe_5d ≥ +15% → +13% net, else 5d close",
-      "n_post": 326,
+      "n_post": 335,
       "win_post": 52,
-      "avg_post": -4.3,
-      "median_post": 4.8,
-      "baseline_avg_post": -1.6,
+      "avg_post": -4.4,
+      "median_post": 4.2,
+      "baseline_avg_post": -1.8,
       "delta_post": -2.6,
       "ci95": [
-        -5.1,
-        -0.3
+        -5.0,
+        -0.2
       ],
       "significant": true,
       "state": "ranked",
@@ -541,13 +541,13 @@
         "predicates": []
       },
       "cluster_ci95": [
-        -5.3,
+        -5.2,
         -0.3
       ],
       "cluster_significant": true,
-      "n_tickers": 256,
-      "ticker_favor": 120,
-      "ticker_against": 136,
+      "n_tickers": 260,
+      "ticker_favor": 122,
+      "ticker_against": 138,
       "ticker_majority": false,
       "established": true,
       "cohort": "v0.3",
@@ -560,14 +560,14 @@
       "registered_at": "2026-07-13",
       "kind": "exit",
       "rule_str": "exit: mfe_5d ≥ +10% → +8% net; else mae_5d ≤ −20% → −22% net; else 5d close",
-      "n_post": 326,
+      "n_post": 335,
       "win_post": 37,
       "avg_post": -9.2,
-      "median_post": -17.2,
-      "baseline_avg_post": -1.6,
-      "delta_post": -7.6,
+      "median_post": -17.3,
+      "baseline_avg_post": -1.8,
+      "delta_post": -7.4,
       "ci95": [
-        -10.1,
+        -9.7,
         -5.4
       ],
       "significant": true,
@@ -586,13 +586,13 @@
         "predicates": []
       },
       "cluster_ci95": [
-        -10.1,
-        -5.6
+        -9.9,
+        -5.4
       ],
       "cluster_significant": true,
-      "n_tickers": 256,
-      "ticker_favor": 89,
-      "ticker_against": 167,
+      "n_tickers": 260,
+      "ticker_favor": 90,
+      "ticker_against": 170,
       "ticker_majority": false,
       "established": true,
       "cohort": "v0.3",
