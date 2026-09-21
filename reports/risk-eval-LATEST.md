@@ -14,12 +14,12 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 **v0.2-yf verdict: not yet established**
 
-### v0.3-yf — n_post = 234
+### v0.3-yf — n_post = 236
 
-- score -> |MAE| (drawdown depth): rho=+0.272 CI[+0.137,+0.394] n=234 tickers=194 SIG
-- score -> range (MFE-MAE): rho=+0.325 CI[+0.193,+0.447] n=234 tickers=194 SIG
-- score -> same-day return *(must stay ns)*: rho=+0.072 CI[-0.063,+0.205] n=234 tickers=194 ns
-- score -> 5-day return *(must stay ns)*: rho=-0.218 CI[-0.352,-0.073] n=234 tickers=194 SIG
+- score -> |MAE| (drawdown depth): rho=+0.265 CI[+0.135,+0.386] n=236 tickers=195 SIG
+- score -> range (MFE-MAE): rho=+0.324 CI[+0.189,+0.449] n=236 tickers=195 SIG
+- score -> same-day return *(must stay ns)*: rho=+0.078 CI[-0.058,+0.211] n=236 tickers=195 ns
+- score -> 5-day return *(must stay ns)*: rho=-0.209 CI[-0.341,-0.067] n=236 tickers=195 SIG
 - consecutive weekly snapshots with positive |MAE| rho: **7** (need >= 3)
 
 **v0.3-yf verdict: PASSES all H-RISK1 criteria**
