@@ -1,43 +1,38 @@
-# ThePickLog — Morning Brief · 2026-09-21
+# ThePickLog — Morning Brief · 2026-09-22
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **UZX** (tier A, score 100.0) — very high relative volume (12×); thin float (0.4M); large up-gap (+2237%). Watch level (reference only, +20%): $2.2439.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **IMCC** (tier A, score 100.0) — very high relative volume (59×); thin float (0.5M); large up-gap (+69%). Watch level (reference only, +20%): $3.5285.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **GIPR** (tier A, score 100.0) — very high relative volume (21×); thin float (1.6M); large up-gap (+59%). Watch level (reference only, +20%): $0.8364.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **TNMG** (tier A, score 100.0) — very high relative volume (16×); thin float (0.2M); large up-gap (+37%). Watch level (reference only, +20%): $4.428.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **PRPL** (tier A, score 100.0) — very high relative volume (12×); thin float (2.3M); large up-gap (+36%). Watch level (reference only, +20%): $3.888.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **PULM** (tier A, score 95.7) — elevated relative volume (8.9×); large up-gap (+22%). Watch level (reference only, +20%): $2.111.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **VRME** (tier A, score 95.0) — very high relative volume (50×); large up-gap (+47%). Watch level (reference only, +20%): $1.4038.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **BTTC** (tier A, score 93.2) — very high relative volume (49×); large up-gap (+56%). Watch level (reference only, +20%): $0.6842.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **AVX** (tier A, score 86.4) — very high relative volume (21×). Watch level (reference only, +20%): $5.1469.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **LOBO** (tier A, score 86.1) — very high relative volume (54×). Watch level (reference only, +20%): $0.7188.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **UZX**: already extended pre-market — chasing buys the top.
-- **UZX**: ultra-thin float — spreads and slippage can be severe.
-- **IMCC**: already extended pre-market — chasing buys the top.
-- **IMCC**: ultra-thin float — spreads and slippage can be severe.
-- **GIPR**: already extended pre-market — chasing buys the top.
-- **GIPR**: sub-$1 — heightened manipulation / delisting risk.
-- **TNMG**: already extended pre-market — chasing buys the top.
-- **TNMG**: ultra-thin float — spreads and slippage can be severe.
-- **PRPL**: already extended pre-market — chasing buys the top.
-- **ZTG**: already extended pre-market — chasing buys the top.
+- **PULM**: already extended pre-market — chasing buys the top.
+- **VRME**: already extended pre-market — chasing buys the top.
+- **BTTC**: already extended pre-market — chasing buys the top.
+- **BTTC**: sub-$1 — heightened manipulation / delisting risk.
+- **LOBO**: sub-$1 — heightened manipulation / delisting risk.
+- **GDC**: already extended pre-market — chasing buys the top.
+- **AVAT**: already extended pre-market — chasing buys the top.
 - **NCPL**: high short interest (23% of float) — squeeze-prone and violent both ways.
 - **NCPL**: already extended pre-market — chasing buys the top.
 - **NCPL**: sub-$1 — heightened manipulation / delisting risk.
-- **OLOX**: sub-$1 — heightened manipulation / delisting risk.
-- **DFDV**: high short interest (20% of float) — squeeze-prone and violent both ways.
-- **DFDV**: already extended pre-market — chasing buys the top.
+- **SLMT**: already extended pre-market — chasing buys the top.
+- **PRTH**: already extended pre-market — chasing buys the top.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: sub-$1 — heightened manipulation / delisting risk.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: high short interest (27% of float) — squeeze-prone and violent both ways.
 - **BJDX**: sub-$1 — heightened manipulation / delisting risk.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **CODX**: sub-$1 — heightened manipulation / delisting risk.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **1213** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 27%) vs **-12%** (rug 11%) for C/D.
