@@ -1,38 +1,39 @@
-# ThePickLog — Morning Brief · 2026-09-22
+# ThePickLog — Morning Brief · 2026-09-23
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **PULM** (tier A, score 95.7) — elevated relative volume (8.9×); large up-gap (+22%). Watch level (reference only, +20%): $2.111.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **VRME** (tier A, score 95.0) — very high relative volume (50×); large up-gap (+47%). Watch level (reference only, +20%): $1.4038.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BTTC** (tier A, score 93.2) — very high relative volume (49×); large up-gap (+56%). Watch level (reference only, +20%): $0.6842.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **AVX** (tier A, score 86.4) — very high relative volume (21×). Watch level (reference only, +20%): $5.1469.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **LOBO** (tier A, score 86.1) — very high relative volume (54×). Watch level (reference only, +20%): $0.7188.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **LHSW** (tier A, score 100.0) — very high relative volume (34×); thin float (1.1M); large up-gap (+61%). Watch level (reference only, +20%): $0.8389.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **IMCC** (tier A, score 100.0) — very high relative volume (12×); thin float (0.5M); large up-gap (+150%). Watch level (reference only, +20%): $9.24.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **DCOY** (tier A, score 100.0) — very high relative volume (54×); thin float (0.6M); large up-gap (+68%). Watch level (reference only, +20%): $5.16.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **RAIN** (tier A, score 99.8) — very high relative volume (39×); large up-gap (+30%). Watch level (reference only, +20%): $1.032.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CWD** (tier A, score 95.6) — very high relative volume (14×); large up-gap (+37%). Watch level (reference only, +20%): $0.8519.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **PULM**: already extended pre-market — chasing buys the top.
-- **VRME**: already extended pre-market — chasing buys the top.
-- **BTTC**: already extended pre-market — chasing buys the top.
-- **BTTC**: sub-$1 — heightened manipulation / delisting risk.
-- **LOBO**: sub-$1 — heightened manipulation / delisting risk.
-- **GDC**: already extended pre-market — chasing buys the top.
-- **AVAT**: already extended pre-market — chasing buys the top.
-- **NCPL**: high short interest (23% of float) — squeeze-prone and violent both ways.
-- **NCPL**: already extended pre-market — chasing buys the top.
-- **NCPL**: sub-$1 — heightened manipulation / delisting risk.
-- **SLMT**: already extended pre-market — chasing buys the top.
-- **PRTH**: already extended pre-market — chasing buys the top.
-- **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **LHSW**: already extended pre-market — chasing buys the top.
+- **LHSW**: sub-$1 — heightened manipulation / delisting risk.
+- **IMCC**: already extended pre-market — chasing buys the top.
+- **IMCC**: ultra-thin float — spreads and slippage can be severe.
+- **DCOY**: already extended pre-market — chasing buys the top.
+- **DCOY**: ultra-thin float — spreads and slippage can be severe.
+- **RAIN**: already extended pre-market — chasing buys the top.
+- **RAIN**: sub-$1 — heightened manipulation / delisting risk.
+- **CWD**: already extended pre-market — chasing buys the top.
+- **CWD**: sub-$1 — heightened manipulation / delisting risk.
+- **BFRG**: already extended pre-market — chasing buys the top.
+- **BFRG**: sub-$1 — heightened manipulation / delisting risk.
+- **QNME**: already extended pre-market — chasing buys the top.
+- **QNME**: sub-$1 — heightened manipulation / delisting risk.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: sub-$1 — heightened manipulation / delisting risk.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **HWH**: ultra-thin float — spreads and slippage can be severe.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **BJDX**: high short interest (27% of float) — squeeze-prone and violent both ways.
 - **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
 - **HKIT**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
-- **BJDX**: high short interest (27% of float) — squeeze-prone and violent both ways.
-- **BJDX**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **1233** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 27%) vs **-12%** (rug 12%) for C/D.
