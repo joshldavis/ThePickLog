@@ -96,24 +96,26 @@ def _d(s):
 # SITUATIONS (what the document says happened), not degrees. Any edit here
 # changes QUESTIONS_SHA256, which invalidates the calibration result.
 # ---------------------------------------------------------------------------
-SPLIT_RATIOS = ["1-for-2", "1-for-3", "1-for-4", "1-for-5", "1-for-8", "1-for-10",
-                "1-for-15", "1-for-20", "1-for-25", "1-for-30", "1-for-40",
-                "1-for-50", "1-for-100"]
+# Every integer ratio 1-for-2 .. 1-for-250 (249 + none + other = 251 <= Jev's 255-choice cap).
+# The first calibration pull found 15 of 40 real splits at ratios a short list would have
+# thrown into "other" (1-for-6, 1-for-12, 1-for-35, ...), so the list is exhaustive.
+SPLIT_RATIOS = [f"1-for-{n}" for n in range(2, 251)]
 
 QUESTIONS = {
     "reverse_split": {
         "type": "choice",
-        "instructions": "Does this filing announce or effect a reverse stock split of the registrant's common stock?",
+        "instructions": "Does this filing report a reverse stock split of the registrant's common stock as one of its events, and if so has it taken effect?",
         "criteria": {
-            "none": "No reverse split is mentioned, or only a forward split or a shareholder vote authorizing a range with no ratio chosen",
-            "announced": "A specific reverse-split ratio has been chosen but the effective date is in the future or not stated",
-            "effective": "The filing states the reverse split has become effective or gives an effective date on or before the filing date",
+            "none": "No reverse split is mentioned, or only a forward split, or shareholders authorized a range of ratios and the board has not chosen one",
+            "announced": "The board has fixed a specific ratio and the filing says the split will become effective on a stated future date or on a date not yet set",
+            "effective": "The filing reports, as one of its own events or recent developments, that the reverse split has become effective or became effective on a stated date",
+            "historical": "A reverse split completed in the past is mentioned only as background, for example to explain that share counts or prices have been retroactively adjusted",
         },
     },
     "split_ratio": {
         "type": "choice",
-        "instructions": "If a specific reverse split ratio has been chosen, which one? The ratio may be written as '1-for-15', 'one-for-fifteen', or 'every fifteen (15) shares reclassified into one (1) share'. A range approved by shareholders with no ratio chosen is 'none'.",
-        "criteria": {"none": "No specific ratio chosen", **{r: "" for r in SPLIT_RATIOS},
+        "instructions": "If the filing states a specific reverse split ratio (announced, effective, or historical), which one? The ratio may be written as '1-for-15', 'one-for-fifteen', or 'every fifteen (15) shares reclassified into one (1) share'. A range approved by shareholders with no ratio chosen is 'none'.",
+        "criteria": {"none": "No specific ratio stated", **{r: "" for r in SPLIT_RATIOS},
                      "other": "A specific ratio not listed here"},
     },
     "listing_status": {
@@ -666,7 +668,7 @@ def _selftest():
 
     # --- question block is stable and hashed ------------------------------------
     assert len(QUESTIONS_SHA256) == 64 and set(QUESTION_ORDER) == set(QUESTIONS)
-    assert len(QUESTIONS["split_ratio"]["criteria"]) <= 255 and len(QUESTIONS["split_ratio"]["criteria"]) == len(SPLIT_RATIOS) + 2
+    assert len(QUESTIONS["split_ratio"]["criteria"]) <= 255 and len(QUESTIONS["split_ratio"]["criteria"]) == len(SPLIT_RATIOS) + 2 == 251
 
     # --- three canned filings through the fake ----------------------------------
     F = {}
