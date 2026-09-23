@@ -1,5 +1,17 @@
 # ThePickLog — Audit Log
 
+## 2026-09-23 — Both 09-19 observations closed; the seal stays as designed
+
+Both observations from the 09-19 audit are shipped, and one of them closed the opposite way from what the audit prescribed.
+
+**Observation 1 — the frozen-quote note now states its rule.** The audit found that re-deriving the seal from the note's own description ("repeated price / gap / RVOL / float tuples") gives 22 rows, not the published 12, because the implementation compares only across trading *sessions* and the note never said so. The note now states the rule in full, names the five 06-22 rows it deliberately leaves alone, and says why. That closes the reproducibility gap: a stranger following the page now gets 12.
+
+**The audit's prescribed fix — seal the five 06-22 rows — was wrong, and is not shipped.** `quote_integrity.py` addressed exactly these rows when the seal was written on 08-29: *"The session filter is what keeps it off the 06-19 pairs' innocent twins… only the real 06-22 row survives into the comparison and is correctly left alone."* On re-reading, that reasoning holds and the audit's did not. BNZI was sealed on a tuple that repeated across twelve real sessions with a 0.00% gap — a dead feed. The five 06-22 rows share a tuple with a *market-closed* day, which is what any illiquid microcap looks like on a Monday when nothing has printed between Thursday's last trade and a 07:00 scan. One repeat against a holiday is thin evidence, and the rule is documented as under-flagging on thin evidence. The audit also framed the direction (all five are losses; sealing helps us) as a reason it was safe to change — but PRINCIPLES.md does not carve out an exception for rule changes that run against our interest. A pre-registered exclusion re-tuned after seeing what it does to the figures is post-hoc either way. ⭐ **The auditor's job is to check that the page says what the code does, not to re-litigate the code's judgment calls from a one-line summary of them.** No published figure moves; stale count stays 12.
+
+**Observation 2 — "fired hours late" is fixed.** Now "fired late — by minutes on some of these days, by hours on others", which is true of all seven sessions in `skipped_sessions.csv` including 09-14 (+11 min).
+
+**Verification.** The two edited template literals were extracted from `index.html` by line and evaluated in Node with a stub `tr`; both render and both new phrases are present. `git diff --stat` before staging: `index.html | 4 ++--`, nothing inherited from another session. The 09-14 scheduler recurrence is not addressed here — it is a dispatcher-side investigation, not a page fix.
+
 ## 2026-09-19 — Weekly verifiability audit — **✅ All claims verify**
 
 *Snapshot: audited against the log as served at 13:10 UTC on 2026-09-19, whose latest cohort is 09-18. The 09-19 scan and the 09-18 grades (`199121c`, `3f88845`) landed in the repo while this run was in progress and are not in the figures below; this entry was rebased onto them.*
