@@ -80,6 +80,11 @@ jobs:
           python-version: "3.11"
       - name: Install deps
         run: pip install yfinance
+      # The pre-open rule is load-bearing for every claim on the site, so its
+      # selftest gates the run rather than merely reporting. If timeliness logic
+      # is broken, logging nothing is the correct outcome.
+      - name: Verify pre-open timing rules
+        run: python market_time.py
       - name: Decide command
         id: cmd
         run: |
@@ -101,12 +106,25 @@ jobs:
               CMD=noop
             fi
           fi
+          # PRE-OPEN GATE, DECIDED UP FRONT (2026-09-23). The gate itself is unchanged
+          # and still lives in market_time.py; what changes is WHERE a refusal is
+          # discovered. Discovering it inside the scan meant exit 1, which painted a
+          # correct, healthy decision as a build failure - five red runs on 09-14 alone
+          # - and trained the operator to ignore the one alert that also reports a
+          # broken scanner. A refused session is a no-op with a ledger row, not a
+          # failure, so it now joins the existing noop path: every downstream data step
+          # is skipped exactly as it is for an already-logged cohort, and the lost
+          # session is reported to healthchecks.io instead, where it reaches someone.
+          REFUSED=0
+          if [ "$CMD" = "scan" ]; then
+            GATE=$(python ignitionscan.py gate-check)
+            echo "$GATE"
+            case "$GATE" in
+              gate=refused*) CMD=noop; REFUSED=1 ;;
+            esac
+          fi
+          echo "refused=$REFUSED" >> "$GITHUB_OUTPUT"
           echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
-      # The pre-open rule is load-bearing for every claim on the site, so its
-      # selftest gates the run rather than merely reporting. If timeliness logic
-      # is broken, logging nothing is the correct outcome.
-      - name: Verify pre-open timing rules
-        run: python market_time.py
       - name: Run ${{ steps.cmd.outputs.cmd }}
         id: run
         if: steps.cmd.outputs.cmd != 'noop'
@@ -133,7 +151,7 @@ jobs:
       # be pushed. The skipped-session ledger is the one artifact that MUST survive
       # a failed scan, so it gets its own committer that runs on failure.
       - name: Publish skipped-session ledger (runs even when the scan is refused)
-        if: failure() && steps.cmd.outputs.cmd == 'scan'
+        if: always() && (steps.cmd.outputs.refused == '1' || (failure() && steps.cmd.outputs.cmd == 'scan'))
         run: |
           [ -f skipped_sessions.csv ] || exit 0
           git config user.name "joshldavis"
@@ -334,8 +352,28 @@ jobs:
       - name: Dead-man's-switch ping (healthchecks.io)
         if: success() && steps.cmd.outputs.cmd == 'scan'
         run: |
-          if [ -n "${{ secrets.HEALTHCHECK_URL }}" ]; then
-            curl -fsS -m 10 "${{ secrets.HEALTHCHECK_URL }}" >/dev/null && echo "healthcheck pinged"
-          else
+          URL="${{ secrets.HEALTHCHECK_URL }}"
+          if [ -z "$URL" ]; then
             echo "HEALTHCHECK_URL secret not set — dead-man's-switch inactive."
+            exit 0
           fi
+          # PING ON EVIDENCE (2026-09-23). A pre-06:00 rung exits 0 having written
+          # nothing, and under the old condition it pinged anyway - so a day whose only
+          # punctual dispatches were too early read as healthy while no cohort existed.
+          # Same defect as the grade run feeding the switch (fixed 08-29): the signal
+          # must be satisfiable only by the thing it watches. The evidence is a cohort.
+          TODAY=$(TZ=America/New_York date +%F)
+          if [ -f picks.csv ] && cut -d, -f3 picks.csv | grep -qxF "$TODAY"; then
+            curl -fsS -m 10 "$URL" >/dev/null && echo "healthcheck pinged - cohort for $TODAY present"
+          else
+            echo "No cohort for $TODAY - not pinging; a later rung can still scan."
+          fi
+      # A refused session no longer fails the build, so THIS is the alarm. /fail puts
+      # the check into a down state at once; skipped_sessions.csv says which session
+      # was lost and why. Without this, a green run would be the only outward sign.
+      - name: Dead-man's-switch - report the lost session
+        if: steps.cmd.outputs.refused == '1'
+        run: |
+          URL="${{ secrets.HEALTHCHECK_URL }}"
+          [ -n "$URL" ] || exit 0
+          curl -fsS -m 10 "$URL/fail" >/dev/null && echo "healthcheck /fail sent - session refused, cohort unrecoverable"
