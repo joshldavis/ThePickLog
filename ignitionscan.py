@@ -255,6 +255,37 @@ def cmd_record_failure():
         print(f"record-failure bookkeeping failed ({type(e).__name__}) — ignored.")
 
 
+def cmd_gate_check():
+    """Decide, before any scan runs, whether this dispatch may log a cohort.
+
+    Prints exactly one line:
+      gate=ok           the scan may proceed
+      gate=notrading    weekend or NYSE holiday - nothing owed, no ledger row
+      gate=early        before the 06:00 ET floor - clean no-op, a later rung will scan
+      gate=refused      at or past the 09:20 ET cutoff - session lost, ledger row written
+
+    Always exits 0. A refusal is a fact about the clock, not a failure of this
+    program: the workflow turns it into a skipped session plus a deliberate
+    dead-man's-switch failure, rather than a red build that says nothing about
+    whether the scanner works. The gate itself is unchanged and is still enforced
+    independently inside cmd_scan(), which remains the load-bearing check.
+    """
+    today = trading_date_et()   # market time, not the CI runner's clock
+    if today in NYSE_HOLIDAYS or not is_session(today):
+        print("gate=notrading")
+        return
+    early, why_early = before_scan_floor(today)
+    if early:
+        print(f"gate=early  {why_early}")
+        return
+    blocked, why = pre_open_guard(today)
+    if blocked:
+        record_skipped_session(today, why)
+        print(f"gate=refused  {why}")
+        return
+    print("gate=ok")
+
+
 def cmd_scan(sample=False):
     today = trading_date_et()   # market time, not the CI runner's clock
     now_iso = datetime.now(timezone.utc).isoformat()
@@ -995,7 +1026,7 @@ SAMPLE_QUOTES = [
 def main():
     ap = argparse.ArgumentParser(description="ThePickLog logger/grader (v0.2, Yahoo Finance)")
     ap.add_argument("command", choices=["scan","scan-market","grade","report","brief","demo",
-                                        "check-grading","record-failure"])
+                                        "check-grading","record-failure","gate-check"])
     args = ap.parse_args()
     if   args.command=="scan":   cmd_scan()
     elif args.command=="scan-market": cmd_scan_market()
@@ -1005,6 +1036,7 @@ def main():
     elif args.command=="brief":  cmd_brief()
     elif args.command=="check-grading": cmd_check_grading()
     elif args.command=="record-failure": cmd_record_failure()
+    elif args.command=="gate-check": cmd_gate_check()
 
 if __name__ == "__main__":
     main()
