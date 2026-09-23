@@ -40,6 +40,7 @@
   .card h2{margin:.25em 0 .3em;font-size:21px;letter-spacing:-.01em}
   .card p{margin:0;color:var(--dim);font-size:14.5px}
   .pill{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.06em;padding:4px 10px;border-radius:999px;vertical-align:middle;margin-left:8px}
+  .v-inc{background:#10202e;color:var(--blue);border:1px solid #24405a}
   .v-fail{background:#3a1c22;color:#ffb3c0;border:1px solid #5a2a33}
   .v-warn{background:#2a1d10;color:var(--amber);border:1px solid #5a3a22}
   .meta{margin-top:12px;font-size:12.5px;color:var(--dim);font-family:ui-monospace,Menlo,monospace}
@@ -118,6 +119,13 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <h1>Field notes</h1>
   <p class="lead">Errors we found in our own record, written up in full — what broke, what it cost us, and the checks that catch it. Every one of these made our numbers look better than they were.</p>
   <p class="strip">Found in public data &nbsp;•&nbsp; Corrected, not quietly restated &nbsp;•&nbsp; The fix is in the write-up</p>
+
+  <a class="card" href="how-many-did-you-test.html" style="border-color:#24405a88">
+    <span class="no">FIELD NOTE · 2026-09-23</span><span class="pill v-inc">METHOD</span>
+    <h2>The number nobody reports: how many strategies did you test before this one?</h2>
+    <p>Mine 200 zero-edge strategies over 30 trades and the median best "win rate" is 73%. A hit rate you are shown cannot be read without two numbers you are almost never shown — how many candidates were searched, and how many trades each one got. We ran the arithmetic, checked our own first instinct (it was wrong), and surveyed four backtesting tools for either number.</p>
+    <div class="meta">58-test sweep, 0 survive · 25-test sweep, 0 survive · four products surveyed, none report the count</div>
+  </a>
 
   <a class="card" href="late-cohorts.html" style="border-color:#5a2a3355">
     <span class="no">FIELD NOTE · 2026-08-04</span><span class="pill v-fail">CORRECTION</span>

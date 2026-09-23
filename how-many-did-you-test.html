@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The number nobody reports: how many strategies did you test before this one?</title>
+<meta name="description" content="Mine enough variations of pure noise and one of them will look like an edge. A 68% win rate on a few dozen trades is the expected result of searching, not evidence. The two numbers that make a mined result readable — and why almost no backtesting tool reports either.">
+<link rel="canonical" href="https://thepicklog.com/how-many-did-you-test.html">
+<meta property="og:title" content="The number nobody reports: how many strategies did you test before this one?">
+<meta property="og:description" content="Mine 200 zero-edge strategies over 30 trades and the median best win rate is 73%. The hit rate a tool shows you cannot be read without two numbers it does not show you.">
+<meta property="og:type" content="article">
+<style>
+  :root{--a-text:#31b3aa;--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a-text)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .proto{margin-left:auto;font-size:11px;color:var(--amber);border:1px solid #f5b14c44;padding:3px 8px;border-radius:999px;background:#f5b14c11;white-space:nowrap;flex-shrink:0}
+  .menu-btn{margin-left:auto;display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.proto{display:none}.menu-btn{display:flex;margin-left:auto}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:36px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.12}
+  h2{font-size:23px;margin:1.9em 0 .5em;letter-spacing:-.015em}
+  h3{font-size:17.5px;margin:1.6em 0 .4em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18.5px;color:var(--dim);margin-bottom:1.4em}
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+  td.num{font-family:ui-monospace,Menlo,monospace}
+  .neg{color:var(--red)} .pos{color:var(--green)} .amb{color:var(--amber)}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18.5px}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:22px 0}
+  .box h3{margin-top:0}
+  .box p:last-child,.box ol:last-child,.box ul:last-child{margin-bottom:0}
+  .warn{border-color:#5a3a22;background:#2a1d10}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13.5px;font-family:ui-monospace,Menlo,monospace}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.55;font-family:ui-monospace,Menlo,monospace;color:#cfe3e1}
+  ol,ul{padding-left:22px}
+  li{margin:8px 0}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+
+  /* ===== a11y baseline — UI audit 2026-08-19 =====
+     3.1 a visible focus ring everywhere (there were 2 :focus rules on the whole site)
+     3.2 footer links to a 24px touch target (they were 14px)
+     3.7 skip-to-content, so keyboard users don't tab 12 nav links on every page */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
+
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 =====
+     There were FIVE different navs across 19 pages. Method/Trust/Guide/Privacy were
+     unreachable from the homepage nav, and Compete existed ONLY on the homepage.
+     Both marker classes are styled so a page's own CSS can use either. */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  /* The mobile menu had no z-index on 16 of 19 pages, so the panel painted BEHIND
+     the article text, and a translucent background left it unreadable wherever
+     backdrop-filter did not apply. Opaque and lifted. */
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+
+  /* ===== 2.3 one long-form type scale — UI audit 2026-08-19 =====
+     Body copy ran 15px in an 820px column on the proof pages: ~113 characters a
+     line, the smallest text on the site on the pages that most need careful
+     reading. method.html set its section headings at 16px against 15px body, so
+     its hierarchy had effectively collapsed. H1 ranged 26–36px with no scale.
+     One scale now: 17px/1.65 in a 720px column (~80ch), H1 34 / H2 23 / H3 17.5. */
+  body{font-size:17px;line-height:1.65}
+  .wrap{max-width:720px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:.15em 0 .3em}
+  h2{font-size:23px;line-height:1.25;letter-spacing:-.015em;margin:1.7em 0 .45em}
+  h3{font-size:17.5px;line-height:1.35;margin:1.5em 0 .35em}
+  p{margin:0 0 1.05em}
+  .lead,.standfirst{font-size:18.5px;line-height:1.5}
+  @media(max-width:560px){
+    body{font-size:16.5px}
+    h1{font-size:28px}
+    h2{font-size:20.5px}
+    .lead,.standfirst{font-size:17px}
+  }
+</style>
+<meta property="og:image" content="https://thepicklog.com/og/split-adjustment-trap.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.com/og/split-adjustment-trap.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.com/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html">Experiments</a>
+      <a href="field-notes.html" class="active">Field notes</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html">Experiments</a>
+    <a href="field-notes.html" class="active">Field notes</a>
+    <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+    <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+    <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+    <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap" id="main" tabindex="-1">
+  <span class="no">FIELD NOTE &middot; 2026-09-23</span>
+  <h1>The number nobody reports: how many strategies did you test before this one?</h1>
+  <p class="standfirst">Search through enough variations of pure noise and one of them will look like an edge. That is not a warning about dishonest people; it is arithmetic, and it applies to us. Here is the arithmetic, the two numbers that make a mined result readable, and what we found when we went looking for a backtesting tool that reports either of them.</p>
+
+  <h2>Start with ours</h2>
+  <p>In August we ran a sweep of calendar effects on QQQ: 25 variations of &ldquo;does the market behave differently at this point in the week or month.&rdquo; One of them looked good.</p>
+  <p>Corrected for the fact that we had run 25 tests, <b>none of them survived.</b> Not the good-looking one, not any of them.</p>
+  <p>We had already done the same thing at larger scale. A 58-test sweep across selection filters and entry timing &mdash; every plausible way of choosing which names the screen keeps, and when to buy them. <b>Zero survived the same correction.</b> Across the project to that point: 33 registered hypotheses, none passed.</p>
+  <p class="pull">None of those sweeps produced a strategy. What they produced was a habit: before believing the best result in a batch, count the batch.</p>
+
+  <h2>Why the count is the whole story</h2>
+  <p>Run one test on a strategy with no edge, at the usual 5% threshold, and you have a 1-in-20 chance of a false positive. Run twenty, and the chance at least one comes back &ldquo;significant&rdquo; is <b>64%</b>. Run fifty-eight &mdash; our sweep &mdash; and it is <b>95%</b>. At two hundred variations, finding a winner is not evidence of anything. It is arithmetic. You were always going to find one.</p>
+  <table>
+    <thead><tr><th>Variations tested</th><th>Chance at least one looks significant</th><th>Threshold you would actually need</th></tr></thead>
+    <tbody>
+      <tr><td class="num">5</td><td class="num">23%</td><td class="num">1 in 100</td></tr>
+      <tr><td class="num">20</td><td class="num">64%</td><td class="num">1 in 400</td></tr>
+      <tr><td class="num">25</td><td class="num">72%</td><td class="num">1 in 500</td></tr>
+      <tr><td class="num">58</td><td class="num">95%</td><td class="num">1 in 1,160</td></tr>
+      <tr><td class="num">200</td><td class="num">&gt;99.99%</td><td class="num">1 in 4,000</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:14.5px;color:var(--dim)"><i>Assumes the tests are independent. Real strategy variants are correlated &mdash; twenty tweaks of one moving average are closer to one test than to twenty &mdash; which makes the true figures lower. Lower, not absent: correlation shrinks the penalty, it never removes it, and nobody who skips the correction entirely is doing so because they measured the correlation.</i></p>
+
+  <h2>What a mined win rate looks like when there is nothing there</h2>
+  <p>Take a coin. It has no edge &mdash; it is a coin. Call each flip a trade, and let it trade thirty times.</p>
+  <p>Now mine it. Generate 200 &ldquo;strategies&rdquo; that are just 200 independent runs of that same coin, and keep the best one. <b>The median best win rate is 73%.</b></p>
+  <p>Not the luckiest case &mdash; the median. Half the time it is higher. With 20 variations instead of 200 the median best is still <b>67%</b>. Give each strategy 100 trades instead of 30 and 200 variations still yields <b>63%</b>.</p>
+  <p>That is the range in which mined strategies are marketed. A 68% win rate on a few dozen trades is not a suspicious result. It is the <i>expected</i> result of searching hard enough through pure noise.</p>
+
+  <h2>The number that cannot be read on its own</h2>
+  <p>Here is where this gets more interesting than a simple debunk, and where we had to correct our own first instinct.</p>
+  <p>One strategy-generation product publishes a customer&rsquo;s account of using it: he screens for a profit factor above 1.6, a win rate above 65%, and a return-to-drawdown ratio above 3, and reports that <b>about one strategy in every million iterations clears that bar.</b> He offers it as evidence the product works.</p>
+  <div class="box" style="border-color:#5a3a22;background:#2a1d10">
+    <h3 style="margin-top:0">We got this wrong first</h3>
+    <p>Our first reaction was that one-in-a-million is exactly what noise produces. <b>We checked, and that is wrong.</b> Under a zero-edge model &mdash; each trade a coin flip of equal size &mdash; here is how often pure noise clears that same three-part filter:</p>
+    <table>
+      <thead><tr><th>Trades per strategy</th><th>Noise passes</th><th>Expected hits per million searched</th></tr></thead>
+      <tbody>
+        <tr><td class="num">20</td><td class="num">8.6%</td><td class="num">85,600</td></tr>
+        <tr><td class="num">30</td><td class="num">4.3%</td><td class="num">43,400</td></tr>
+        <tr><td class="num">50</td><td class="num">1.6%</td><td class="num">16,100</td></tr>
+        <tr><td class="num">100</td><td class="num">0.19%</td><td class="num">1,900</td></tr>
+        <tr><td class="num">200</td><td class="num">0.003%</td><td class="num"><b>30</b></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-bottom:0">At 30 trades, noise clears that filter <b>forty-three thousand times</b> per million. One hit per million would mean the search was finding <i>less</i> than chance. At 200 trades, noise clears it about <b>30 times</b> per million &mdash; so one-in-a-million is genuinely selective.</p>
+  </div>
+  <p class="pull">The same hit rate is either meaningless or impressive depending on a number that was not reported. Without the trade count, it cannot be read at all &mdash; in either direction.</p>
+  <p>Across a plausible range of sample sizes the noise rate moves by more than three orders of magnitude. That is the real finding, and it is a more useful one than &ldquo;mining is bad.&rdquo; Mining is a legitimate way to generate hypotheses. What makes a mined result readable is publishing the two numbers that let someone else do this arithmetic: <b>how many candidates you searched, and how many observations each one got.</b> Almost nobody publishes either.</p>
+
+  <h2>Where the category actually stands</h2>
+  <p>We looked at four consumer-facing backtesting and strategy-generation products. <b>We could not find one that reports, alongside a winner, how many candidates that winner beat</b> &mdash; or that discounts the result for the size of the search.</p>
+  <p>What they do offer is real and worth crediting. One splits data into training and test halves, validates forward on rolling out-of-sample segments, runs a Monte Carlo stress test on the trade sequence, grades the result with a four-way verdict that includes &ldquo;looked good in-sample only,&rdquo; and makes you tick a box acknowledging a strategy is fragile before it will save it. Another adds a noise test that rebuilds the price series a thousand times over. A third advertises Monte Carlo, walk-forward matrices, parameter permutation and automatic overfitting tests. This is serious engineering against overfitting <i>one</i> strategy.</p>
+  <p>None of it addresses the search that selected that strategy. A train/test split scores the finalist; it does not penalise the tournament that produced the finalist. And the tools that search hardest disclose the search least &mdash; one advertises combining and verifying <i>millions</i> of entry and exit conditions on its front page, and reports no count anywhere in its output.</p>
+  <p>The fourth is the telling one. It publishes a genuinely good educational page on multiple-testing correction &mdash; and states plainly that the difficulty is bookkeeping, because correction requires knowing how many tests were run. It is right. Its own tooling does not keep that book either.</p>
+  <div class="box">
+    <h3>Scope of that claim, stated honestly</h3>
+    <p>We read one of these four products&rsquo; shipped application code in full. For the other three we read public documentation, marketing and support material, not their in-app output. A count could exist in a screen we have not seen. If you work on one of these and we have missed it, tell us and we will correct this note in public, which is what we do with <a href="late-cohorts.html">our own errors</a>.</p>
+  </div>
+
+  <h2>The check, in ten seconds</h2>
+  <p>Ask: <b>&ldquo;How many variations did you test before you showed me this one &mdash; and how many trades did each one get?&rdquo;</b></p>
+  <ul>
+    <li>Two numbers, even large ones, mean they were counting, and you can do the arithmetic above.</li>
+    <li>&ldquo;We tested thoroughly&rdquo; is not a number.</li>
+    <li>&ldquo;Just this one,&rdquo; from a product with an optimizer, a miner, or a parameter sweep, is not true.</li>
+    <li><b>&ldquo;Why does that matter?&rdquo; is the answer.</b> Move on.</li>
+  </ul>
+  <p>And the follow-up that costs nothing if they were honest: <i>what would you have shown me if this one had not worked?</i> A pre-registered process has an answer &mdash; the failures, published. A mined one does not, because the failures were never written down.</p>
+  <p>This is check #4 on <a href="guide.html">the seven checks any service should pass</a> &mdash; rules frozen in advance, or fitted to the past. If you want to put a service through all seven, <a href="scorecard.html">the scorecard takes two minutes</a> and nothing you enter leaves your browser.</p>
+
+  <h2>What we do about it</h2>
+  <p>Every hypothesis is registered with a date and an evaluation window before we look. When we sweep, we publish the sweep &mdash; all 58, all 25, not the survivor. When a sweep produces nothing, that is a result and it goes up.</p>
+  <p>And the case we are least comfortable with, which is why it is here: the turn-of-month effect was the strongest survivor of that 25-test calendar sweep, in which, corrected for multiple testing, nothing survived. We did not publish it as a finding. We registered it forward as <a href="experiment-04.html">Experiment 04</a>, on a frozen window, with the verdict date set in advance &mdash; because the only way to redeem a mined result is to stop mining and let it face data that did not exist when you found it.</p>
+  <p class="pull">That verdict is due in 2027. We do not know what it says. That is the point.</p>
+
+  <h2>Reproduce every number above</h2>
+  <p>Seeded, so the figures are stable. Runs in under a minute in stock Python.</p>
+<pre>import random
+from math import comb
+
+# 1. chance at least one of N independent tests clears a 5% threshold under the null
+for N in (5, 20, 25, 58, 200):
+    print(N, f"{(1 - 0.95**N)*100:.2f}%", "threshold 1 in", round(1/(0.05/N)))
+
+# 2. median best win rate from mining N zero-edge strategies of n trades each
+def best_of(N, n, trials=20000, seed=7):
+    rng = random.Random(seed)
+    b = sorted(max(sum(rng.random() &lt; 0.5 for _ in range(n)) for _ in range(N))
+               for _ in range(trials))
+    return b[len(b)//2] / n
+
+for N, n in ((20, 30), (200, 30), (200, 100)):
+    print(f"best of {N} over {n} trades -&gt; {best_of(N, n)*100:.1f}%")
+
+# 3. how often zero-edge noise clears win&gt;=65% AND PF&gt;=1.6 AND net/maxDD&gt;=3
+def pass_rate(n, trials=200000, seed=11):
+    rng = random.Random(seed); hits = 0
+    for _ in range(trials):
+        w = eq = peak = mdd = 0
+        for _ in range(n):
+            r = 1 if rng.random() &lt; 0.5 else -1
+            w += r &gt; 0; eq += r
+            peak = max(peak, eq); mdd = max(mdd, peak - eq)
+        l = n - w
+        if w/n &lt; 0.65: continue
+        if l and w/l &lt; 1.6: continue
+        if mdd == 0 or eq/mdd &gt;= 3: hits += 1
+    return hits/trials
+
+for n in (20, 30, 50, 100, 200):
+    p = pass_rate(n)
+    print(f"n={n:&lt;4} noise passes {p*100:7.3f}%  -&gt; {p*1e6:&gt;9,.0f} per million searched")</pre>
+
+  <p class="foot">
+    Educational and informational only &mdash; not investment advice, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida). The products described above are not named on purpose: the point is the category, not any vendor, and every figure attributed to a product is paraphrased from that product&rsquo;s own public material. The simulation is a deliberately simple zero-edge model with equal-sized trades; real strategies have asymmetric payoffs, which changes the numbers but not the direction of the argument.
+    <br>If you are checking someone else&rsquo;s track record for this, start with <a href="guide.html">the 7 checks every service should pass</a>.
+  
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
+  </p>
+</div>
+</body>
+</html>
