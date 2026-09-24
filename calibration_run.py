@@ -27,7 +27,8 @@ NOTHING HERE TOUCHES filing_lens.THRESHOLDS. Threshold changes are a separate co
 that cites this run's result.json by path and sha.
 
 USAGE
-  JEV_API_KEY=... JEV_MODEL=jev-1.13.0 python3 calibration_run.py --cal calibration
+  python3 calibration_run.py --cal calibration   # reads ../jev.env (outside the repo)
+  JEV_ENV_FILE=/path/to/other.env python3 calibration_run.py --cal calibration
   python3 calibration_run.py --cal calibration --fake        # plumbing test, no key
 NOT INVESTMENT ADVICE.
 """
@@ -41,7 +42,25 @@ import time
 from collections import Counter, defaultdict
 from datetime import date
 
-import filing_lens as fl
+
+def _load_env(path):
+    """KEY=VALUE lines into os.environ (existing env wins). Must run BEFORE importing
+    filing_lens, which reads JEV_* at import. Never prints values."""
+    if not path or not os.path.exists(path):
+        return False
+    for line in open(path):
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        os.environ.setdefault(k.strip(), v.strip())
+    return True
+
+
+_ENV = os.environ.get("JEV_ENV_FILE") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "jev.env")
+_ENV_LOADED = _load_env(_ENV)
+
+import filing_lens as fl  # noqa: E402  (after env load on purpose)
 
 Q = fl.QUESTION_ORDER
 BINS = 10
@@ -81,7 +100,9 @@ def get_response(cal, run_dir, r, call, model):
     path = os.path.join(run_dir, "responses", r["cal_id"] + ".json")
     if os.path.exists(path):
         resp = json.load(open(path))
-        return resp, "cache"
+        # a cached answer is only valid for the exact text it was made on
+        if resp.get("_text_sha256") == r["text_sha256"] and resp.get("_questions_sha256") == fl.QUESTIONS_SHA256:
+            return resp, "cache"
     text = open(os.path.join(cal, r["text_file"])).read()
     if hashlib.sha256(text.encode()).hexdigest() != r["text_sha256"]:
         return None, "text_hash_mismatch"
@@ -98,6 +119,7 @@ def get_response(cal, run_dir, r, call, model):
             time.sleep(2 ** attempt)
     if str(resp.get("model", "")) != model:
         return None, f"version_drift:{resp.get('model')}"
+    resp = dict(resp, _text_sha256=r["text_sha256"], _questions_sha256=fl.QUESTIONS_SHA256)
     json.dump(resp, open(path, "w"))
     return resp, "live"
 
@@ -236,7 +258,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cal", default="calibration")
     ap.add_argument("--fake", action="store_true", help="plumbing test with filing_lens._fake_jev")
-    ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--limit", type=int, default=None, help="score only the first N filings (e.g. --limit 3 as a live smoke test)")
     ap.add_argument("--pace", type=float, default=0.1)
     ap.add_argument("--seed", type=int, default=7)
     args = ap.parse_args()
@@ -248,7 +270,10 @@ def main():
         if not model or model.endswith("latest"):
             sys.exit("JEV_MODEL must be an exact pinned version (never 'latest')")
         if not fl.JEV_API_KEY:
-            sys.exit("JEV_API_KEY is required")
+            sys.exit(f"JEV_API_KEY is empty. Paste your key into {os.path.abspath(_ENV)} "
+                     f"({'found' if _ENV_LOADED else 'NOT found'}), after 'JEV_API_KEY='.")
+        print(f"key loaded from {os.path.abspath(_ENV) if _ENV_LOADED else 'environment'} "
+              f"(…{fl.JEV_API_KEY[-4:]}); model {model}; endpoint {fl.JEV_ENDPOINT}")
         call = fl.call_jev
     run_dir = os.path.join(args.cal, f"run_{model}")
     os.makedirs(os.path.join(run_dir, "responses"), exist_ok=True)

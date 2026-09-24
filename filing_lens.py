@@ -66,9 +66,12 @@ __version__ = "0.1.0-gate1"
 EIGHTK_WINDOW    = 30    # days: an 8-K older than this cannot be "the reason the quote froze this week"
 OFFERING_WINDOW  = 180   # days: matches edgar_lens.OFFERING_WINDOW — active dilution pressure
 PREFILTER_ITEMS  = ("1.01", "3.01", "3.02", "5.03", "8.01")   # 8-K items worth reading
-MAX_TOKENS       = 32_000          # Jev's longest-single-question limit
-CHARS_PER_TOKEN  = 4               # conservative estimate; we have no tokenizer offline
-MAX_CHARS        = MAX_TOKENS * CHARS_PER_TOKEN
+# Jev's 32k budget is the STATE PLUS THE LONGEST QUESTION (docs.typesafe.ai/models,
+# 2026-09-23), not the text alone. The longest question here is split_ratio at ~1.5k
+# tokens; the state wrapper adds a few hundred. So the filing text gets 30k.
+MAX_TOKENS       = 30_000          # text budget inside Jev's 32k state+longest-question limit
+CHARS_PER_TOKEN  = 3.2             # conservative: SEC tables/numbers tokenize denser than prose
+MAX_CHARS        = int(MAX_TOKENS * CHARS_PER_TOKEN)   # 96,000 characters
 MAX_FILINGS_PER_TICKER = 6         # politeness cap on SEC document fetches per scan
 
 # The model version is PINNED by the environment at gate 2; never "jev-latest".
@@ -332,7 +335,8 @@ def cap_text(text, max_chars=MAX_CHARS):
 
 
 def est_tokens(text):
-    return (len(text) + CHARS_PER_TOKEN - 1) // CHARS_PER_TOKEN
+    import math
+    return math.ceil(len(text) / CHARS_PER_TOKEN)
 
 
 # ---------------------------------------------------------------------------
