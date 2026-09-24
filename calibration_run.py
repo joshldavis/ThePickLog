@@ -80,9 +80,20 @@ PASS_BAR = {
 }
 
 
-def load_labels(cal):
+def load_labels(cal, corrections=True):
+    """labels.csv, then label_corrections.csv (documented label errors, each with the
+    filing's own words as evidence), then audit.csv (the human auditor always wins)."""
     labels = {r["cal_id"]: r for r in csv.DictReader(open(os.path.join(cal, "labels.csv")))}
     overrides = 0
+    cp = os.path.join(cal, "label_corrections.csv")
+    n_corr = 0
+    if corrections and os.path.exists(cp):
+        for c in csv.DictReader(open(cp)):
+            if c["cal_id"] in labels:
+                labels[c["cal_id"]][f"label_{c['question']}"] = c["new"]
+                labels[c["cal_id"]][f"label_{c['question']}_src"] = "correction"
+                n_corr += 1
+    load_labels.n_corrections = n_corr
     ap = os.path.join(cal, "audit.csv")
     if os.path.exists(ap):
         for a in csv.DictReader(open(ap)):
@@ -124,11 +135,33 @@ def get_response(cal, run_dir, r, call, model):
     return resp, "live"
 
 
+def _per_value(q, pts):
+    """positives, precision/recall at the proposed auto floor, and the smallest floor
+    (0.01 grid, >= 5 predictions) that delivers >= 0.95 precision."""
+    per = {}
+    for (qq, v), (auto_floor, _) in fl.THRESHOLDS.items():
+        if qq != q:
+            continue
+        pos = [x for x in pts if x[3] == v]
+        pred = [x for x in pts if x[2] == v and x[0] >= auto_floor]
+        tp = sum(1 for x in pred if x[3] == v)
+        floor95 = None
+        for f in [i / 100 for i in range(50, 100)]:
+            pr = [x for x in pts if x[2] == v and x[0] >= f]
+            if len(pr) >= 5 and sum(1 for x in pr if x[3] == v) / len(pr) >= 0.95:
+                floor95 = f; break
+        per[v] = {"labeled_positives": len(pos), "proposed_auto_floor": auto_floor,
+                  "precision_at_floor": round(tp / len(pred), 4) if pred else None,
+                  "recall_at_floor": round(tp / len(pos), 4) if pos else None,
+                  "n_predicted_at_floor": len(pred), "floor_for_0.95_precision": floor95}
+    return per
+
+
 def score(rows, answers, labels):
     """rows: list of candidates rows scored; answers: cal_id -> parsed answers."""
     out = {}
     for q in Q:
-        pts = []                                     # (p_of_chosen, correct, chosen, truth)
+        pts, pts_rows = [], []                       # (p_of_chosen, correct, chosen, truth)
         for r in rows:
             cid = r["cal_id"]
             a = answers[cid][q]
@@ -136,6 +169,7 @@ def score(rows, answers, labels):
             if a["value"] == "" or a["p"] == "" or not truth:
                 continue
             pts.append((float(a["p"]), a["value"] == truth, a["value"], truth))
+            pts_rows.append(r)
         n = len(pts)
         res = {"n": n}
         if not n:
@@ -158,26 +192,13 @@ def score(rows, answers, labels):
         res["reliability"] = rel
         top = [c for p, c, _, _ in pts if p >= TOP_BIN]
         res["top_bin"] = {"n": len(top), "accuracy": round(sum(top) / len(top), 4) if top else None}
-        # per value: positives, precision/recall at the proposed floor, floor for 0.95 precision
-        per = {}
-        for (qq, v), (auto_floor, _) in fl.THRESHOLDS.items():
-            if qq != q:
-                continue
-            pos = [x for x in pts if x[3] == v]
-            pred = [x for x in pts if x[2] == v and x[0] >= auto_floor]
-            tp = sum(1 for x in pred if x[3] == v)
-            prec = round(tp / len(pred), 4) if pred else None
-            rec = round(tp / len(pos), 4) if pos else None
-            # smallest floor (on a 0.01 grid) giving >= 0.95 precision with >= 5 predictions
-            floor95 = None
-            for f in [i / 100 for i in range(50, 100)]:
-                pr = [x for x in pts if x[2] == v and x[0] >= f]
-                if len(pr) >= 5 and sum(1 for x in pr if x[3] == v) / len(pr) >= 0.95:
-                    floor95 = f; break
-            per[v] = {"labeled_positives": len(pos), "proposed_auto_floor": auto_floor,
-                      "precision_at_floor": prec, "recall_at_floor": rec, "n_predicted_at_floor": len(pred),
-                      "floor_for_0.95_precision": floor95}
-        res["per_value"] = per
+        res["per_value"] = _per_value(q, pts)
+        # The split guard only ever consumes 8-K answers (Item 5.03/3.03); prospectuses
+        # recite old splits as background. Score that production scope separately.
+        if q in ("reverse_split", "split_ratio"):
+            pts8 = [x for x, r in zip(pts, pts_rows) if r["form"].startswith("8-K")]
+            res["per_value_8k"] = _per_value(q, pts8)
+            res["n_8k"] = len(pts8)
         out[q] = res
     # split_ratio conditional on a real split
     cond = [(answers[r["cal_id"]]["split_ratio"]["value"], labels[r["cal_id"]]["label_split_ratio"])
@@ -246,6 +267,7 @@ def field_note(model, res, verd, meta):
           "`reverse_split`/`split_ratio` where it could; 8-K item codes decided bankruptcy/auditor/restatement/M&A; "
           "a model reader labeled the rest with a verbatim quote per label; a human audited every disagreement plus a "
           "seeded sample. Precedence and rules: `calibration_truth.py`, `calibration_merge.py`. "
+          f"Documented label corrections applied: {meta.get('label_corrections', 0)} (calibration/label_corrections.csv, each with the filing's own words as evidence; `--no-corrections` scores the original labels). "
           f"Audit overrides applied: {meta['audit_overrides']}.", "",
           "## Reproduce", "",
           "Every request is the stored text (hash in candidates.csv) plus the question block in `filing_lens.QUESTIONS`, "
@@ -261,6 +283,8 @@ def main():
     ap.add_argument("--limit", type=int, default=None, help="score only the first N filings (e.g. --limit 3 as a live smoke test)")
     ap.add_argument("--pace", type=float, default=0.1)
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--no-corrections", action="store_true",
+                    help="score against labels as originally made (writes result_as_labeled.json)")
     args = ap.parse_args()
 
     if args.fake:
@@ -281,7 +305,9 @@ def main():
     cands = list(csv.DictReader(open(os.path.join(args.cal, "candidates.csv"))))
     if args.limit:
         cands = cands[: args.limit]
-    labels, overrides = load_labels(args.cal)
+    labels, overrides = load_labels(args.cal, corrections=not args.no_corrections)
+    n_corr = getattr(load_labels, "n_corrections", 0)
+    tag = "_as_labeled" if args.no_corrections else ""
 
     answers, skipped, src = {}, Counter(), Counter()
     for i, r in enumerate(cands, 1):
@@ -300,20 +326,20 @@ def main():
     res = score(rows, answers, labels)
     verd = verdicts(res)
     meta = {"run_date": date.today().isoformat(), "model": model, "scored": len(rows), "skipped": dict(skipped), "n_skipped": sum(skipped.values()),
-            "seed": args.seed, "audit_overrides": overrides, "questions_sha256": fl.QUESTIONS_SHA256,
+            "seed": args.seed, "audit_overrides": overrides, "label_corrections": n_corr, "questions_sha256": fl.QUESTIONS_SHA256,
             "lens_version": fl.__version__,
             "pass_bar": {k: ({f"{a}:{b}": x for (a, b), x in v.items()} if isinstance(v, dict) else v) for k, v in PASS_BAR.items()}}
     result = {"meta": meta, "verdicts": {q: {"verdict": v[0], "reasons": v[1]} for q, v in verd.items()}, "scores": res}
-    json.dump(result, open(os.path.join(run_dir, "result.json"), "w"), indent=2, default=str)
-    with open(os.path.join(run_dir, "reliability.csv"), "w", newline="") as fh:
+    json.dump(result, open(os.path.join(run_dir, f"result{tag}.json"), "w"), indent=2, default=str)
+    with open(os.path.join(run_dir, f"reliability{tag}.csv"), "w", newline="") as fh:
         w = csv.writer(fh); w.writerow(["question", "bin", "lo", "hi", "n", "accuracy"])
         for q in Q:
             for b in res.get(q, {}).get("reliability", []):
                 w.writerow([q, b["bin"], b["lo"], b["hi"], b["n"], b.get("accuracy", "")])
-    open(os.path.join(run_dir, "FIELD-NOTE-DRAFT.md"), "w").write(field_note(model, res, verd, meta))
+    open(os.path.join(run_dir, f"FIELD-NOTE-DRAFT{tag}.md"), "w").write(field_note(model, res, verd, meta))
     for q in Q:
         print(f"  {q:16s} {verd[q][0]:9s} n={res[q].get('n', 0):3d} acc={res[q].get('accuracy', '')} ece={res[q].get('ece', '')}")
-    print(f"-> {run_dir}/result.json, reliability.csv, FIELD-NOTE-DRAFT.md")
+    print(f"-> {run_dir}/result{tag}.json, reliability{tag}.csv, FIELD-NOTE-DRAFT{tag}.md  (label corrections applied: {n_corr})")
 
 
 if __name__ == "__main__":
