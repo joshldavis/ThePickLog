@@ -1,38 +1,41 @@
-# ThePickLog — Morning Brief · 2026-09-23
+# ThePickLog — Morning Brief · 2026-09-24
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **LHSW** (tier A, score 100.0) — very high relative volume (34×); thin float (1.1M); large up-gap (+61%). Watch level (reference only, +20%): $0.8389.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **IMCC** (tier A, score 100.0) — very high relative volume (12×); thin float (0.5M); large up-gap (+150%). Watch level (reference only, +20%): $9.24.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **DCOY** (tier A, score 100.0) — very high relative volume (54×); thin float (0.6M); large up-gap (+68%). Watch level (reference only, +20%): $5.16.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **RAIN** (tier A, score 99.8) — very high relative volume (39×); large up-gap (+30%). Watch level (reference only, +20%): $1.032.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **CWD** (tier A, score 95.6) — very high relative volume (14×); large up-gap (+37%). Watch level (reference only, +20%): $0.8519.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **JAGX** (tier A, score 100.0) — very high relative volume (17×); thin float (0.3M); large down-gap (-74%). Watch level (reference only, +20%): $10.692.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **BENF** (tier A, score 100.0) — very high relative volume (33×); thin float (2.3M); large up-gap (+272%). Watch level (reference only, +20%): $2.4.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **WHLR** (tier A, score 100.0) — very high relative volume (50×); thin float (0.1M); large up-gap (+149%). Watch level (reference only, +20%): $5.58.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **VSA** (tier A, score 100.0) — very high relative volume (36×); thin float (0.6M); large up-gap (+31%). Watch level (reference only, +20%): $3.12.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **ARTL** (tier A, score 100.0) — very high relative volume (53×); thin float (0.5M); large up-gap (+23%). Watch level (reference only, +20%): $6.12.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **LHSW**: already extended pre-market — chasing buys the top.
-- **LHSW**: sub-$1 — heightened manipulation / delisting risk.
-- **IMCC**: already extended pre-market — chasing buys the top.
-- **IMCC**: ultra-thin float — spreads and slippage can be severe.
-- **DCOY**: already extended pre-market — chasing buys the top.
+- **JAGX**: ultra-thin float — spreads and slippage can be severe.
+- **BENF**: already extended pre-market — chasing buys the top.
+- **WHLR**: already extended pre-market — chasing buys the top.
+- **WHLR**: ultra-thin float — spreads and slippage can be severe.
+- **VSA**: already extended pre-market — chasing buys the top.
+- **VSA**: ultra-thin float — spreads and slippage can be severe.
+- **ARTL**: already extended pre-market — chasing buys the top.
+- **ARTL**: ultra-thin float — spreads and slippage can be severe.
 - **DCOY**: ultra-thin float — spreads and slippage can be severe.
-- **RAIN**: already extended pre-market — chasing buys the top.
-- **RAIN**: sub-$1 — heightened manipulation / delisting risk.
-- **CWD**: already extended pre-market — chasing buys the top.
-- **CWD**: sub-$1 — heightened manipulation / delisting risk.
+- **GCDT**: already extended pre-market — chasing buys the top.
+- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
+- **GCDT**: already extended pre-market — chasing buys the top.
+- **GCDT**: sub-$1 — heightened manipulation / delisting risk.
+- **ONCO**: sub-$1 — heightened manipulation / delisting risk.
+- **MSS**: ultra-thin float — spreads and slippage can be severe.
 - **BFRG**: already extended pre-market — chasing buys the top.
 - **BFRG**: sub-$1 — heightened manipulation / delisting risk.
-- **QNME**: already extended pre-market — chasing buys the top.
-- **QNME**: sub-$1 — heightened manipulation / delisting risk.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: sub-$1 — heightened manipulation / delisting risk.
-- **HWH**: ultra-thin float — spreads and slippage can be severe.
 - **NCT**: ultra-thin float — spreads and slippage can be severe.
-- **BJDX**: high short interest (27% of float) — squeeze-prone and violent both ways.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **BJDX**: high short interest (27% of float) — squeeze-prone and violent both ways.
+- **BJDX**: sub-$1 — heightened manipulation / delisting risk.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
