@@ -83,6 +83,108 @@ def pct(n, d):
     return (100.0 * n / d) if d else float("nan")
 
 
+# ---------------------------------------------------------------- one-stock sensitivity
+# (2026-09-23) A mean over thin-float names can be one stock. JAGX 2026-09-22 closed
+# at ~12x its open after a 1-for-15 reverse split shrank the float; that single pick
+# grades near +1,100% and, alone, moves the all-picks open->close mean from about
+# -2.3% to -1.4%. DFNS (+663%) did the same to the 07-29 selection sweep. The row is
+# real and stays; what changes is that no mean is printed without saying so when one
+# pick carries it.
+#
+# RULE (shared with index.html / dashboard.html, keep in sync): take the pick whose
+# removal moves the mean the most. Flag the mean when removing it moves it by at least
+# ONE_STOCK_PP percentage points AND by at least ONE_STOCK_REL of the remaining mean,
+# or flips its sign. Never flags on fewer than 3 values. Replayed over the log as of
+# 2026-09-23 it flags nothing: the largest pick so far (+240.9%) moves the all-picks
+# mean by 0.19pp.
+ONE_STOCK_PP = 0.5
+ONE_STOCK_REL = 0.20
+_ONE_LABELS = {}     # round(value, 4) -> "TICKER YYYY-MM-DD" (unique values only)
+_ONE_NOTES = {}      # (label, value) -> {top, uses}; printed after section 1
+
+
+def one_stock(xs):
+    """(mean, mean_without_top, top_value) if one value carries the mean, else None."""
+    xs = [x for x in xs if x is not None]
+    n = len(xs)
+    if n < 3:
+        return None
+    m = sum(xs) / n
+    top = max(xs, key=lambda x: abs(x - m))
+    mex = (sum(xs) - top) / (n - 1)
+    d = abs(m - mex)
+    if d < ONE_STOCK_PP:
+        return None
+    if d >= ONE_STOCK_REL * abs(mex) or (m > 0) != (mex > 0):
+        return m, mex, top
+    return None
+
+
+def _label(x):
+    return _ONE_LABELS.get(round(x, 4), "one pick")
+
+
+def am(xs, where=""):
+    """Formatted mean; marks it with the carrier's dagger when one pick carries it.
+    Footnotes are grouped by carrier, so one outlier gets one line however many
+    averages it moves."""
+    s = f"{mean(xs):+.1f}%"
+    r = one_stock(xs)
+    if not r:
+        return s
+    m, mex, top = r
+    lab = _label(top)
+    key = (lab, round(top, 4))
+    if key not in _ONE_NOTES:
+        _ONE_NOTES[key] = {"top": top, "uses": []}
+    _ONE_NOTES[key]["uses"].append((where, m, mex))
+    k = list(_ONE_NOTES).index(key) + 1
+    return f"{s} †{k}"
+
+
+def _one_block():
+    out = []
+    for k, ((lab, _), v) in enumerate(_ONE_NOTES.items(), 1):
+        uses = v["uses"]
+        where, m, mex = uses[0]
+        if len(uses) == 1:
+            line = (f"†{k} **{lab}** ({v['top']:+.0f}%) carries the {where} average: "
+                    f"**{m:+.1f}%** with it, **{mex:+.1f}%** without.")
+        else:
+            line = (f"†{k} **{lab}** ({v['top']:+.0f}%) carries {len(uses)} averages marked †{k}, "
+                    f"including {where}: **{m:+.1f}%** with it, **{mex:+.1f}%** without.")
+        if len(uses) > 1:
+            lo = min(u[2] for u in uses); hi = max(u[2] for u in uses)
+            line += f" Across all {len(uses)}, the figure without it runs {lo:+.1f}% to {hi:+.1f}%."
+        out.append(line)
+    return out
+
+
+def delta_caveat(a, b, delta):
+    """For a verdict built on mean(a) - mean(b): if one pick carries it, say what the
+    delta is without that pick (removed from whichever arms contain it)."""
+    cand = [r for r in (one_stock(a), one_stock(b)) if r]
+    if not cand:
+        return ""
+    top = max(cand, key=lambda r: abs(r[0] - r[1]))[2]
+
+    def drop(xs):
+        xs = list(xs)
+        if top in xs:
+            xs.remove(top)
+        return xs
+    a2, b2 = drop(a), drop(b)
+    if not a2 or not b2:
+        return ""
+    d2 = mean(a2) - mean(b2)
+    if abs(delta - d2) < ONE_STOCK_PP:
+        return ""
+    flip = (delta > 0) != (d2 > 0)
+    return (f" ⚠️ **One stock drives this:** without {_label(top)} ({top:+.0f}%) the delta is "
+            f"**{d2:+.1f}pp**" + ("; the sign flips, so this reading does not stand on its own."
+                                   if flip else "."))
+
+
 def trading_days_between(a, b):
     """Count weekdays in [a, b) — rough scan-coverage check (ignores US holidays)."""
     days, cur = [], a
@@ -138,6 +240,19 @@ def main():
     by_id = {p["pick_id"]: p for p in picks if p.get("pick_id")}
     pick_dates = sorted({_d(p["trading_date"]) for p in picks if p.get("trading_date")})
     graded_ids = {o["pick_id"] for o in outs if o.get("pick_id")}
+    _seen = {}
+    _pk = {p.get("pick_id"): p for p in all_picks}
+    for o in all_outs:
+        p0 = _pk.get(o.get("pick_id")) or {}
+        lab = f"{p0.get('ticker') or o.get('ticker', '?')} {p0.get('trading_date') or o.get('trading_date', '')}".strip()
+        for k in ("ret_open_close_net", "ret_open_5dclose_net"):
+            v = _f(o.get(k))
+            if v is not None:
+                key = round(v, 4)
+                _seen[key] = None if (key in _seen and _seen[key] != lab) else lab
+    _ONE_LABELS.clear()
+    _ONE_LABELS.update({k: v for k, v in _seen.items() if v})
+    _ONE_NOTES.clear()
 
     # ---- 1. maturation ----
     w("## 1. Maturation")
@@ -170,8 +285,8 @@ def main():
     w("")
     if outs:
         w(f"- **Win rate:** {pct(sum(wins), len(wins)):.0f}%  ({sum(wins)}/{len(wins)} positive net, open→close).")
-        w(f"- **Open→close net:** median {med(rets_oc):+.1f}%, mean {mean(rets_oc):+.1f}%.")
-        w(f"- **5-day net:** median {med(rets_5d):+.1f}%, mean {mean(rets_5d):+.1f}%.")
+        w(f"- **Open→close net:** median {med(rets_oc):+.1f}%, mean {am(rets_oc, 'all picks, open→close')}.")
+        w(f"- **5-day net:** median {med(rets_5d):+.1f}%, mean {am(rets_5d, 'all picks, 5-day')}.")
         w(f"- **Drawdown (MAE 5d):** median {med(maes):+.1f}%, worst {min(maes):+.1f}%.")
         w(f"- **Catastrophic-rug rate (MAE < {RUG:.0f}%):** {pct(sum(1 for m in maes if m < RUG), len(maes)):.0f}%.")
     else:
@@ -237,7 +352,7 @@ def main():
             if not xs:
                 w(f"| {name} | 0 | — | — | — |"); return
             wr = pct(sum(1 for r in xs if r > 0), len(xs))
-            w(f"| {name} | {len(xs)} | {mean(xs):+.1f}% | {med(xs):+.1f}% | {wr:.0f}% |")
+            w(f"| {name} | {len(xs)} | {am(xs, name)} | {med(xs):+.1f}% | {wr:.0f}% |")
         line("Take every pick", allr)
         line("Skip A/B (Finding-A rule)", skip_ab)
         line("Only A/B (the hot names)", only_ab)
@@ -247,7 +362,7 @@ def main():
             verdict = (f"Skipping the hot A/B names changes avg net/trade by **{delta:+.1f}pp** vs taking everything"
                        f" — {'Finding A pays as a filter here' if delta > 0 else 'no edge from the filter yet'} "
                        "(small N, directional).")
-            w(verdict)
+            w(verdict + delta_caveat(skip_ab, allr, delta))
     else:
         w("- No 5-day-graded picks yet.")
     w("")
@@ -293,7 +408,7 @@ def main():
         if not kept:
             return "n=0", "—", "—"
         rs = [r for r, _ in kept]
-        return f"n={len(kept)}", f"{pct(sum(wv for _, wv in kept), len(kept)):.0f}%", f"{mean(rs):+.1f}%"
+        return f"n={len(kept)}", f"{pct(sum(wv for _, wv in kept), len(kept)):.0f}%", am(rs, "pre-registered filter arm")
 
     labels = {"ALL": "Baseline (all picks)", "F1": "H-F1 skip <$1", "F2": "H-F2 skip float≥3M",
               "F3": "H-F3 skip gap≥+20%", "F4": "H-F4 skip A/B (Finding A)", "CLEAN": "H-CLEAN (all filters)"}
@@ -315,7 +430,7 @@ def main():
             si_rows.append((si, r, int(o["win"]) if o.get("win") not in (None, "") else (1 if r > 0 else 0)))
 
     def f2(k):
-        return (f"n={len(k)}, win {pct(sum(wv for _, wv in k), len(k)):.0f}%, avg {mean([r for r, _ in k]):+.1f}%"
+        return (f"n={len(k)}, win {pct(sum(wv for _, wv in k), len(k)):.0f}%, avg {am([r for r, _ in k], 'H-SI arm')}"
                 if k else "n=0")
     w("**H-SI — short-interest cut (open question, two-sided):**")
     if si_rows:
@@ -376,7 +491,7 @@ def main():
         if not rs:
             w(f"| {name} | n=0 | — | — | — |"); return
         wr = pct(sum(1 for r in rs if r > 0), len(rs))
-        w(f"| {name} | n={len(rs)} | {wr:.0f}% | {mean(rs):+.1f}% | {med(rs):+.1f}% |")
+        w(f"| {name} | n={len(rs)} | {wr:.0f}% | {am(rs, name)} | {med(rs):+.1f}% |")
 
     w("| arm | n | win% | avg net | median |")
     w("|---|---|---|---|---|")
@@ -392,7 +507,7 @@ def main():
         dp = mean(post_e) - mean(post_b)
         tail = " Directional only until n≥30 per arm." if len(post_e) < 30 else ""
         w(f"- Post-registration expectancy delta (H-EX1 − baseline): **{dp:+.1f}pp** on "
-          f"n={len(post_e)}.{tail}")
+          f"n={len(post_e)}.{tail}" + delta_caveat(post_e, post_b, dp))
     else:
         w(f"- No post-{EX_REG} graded picks yet — fills in as picks logged after registration "
           "reach the 5-day grade (first ones land ~next week). The all-time row is in-sample "
@@ -445,7 +560,7 @@ def main():
         if not vals:
             w(f"| {name} | n=0 | — | — | — |"); return
         wr = pct(sum(1 for v in vals if v > 0), len(vals))
-        w(f"| {name} | n={len(vals)} | {wr:.0f}% | {mean(vals):+.1f}% | {med(vals):+.1f}% |")
+        w(f"| {name} | n={len(vals)} | {wr:.0f}% | {am(vals, name)} | {med(vals):+.1f}% |")
 
     all_rows, post_rows = ex2_rows(False), ex2_rows(True)
     if not all_rows:
@@ -475,7 +590,8 @@ def main():
             tail = " Directional only until n≥30." if len(post_rows) < 30 else ""
             w(f"- Post-registration expectancy delta (H-EX2 − H-EX1): **{dp:+.1f}pp** on "
               f"n={len(post_rows)} path-bearing picks. Positive ⇒ the stop earns its keep; "
-              f"a null/negative keeps H-EX1 stop-less.{tail}")
+              f"a null/negative keeps H-EX1 stop-less.{tail}"
+              + delta_caveat([r[2] for r in post_rows], [r[1] for r in post_rows], dp))
         else:
             w(f"- No post-{EX2_REG} path-bearing graded picks yet — the all-time row is "
               "in-sample context, **not** the test.")
@@ -512,7 +628,7 @@ def main():
         if not rs:
             return "n=0", "—", "—"
         wr = pct(sum(1 for r in rs if r > 0), len(rs))
-        return f"n={len(rs)}", f"{wr:.0f}%", f"{mean(rs):+.1f}%"
+        return f"n={len(rs)}", f"{wr:.0f}%", am(rs, "exit batch #2 arm")
 
     # (i) arms evaluable from the graded log alone (mfe_5d + closes). A +L% target that
     # fills realizes net (L − 2)%; unfilled exits at the 5-day close (already net).
@@ -678,7 +794,7 @@ def main():
         if rets:
             wins = sum(1 for x in rets if x > 0)
             w(f"- Graded: n={len(rets)}, win {pct(wins, len(rets)):.0f}%, "
-              f"median net {med(rets):+.1f}%, mean {mean(rets):+.1f}%.")
+              f"median net {med(rets):+.1f}%, mean {am(rets, 'v0.3 cohort')}.")
         else:
             w("- No v0.3 picks graded yet (grading lags 5 trading days).")
         w("- Candidate pool + non-published eligibles: `candidates.csv` "
@@ -690,6 +806,14 @@ def main():
     w(f"*Generated by weekly_report.py on {datetime.utcnow().isoformat()}Z. "
       "Forward log is the canonical record; backtest CSVs are gitignored and exploratory.*")
 
+    if _ONE_NOTES:
+        block = ["## ⚠️ One-stock sensitivity", "",
+                 "Some averages below are carried by a single pick. The pick is real and stays in "
+                 "every figure; each such mean is marked with a numbered † and the figure without it is given here. "
+                 "Read the median, which one pick cannot move, as the headline.", ""]
+        block += [f"- {n}" for n in _one_block()] + [""]
+        i = L.index("## 2. Realized performance (graded picks)")
+        L[i:i] = block
     _write(L, today)
 
 

@@ -646,10 +646,26 @@ async function main(){
   two.appendChild(c1);two.appendChild(c2);root.appendChild(two);
   const ordered=[...graded].sort((a,b)=> (byId[a.pick_id]?.trading_date||"").localeCompare(byId[b.pick_id]?.trading_date||"") || (a.graded_at||"").localeCompare(b.graded_at||""));
   let cum=0; const eq=ordered.map(o=>{cum+=num(o.ret_open_close_net)||0;return +cum.toFixed(1);});
+  /* ONE-STOCK SENSITIVITY (2026-09-23) — same rule as weekly_report.py / index.html. When a
+     single pick carries the mean, draw the curve without it as a dashed line so a reader
+     can see how much of the shape is one stock. The solid line (every pick) is unchanged. */
+  const _oc=ordered.map(o=>num(o.ret_open_close_net)).filter(v=>v!=null);
+  let one=null;
+  if(_oc.length>=3){
+    const s=_oc.reduce((a,v)=>a+v,0), m=s/_oc.length;
+    const topO=ordered.reduce((a,o)=>{const v=num(o.ret_open_close_net);return v!=null&&(a==null||Math.abs(v-m)>Math.abs(num(a.ret_open_close_net)-m))?o:a;},null);
+    const tv=num(topO.ret_open_close_net), mex=(s-tv)/(_oc.length-1), d=Math.abs(m-mex);
+    if(d>=0.5 && (d>=0.2*Math.abs(mex) || (m>0)!==(mex>0))){
+      const tp=byId[topO.pick_id]||{};
+      one={o:topO, top:tv, m, mex, label:`${(tp.ticker||topO.ticker||"?").toUpperCase()} ${tp.trading_date||topO.trading_date||""}`.trim()};
+    }
+  }
+  let cumX=0; const eqX=one?ordered.map(o=>{ if(o!==one.o) cumX+=num(o.ret_open_close_net)||0; return +cumX.toFixed(1);}):null;
   const gridc="#2a3240", dimc="#8b98a8";
   new Chart(c1.querySelector("canvas"),{type:"line",
-    data:{labels:eq.map((_,i)=>i+1),datasets:[{data:eq,borderColor:eq[eq.length-1]>=0?"#2ec27e":"#f0506e",borderWidth:2,pointRadius:0,fill:false,tension:.15}]},
-    options:{plugins:{legend:{display:false},title:{display:true,text:"Cumulative net % (open→close)",color:dimc}},scales:{x:{ticks:{color:dimc},grid:{color:gridc}},y:{ticks:{color:dimc},grid:{color:gridc}}}}});
+    data:{labels:eq.map((_,i)=>i+1),datasets:[{label:"every pick",data:eq,borderColor:eq[eq.length-1]>=0?"#2ec27e":"#f0506e",borderWidth:2,pointRadius:0,fill:false,tension:.15}]
+      .concat(one?[{label:`without ${one.label}`,data:eqX,borderColor:dimc,borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false,tension:.15}]:[])},
+    options:{plugins:{legend:{display:!!one,labels:{color:dimc,boxWidth:18}},title:{display:true,text:one?[`Cumulative net % (open→close)`,`dashed: without ${one.label} (${one.top>=0?"+":""}${one.top.toFixed(0)}%), one stock that carries the mean`]:"Cumulative net % (open→close)",color:dimc}},scales:{x:{ticks:{color:dimc},grid:{color:gridc}},y:{ticks:{color:dimc},grid:{color:gridc}}}}});
   const bins=[-100,-50,-30,-20,-10,0,10,20,30,50,200],labels2=["<−50","−50/−30","−30/−20","−20/−10","−10/0","0/10","10/20","20/30","30/50",">50"];
   const counts=new Array(labels2.length).fill(0);
   oc.forEach(v=>{for(let b=0;b<labels2.length;b++){if(v>=bins[b]&&v<bins[b+1]){counts[b]++;break;}}});
