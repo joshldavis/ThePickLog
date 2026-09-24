@@ -73,7 +73,7 @@ MAX_FILINGS_PER_TICKER = 6         # politeness cap on SEC document fetches per 
 
 # The model version is PINNED by the environment at gate 2; never "jev-latest".
 JEV_MODEL    = os.environ.get("JEV_MODEL", "")
-JEV_ENDPOINT = os.environ.get("JEV_ENDPOINT", "")     # set at gate 3 (gateway or direct)
+JEV_ENDPOINT = os.environ.get("JEV_ENDPOINT", "https://api.typesafe.ai/v1/systemone")  # docs.typesafe.ai/api
 JEV_API_KEY  = os.environ.get("JEV_API_KEY", "")
 
 
@@ -120,9 +120,9 @@ QUESTIONS = {
     },
     "listing_status": {
         "type": "choice",
-        "instructions": "What does this filing say about the registrant's exchange listing?",
+        "instructions": "What does this filing say about the registrant's exchange listing? If trading was halted or suspended, choose halt even when a delisting determination is also described; a halt that has already been lifted with compliance restored is regained_compliance.",
         "criteria": {
-            "none": "Listing is not discussed",
+            "none": "Listing is not discussed, or only a voluntary transfer between exchanges or tiers",
             "deficiency_notice": "The exchange notified the company it is out of compliance (bid price, equity, filing delinquency) and a cure period is running",
             "delisting_determination": "The exchange has determined to delist, or the company will be moved to OTC, or an appeal was denied",
             "halt": "Trading in the stock has been halted or suspended by the exchange or the SEC",

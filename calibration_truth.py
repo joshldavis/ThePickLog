@@ -68,11 +68,19 @@ ITEM_EVENTS = {"1.03": "bankruptcy", "4.01": "auditor_change", "4.02": "restatem
 
 
 def yahoo_reverse_splits(ticker, pace=0.6):
-    """[(date, N)] for reverse splits (ratio < 1) in Yahoo's history. [] on any failure."""
+    """[(date, N)] for reverse splits (ratio < 1) in Yahoo's history; None when the
+    query FAILED (rate limit, unknown ticker) — never confuse failure with 'no splits'."""
     try:
         import yfinance as yf
-        s = yf.Ticker(ticker).splits
+        tk = yf.Ticker(ticker)
+        s = tk.splits
         time.sleep(pace)
+        if s is None or len(s) == 0:
+            # empty can mean "no splits" or "no data at all": require a price history to exist
+            h = tk.history(period="5d")
+            time.sleep(pace)
+            if h is None or len(h) == 0:
+                return None
         out = []
         for ts, r in s.items():
             r = float(r)
@@ -80,7 +88,7 @@ def yahoo_reverse_splits(ticker, pace=0.6):
                 out.append((ts.date(), int(round(1.0 / r))))
         return out
     except Exception:
-        return []
+        return None
 
 
 def float_ratio_events(repo):
@@ -118,6 +126,7 @@ def main():
     ap.add_argument("--cal", default="calibration")
     ap.add_argument("--repo", default=os.path.dirname(os.path.abspath(__file__)))
     ap.add_argument("--no-yahoo", action="store_true")
+    ap.add_argument("--recheck-empty", action="store_true", help="re-query tickers whose cached split list is empty")
     args = ap.parse_args()
 
     rows = list(csv.DictReader(open(os.path.join(args.cal, "candidates.csv"))))
@@ -127,16 +136,20 @@ def main():
     ysplits = {}
     cache = os.path.join(args.cal, "yahoo_splits.json")
     if os.path.exists(cache):
-        ysplits = {t: [(date.fromisoformat(d), n) for d, n in v] for t, v in json.load(open(cache)).items()}
+        ysplits = {t: (None if v is None else [(date.fromisoformat(d), n) for d, n in v]) for t, v in json.load(open(cache)).items()}
         print(f"  yahoo splits from cache ({len(ysplits)} tickers)")
-    elif not args.no_yahoo:
-        for i, t in enumerate(tickers, 1):
+    if not args.no_yahoo:
+        missing = [t for t in tickers if ysplits.get(t) is None or (ysplits.get(t) == [] and args.recheck_empty)]
+        for i, t in enumerate(missing, 1):
             ysplits[t] = yahoo_reverse_splits(t)
             if i % 25 == 0:
-                print(f"  yahoo {i}/{len(tickers)}")
-        json.dump({t: [(d.isoformat(), n) for d, n in v] for t, v in ysplits.items()}, open(cache, "w"))
+                print(f"  yahoo {i}/{len(missing)} (new)")
+        if missing:
+            json.dump({t: (None if v is None else [(d.isoformat(), n) for d, n in v]) for t, v in ysplits.items()}, open(cache, "w"))
+    # A ticker with NO Yahoo entry (never queried, or the query failed) has no market truth:
+    # "no split" may only be asserted when the history was actually fetched.
     fsplits = float_ratio_events(args.repo)
-    print(f"yahoo reverse splits: {sum(len(v) for v in ysplits.values())}; "
+    print(f"yahoo reverse splits: {sum(len(v) for v in ysplits.values() if v)} ({sum(1 for v in ysplits.values() if v is None)} tickers unknown); "
           f"float-ratio events in candidates.csv: {sum(len(v) for v in fsplits.values())}")
 
     out = []
@@ -153,7 +166,7 @@ def main():
             setq(q, "", "", "")
 
         # ---- reverse split / ratio from the market (RULES v2) --------------------
-        allS = [(d, n, (d - fd).days) for d, n in ysplits.get(r["ticker"], [])]
+        allS = [(d, n, (d - fd).days) for d, n in (ysplits.get(r["ticker"]) or [])]
         near = [x for x in allS if -400 <= x[2] <= 75]
         eff = [x for x in allS if -30 <= x[2] <= 0]
         edge = [x for x in allS if 1 <= x[2] <= 3]
@@ -166,8 +179,8 @@ def main():
         t["yahoo_split_offset_days"] = win[0][2] if win else ""
         t["float_ratio_date"] = fwin[0][0] if fwin else ""
         t["float_ratio_n"] = fwin[0][1] if fwin else ""
-        if args.no_yahoo and not ysplits:
-            pass
+        if ysplits.get(r["ticker"]) is None:
+            pass                                   # no market data (query failed) -> reader decides
         elif not near:
             setq("reverse_split", "none", "high", "no_split_in_window")
             setq("split_ratio", "none", "high", "no_split_in_window")
