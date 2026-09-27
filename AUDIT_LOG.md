@@ -1,5 +1,42 @@
 # ThePickLog — Audit Log
 
+## 2026-09-26 — Weekly verifiability audit — **✅ All claims verify**
+
+*Snapshot: live build `9ddb917` (stamp "2026-09-26 07:57 ET"), CSVs fetched same-origin at ~13:10 UTC. Latest cohort 09-25, latest grade 09-25 23:45Z.*
+
+Every published figure re-derives from the two CSVs. No failures, no new gaps, no new holiday cohort. One new scale-mismatch exclusion (NCT) appeared this week, and the on-site note already names it.
+
+- **Data served.** `/picks.csv` 200, 254,517 bytes, 1,441 rows. `/outcomes.csv` 200, 164,923 bytes, 1,318 rows. All 23 static pages 200; all 44 distinct same-origin link/asset targets across them 200 (0 broken).
+- **Real data shown.** Track record renders the real log: 1,290 picks, 2026-06-09 → 2026-09-25. No sample fallback. "sample" appears twice: "out-of-sample" and a sentence about effective sample size.
+- **No silent gaps.** 70 distinct `trading_date`s. The only missing weekdays are the seven already declared: the 08-27 → 09-03 outage (closed history) and 09-14 (closed 09-23). 06-19 is still the only holiday cohort, still VOID and excluded. No weekend or holiday cohort this week. The Saturday 09-26 `data: scan` commit touched no `picks.csv` (only EOD experiment signals dated 09-25 + ledger). All nine cohorts since 09-15 publish between 07:56 and 08:29 ET. Since 09-16 every cohort lands at 07:56 ET (Vercel dispatch), inside the 06:00 floor and 09:20 cutoff.
+- **Claims == data.** Independent recompute matches the site exactly:
+  - Picks logged **1,290**, graded **1,155**, win rate **32%** (32.38: 374 W / 781 M).
+  - Median net **−2.9%** (−2.85), mean net **−2.7%** (−2.66), avg worst dip **−18.0%** (−17.99), 5-day swing **−6.4%** (−6.44).
+  - "62 trading days" = 63 dates in the shown set minus 06-19. ✓
+  - Tier table: n A 373 / B 83 / C 322 / D 377, tickers 274 / 51 / 20 / 16, mean −2.3 / −2.5 / −3.2 / −2.6, median −3.9 / −4.0 / −2.5 / −2.7. All match.
+  - Win rate by tier (computed; the page shows no by-tier win-rate figure): A 37.5 / B 34.9 / C 32.3 / D 26.8%.
+  - Overdue note "4 picks … (A: 4)" = AREN 09-04, GTBP/CTSO/LRHC 09-08. ✓
+- **One-stock sensitivity (new in `8ac1e8d`).** Re-ran the rule (≥0.5pp AND ≥20% of the remaining mean, or a sign flip). No tier mean or the all-picks mean is flagged, and none carries a †. Tier A is the near-miss: PFSA 08-18 (+210%) moves it 0.57pp against a 0.578 threshold. It will likely tip into a flag as the log moves. JAGX 09-22 (C) is still pending, so its expected effect on C has not happened yet.
+- **Exclusions reproduce.** All three were re-derived from scratch.
+  - Late: **128 across 7 cohorts**, same per-date counts as the note.
+  - Frozen-quote: **12 (BNZI 12)**.
+  - Scale-mismatch: **11** (VMAR 7, SUGP 1, CPHI 1, SLE 1, **NCT 1 — new this week**). The on-site note already lists NCT.
+  - Union 151; 1,441 − 151 = 1,290. ✓
+- **Honest grading.** All **1,293** rows carrying data reproduce (close/open − 1) − 2% (max deviation 0.005pp). 0 duplicate `pick_id`s in either file, 0 orphan outcomes, `win` consistent with the sign of the net on all 1,293. All 25 ungradeable rows carry a note: 14 phantom-holiday VOID, 9 no entry bar, 2 UNGRADEABLE partial-session. 0 empty notes.
+- **Chips reconcile.** Graded 1,155 + Pending 111 + Void 24 = All 1,290 ✓ (Wins 374 + Misses 781 = Graded).
+- **Disclaimers.** Present on index and method: educational, not advice, not an RIA or broker-dealer. disclaimer.html states not investment advice and not an RIA or broker-dealer. *Observation (not a fail, unchanged since before 09-19):* on disclaimer.html the word "educational" appears only in the `<meta name="description">`. The visible body says "research project, not investment advice". If "educational" is meant to be a reader-facing claim there, add it to the body copy. **Closed 09-27:** the lead panel now reads "published for educational and informational purposes only — not investment advice."
+- **Validity backing.**
+  - (a) Structural: tiers render as heat ("⚠ hot / ○ cool"; method §9 says "heat scale, not a quality grade"). Both tails widen monotonically A→D: mean MAE −23.54 / −18.84 / −15.33 / −14.60, mean MFE +45.32 / +34.85 / +19.28 / +15.66. All six pairwise clustered 95% CIs on mean net overlap (A [−4.3, −0.4], B [−4.8, 0.0], C [−4.2, −2.4], D [−3.2, −1.9]). The derived ordering sentence correctly says no ranking holds. A, C and D now separate from zero, all negative.
+  - (b) The "unvalidated" label is still present (15× on the index watchlist view, plus method §9). The Gate-1 verdict is not rendered here.
+  - (c) Messick framework, Domain-Coverage Spec and Structural Justification all return 200 and are linked from method.html. So are Empirical-Validity-Studies, Validity-Dossier-UG15 and Generalizability-and-Consequential. All six aspects are named on method.html.
+
+**Housekeeping (not a site defect).** The local clone is 12 commits behind `origin/main`. It also has another session's uncommitted work: this file's 09-25 H-RISK1 entry, `HYPOTHESES.md`, `experiment-01.html`, `risk_eval.py`, and untracked `calibration*` / `judge/` / `filing_lens.py`. This run only prepended this entry. It did not commit, pull or stage, so the other session's edits did not ship. Committing this file will carry the 09-25 entry with it, and that entry describes `experiment-01.html` changes that are not yet live. Ship them together or split them deliberately. No front-end changes, so nothing was deployed; no issue opened. **Follow-up 09-27:** the clone was fast-forwarded to `65a4508`; the incoming commits touched none of the dirty files. This entry and the disclaimer fix were committed on their own. The index copy of AUDIT_LOG.md was built from HEAD plus this entry only, so the 09-25 H-RISK1 entry and its sibling files stay uncommitted in the working tree for their session to ship.
+
+**Grading in the coming week.** 111 pending.
+- **09-21 (21) → ~09-28**, **09-22 (21) → ~09-29**, **09-23 (20) → ~09-30**, **09-24 (22) → ~10-01**, **09-25 (22) → ~10-02**.
+- Stragglers: PHGE 09-16 (A, one session inside the slack window) should clear or go overdue by ~09-29. AREN 09-04 and GTBP / CTSO / LRHC 09-08 are already overdue and will most likely resolve with an explicit UNGRADEABLE note.
+- Watch **JAGX 09-22 (C)**: the ~12× open→close day `8ac1e8d` was built for. Its grade should trigger the one-stock † on tier C and possibly on the all-picks mean. Next week's audit should confirm the flag renders.
+
 ## 2026-09-23 — Both 09-19 observations closed; the seal stays as designed
 
 Both observations from the 09-19 audit are shipped, and one of them closed the opposite way from what the audit prescribed.
