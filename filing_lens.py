@@ -32,9 +32,9 @@ DESIGN RULES (same discipline as edgar_lens / quote_integrity)
   • THE CLASSIFIER NEVER ACTS ALONE: route() returns auto / review / ignore. "auto"
     means "hand this to an existing, independently verifiable check" — it does not
     void a row or change a count by itself.
-  • THRESHOLDS ARE PLACEHOLDERS until the gate-2 calibration run sets them from a
-    published curve. They live in one place (THRESHOLDS) and are versioned with the
-    questions (QUESTIONS_SHA256) and the model.
+  • THRESHOLDS live in one place (THRESHOLDS) and are versioned with the questions
+    (QUESTIONS_SHA256) and the model. Each calibrated entry cites its run; the rest
+    are still placeholders, and shadow mode (gate 3) only logs their routing.
 
 GATES
   1. (this file) pure core + --selftest, no network, no key.
@@ -58,7 +58,7 @@ import time
 from datetime import date, datetime, timezone
 from html.parser import HTMLParser
 
-__version__ = "0.1.0-gate1"
+__version__ = "0.2.0-gate2"
 
 # ---------------------------------------------------------------------------
 # Tunables (explicit, auditable)
@@ -199,15 +199,28 @@ QUESTIONS = QUESTIONS_BY_VERSION[QUESTIONS_VERSION]
 QUESTIONS_SHA256 = _qsha(QUESTIONS)
 
 # ---------------------------------------------------------------------------
-# THRESHOLDS — PLACEHOLDERS until gate 2. (question, value) -> (auto_floor, review_floor).
+# THRESHOLDS. (question, value) -> (auto_floor, review_floor).
+#   CALIBRATED (cited below): reverse_split/effective, listing_status/halt,
+#   listing_status/delisting_determination. Everything else is still a PLACEHOLDER.
 # A value not listed routes "ignore" whatever its probability ("none" answers,
 # regained_compliance, etc.). always_review overrides the band.
 # ---------------------------------------------------------------------------
 THRESHOLDS = {
+    # split-v2 test, REGISTRATION-split-v2.md, labels frozen 945e3ad before any call:
+    # 24/24 precision at 0.90 on 196 held-out 2024 8-Ks (30 labeled effective), 0 of 30
+    # re-asks changed. Auto ONLY for 8-Ks carrying Item 5.03/3.03 (SPLIT_AUTO_ITEMS),
+    # review below 0.90 (run 2 measured up to 0.10 of run-to-run drift; the registered
+    # [0.80, 0.90) band is inside [0.60, 0.90), and 2 of the 6 true effectives it
+    # missed sat at 0.60 and 0.79, so a higher review floor would drop real splits).
     ("reverse_split", "effective"):             (0.90, 0.60),
     ("reverse_split", "announced"):             (0.90, 0.60),
+    # calibration run 2 (2026-09-25, 543 filings, calibration/run_jev-1.13.0_2026-09-25/
+    # result.json): halt 20/21 = 0.952 at 0.90 (0.95 reached from 0.79 up);
+    # delisting 10/10 at 0.90 (from 0.56 up). Auto floor kept at 0.90, above both
+    # measured floors by the 0.10 drift margin; below it everything is review.
     ("listing_status", "halt"):                 (0.90, 0.60),
     ("listing_status", "delisting_determination"): (0.90, 0.60),
+    # PLACEHOLDER. Run 2 measured 0.911 precision at 0.85 (0.95 only from 0.94 up).
     ("listing_status", "deficiency_notice"):    (0.85, 0.60),
     ("dilution_event", "priced_offering"):      (0.85, 0.60),
     ("dilution_event", "private_placement"):    (0.85, 0.60),
@@ -219,15 +232,27 @@ THRESHOLDS = {
     ("other_material", "auditor_change"):       (0.85, 0.60),
 }
 ALWAYS_REVIEW = {("other_material", "bankruptcy")}
-# reverse_split FAILED its registered bar in calibration run 2 (2026-09-25: effective
-# precision 0.833 at 0.90 vs 0.95). Until the v2 test passes, no split answer may act on
-# its own; the best it can do is put a filing in the review queue.
+# reverse_split FAILED its registered bar in calibration run 2 (v1 question: effective
+# precision 0.833 at 0.90 vs 0.95). The v2 question PASSED its pre-registered test, so
+# "effective" may route auto, but only under the v2 question block and only for 8-Ks
+# with Item 5.03/3.03 (the population it was tested on). Every other split answer,
+# including "announced", can at most put a filing in the review queue.
 NO_AUTO = {"reverse_split"}
+SPLIT_AUTO_ITEMS = {"5.03", "3.03"}
+SPLIT_AUTO_QUESTIONS = {"v2"}
+
+
+def _split_auto_ok(value, filing):
+    if value != "effective" or not filing or QUESTIONS_VERSION not in SPLIT_AUTO_QUESTIONS:
+        return False
+    form = str(filing.get("form", ""))
+    return form in ("8-K", "8-K/A") and bool(set(_items_of(filing.get("items", ""))) & SPLIT_AUTO_ITEMS)
 THRESHOLDS_VERSION = os.environ.get("FILING_LENS_SHA", "")   # git short SHA, set by the Action
 
 
-def route(question, value, p, truncated=False):
-    """auto / review / ignore for one answer. Pure."""
+def route(question, value, p, truncated=False, filing=None):
+    """auto / review / ignore for one answer. Pure. `filing` (form, items) is needed
+    only for the scoped reverse_split auto route; without it splits never auto."""
     key = (question, value)
     if truncated and value not in ("none", "no"):
         return "review"                                  # partial text, never auto
@@ -243,7 +268,9 @@ def route(question, value, p, truncated=False):
     except (TypeError, ValueError):
         return "review"
     if p >= auto_floor:
-        return "review" if question in NO_AUTO else "auto"
+        if question in NO_AUTO and not (question == "reverse_split" and _split_auto_ok(value, filing)):
+            return "review"
+        return "auto"
     if p >= review_floor:
         return "review"
     return "ignore"
@@ -427,8 +454,8 @@ def parse_answers(resp, expected_model=None):
     return out
 
 
-def route_all(answers, truncated=False):
-    return {q: route(q, a["value"], a["p"], truncated) for q, a in answers.items()}
+def route_all(answers, truncated=False, filing=None):
+    return {q: route(q, a["value"], a["p"], truncated, filing) for q, a in answers.items()}
 
 
 # ---------------------------------------------------------------------------
@@ -515,7 +542,7 @@ def classify_filing(filing, raw_doc, call, model=None, pick_id="", ticker="", ci
     response = call(request)
     latency = int((time.time() - t0) * 1000)
     answers = parse_answers(response, expected_model=model)     # raises VersionDrift
-    routing = route_all(answers, truncated)
+    routing = route_all(answers, truncated, filing)
     rec = log_record(pick_id, ticker, cik, filing, text, request, response, answers, routing,
                      truncated, latency)
     return {"filing": filing, "text": text, "truncated": truncated, "model": model,
@@ -721,7 +748,8 @@ def _selftest():
     s = res["split"]
     assert s["answers"]["reverse_split"]["value"] == "effective" and s["answers"]["reverse_split"]["p"] == 0.94, s["answers"]
     assert s["answers"]["split_ratio"]["value"] == "1-for-20", s["answers"]["split_ratio"]
-    assert s["routing"]["reverse_split"] == "review", s["routing"]   # NO_AUTO
+    exp = "auto" if QUESTIONS_VERSION in SPLIT_AUTO_QUESTIONS else "review"
+    assert s["routing"]["reverse_split"] == exp, s["routing"]   # 8-K 5.03, p 0.94: scoped auto under v2
     assert s["routing"]["split_ratio"] == "ignore" and s["routing"]["going_concern"] == "ignore", s["routing"]
     assert s["answers"]["going_concern"] == {"value": "no", "p": 0.97, "confidence": "", "probabilities": {"yes": 0.03, "no": 0.97}}
 
@@ -733,7 +761,14 @@ def _selftest():
     assert all(v == "ignore" for v in r["routing"].values()), r["routing"]
 
     # --- routing bands + special cases ------------------------------------------
-    assert route("reverse_split", "effective", 0.95) == "review", "NO_AUTO: split answers never act alone"
+    assert route("reverse_split", "effective", 0.95) == "review", "no filing context -> split never auto"
+    k503 = {"form": "8-K", "items": "5.03,9.01"}
+    assert route("reverse_split", "effective", 0.95, filing=k503) == ("auto" if QUESTIONS_VERSION in SPLIT_AUTO_QUESTIONS else "review")
+    assert route("reverse_split", "effective", 0.85, filing=k503) == "review", "drift band [0.80, 0.90) is review"
+    assert route("reverse_split", "effective", 0.95, filing={"form": "8-K", "items": "8.01"}) == "review", "outside tested scope"
+    assert route("reverse_split", "effective", 0.95, filing={"form": "10-Q", "items": ""}) == "review", "outside tested scope"
+    assert route("reverse_split", "announced", 0.99, filing=k503) == "review", "announced never auto"
+    assert route("reverse_split", "effective", 0.95, truncated=True, filing=k503) == "review"
     assert route("listing_status", "halt", 0.95) == "auto"
     assert route("reverse_split", "effective", 0.75) == "review"
     assert route("reverse_split", "effective", 0.40) == "ignore"

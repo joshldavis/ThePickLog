@@ -1,0 +1,661 @@
+{
+  "meta": {
+    "run_date": "2026-09-28",
+    "model": "jev-1.13.0",
+    "scored": 196,
+    "skipped": {},
+    "n_skipped": 0,
+    "seed": 7,
+    "audit_overrides": 0,
+    "label_corrections": 0,
+    "questions_sha256": "394e6c22687a3ce282e839b69041d31418df6135e1e9267c077967db71726c6a",
+    "lens_version": "0.1.0-gate1",
+    "questions_version": "v2",
+    "pass_bar": {
+      "ece_max": 0.05,
+      "top_bin_min_accuracy": 0.9,
+      "auto_precision_min": {
+        "reverse_split:effective": 0.95,
+        "listing_status:halt": 0.95,
+        "listing_status:delisting_determination": 0.95
+      },
+      "split_ratio_conditional_accuracy_min": 0.95,
+      "min_positives_to_score": 30
+    }
+  },
+  "verdicts": {
+    "reverse_split": {
+      "verdict": "FAIL",
+      "reasons": [
+        "ECE 0.0633 > 0.05"
+      ]
+    },
+    "split_ratio": {
+      "verdict": "FAIL",
+      "reasons": [
+        "ECE 0.0546 > 0.05"
+      ]
+    },
+    "listing_status": {
+      "verdict": "PASS*",
+      "reasons": [
+        "halt: only 1 positives (<30) \u2014 UNDERPOWERED, not gated",
+        "delisting_determination: only 1 positives (<30) \u2014 UNDERPOWERED, not gated"
+      ]
+    },
+    "dilution_event": {
+      "verdict": "PASS",
+      "reasons": []
+    },
+    "going_concern": {
+      "verdict": "FAIL",
+      "reasons": [
+        "ECE 0.0582 > 0.05"
+      ]
+    },
+    "other_material": {
+      "verdict": "FAIL",
+      "reasons": [
+        "ECE 0.0694 > 0.05"
+      ]
+    }
+  },
+  "scores": {
+    "reverse_split": {
+      "n": 196,
+      "accuracy": 0.9847,
+      "ece": 0.0633,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 1,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 2,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 2,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 1,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 4,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 186,
+          "accuracy": 1.0
+        }
+      ],
+      "top_bin": {
+        "n": 186,
+        "accuracy": 1.0
+      },
+      "per_value": {
+        "effective": {
+          "labeled_positives": 30,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.8,
+          "n_predicted_at_floor": 24,
+          "floor_for_0.95_precision": 0.5
+        },
+        "announced": {
+          "labeled_positives": 29,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 29,
+          "floor_for_0.95_precision": 0.5
+        }
+      },
+      "per_value_8k": {
+        "effective": {
+          "labeled_positives": 30,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.8,
+          "n_predicted_at_floor": 24,
+          "floor_for_0.95_precision": 0.5
+        },
+        "announced": {
+          "labeled_positives": 29,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 29,
+          "floor_for_0.95_precision": 0.5
+        }
+      },
+      "n_8k": 196
+    },
+    "split_ratio": {
+      "n": 196,
+      "accuracy": 0.9949,
+      "ece": 0.0546,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 1,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 1,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 0
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 0
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 1,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 193,
+          "accuracy": 1.0
+        }
+      ],
+      "top_bin": {
+        "n": 193,
+        "accuracy": 1.0
+      },
+      "per_value": {},
+      "per_value_8k": {},
+      "n_8k": 196,
+      "conditional": {
+        "n": 59,
+        "accuracy": 1.0
+      }
+    },
+    "listing_status": {
+      "n": 196,
+      "accuracy": 0.9541,
+      "ece": 0.0434,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 6,
+          "accuracy": 0.6667
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 3,
+          "accuracy": 0.6667
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 2,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 5,
+          "accuracy": 0.6
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 180,
+          "accuracy": 0.9833
+        }
+      ],
+      "top_bin": {
+        "n": 180,
+        "accuracy": 0.9833
+      },
+      "per_value": {
+        "halt": {
+          "labeled_positives": 1,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": null,
+          "recall_at_floor": 0.0,
+          "n_predicted_at_floor": 0,
+          "floor_for_0.95_precision": null
+        },
+        "delisting_determination": {
+          "labeled_positives": 1,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 1,
+          "floor_for_0.95_precision": null
+        },
+        "deficiency_notice": {
+          "labeled_positives": 6,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.5,
+          "n_predicted_at_floor": 3,
+          "floor_for_0.95_precision": null
+        }
+      }
+    },
+    "dilution_event": {
+      "n": 196,
+      "accuracy": 0.8878,
+      "ece": 0.0357,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 2,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 4,
+          "accuracy": 0.75
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 9,
+          "accuracy": 0.4444
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 10,
+          "accuracy": 0.6
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 17,
+          "accuracy": 0.7647
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 154,
+          "accuracy": 0.9481
+        }
+      ],
+      "top_bin": {
+        "n": 154,
+        "accuracy": 0.9481
+      },
+      "per_value": {
+        "priced_offering": {
+          "labeled_positives": 7,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.5714,
+          "n_predicted_at_floor": 4,
+          "floor_for_0.95_precision": 0.5
+        },
+        "private_placement": {
+          "labeled_positives": 17,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.2353,
+          "n_predicted_at_floor": 4,
+          "floor_for_0.95_precision": 0.63
+        },
+        "atm_or_equity_line": {
+          "labeled_positives": 1,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 1,
+          "floor_for_0.95_precision": null
+        },
+        "convertible_or_warrants": {
+          "labeled_positives": 43,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.7619,
+          "recall_at_floor": 0.7442,
+          "n_predicted_at_floor": 42,
+          "floor_for_0.95_precision": 0.99
+        }
+      }
+    },
+    "going_concern": {
+      "n": 196,
+      "accuracy": 0.9847,
+      "ece": 0.0582,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 2,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 0
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 0
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 2,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 192,
+          "accuracy": 1.0
+        }
+      ],
+      "top_bin": {
+        "n": 192,
+        "accuracy": 1.0
+      },
+      "per_value": {
+        "yes": {
+          "labeled_positives": 1,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.5,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 2,
+          "floor_for_0.95_precision": null
+        }
+      }
+    },
+    "other_material": {
+      "n": 196,
+      "accuracy": 0.9643,
+      "ece": 0.0694,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 1,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 3,
+          "accuracy": 0.3333
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 5,
+          "accuracy": 0.4
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 4,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 5,
+          "accuracy": 0.6
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 178,
+          "accuracy": 1.0
+        }
+      ],
+      "top_bin": {
+        "n": 178,
+        "accuracy": 1.0
+      },
+      "per_value": {
+        "bankruptcy": {
+          "labeled_positives": 0,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": null,
+          "recall_at_floor": null,
+          "n_predicted_at_floor": 0,
+          "floor_for_0.95_precision": null
+        },
+        "restatement": {
+          "labeled_positives": 1,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 1,
+          "floor_for_0.95_precision": null
+        },
+        "auditor_change": {
+          "labeled_positives": 2,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 2,
+          "floor_for_0.95_precision": null
+        }
+      }
+    }
+  }
+}
