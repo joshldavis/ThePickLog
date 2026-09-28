@@ -27,7 +27,8 @@ NOTHING HERE TOUCHES filing_lens.THRESHOLDS. Threshold changes are a separate co
 that cites this run's result.json by path and sha.
 
 USAGE
-  python3 calibration_run.py --cal calibration   # reads ../jev.env (outside the repo)
+  python3 calibration_run.py --cal calibration   # reads ../jev.env (outside the repo); question block v2
+  FILING_LENS_QUESTIONS=v1 python3 calibration_run.py --cal calibration   # re-score runs 1-2 exactly
   JEV_ENV_FILE=/path/to/other.env python3 calibration_run.py --cal calibration
   python3 calibration_run.py --cal calibration --fake        # plumbing test, no key
 NOT INVESTMENT ADVICE.
@@ -299,7 +300,8 @@ def main():
         print(f"key loaded from {os.path.abspath(_ENV) if _ENV_LOADED else 'environment'} "
               f"(…{fl.JEV_API_KEY[-4:]}); model {model}; endpoint {fl.JEV_ENDPOINT}")
         call = fl.call_jev
-    run_dir = os.path.join(args.cal, f"run_{model}")
+    # v1 keeps its original folder name so runs 1-2 re-score from cache; later versions get their own
+    run_dir = os.path.join(args.cal, f"run_{model}" if fl.QUESTIONS_VERSION == "v1" else f"run_{model}_{fl.QUESTIONS_VERSION}")
     os.makedirs(os.path.join(run_dir, "responses"), exist_ok=True)
 
     cands = list(csv.DictReader(open(os.path.join(args.cal, "candidates.csv"))))
@@ -327,7 +329,7 @@ def main():
     verd = verdicts(res)
     meta = {"run_date": date.today().isoformat(), "model": model, "scored": len(rows), "skipped": dict(skipped), "n_skipped": sum(skipped.values()),
             "seed": args.seed, "audit_overrides": overrides, "label_corrections": n_corr, "questions_sha256": fl.QUESTIONS_SHA256,
-            "lens_version": fl.__version__,
+            "lens_version": fl.__version__, "questions_version": fl.QUESTIONS_VERSION,
             "pass_bar": {k: ({f"{a}:{b}": x for (a, b), x in v.items()} if isinstance(v, dict) else v) for k, v in PASS_BAR.items()}}
     result = {"meta": meta, "verdicts": {q: {"verdict": v[0], "reasons": v[1]} for q, v in verd.items()}, "scores": res}
     json.dump(result, open(os.path.join(run_dir, f"result{tag}.json"), "w"), indent=2, default=str)

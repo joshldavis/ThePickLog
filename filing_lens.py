@@ -166,7 +166,37 @@ QUESTION_ORDER = list(QUESTIONS.keys())
 def _sha(s):
     return hashlib.sha256(s.encode("utf-8") if isinstance(s, str) else s).hexdigest()
 
-QUESTIONS_SHA256 = _sha(json.dumps(QUESTIONS, sort_keys=True, separators=(",", ":")))
+
+def _qsha(qs):
+    return _sha(json.dumps(qs, sort_keys=True, separators=(",", ":")))
+
+
+# ---- question versions ------------------------------------------------------
+# v1 = the block used by calibration runs 1 (2026-09-23) and 2 (2026-09-25); kept
+# verbatim so those results re-score exactly from cache.
+# v2 (registered 2026-09-28, REGISTRATION-split-v2.md) changes ONLY reverse_split: run 2
+# showed its misses were filings that recite an already-completed split; v1's question
+# never said that counts as "historical". Every other question is byte-identical.
+import copy as _copy
+QUESTIONS_V1 = _copy.deepcopy(QUESTIONS)
+QUESTIONS_V2 = _copy.deepcopy(QUESTIONS)
+QUESTIONS_V2["reverse_split"] = {
+    "type": "choice",
+    "instructions": ("Is a reverse stock split of the registrant's common stock one of the events THIS filing reports, "
+                     "and if so, does it take effect before or after the filing date? A split that the filing mentions "
+                     "as already completed and reported earlier (for example 'as previously disclosed', a recap of recent "
+                     "developments, or an explanation of adjusted share counts) is historical, not effective."),
+    "criteria": {
+        "none": "No reverse split is mentioned; or only a forward split; or shareholders approved a range of ratios and no specific ratio has been fixed",
+        "announced": "This filing reports that a specific ratio has been fixed and the split takes effect after the filing date, or on a date not yet set",
+        "effective": "This filing reports the split as its own event, and the split took effect on or before the filing date, including earlier the same day",
+        "historical": "The filing mentions a reverse split that was completed and reported before this filing, as background or a recap",
+    },
+}
+QUESTIONS_BY_VERSION = {"v1": QUESTIONS_V1, "v2": QUESTIONS_V2}
+QUESTIONS_VERSION = os.environ.get("FILING_LENS_QUESTIONS", "v2")
+QUESTIONS = QUESTIONS_BY_VERSION[QUESTIONS_VERSION]
+QUESTIONS_SHA256 = _qsha(QUESTIONS)
 
 # ---------------------------------------------------------------------------
 # THRESHOLDS — PLACEHOLDERS until gate 2. (question, value) -> (auto_floor, review_floor).
@@ -189,6 +219,10 @@ THRESHOLDS = {
     ("other_material", "auditor_change"):       (0.85, 0.60),
 }
 ALWAYS_REVIEW = {("other_material", "bankruptcy")}
+# reverse_split FAILED its registered bar in calibration run 2 (2026-09-25: effective
+# precision 0.833 at 0.90 vs 0.95). Until the v2 test passes, no split answer may act on
+# its own; the best it can do is put a filing in the review queue.
+NO_AUTO = {"reverse_split"}
 THRESHOLDS_VERSION = os.environ.get("FILING_LENS_SHA", "")   # git short SHA, set by the Action
 
 
@@ -209,7 +243,7 @@ def route(question, value, p, truncated=False):
     except (TypeError, ValueError):
         return "review"
     if p >= auto_floor:
-        return "auto"
+        return "review" if question in NO_AUTO else "auto"
     if p >= review_floor:
         return "review"
     return "ignore"
@@ -344,7 +378,7 @@ def est_tokens(text):
 #   request:  {"model", "state": {...}, "questions": {...}}
 #   response: {"model", "answers": {q: {"choice"|"noul", "probabilities", "confidence"}}, "usage"}
 # ---------------------------------------------------------------------------
-def build_request(filing, text, model=None):
+def build_request(filing, text, model=None, questions=None):
     model = model or JEV_MODEL
     return {
         "model": model,
@@ -354,7 +388,7 @@ def build_request(filing, text, model=None):
             "filing_date": filing.get("filingDate", ""),
             "text": text,
         },
-        "questions": QUESTIONS,
+        "questions": questions if questions is not None else QUESTIONS,
     }
 
 
@@ -687,7 +721,7 @@ def _selftest():
     s = res["split"]
     assert s["answers"]["reverse_split"]["value"] == "effective" and s["answers"]["reverse_split"]["p"] == 0.94, s["answers"]
     assert s["answers"]["split_ratio"]["value"] == "1-for-20", s["answers"]["split_ratio"]
-    assert s["routing"]["reverse_split"] == "auto", s["routing"]
+    assert s["routing"]["reverse_split"] == "review", s["routing"]   # NO_AUTO
     assert s["routing"]["split_ratio"] == "ignore" and s["routing"]["going_concern"] == "ignore", s["routing"]
     assert s["answers"]["going_concern"] == {"value": "no", "p": 0.97, "confidence": "", "probabilities": {"yes": 0.03, "no": 0.97}}
 
@@ -699,7 +733,8 @@ def _selftest():
     assert all(v == "ignore" for v in r["routing"].values()), r["routing"]
 
     # --- routing bands + special cases ------------------------------------------
-    assert route("reverse_split", "effective", 0.95) == "auto"
+    assert route("reverse_split", "effective", 0.95) == "review", "NO_AUTO: split answers never act alone"
+    assert route("listing_status", "halt", 0.95) == "auto"
     assert route("reverse_split", "effective", 0.75) == "review"
     assert route("reverse_split", "effective", 0.40) == "ignore"
     assert route("reverse_split", "effective", 0.95, truncated=True) == "review", "truncated never auto"
