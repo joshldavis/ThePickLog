@@ -45,6 +45,7 @@ GATES
 USAGE
   python3 filing_lens.py --selftest              # offline logic test (no network)
   python3 filing_lens.py --ticker JAGX --dry-run # SEC only: which filings WOULD be read
+  python3 filing_lens.py --shadow                # gate 3: read today's logged picks, log only
 NOT INVESTMENT ADVICE.
 """
 import argparse
@@ -852,8 +853,89 @@ def _selftest():
     snap5 = snapshot("EXMP", "0001234567", recent, asof, dry_run=True)
     assert snap5["fl_filings_read"] == 3 and snap5["fl_note"].startswith("dry_run:"), snap5
 
+    # --- gate 3 shadow: idempotent, capped, logs only -------------------------------
+    import tempfile, csv as _csv
+    td = tempfile.mkdtemp()
+    pp, lp = os.path.join(td, "picks.csv"), os.path.join(td, "ev.jsonl")
+    with open(pp, "w", newline="") as fh:
+        w = _csv.writer(fh); w.writerow(["pick_id", "trading_date", "ticker"])
+        w.writerows([["p1", "2026-09-22", "EXMP"], ["p2", "2026-09-22", "NOCIK"], ["p3", "2026-09-21", "EXMP"]])
+    rec = {"form": [sel[1]["form"]], "filingDate": [sel[1]["filingDate"]], "items": [sel[1]["items"]],
+           "accessionNumber": [sel[1]["accession"]], "primaryDocument": [sel[1]["primaryDocument"]]}
+    kw = dict(picks_path=pp, log_path=lp, call=_fake_jev, fetch=lambda u: _CANNED["split"],
+              recent_of=lambda c: rec, cik_of=lambda t: "" if t == "NOCIK" else "0001234567")
+    JEV_MODEL = MODEL
+    try:
+        s1 = shadow("2026-09-22", **kw)
+        lines = [json.loads(l) for l in open(lp)]
+        s2 = shadow("2026-09-22", **kw)
+        s3 = shadow("2026-09-22", max_reads=0, **dict(kw, log_path=os.path.join(td, "e2.jsonl")))
+    finally:
+        JEV_MODEL = saved
+    assert (s1["picks"], s1["read"], s1["no_cik"], s1["errors"]) == (2, 1, 1, 0), s1
+    assert len(lines) == 1 and lines[0]["pick_id"] == "p1" and lines[0]["model"] == MODEL, [l["pick_id"] for l in lines]
+    assert s2["skipped_logged"] == 1 and s2["read"] == 0 and len(open(lp).readlines()) == 1, "idempotent"
+    assert s3["cap_reached"] and not os.path.exists(os.path.join(td, "e2.jsonl")), s3
+
     print(f"filing_lens selftest OK  (lens {__version__}, questions sha {QUESTIONS_SHA256[:12]}, "
           f"{len(QUESTION_ORDER)} questions, {len(FL_FIELDS)} sidecar fields)")
+
+
+# ---------------------------------------------------------------------------
+# GATE 3 — SHADOW MODE. Runs as its own workflow step AFTER the scan has logged and
+# committed nothing yet depends on it: it reads picks.csv for one trading date, reads
+# each pick's prefiltered filings through Jev, and appends to filing_events.jsonl.
+# LOGS ONLY. Nothing here writes picks.csv / edgar_snapshot.csv, and no routing value
+# acts on anything; the log is what a later gate is judged on. It runs outside the scan
+# on purpose: the pre-open rule must never wait on an outside model.
+# ---------------------------------------------------------------------------
+def shadow(trading_date, picks_path="picks.csv", log_path="filing_events.jsonl", max_reads=40,
+           call=None, fetch=None, recent_of=None, cik_of=None):
+    """-> summary dict. Idempotent: a pick_id already in the log is never re-read, so a
+    re-run or a retried workflow cannot double-log or double-spend."""
+    import csv
+    summary = {"trading_date": trading_date, "picks": 0, "skipped_logged": 0, "read": 0,
+               "no_cik": 0, "errors": 0, "cap_reached": False, "notes": []}
+    if not (JEV_API_KEY and JEV_MODEL) and call is None:
+        summary["notes"].append("no_key: shadow skipped")
+        return summary
+    call = call or call_jev
+    fetch = fetch or fetch_doc
+    if recent_of is None:
+        from edgar_lens import submissions_recent as recent_of
+    if cik_of is None:
+        from asof_grader import ticker_to_cik as cik_of
+    done = set()
+    if os.path.exists(log_path):
+        for line in open(log_path):
+            try:
+                done.add(json.loads(line).get("pick_id", ""))
+            except ValueError:
+                continue
+    rows = [r for r in csv.DictReader(open(picks_path)) if r.get("trading_date") == trading_date]
+    summary["picks"] = len(rows)
+    for r in rows:
+        if r["pick_id"] in done:
+            summary["skipped_logged"] += 1
+            continue
+        if summary["read"] >= max_reads:
+            summary["cap_reached"] = True
+            break
+        try:
+            cik = cik_of(r["ticker"])
+            if not cik:
+                summary["no_cik"] += 1
+                continue
+            recent = recent_of(cik)
+            out = snapshot(r["ticker"], cik, recent, trading_date, pick_id=r["pick_id"],
+                           call=call, fetch=fetch, log_path=log_path)
+            summary["read"] += int(out.get("fl_filings_read") or 0)
+            if out.get("fl_note"):
+                summary["notes"].append(f"{r['ticker']}:{out['fl_note'][:80]}")
+        except Exception as e:                      # one ticker never stops the rest
+            summary["errors"] += 1
+            summary["notes"].append(f"{r['ticker']}:{type(e).__name__}")
+    return summary
 
 
 def main():
@@ -862,9 +944,25 @@ def main():
     ap.add_argument("--ticker")
     ap.add_argument("--asof", default=date.today().isoformat())
     ap.add_argument("--dry-run", action="store_true", help="SEC only: list the filings that would be read")
+    ap.add_argument("--shadow", action="store_true", help="gate 3: read the picks logged for --date, log only")
+    ap.add_argument("--date", default=None, help="trading date for --shadow (default: today, America/New_York)")
+    ap.add_argument("--max-reads", type=int, default=int(os.environ.get("FILING_LENS_MAX_READS", "40")))
     args = ap.parse_args()
     if args.selftest:
         _selftest(); return
+    if args.shadow:
+        d = args.date
+        if not d:
+            try:
+                from zoneinfo import ZoneInfo
+                d = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
+            except Exception:
+                d = date.today().isoformat()
+        try:
+            s = shadow(d, max_reads=args.max_reads)
+        except Exception as e:                      # shadow mode can never fail a run
+            s = {"trading_date": d, "fatal": f"{type(e).__name__}: {str(e)[:120]}"}
+        print("filing_lens shadow:", json.dumps(s)); return
     if args.ticker:
         from edgar_lens import submissions_recent
         from asof_grader import ticker_to_cik
