@@ -1,0 +1,656 @@
+{
+  "meta": {
+    "run_date": "2026-09-25",
+    "model": "jev-1.13.0",
+    "scored": 543,
+    "skipped": {},
+    "n_skipped": 0,
+    "seed": 7,
+    "audit_overrides": 0,
+    "label_corrections": 0,
+    "questions_sha256": "6be36476189ab9339d97e5061f4036140f0c2adf51cfd64af78a38588e4534b8",
+    "lens_version": "0.1.0-gate1",
+    "pass_bar": {
+      "ece_max": 0.05,
+      "top_bin_min_accuracy": 0.9,
+      "auto_precision_min": {
+        "reverse_split:effective": 0.95,
+        "listing_status:halt": 0.95,
+        "listing_status:delisting_determination": 0.95
+      },
+      "split_ratio_conditional_accuracy_min": 0.95,
+      "min_positives_to_score": 30
+    }
+  },
+  "verdicts": {
+    "reverse_split": {
+      "verdict": "FAIL",
+      "reasons": [
+        "effective: precision 0.8333 at floor 0.9 < 0.95"
+      ]
+    },
+    "split_ratio": {
+      "verdict": "PASS",
+      "reasons": []
+    },
+    "listing_status": {
+      "verdict": "PASS",
+      "reasons": []
+    },
+    "dilution_event": {
+      "verdict": "PASS",
+      "reasons": []
+    },
+    "going_concern": {
+      "verdict": "PASS",
+      "reasons": []
+    },
+    "other_material": {
+      "verdict": "PASS",
+      "reasons": []
+    }
+  },
+  "scores": {
+    "reverse_split": {
+      "n": 543,
+      "accuracy": 0.9153,
+      "ece": 0.0367,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 2,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 2,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 11,
+          "accuracy": 0.5455
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 14,
+          "accuracy": 0.2143
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 13,
+          "accuracy": 0.4615
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 501,
+          "accuracy": 0.9601
+        }
+      ],
+      "top_bin": {
+        "n": 501,
+        "accuracy": 0.9601
+      },
+      "per_value": {
+        "effective": {
+          "labeled_positives": 61,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 0.8333,
+          "recall_at_floor": 0.6557,
+          "n_predicted_at_floor": 48,
+          "floor_for_0.95_precision": null
+        },
+        "announced": {
+          "labeled_positives": 49,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.898,
+          "n_predicted_at_floor": 44,
+          "floor_for_0.95_precision": 0.79
+        }
+      },
+      "per_value_8k": {
+        "effective": {
+          "labeled_positives": 56,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 0.9474,
+          "recall_at_floor": 0.6429,
+          "n_predicted_at_floor": 38,
+          "floor_for_0.95_precision": 0.94
+        },
+        "announced": {
+          "labeled_positives": 49,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.898,
+          "n_predicted_at_floor": 44,
+          "floor_for_0.95_precision": 0.79
+        }
+      },
+      "n_8k": 464
+    },
+    "split_ratio": {
+      "n": 543,
+      "accuracy": 0.9429,
+      "ece": 0.017,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 2,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 3,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 2,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 2,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 5,
+          "accuracy": 0.4
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 529,
+          "accuracy": 0.9584
+        }
+      ],
+      "top_bin": {
+        "n": 529,
+        "accuracy": 0.9584
+      },
+      "per_value": {},
+      "per_value_8k": {},
+      "n_8k": 464,
+      "conditional": {
+        "n": 110,
+        "accuracy": 0.9545
+      }
+    },
+    "listing_status": {
+      "n": 543,
+      "accuracy": 0.919,
+      "ece": 0.0366,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 4,
+          "accuracy": 0.25
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 16,
+          "accuracy": 0.25
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 17,
+          "accuracy": 0.5882
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 28,
+          "accuracy": 0.7143
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 23,
+          "accuracy": 0.913
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 455,
+          "accuracy": 0.9736
+        }
+      ],
+      "top_bin": {
+        "n": 455,
+        "accuracy": 0.9736
+      },
+      "per_value": {
+        "halt": {
+          "labeled_positives": 43,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 0.9524,
+          "recall_at_floor": 0.4651,
+          "n_predicted_at_floor": 21,
+          "floor_for_0.95_precision": 0.79
+        },
+        "delisting_determination": {
+          "labeled_positives": 39,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.2564,
+          "n_predicted_at_floor": 10,
+          "floor_for_0.95_precision": 0.56
+        },
+        "deficiency_notice": {
+          "labeled_positives": 81,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.9114,
+          "recall_at_floor": 0.8889,
+          "n_predicted_at_floor": 79,
+          "floor_for_0.95_precision": 0.94
+        }
+      }
+    },
+    "dilution_event": {
+      "n": 543,
+      "accuracy": 0.8877,
+      "ece": 0.0408,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 1,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 9,
+          "accuracy": 0.4444
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 27,
+          "accuracy": 0.5185
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 16,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 22,
+          "accuracy": 0.5
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 37,
+          "accuracy": 0.7297
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 431,
+          "accuracy": 0.9698
+        }
+      ],
+      "top_bin": {
+        "n": 431,
+        "accuracy": 0.9698
+      },
+      "per_value": {
+        "priced_offering": {
+          "labeled_positives": 32,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.8966,
+          "recall_at_floor": 0.8125,
+          "n_predicted_at_floor": 29,
+          "floor_for_0.95_precision": null
+        },
+        "private_placement": {
+          "labeled_positives": 51,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.9545,
+          "recall_at_floor": 0.4118,
+          "n_predicted_at_floor": 22,
+          "floor_for_0.95_precision": 0.85
+        },
+        "atm_or_equity_line": {
+          "labeled_positives": 35,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.96,
+          "recall_at_floor": 0.6857,
+          "n_predicted_at_floor": 25,
+          "floor_for_0.95_precision": 0.75
+        },
+        "convertible_or_warrants": {
+          "labeled_positives": 74,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.8429,
+          "recall_at_floor": 0.7973,
+          "n_predicted_at_floor": 70,
+          "floor_for_0.95_precision": 0.95
+        }
+      }
+    },
+    "going_concern": {
+      "n": 543,
+      "accuracy": 0.9705,
+      "ece": 0.0294,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 0
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 2,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 2,
+          "accuracy": 1.0
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 11,
+          "accuracy": 0.7273
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 528,
+          "accuracy": 0.9754
+        }
+      ],
+      "top_bin": {
+        "n": 528,
+        "accuracy": 0.9754
+      },
+      "per_value": {
+        "yes": {
+          "labeled_positives": 11,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.44,
+          "recall_at_floor": 1.0,
+          "n_predicted_at_floor": 25,
+          "floor_for_0.95_precision": null
+        }
+      }
+    },
+    "other_material": {
+      "n": 543,
+      "accuracy": 0.9355,
+      "ece": 0.0384,
+      "reliability": [
+        {
+          "bin": 0,
+          "lo": 0.0,
+          "hi": 0.1,
+          "n": 0
+        },
+        {
+          "bin": 1,
+          "lo": 0.1,
+          "hi": 0.2,
+          "n": 0
+        },
+        {
+          "bin": 2,
+          "lo": 0.2,
+          "hi": 0.3,
+          "n": 0
+        },
+        {
+          "bin": 3,
+          "lo": 0.3,
+          "hi": 0.4,
+          "n": 0
+        },
+        {
+          "bin": 4,
+          "lo": 0.4,
+          "hi": 0.5,
+          "n": 2,
+          "accuracy": 0.0
+        },
+        {
+          "bin": 5,
+          "lo": 0.5,
+          "hi": 0.6,
+          "n": 9,
+          "accuracy": 0.4444
+        },
+        {
+          "bin": 6,
+          "lo": 0.6,
+          "hi": 0.7,
+          "n": 15,
+          "accuracy": 0.4
+        },
+        {
+          "bin": 7,
+          "lo": 0.7,
+          "hi": 0.8,
+          "n": 16,
+          "accuracy": 0.6875
+        },
+        {
+          "bin": 8,
+          "lo": 0.8,
+          "hi": 0.9,
+          "n": 24,
+          "accuracy": 0.8333
+        },
+        {
+          "bin": 9,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n": 477,
+          "accuracy": 0.979
+        }
+      ],
+      "top_bin": {
+        "n": 477,
+        "accuracy": 0.979
+      },
+      "per_value": {
+        "bankruptcy": {
+          "labeled_positives": 4,
+          "proposed_auto_floor": 0.9,
+          "precision_at_floor": 1.0,
+          "recall_at_floor": 0.5,
+          "n_predicted_at_floor": 2,
+          "floor_for_0.95_precision": null
+        },
+        "restatement": {
+          "labeled_positives": 1,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.0,
+          "recall_at_floor": 0.0,
+          "n_predicted_at_floor": 1,
+          "floor_for_0.95_precision": null
+        },
+        "auditor_change": {
+          "labeled_positives": 3,
+          "proposed_auto_floor": 0.85,
+          "precision_at_floor": 0.5,
+          "recall_at_floor": 0.6667,
+          "n_predicted_at_floor": 4,
+          "floor_for_0.95_precision": null
+        }
+      }
+    }
+  }
+}

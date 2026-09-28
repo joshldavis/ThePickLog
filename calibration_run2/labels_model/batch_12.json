@@ -1,0 +1,702 @@
+[
+ {
+  "cal_id": "CAL-0276",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "provide written notice of its intention to cure the deficiency during the second compliance period, by effecting a reverse stock split, if necessary",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company has been given 180 calendar days, or until September 22, 2026, to regain compliance with the Minimum Bid Price Requirement",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Reverse split mentioned only as a hypothetical cure option; no ratio chosen."
+ },
+ {
+  "cal_id": "CAL-0277",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "We have not, and the Sales Agent has not, authorized anyone to provide you with different information.",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "low",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Truncated 424B5; offering terms not shown. 'Sales Agent' language implies an ATM program. Filing also describes a completed November 2025 private placement of 15,000,000 Class A shares at $1.00 (private_placement would be the alternative label)."
+ },
+ {
+  "cal_id": "CAL-0278",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "A total of 3,008,643 shares of Series A Preferred Stock were issued in this stock dividend.",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Series A Convertible Preferred issued as a stock dividend; convertible one-for-one into common after FDA approval."
+ },
+ {
+  "cal_id": "CAL-0279",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company's listing is being continued pursuant to an extension with a targeted completion date of July 14, 2026 (the \"Plan Period\")",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "NYSE accepted compliance plan; company still non-compliant with stockholders' equity standard during plan period."
+ },
+ {
+  "cal_id": "CAL-0280",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "has agreed to sell in a private placement (the \"Offering\") to the Investors an aggregate of (i) 4,187,953 shares",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Shares plus pre-funded warrants at $12.50; ~$125M PIPE."
+ },
+ {
+  "cal_id": "CAL-0281",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Non-exclusive license agreement with Catalent only."
+ },
+ {
+  "cal_id": "CAL-0282",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "The Company has 45 calendar days from April 1, 2026, or until May 16, 2026, to submit to Nasdaq a plan to regain compliance",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0283",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Nasdaq granted our request for an extension through February 8, 2027 (the \"Extension Notice\") to evidence compliance with the $1.00 per share requirement",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Second compliance period for bid price; cure period still running."
+ },
+ {
+  "cal_id": "CAL-0284",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "we issued and sold 3,500 shares of Series B Preferred Stock for an aggregate purchase price of $3.15 million at the initial closing",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Securities Purchase Agreement with a single institutional investor for convertible preferred; private_placement is the alternative label."
+ },
+ {
+  "cal_id": "CAL-0285",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "37,174,713 shares of Common Stock underlying common stock purchase warrants issued in the Private Placement",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Resale S-3 covering shares issuable on exercise of pre-funded and common warrants from a March 31, 2026 private placement; 'none' (secondary resale) is the alternative label."
+ },
+ {
+  "cal_id": "CAL-0286",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "entered into a Securities Purchase Agreement (the \"Agreement\") to issue and sell up to 2,222,222 shares (the \"Shares\") of common stock",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Shares at $7.20 plus warrants at $9.00 to a single institutional investor under Section 4(a)(2)."
+ },
+ {
+  "cal_id": "CAL-0287",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "agreed to issue and sell, in a private placement priced at-the-market under the rules of The Nasdaq Stock Market (the \"Private Placement\")",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Shares, pre-funded warrants and common warrants at $2.13; ~$2.8M gross."
+ },
+ {
+  "cal_id": "CAL-0288",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "regained_compliance",
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company believes it is now in compliance with the Minimum Equity Requirement and will be able to demonstrate such compliance",
+   "dilution_event": "1,340,921 shares (the \"Shares\") of common stock, par value $0.00001 per share (the \"Common Stock\"), of the Company, at a public offering price of $0.30",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Company states it believes it is now in compliance after the offering, but Nasdaq has not yet confirmed; deficiency_notice (plan period running) is the alternative label."
+ },
+ {
+  "cal_id": "CAL-0289",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "19,281,254 shares of common stock issuable upon conversion of senior secured convertible notes, (ii) 16,378,563 shares of common stock issuable upon the exercise",
+   "going_concern": "our ability to continue operating as a going concern;",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Resale prospectus for shares underlying convertible notes and warrants from November 2025 private placement; 'none' (secondary resale) is the alternative. Going concern appears only as a forward-looking risk bullet, not a statement of substantial doubt."
+ },
+ {
+  "cal_id": "CAL-0290",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Director appointment and director compensation program; RSU grant to a director is equity compensation, not a financing."
+ },
+ {
+  "cal_id": "CAL-0291",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "the Investor is obligated to purchase from the Company, up to Twenty-Five Million United States Dollars ($25,000,000) of the Company's common stock",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Equity line purchase agreement with Helena Global Investment Opportunities I Ltd."
+ },
+ {
+  "cal_id": "CAL-0292",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "medium",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "other_material": "medium"
+  },
+  "notes": "Item 8.01 shell furnishing a press release (Exhibit 99.1); press release content not in the view, so nothing can be labeled from the text."
+ },
+ {
+  "cal_id": "CAL-0293",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Creation of wholly owned subsidiary MAC and estimated NAV; MAC shares issued to MKZR, not to third parties. 'going concern' appears only in the enterprise-value definition."
+ },
+ {
+  "cal_id": "CAL-0294",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "yes",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "retroactively restated to give effect to a 1.222 for-1 forward split of our outstanding shares of common stock in April 2023",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "we will not receive any proceeds from the sale of shares of common stock by the Registered Stockholders",
+   "going_concern": "The report of our independent registered public accounting firm included a \"going concern\" explanatory paragraph.",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "low",
+   "other_material": "high"
+  },
+  "notes": "Resale S-1 for already-outstanding shares (including 102,750 shares issued in March 2025 SPAs). Going concern: filing reports the auditor's going-concern explanatory paragraph but does not use the words 'substantial doubt'; 'no' is the strict-reading alternative."
+ },
+ {
+  "cal_id": "CAL-0295",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "75,000 Common Shares Offered by the Selling Shareholders",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "medium",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "other_material": "medium"
+  },
+  "notes": "Prospectus supplement attaching a 6-K that only furnishes a press release (Exhibit 99.1, not shown). Resale by selling shareholders only."
+ },
+ {
+  "cal_id": "CAL-0296",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "we may from time to time sell ordinary shares, debt securities, rights, warrants or units comprising any combination of these securities",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "$30M universal shelf (F-3/A) with no specific priced deal."
+ },
+ {
+  "cal_id": "CAL-0297",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not in compliance with Nasdaq Listing Rule 5250(c)(1) because it has not yet filed its Annual Report on Form 10-K",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filing delinquency notice; 60 days to submit a compliance plan."
+ },
+ {
+  "cal_id": "CAL-0298",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Charter and bylaw amendments plus special meeting vote results only."
+ },
+ {
+  "cal_id": "CAL-0299",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "regained_compliance",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "by appointing Charles C. Jeong and Mi Jeong Lee as further described in Item 5.02 below, has remedied all deficiencies under Nasdaq Listing Rule 5605.",
+   "dilution_event": "as previously reported, on October 20, 2025, the Company entered into a Securities Subscription Agreement with Mr. Jeong",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Nasdaq board-independence deficiency notice with cure period, but company states it has remedied all deficiencies; deficiency_notice is the alternative label. Director (not CEO/CFO) resignations. October 2025 subscription agreement is prior-period background."
+ },
+ {
+  "cal_id": "CAL-0300",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "it intends to voluntarily transfer the listing of its Common Stock to The Nasdaq Stock Market LLC (\"Nasdaq\")",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Voluntary NYSE-to-Nasdaq listing transfer; no deficiency, exchange-initiated delisting, halt, or compliance event, so none of the listing categories fit."
+ }
+]

@@ -1,0 +1,698 @@
+[
+ {
+  "cal_id": "CAL-0400",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "NASDAQ halted trading of the Shares prior to the open of trading on the morning of January 3, 2025.",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "on January 3, 2025, Purchaser merged with and into the Company"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Completed all-cash acquisition by CECO Environmental; halt requested by company in connection with merger closing. Director resignations only, no CEO/CFO departure."
+ },
+ {
+  "cal_id": "CAL-0401",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Nasdaq suspended trading in the Company's securities effective at the open of business on Thursday, December 26, 2024.",
+   "dilution_event": "the Company no longer expects to sell any additional convertible debentures under the SPA",
+   "going_concern": "not mentioned",
+   "other_material": "Nina Footwear Corp. ... terminated the Agreement and Plan of Merger and Reorganization"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Merger agreement was terminated (not a definitive agreement to merge); potential bankruptcy is only mentioned as a possible strategic alternative. Suspension plus Panel delisting decision and abandoned appeal; halt chosen per rule."
+ },
+ {
+  "cal_id": "CAL-0402",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company's common stock was suspended from trading on Nasdaq effective with the open of trading on January 28, 2025",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Panel denied appeal and suspended trading effective the filing date; moved to OTC as QTIH."
+ },
+ {
+  "cal_id": "CAL-0403",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Trading in the Company's common stock, par value $0.0001 per share, was suspended effective January 6, 2025.",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Body event is a voluntary delisting/deregistration; suspension (Jan 6) and Panel delisting decision appear only in the cover-page footnote. Halt chosen because the suspension is stated in the text."
+ },
+ {
+  "cal_id": "CAL-0404",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "NYSE Regulation has suspended trading of, and determined to commence proceedings to delist, the Company's common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0405",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "provided the Company with an extension through April 15, 2025 to complete and file the Company's Quarterly Reports on Form 10-Q",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filing-delinquency deficiency with cure period extended; trading suspension mentioned only as a possible future consequence."
+ },
+ {
+  "cal_id": "CAL-0406",
+  "labels": {
+   "reverse_split": "historical",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "the Company had effected a reverse stock split over the prior one-year period",
+   "split_ratio": "not mentioned",
+   "listing_status": "Trading in the Common Shares on the NYSE was suspended immediately after market close on February 26, 2025.",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Item 1.01 covers waivers under existing Glencore/Koch convertible notes (no new issuance). Past reverse split mentioned only as the basis for NYSE 802.01C delisting."
+ },
+ {
+  "cal_id": "CAL-0407",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "regained_compliance",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "NYSE Regulation has withdrawn its delisting determination and will be lifting the trading suspension of the Company's common stock on NYSE American",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Low-price deficiency resolved and suspension being lifted (trading resumes March 5, 2025, after the filing date). Company remains under a separate compliance plan for equity standards."
+ },
+ {
+  "cal_id": "CAL-0408",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "NYSE American has suspended trading in the Company's common shares as of March 4, 2025",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0409",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "On April 1, 2025, Nasdaq halted trading in the Company's securities.",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "SPAC; the pending Business Combination Agreement dates from February 2023 and is referenced only as background, so other_material is none."
+ },
+ {
+  "cal_id": "CAL-0410",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "it had suspended trading of the Company's common stock and determined to commence proceedings to delist the Company's common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0411",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-20",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split became effective at 12:01 a.m. Eastern Time on March 31, 2025.",
+   "split_ratio": "at a ratio of 1-for-20",
+   "listing_status": "the Company's securities will be suspended from trading on Nasdaq CM at the opening of business on April 10, 2025",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Reverse split effective March 31, 2025 (before the April 7 filing) is reported as a recent development, though prefaced 'as previously disclosed'. Suspension is scheduled for April 10, after the filing date, so labeled delisting_determination rather than halt. The Verde merger agreement (Oct 2024) is background only."
+ },
+ {
+  "cal_id": "CAL-0412",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "seeking shareholder approval to effect a reverse stock split ... with a ratio in the range between and including 1-for-1.5 and 1-for-5",
+   "split_ratio": "with such ratio to be determined by the Company's Board of Directors",
+   "listing_status": "the staff has determined to delist the Company's common stock from The Nasdaq Capital Market",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Trading suspension scheduled for April 15, 2025, after the April 10 filing date; hearing requested does not stay suspension. Reverse split is a proposed range with no ratio chosen."
+ },
+ {
+  "cal_id": "CAL-0413",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Trading of the Company's Common Stock on Nasdaq was halted prior to the opening of trading on the Closing Date.",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "Merger Sub merged with and into the Company (the \"Merger\"), with the Company surviving the Merger as a direct, wholly owned subsidiary of Parent"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Completed take-private by Patient Square Capital at $31.35 per share; officers continued, only directors departed."
+ },
+ {
+  "cal_id": "CAL-0414",
+  "labels": {
+   "reverse_split": "historical",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "because the Company has effected a reverse stock split over the prior one-year period",
+   "split_ratio": "not mentioned",
+   "listing_status": "Nasdaq has determined that the Company's securities will be delisted from Nasdaq and will be suspended at the opening of business on April 23, 2025",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "The Board unanimously approved a plan of liquidation and dissolution"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Suspension is scheduled for April 23, after the April 17 filing; company will not appeal and also gave voluntary delisting notice. Board-approved plan of liquidation and dissolution (subject to stockholder approval) is not a bankruptcy/receivership, so other_material is none."
+ },
+ {
+  "cal_id": "CAL-0415",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "unless the Company timely requests a hearing before the Nasdaq Hearings Panel (the \"Panel\"), trading of the Common Stock will be suspended",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Staff determination under Rule 5810(c)(3)(A)(iii) (bid price at or below $0.10) subjects the stock to delisting; company intends to request a hearing, which stays suspension. Annual meeting postponement is not a listed category."
+ },
+ {
+  "cal_id": "CAL-0416",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "it had suspended trading of the Company's common stock and determined to commence proceedings to delist the Company's common stock from the Exchange",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Also a 10-K filing-delinquency deficiency notice on April 16; halt on April 21 takes precedence."
+ },
+ {
+  "cal_id": "CAL-0417",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "to effect a reverse stock split of the Company's common stock with a ratio in the range between and including 1-for-5 and 1-for-30",
+   "split_ratio": "with such ratio to be determined by the Board",
+   "listing_status": "the Company's common stock will be delisted from Nasdaq and trading in the Company's stock will be suspended at the open of trading",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "approved a plan to implement a workforce reduction of 55%"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Suspension scheduled April 29, after the April 25 filing; appeal does not stay suspension. Workforce reduction is not a listed other_material category."
+ },
+ {
+  "cal_id": "CAL-0418",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "this matter serves as an additional basis for delisting the Company's securities from Nasdaq",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "New event is a 10-K delinquency deficiency notice, but the stock is already subject to a staff delisting determination (bid price at or below $0.10) stayed pending a May 27 Panel hearing; no cure period is running. Could alternatively be read as deficiency_notice."
+ },
+ {
+  "cal_id": "CAL-0419",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Trading of the Common Stock on the NYSE American was suspended after market close on April 21, 2025 and began trading on the OTC Market",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "New events are the decision not to appeal and NYSE American's Form 25 filing; the April 21 suspension is restated as previously disclosed. Halt chosen per rule since the suspension is stated; delisting_determination is the alternative. Director (not CEO/CFO) resignation."
+ },
+ {
+  "cal_id": "CAL-0420",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Trading of the Company's common stock on the NYSE American was suspended on May 7, 2025 and began trading on the OTC Pink Market",
+   "dilution_event": "registered public offering (the \"Offering\"), an aggregate of 76,666,667 shares of common stock ... offered at an offering price of $0.15 per Share.",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Registered best-efforts offering under an effective S-1 with stated price and share count, sold via a securities purchase agreement with Series F/G/H warrants; some investors withdrew after the halt and only ~$1.1M net was raised. priced_offering chosen over private_placement/convertible_or_warrants."
+ },
+ {
+  "cal_id": "CAL-0421",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "NYSE Regulation has suspended trading of, and determined to commence proceedings to delist, the Company's common shares",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0422",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "this matter serves as an additional basis for delisting the Company's securities from Nasdaq",
+   "dilution_event": "issued a promissory note to Keystone Capital Partners, LLC ... in an aggregate principal amount of $294,117.65",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "New event is a 10-Q delinquency deficiency notice; stock remains subject to the staff delisting determination stayed pending the May 27 Panel hearing (same situation as CAL-0418). The note is non-convertible debt repayable from an existing equity line, so no new share issuance."
+ },
+ {
+  "cal_id": "CAL-0423",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "On June 16, 2025, following the Closing, Nasdaq suspended trading of the Shares and Playa filed a Form 25",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "On June 11, 2025, Buyer accepted for payment all such Shares validly tendered and not properly withdrawn pursuant to the Offer"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Completed acquisition by Hyatt via tender offer; CEO Wardinski and other executives ceased to be officers at Closing, but the acquisition is the primary event."
+ },
+ {
+  "cal_id": "CAL-0424",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "its determination to delist the Company's common stock as a result of the Company's ongoing failure to comply with the Minimum Bid Price Requirement",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Trading suspension scheduled for July 8, 2025, after the July 2 filing date; hearing request will not stay the suspension."
+ }
+]
