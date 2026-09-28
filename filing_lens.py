@@ -26,7 +26,7 @@ DESIGN RULES (same discipline as edgar_lens / quote_integrity)
   • PINNED MODEL: the live caller refuses to run unless JEV_MODEL is set to an exact
     version. A response carrying any other version is DISCARDED as version drift.
   • ITEM-CODE PREFILTER FIRST: the free SEC submissions block already lists each
-    8-K's items. Only 8-Ks carrying 1.01 / 3.01 / 3.02 / 5.03 / 8.01 within
+    8-K's items. Only 8-Ks carrying 1.01 / 3.01 / 3.02 / 3.03 / 5.03 / 8.01 within
     EIGHTK_WINDOW, plus priced-offering / shelf forms within OFFERING_WINDOW, are
     read at all. Everything else is never sent anywhere.
   • THE CLASSIFIER NEVER ACTS ALONE: route() returns auto / review / ignore. "auto"
@@ -66,7 +66,9 @@ __version__ = "0.2.0-gate2"
 # ---------------------------------------------------------------------------
 EIGHTK_WINDOW    = 30    # days: an 8-K older than this cannot be "the reason the quote froze this week"
 OFFERING_WINDOW  = 180   # days: matches edgar_lens.OFFERING_WINDOW — active dilution pressure
-PREFILTER_ITEMS  = ("1.01", "3.01", "3.02", "5.03", "8.01")   # 8-K items worth reading
+PREFILTER_ITEMS  = ("1.01", "3.01", "3.02", "3.03", "5.03", "8.01")   # 8-K items worth reading
+# 3.03 added 2026-09-28: the split-v2 test population was 8-Ks with 5.03 OR 3.03, and a
+# split can be reported under 3.03 alone; without it those filings were never read.
 # Jev's 32k budget is the STATE PLUS THE LONGEST QUESTION (docs.typesafe.ai/models,
 # 2026-09-23), not the text alone. The longest question here is split_ratio at ~1.5k
 # tokens; the state wrapper adds a few hundred. So the filing text gets 30k.
@@ -712,6 +714,9 @@ def _selftest():
     got = [(f["form"], f["filingDate"], f["reason"]) for f in sel]
     assert ("8-K", "2026-09-17", "8k_items:5.03") in got, got
     assert ("8-K", "2026-09-18", "8k_items:3.01") in got, got
+    only303 = {"form": ["8-K"], "filingDate": ["2026-09-20"], "items": ["3.03,9.01"],
+               "accessionNumber": ["0001-26-9"], "primaryDocument": ["z.htm"]}
+    assert [f["reason"] for f in select_filings(only303, "2026-09-22")] == ["8k_items:3.03"], "3.03-only 8-K is read"
     assert ("424B5", "2026-08-01", "offering") in got, got
     assert not any(d == "2026-09-10" for _, d, _ in got), "5.02-only 8-K must NOT be read"
     assert not any(d == "2025-11-01" for _, d, _ in got), "S-3 older than OFFERING_WINDOW must NOT be read"
