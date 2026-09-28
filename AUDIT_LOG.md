@@ -37,6 +37,16 @@ Every published figure re-derives from the two CSVs. No failures, no new gaps, n
 - Stragglers: PHGE 09-16 (A, one session inside the slack window) should clear or go overdue by ~09-29. AREN 09-04 and GTBP / CTSO / LRHC 09-08 are already overdue and will most likely resolve with an explicit UNGRADEABLE note.
 - Watch **JAGX 09-22 (C)**: the ~12× open→close day `8ac1e8d` was built for. Its grade should trigger the one-stock † on tier C and possibly on the all-picks mean. Next week's audit should confirm the flag renders.
 
+## 2026-09-25 — H-RISK1 printed a pass its own page ruled out; code now enforces the stated rule
+
+**Finding.** `reports/risk-eval-LATEST.md` (09-23) printed **"v0.3-yf verdict: PASSES all H-RISK1 criteria"** four lines below *"score -> 5-day return (must stay ns): rho=−0.199 CI[−0.331,−0.060] n=245 tickers=203 **SIG**"*. The registration (HYPOTHESES.md batch #6) says a score that predicts magnitude *and* direction "fails this hypothesis as stated". The report labelled both signed-return horizons *must stay ns*. `risk_eval.py` enforced only the same-day one. The pass was never published on the site; `grep H-RISK1 *.html` returns nothing. It lived only in the report.
+
+**Fix (tightening only).** `h_risk1_verdict()` now requires both horizons to be non-significant, treats a missing horizon as a failure, and prints the reason a cohort is not established. The selftest covers the 09-23 case. The amendment is appended to HYPOTHESES.md, with a pointer under the original pass bar: 0 lines deleted. Re-run on a copy of the tree: v0.3 → *not yet established — score -> 5-day return is significant (rho −0.199)*. v0.2 → unchanged, *not yet established* on the |MAE| half. `risk_snapshots.csv`: 0 rows appended, schema unchanged.
+
+**Why this is not the post-hoc move the 09-23 entry refused.** That entry refused to re-tune an exclusion after seeing its effect. Here the rule was already written and displayed, and the code under-enforced it. Matching the page to the code would have been the loosening. Matching the code to the page cannot make any pass easier.
+
+**Site.** `experiment-01.html` §"What we found instead": "carrying essentially no information about which way" is now scoped to the original universe. The 48%/20% figures are dated to the discovery. A *Forward update* paragraph gives the forward figures: 45% vs 27% realised on 326 v0.2 picks, H-RISK2 Brier not beating no-skill, and the v0.3 5-day direction result. It admits the report printed a pass until today.
+
 ## 2026-09-23 — Both 09-19 observations closed; the seal stays as designed
 
 Both observations from the 09-19 audit are shipped, and one of them closed the opposite way from what the audit prescribed.

@@ -551,6 +551,8 @@ zero for **both** magnitude measures; the sign holding across ≥ 3 consecutive 
 NON-SIGNIFICANT.** A result where the score predicts magnitude *and* direction fails this
 hypothesis as stated; the claim is specifically that it separates the two.
 
+> **Amended 2026-09-25:** "signed return" is enforced at BOTH horizons the evaluator reports, same-day and 5-day. See *Amendment to batch #6* at the end of this file.
+
 **In-sample motivation (2026-07-29, ticker-clustered).** v0.2 (n=444, 16 tickers):
 score→|MAE| rho **+0.206**, score→range **+0.277**, score→same-day return **+0.004 (ns)**.
 v0.3 (n=80, 67 tickers): **+0.320**, **+0.440**, **−0.054 (ns)**. Mean |rho| across the family
@@ -1256,3 +1258,48 @@ that runs the other way, it should be refused.
 **Unchanged:** every registered rule, universe, entry condition, exit, cost assumption and
 registration date. The win rate remains reported and remains explicitly not a pass criterion. No
 stored signal or outcome row was altered by this amendment.
+
+---
+
+## Amendment to batch #6 — H-RISK1's direction test covers BOTH horizons, frozen 2026-09-25
+
+**What was wrong.** H-RISK1's pass bar has two halves. The second half, the discriminant, reads:
+*"the rho between `score` and signed return REMAINING NON-SIGNIFICANT. A result where the score
+predicts magnitude* and *direction fails this hypothesis as stated."* `risk_eval.py` computes the
+signed-return rho at two horizons, same-day and 5-day, and its public report has labelled **both**
+lines *"(must stay ns)"* since the day it shipped. The verdict code checked only the same-day one.
+
+On 2026-09-23 that gap started to matter. The v0.3 cohort's report printed **"PASSES all H-RISK1
+criteria"** directly under its own line reading *"score -> 5-day return (must stay ns): rho=−0.199
+CI[−0.331, −0.060] n=245 tickers=203 **SIG**"*. The page contradicted itself, and the
+contradiction flattered us.
+
+**The amendment — one change, tightening.** The discriminant now requires the signed-return rho to
+be non-significant at **both** horizons, same-day **and** 5-day. A missing horizon now counts as a
+failure where it previously did not count at all. `risk_eval.py` does this in one function,
+`h_risk1_verdict()`, which also prints *why* a cohort is not established. Its selftest now includes
+the exact case above: magnitude passes, 5-day direction is significant, and the verdict must refuse.
+
+**Consequence, stated before anyone reads it as a loss.** v0.3 goes from "PASSES" to **"not yet
+established"**. The magnitude half still holds there (|MAE| rho +0.265, range rho +0.339, both
+significant across 203 tickers). What fails is the claim that the score is *direction-free*. On the
+market-wide universe, higher-scored names have gone on to do **worse** over five days. That is
+Finding A (hot names fade) showing up again in a second universe. It is **not** registered as a
+finding by this amendment. Registering it would require a new dated entry and a fresh out-of-sample
+window starting on that date. v0.2 is unaffected: its 5-day rho is non-significant, and it was
+already "not yet established" on the |MAE| half.
+
+**Why this is not a post-hoc rule change.** The 2026-09-23 audit refused to re-tune an exclusion
+after seeing its effect on the figures, and that precedent is right. This amendment is different
+in kind. It does not choose a new rule. It makes the code enforce the rule the registration wrote
+and the report has always displayed. The auditor's job, per that same entry, *"is to check that the
+page says what the code does"*. Here the page and the code disagreed, and the page was the
+stricter one. Relaxing the page to match the code would have been the post-hoc move: it would
+loosen a displayed criterion after seeing that the looser one passes. By this project's standing
+test (see the H-EXP02 amendment, 2026-08-28), a mid-flight change that can only make a pass harder
+is safe, and this one can only make a pass harder.
+
+**Unchanged:** the registration date (2026-07-29), cohorts, the ticker-clustered bootstrap, the
+magnitude criteria, the ≥ 3 consecutive-snapshot rule, H-RISK2 in full, the binding
+"volatility persistence, not alpha" framing, and every stored row. `risk_snapshots.csv` keeps its
+schema. No outcome, pick or snapshot row was altered.

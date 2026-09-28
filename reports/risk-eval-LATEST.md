@@ -2,7 +2,7 @@
 
 Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W40**.
 
-**H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant.
+**H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant — at **both** horizons, same-day and 5-day (enforced in code since the 2026-09-25 amendment; before that only same-day was checked, though both were always labelled *must stay ns*).
 
 ### v0.2-yf — n_post = 356
 
@@ -12,7 +12,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> 5-day return *(must stay ns)*: rho=+0.107 CI[-0.065,+0.237] n=356 tickers=16 ns
 - consecutive weekly snapshots with positive |MAE| rho: **8** (need >= 3)
 
-**v0.2-yf verdict: not yet established**
+**v0.2-yf verdict: not yet established** — score -> |MAE| is not positive and significant
 
 ### v0.3-yf — n_post = 275
 
@@ -22,7 +22,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> 5-day return *(must stay ns)*: rho=-0.199 CI[-0.319,-0.068] n=275 tickers=223 SIG
 - consecutive weekly snapshots with positive |MAE| rho: **8** (need >= 3)
 
-**v0.3-yf verdict: PASSES all H-RISK1 criteria**
+**v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.199), so the score also carries DIRECTION information; that fails H-RISK1 as registered
 
 ---
 

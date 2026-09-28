@@ -26,3 +26,15 @@ patch*.py
 # paths.csv stays the only committed price history.
 tsfm_bars_cache.json
 experiments/H-TSFM1-verdict.json.tmp
+
+# Gate-2 calibration + judge work-in-progress (2026-09-28). Vercel serves the whole repo
+# (outputDirectory "."), so committing these would publish third-party filing texts and a
+# DRAFT registration on the live site. Keep local until final; a registration ships only
+# as its own dated commit.
+calibration/
+judge/
+calibration_merge.py
+calibration_pull.py
+calibration_run.py
+calibration_truth.py
+filing_lens.py

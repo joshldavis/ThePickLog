@@ -259,6 +259,34 @@ def consecutive_positive(cohort, key="rho_absmae"):
     return c
 
 
+def h_risk1_verdict(r, consec):
+    """H-RISK1 pass/fail. Returns (ok, reason-if-not).
+
+    AMENDED 2026-09-25 (HYPOTHESES.md, H-RISK1 amendment): the discriminant half now requires
+    BOTH signed-return horizons -- same-day AND 5-day -- to stay non-significant. The registration
+    says "a result where the score predicts magnitude *and* direction fails this hypothesis as
+    stated", and this report has always labelled both horizons "(must stay ns)"; until this date
+    the code enforced only the same-day one. Tightening only: no input under which this makes a
+    pass easier to print.
+    """
+    if r["n"] < MIN_N:
+        return False, f"n={r['n']} is below the {MIN_N} floor"
+    for k, label in (("absmae", "|MAE|"), ("range", "range")):
+        x = r.get(k)
+        if not (x and x["sig"] and x["rho"] > 0):
+            return False, f"score -> {label} is not positive and significant"
+    for k, label in (("ret1", "same-day return"), ("ret5", "5-day return")):
+        x = r.get(k)
+        if not x:
+            return False, f"score -> {label}: insufficient data"
+        if x["sig"]:
+            return False, (f"score -> {label} is significant (rho {x['rho']:+.3f}), so the score "
+                           f"also carries DIRECTION information; that fails H-RISK1 as registered")
+    if consec < 3:
+        return False, f"only {consec} consecutive positive weekly snapshots (need 3)"
+    return True, ""
+
+
 def fmt(r):
     if not r:
         return "insufficient data"
@@ -273,7 +301,9 @@ def write_report(res, r2, iso, now):
          "**H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), "
          "not *direction*. The claim has two halves and BOTH must hold: the magnitude "
          "correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return "
-         "correlation stays non-significant.", ""]
+         "correlation stays non-significant — at **both** horizons, same-day and 5-day "
+         "(enforced in code since the 2026-09-25 amendment; before that only same-day was checked, "
+         "though both were always labelled *must stay ns*).", ""]
     for cohort, r in sorted(res.items()):
         L += [f"### {cohort} — n_post = {r['n']}", "",
               f"- score -> |MAE| (drawdown depth): {fmt(r['absmae'])}",
@@ -282,11 +312,9 @@ def write_report(res, r2, iso, now):
               f"- score -> 5-day return *(must stay ns)*: {fmt(r['ret5'])}",
               f"- consecutive weekly snapshots with positive |MAE| rho: "
               f"**{consecutive_positive(cohort)}** (need >= 3)", ""]
-        ok = (r["n"] >= MIN_N and r["absmae"] and r["absmae"]["sig"] and r["absmae"]["rho"] > 0
-              and r["range"] and r["range"]["sig"] and r["range"]["rho"] > 0
-              and r["ret1"] and not r["ret1"]["sig"]
-              and consecutive_positive(cohort) >= 3)
-        L += [f"**{cohort} verdict: {'PASSES all H-RISK1 criteria' if ok else 'not yet established'}**", ""]
+        ok, why = h_risk1_verdict(r, consecutive_positive(cohort))
+        L += [f"**{cohort} verdict: {'PASSES all H-RISK1 criteria' if ok else 'not yet established'}**"
+              + (f" — {why}" if why else ""), ""]
     L += ["---", "", "**H-RISK2** — is the gauge *calibrated*, not merely correlated? "
           "v0.2 cohort only; the frozen probabilities are explicitly NOT transferable to v0.3 "
           "(different score distributions — see H-STR3).", ""]
@@ -357,6 +385,15 @@ def _selftest():
     assert a and a["rho"] > 0.9 and a["sig"], a
     d = cluster_boot_rho(rows, "score", "ret1")
     assert d and abs(d["rho"]) < 0.3, d
+    S = lambda rho, sig: {"rho": rho, "lo": 0, "hi": 0, "n": 99, "tickers": 50, "sig": sig}
+    good = {"n": 99, "absmae": S(0.3, True), "range": S(0.3, True),
+            "ret1": S(0.0, False), "ret5": S(0.0, False)}
+    assert h_risk1_verdict(good, 3) == (True, "")
+    assert h_risk1_verdict(good, 2)[0] is False
+    assert h_risk1_verdict(dict(good, ret5=S(-0.2, True)), 7)[0] is False   # the 2026-09-25 case
+    assert h_risk1_verdict(dict(good, ret1=S(0.2, True)), 7)[0] is False
+    assert h_risk1_verdict(dict(good, ret5=None), 7)[0] is False
+    assert h_risk1_verdict(dict(good, n=MIN_N - 1), 7)[0] is False
     print("risk_eval selftest PASS — rank/spearman/quintile/brier + cluster bootstrap verified")
     return 0
 
