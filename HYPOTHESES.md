@@ -1256,3 +1256,12 @@ that runs the other way, it should be refused.
 **Unchanged:** every registered rule, universe, entry condition, exit, cost assumption and
 registration date. The win rate remains reported and remains explicitly not a pass criterion. No
 stored signal or outcome row was altered by this amendment.
+
+## H-JEV1 — Jev-flagged filings and drawdown depth, registered 2026-09-30
+
+Full registration: `REGISTRATION-H-JEV1.md` (analysis frozen in `jev_backfill.py`, same commit).
+Claim: picks with a filing that Jev reads as a risk event (any `auto`/`review` route) have a deeper
+`mae_5d` than unflagged picks in the same cohort × score tercile. PASS = D ≤ −3.0pp, clustered CI
+upper < 0, ≥ 25 tickers per arm, on the **forward** window 2026-10-01 → 2026-12-31 only (one look
+on/after 2027-01-11). Part A (2026-06-01 → 2026-09-30) is retrospective and cannot pass.
+Binding framing: a risk label, not alpha; selection unchanged.
