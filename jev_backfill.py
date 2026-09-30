@@ -43,7 +43,7 @@ except Exception:                                   # pragma: no cover
 
 import filing_lens as fl
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 OUT_DIR   = "jev_backfill"
 PICKMAP   = os.path.join(OUT_DIR, "pick_filings.csv")
@@ -222,10 +222,13 @@ def read(max_reads, call=None, fetch=None):
 # ANALYZE — the registered analysis. Pure given the four files.
 # =====================================================================================
 def _f(x):
+    """float or None. NaN counts as missing (amendment 1, 2026-09-30: outcomes.csv carries
+    literal 'nan' in ret_open_5dclose_net for 42 rows; float('nan') leaked into S4)."""
     try:
-        return float(x)
+        v = float(x)
     except (TypeError, ValueError):
         return None
+    return None if v != v else v
 
 
 def pick_flags(pickmap_rows, events):
@@ -366,6 +369,8 @@ def analyze(part, **kw):
            "n_rows": len(rows), "n_tickers": len({r["ticker"] for r in rows})}
     prim = contrast(rows, "mae", "flag_any", "PRIMARY: mae_5d, any Jev flag")
     prim["verdict"] = verdict(prim)
+    if part == "A":   # amendment 1: never print a bare PASS for the part that cannot pass
+        prim["verdict"] = f"RETROSPECTIVE: numeric bar {prim['verdict']}; Part A cannot establish H-JEV1"
     res["primary"] = prim
     sec = []
     dil = [r for r in rows if r["dilution_flag"] in ("offering", "shelf")]
@@ -433,6 +438,7 @@ def _selftest():
     assert verdict({**base, "ci95": [-6, 0.1]}) == "FAIL"
     assert verdict({**base, "tickers_clean": 24}).startswith("INSUFFICIENT")
     assert tercile_cuts([1, 2, 3, 4, 5, 6]) == (3, 5)
+    assert _f("nan") is None and _f("") is None and _f("-4.5") == -4.5
     print("jev_backfill selftest: OK")
 
 

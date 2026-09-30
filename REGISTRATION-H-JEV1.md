@@ -57,3 +57,27 @@ JEV_MODEL=jev-1.13.0 JEV_API_KEY=… python3 jev_backfill.py read
 python3 jev_backfill.py analyze --part A
 ```
 `jev_backfill/events.jsonl` holds every raw response with its text sha256, question sha256 and model. The analysis re-runs from these files without a key or network.
+
+---
+
+## Amendment 1 — 2026-09-30, after Part A ran (reporting only; no rule changed)
+
+1. **NaN.** `outcomes.csv` stores the literal string `nan` in `ret_open_5dclose_net` for 42 rows. `_f()` turned it into a float NaN, so S4 printed NaN. NaN now counts as missing. The primary (`mae_5d`), S1–S3 and both sensitivities have no NaN rows, and re-running the analysis on the same files left every one of them byte-identical. Only S4 changed.
+2. **Label.** For Part A, the printed verdict now reads `RETROSPECTIVE: numeric bar …; Part A cannot establish H-JEV1` instead of a bare `PASS`, so the record says what this registration says.
+
+Neither change can make a pass easier. Exposure, strata, estimate, CI, bar, windows and every stored row are unchanged.
+
+## Part A result — 2026-09-30 (retrospective; cannot establish H-JEV1)
+
+756 unique filings read for 1,397 picks. There were 0 unreadable filings, one fetch timeout that was retried and read, and 69 picks excluded for having no CIK (9 tickers, mostly delisted). 1,291 graded picks on 323 tickers entered the analysis. Record: `jev_backfill/` (`events.jsonl` holds every raw response; `result_A.json`). An independent recomputation (separate code, bootstrap seed 7, raw answers re-routed through `route()`: 0 of 756 differed from the logged routing) matched every estimate.
+
+| | flagged (picks / tickers) | clean | D (pp of mae_5d) | 95% CI |
+|---|---|---|---|---|
+| **Primary** | 900 / 199 | 391 / 135 | **−4.51** | [−7.62, −0.48] |
+| S1 within form-code offering/shelf | 755 / 185 | 156 / 59 | −3.16 | [−7.09, +4.53] |
+| S2 8-K text only | 214 / 78 | 1077 / 262 | **−6.42** | [−10.94, −2.12] |
+| S3 same-day return | | | +0.16 | [−2.59, +2.99] |
+| S4 5-day return | | | −4.87 | [−13.39, +1.90] |
+| A-sens1 without the 23 seen tickers | 804 / 177 | 390 / 134 | −4.30 | [−7.40, −0.36] |
+
+**Reading.** Part A met the numeric bar. That is consistent with H-JEV1, and it proves nothing, because the outcomes were known. Direction is null, as registered. S1's CI crosses zero, so this record doesn't show that reading the text beats the form-code flag H-DIL2 already uses. The clearest signal is in S2, filings form codes can't see. Part B decides.
