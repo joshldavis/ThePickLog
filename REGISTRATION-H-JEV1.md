@@ -81,3 +81,11 @@ Neither change can make a pass easier. Exposure, strata, estimate, CI, bar, wind
 | A-sens1 without the 23 seen tickers | 804 / 177 | 390 / 134 | −4.30 | [−7.40, −0.36] |
 
 **Reading.** Part A met the numeric bar. That is consistent with H-JEV1, and it proves nothing, because the outcomes were known. Direction is null, as registered. S1's CI crosses zero, so this record doesn't show that reading the text beats the form-code flag H-DIL2 already uses. The clearest signal is in S2, filings form codes can't see. Part B decides.
+
+---
+
+## Amendment 2 — 2026-10-01, before any Part B outcome exists (tightening only)
+
+H-JEV2 (`REGISTRATION-H-JEV2.md`) was registered today as a second forward test. Two tests mean two chances at a false pass, so H-JEV1 Part B is now judged with H-JEV2 under **Holm's step-down**. A test passes on its 97.5% CI, or on its 95% CI once the other has passed on its 97.5% CI. Before this amendment H-JEV1 needed only its 95% CI, so the bar can only have risen. Exposure, window, estimate, effect bar and ticker floor are unchanged, and Part A's reported numbers are unchanged; `result_A.json` only gains a `ci_level` field on re-run.
+
+For the record, here is the rule applied to Part A's data, which shows the tightening has teeth. H-JEV1's 97.5% CI is [−7.99, +0.37], so it would not pass at step 1. It would pass at step 2 only because the 8-K flag's 97.5% CI is [−11.40, −0.99]. Part A still cannot establish either hypothesis.

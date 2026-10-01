@@ -43,7 +43,7 @@ except Exception:                                   # pragma: no cover
 
 import filing_lens as fl
 
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 
 OUT_DIR   = "jev_backfill"
 PICKMAP   = os.path.join(OUT_DIR, "pick_filings.csv")
@@ -55,6 +55,12 @@ OUTCOMES  = "outcomes.csv"
 # ---- registered constants (REGISTRATION-H-JEV1.md) ---------------------------------
 PART_A = ("2026-06-01", "2026-09-30")     # retrospective: outcomes already known
 PART_B = ("2026-10-01", "2026-12-31")     # forward, confirmatory: one look, on/after 2027-01-11
+# Amendment 2 (2026-10-01): H-JEV2 (REGISTRATION-H-JEV2.md) tests the 8-K-only flag forward
+# from the day after its registration. H-JEV1 Part B and H-JEV2 form a family of two,
+# judged by Holm's step-down: a test passes on its 97.5% CI, or on its 95% CI once the
+# other test has passed on its 97.5% CI. Part A stays at 95% as originally reported.
+JEV2_WINDOW  = ("2026-10-02", "2026-12-31")
+CI_FAMILY    = 0.975
 EFFECT_BAR   = -3.0                        # percentage points of mae_5d
 MIN_TICKERS  = 25                          # distinct tickers required in EACH arm
 BOOT, SEED   = 2000, 2026
@@ -285,7 +291,7 @@ def stratified_diff(rows, ykey, flagkey):
     return (num / den) if den else None
 
 
-def cluster_boot(rows, ykey, flagkey, B=BOOT, seed=SEED):
+def cluster_boot(rows, ykey, flagkey, B=BOOT, seed=SEED, level=0.95):
     by = collections.defaultdict(list)
     for r in rows:
         by[r["ticker"]].append(r)
@@ -300,7 +306,8 @@ def cluster_boot(rows, ykey, flagkey, B=BOOT, seed=SEED):
     est.sort()
     if len(est) < B * 0.9:
         return (None, None)
-    return (est[int(0.025 * len(est))], est[int(0.975 * len(est)) - 1])
+    tail = (1.0 - level) / 2.0
+    return (est[int(tail * len(est))], est[int((1.0 - tail) * len(est)) - 1])
 
 
 def build_rows(part, picks_path=PICKS, outcomes_path=OUTCOMES, pickmap=None, events=None):
@@ -323,6 +330,7 @@ def build_rows(part, picks_path=PICKS, outcomes_path=OUTCOMES, pickmap=None, eve
         if st not in ("ok", "partial", "no_filings"):
             continue                                       # no_cik / sec_err / unread: excluded, counted
         rows.append({"pick_id": p["pick_id"], "ticker": p["ticker"], "cohort": p["model_version"],
+                     "trading_date": p["trading_date"],
                      "score": _f(p["score"]) or 0.0, "dilution_flag": p.get("dilution_flag", ""),
                      "status": st, "flag_any": bool(fg and fg["flag_any"]),
                      "flag_8k": bool(fg and fg["flag_8k"]), "cats": sorted(fg["cats"]) if fg else [],
@@ -337,28 +345,46 @@ def build_rows(part, picks_path=PICKS, outcomes_path=OUTCOMES, pickmap=None, eve
     return rows, dict(status), cuts
 
 
-def contrast(rows, ykey, flagkey, label):
+def contrast(rows, ykey, flagkey, label, level=0.95):
     arm = lambda f: [r for r in rows if r[flagkey] == f and r.get(ykey) is not None]
     a, b = arm(True), arm(False)
     d = stratified_diff(rows, ykey, flagkey)
-    lo, hi = cluster_boot(rows, ykey, flagkey) if d is not None else (None, None)
+    lo, hi = cluster_boot(rows, ykey, flagkey, level=level) if d is not None else (None, None)
     mean = lambda xs: round(sum(x[ykey] for x in xs) / len(xs), 3) if xs else None
     return {"label": label, "y": ykey, "flag": flagkey,
             "n_flag": len(a), "n_clean": len(b),
             "tickers_flag": len({r["ticker"] for r in a}), "tickers_clean": len({r["ticker"] for r in b}),
             "mean_flag": mean(a), "mean_clean": mean(b),
             "D_stratified": None if d is None else round(d, 3),
-            "ci95": [None if lo is None else round(lo, 3), None if hi is None else round(hi, 3)]}
+            "ci_level": level,
+            "ci95" if level == 0.95 else "ci": [None if lo is None else round(lo, 3),
+                                                None if hi is None else round(hi, 3)]}
 
 
 def verdict(c):
     if c["tickers_flag"] < MIN_TICKERS or c["tickers_clean"] < MIN_TICKERS:
         return "INSUFFICIENT (fewer than %d tickers in an arm)" % MIN_TICKERS
-    if c["D_stratified"] is None or c["ci95"][1] is None:
+    ci = c.get("ci95") or c.get("ci")
+    if c["D_stratified"] is None or ci[1] is None:
         return "INSUFFICIENT (no estimable strata)"
-    if c["D_stratified"] <= EFFECT_BAR and c["ci95"][1] < 0:
+    if c["D_stratified"] <= EFFECT_BAR and ci[1] < 0:
         return "PASS"
     return "FAIL"
+
+
+def holm(c1, c1_strict, c2, c2_strict):
+    """Holm step-down for two tests via CIs -> (verdict1, verdict2)."""
+    s1, s2 = verdict(c1_strict) == "PASS", verdict(c2_strict) == "PASS"
+    l1, l2 = verdict(c1), verdict(c2)
+    def one(strict, loose, other_strict):
+        if loose.startswith("INSUFFICIENT"):
+            return loose
+        if strict:
+            return "PASS (97.5% CI, Holm step 1)"
+        if other_strict and loose == "PASS":
+            return "PASS (95% CI, Holm step 2)"
+        return "FAIL (Holm)"
+    return one(s1, l1, s2), one(s2, l2, s1)
 
 
 def analyze(part, **kw):
@@ -379,6 +405,15 @@ def analyze(part, **kw):
     sec.append(contrast(rows, "r0", "flag_any", "S3: same-day return (direction; expected null)"))
     sec.append(contrast(rows, "r5", "flag_any", "S4: 5-day return (direction; expected null)"))
     res["secondary"] = sec
+    if part == "B":   # H-JEV2 + Holm across the family of two
+        r2 = [r for r in rows if JEV2_WINDOW[0] <= r["trading_date"] <= JEV2_WINDOW[1]]
+        h2 = contrast(r2, "mae", "flag_8k", "H-JEV2 PRIMARY: mae_5d, flag from 8-K text only")
+        h2["window"] = JEV2_WINDOW
+        p975 = contrast(rows, "mae", "flag_any", "H-JEV1 at 97.5%", level=CI_FAMILY)
+        h975 = contrast(r2, "mae", "flag_8k", "H-JEV2 at 97.5%", level=CI_FAMILY)
+        prim["ci975"], h2["ci975"] = p975["ci"], h975["ci"]
+        prim["verdict"], h2["verdict"] = holm(prim, p975, h2, h975)
+        res["h_jev2"] = h2
     if part == "A":
         unseen = [r for r in rows if r["ticker"] not in SEEN_TICKERS]
         s = contrast(unseen, "mae", "flag_any", "A-sens1: primary excluding the 23 replay-seen tickers")
@@ -438,6 +473,14 @@ def _selftest():
     assert verdict({**base, "ci95": [-6, 0.1]}) == "FAIL"
     assert verdict({**base, "tickers_clean": 24}).startswith("INSUFFICIENT")
     assert tercile_cuts([1, 2, 3, 4, 5, 6]) == (3, 5)
+    assert verdict({"tickers_flag": 30, "tickers_clean": 30, "D_stratified": -4.0, "ci": [-7, -0.1]}) == "PASS"
+    G = lambda hi: {"tickers_flag": 30, "tickers_clean": 30, "D_stratified": -4.0, "ci": [-7, hi]}
+    assert holm(G(-0.5), G(0.3), G(-2), G(-1)) == ("PASS (95% CI, Holm step 2)", "PASS (97.5% CI, Holm step 1)")
+    assert holm(G(-0.5), G(0.3), G(-0.5), G(0.3)) == ("FAIL (Holm)", "FAIL (Holm)")
+    assert holm(G(0.2), G(0.9), G(-2), G(-1))[0] == "FAIL (Holm)"
+    lo95, hi95 = cluster_boot(rows, "y", "flag", B=400, seed=3)
+    lo975, hi975 = cluster_boot(rows, "y", "flag", B=400, seed=3, level=0.975)
+    assert lo975 <= lo95 and hi975 >= hi95, "97.5% interval must be at least as wide"
     assert _f("nan") is None and _f("") is None and _f("-4.5") == -4.5
     print("jev_backfill selftest: OK")
 

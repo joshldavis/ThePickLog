@@ -1265,3 +1265,9 @@ Claim: picks with a filing that Jev reads as a risk event (any `auto`/`review` r
 upper < 0, ≥ 25 tickers per arm, on the **forward** window 2026-10-01 → 2026-12-31 only (one look
 on/after 2027-01-11). Part A (2026-06-01 → 2026-09-30) is retrospective and cannot pass.
 Binding framing: a risk label, not alpha; selection unchanged.
+
+## H-JEV2 — 8-K risk events and drawdown depth, registered 2026-10-01
+
+Full registration: `REGISTRATION-H-JEV2.md`. Forward window 2026-10-02 → 2026-12-31 (one look on/after
+2027-01-11). Chosen after seeing H-JEV1 Part A's S2 result, which is disclosed in the registration and
+is not evidence. Same bar as H-JEV1; the two are judged together under Holm (H-JEV1 amendment 2).
