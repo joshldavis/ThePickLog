@@ -1,37 +1,40 @@
-# ThePickLog — Morning Brief · 2026-09-30
+# ThePickLog — Morning Brief · 2026-10-01
 
 _Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **BKYI** (tier A, score 100.0) — very high relative volume (61×); thin float (1.3M); large up-gap (+62%). Watch level (reference only, +20%): $3.264.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **MSGY** (tier A, score 100.0) — very high relative volume (12×); thin float (0.8M); large up-gap (+42%). Watch level (reference only, +20%): $5.3276.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **KMRK** (tier A, score 99.0) — very high relative volume (29×); large up-gap (+21%). Watch level (reference only, +20%): $1.356.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **HTLM** (tier A, score 98.2) — elevated relative volume (9.8×); large up-gap (+20%). Watch level (reference only, +20%): $2.5196.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SSTI** (tier A, score 97.3) — very high relative volume (27×); large up-gap (+52%). Watch level (reference only, +20%): $9.9476.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CMCT** (tier A, score 100.0) — very high relative volume (60×); thin float (2.8M); large up-gap (+44%). Watch level (reference only, +20%): $3.324.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **TGE** (tier A, score 97.2) — very high relative volume (60×); large up-gap (+88%). Watch level (reference only, +20%): $1.8726.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **TNON** (tier A, score 93.8) — elevated relative volume (8.2×); thin float (0.6M); large up-gap (+50%). Watch level (reference only, +20%): $4.908.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **SOTK** (tier A, score 92.4) — elevated relative volume (9.8×); large up-gap (+17%). Watch level (reference only, +20%): $6.984.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CUPR** (tier A, score 89.5) — elevated relative volume (9.7×); thin float (2.0M). Watch level (reference only, +20%): $2.736.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **BKYI**: already extended pre-market — chasing buys the top.
+- **CMCT**: already extended pre-market — chasing buys the top.
+- **TGE**: already extended pre-market — chasing buys the top.
+- **TNON**: high short interest (86% of float) — squeeze-prone and violent both ways.
+- **TNON**: already extended pre-market — chasing buys the top.
+- **TNON**: ultra-thin float — spreads and slippage can be severe.
+- **CHGA**: ultra-thin float — spreads and slippage can be severe.
 - **MSGY**: already extended pre-market — chasing buys the top.
 - **MSGY**: ultra-thin float — spreads and slippage can be severe.
-- **KMRK**: already extended pre-market — chasing buys the top.
-- **SSTI**: already extended pre-market — chasing buys the top.
-- **KALA**: already extended pre-market — chasing buys the top.
-- **KALA**: sub-$1 — heightened manipulation / delisting risk.
-- **SDEV**: already extended pre-market — chasing buys the top.
-- **SANG**: already extended pre-market — chasing buys the top.
+- **BTTC**: already extended pre-market — chasing buys the top.
+- **BTTC**: sub-$1 — heightened manipulation / delisting risk.
+- **FFR**: already extended pre-market — chasing buys the top.
 - **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **GOW**: already extended pre-market — chasing buys the top.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: ultra-thin float — spreads and slippage can be severe.
-- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
+- **BJDX**: sub-$1 — heightened manipulation / delisting risk.
 - **GCDT**: sub-$1 — heightened manipulation / delisting risk.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: sub-$1 — heightened manipulation / delisting risk.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
-- **BJDX**: sub-$1 — heightened manipulation / delisting risk.
+- **SUGP**: ultra-thin float — spreads and slippage can be severe.
+- **SUGP**: sub-$1 — heightened manipulation / delisting risk.
 - **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **1355** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-20%** (rug rate 28%) vs **-11%** (rug 11%) for C/D.
