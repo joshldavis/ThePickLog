@@ -1,5 +1,60 @@
 # ThePickLog — Audit Log
 
+## 2026-10-03 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+*Snapshot: live build `67f7793` (stamp "2026-10-03 07:57 ET"). Both served CSVs match `origin/main@67f7793` byte for byte (SHA-256 `6eebe567…` picks, `6bd45900…` outcomes). Latest cohort 10-02.*
+
+Every number on the Track record re-derives from the CSVs, and the JAGX one-stock † now renders where 09-26 predicted. One prose claim no longer holds: method.html §9 says "both tails widen monotonically with heat … the hottest tier … makes the biggest run". Tier B's mean MFE now exceeds tier A's.
+
+- **⚠️ FAIL — method §9 MFE monotonicity (check 8a / claims == data).**
+  - Mean MFE A **+44.53** / B **+48.95** / C +22.59 / D +15.44. That is not monotone.
+  - Median MFE is also inverted, barely: A 14.18 / B 14.47.
+  - Cause: JAGX 2026-09-21 (tier B) graded this week with MFE **+1,347%**. Without each tier's top MFE: A +40.44 / B +33.86 / C +18.70 / D +14.21, which is monotone again. So it is one stock, as the 09-26 entry warned. But the sentence is hard-coded prose that a stranger can falsify from the CSVs today.
+  - MAE is still monotone: −23.69 / −19.97 / −15.37 / −14.03.
+  - **Fix (prescribed, not applied):** do not swap in a new hard-coded claim. That is the 08-29 lesson arriving a third time. Do one of these:
+    - (i) Scope the sentence to what holds robustly, e.g. "the hottest tier digs the deepest hole; the upside tail is also widest at the hot end, but one stock (JAGX 09-21, tier B) currently reorders A and B on mean", or
+    - (ii) Move the tail claim into a live-computed line on the Track record, reusing `_oneStock`.
+  - Either way, keep "no established ordering on forward return", which still holds.
+- **Data served.** `/picks.csv` 200, 274,651 B, 1,554 rows. `/outcomes.csv` 200, 177,848 B, 1,424 rows. All 23 HTML pages 200. All 46 real same-origin link/asset targets 200. The 5 regex hits that 404'd were JS string-concatenation fragments and one web.archive.org URL, not links.
+- **Real data shown.** 1,402 picks logged, no sample fallback.
+- **No silent gaps.** 75 distinct `trading_date`s, 06-09 → 10-02.
+  - The only missing sessions are the seven already declared: 08-27 → 09-03 outage and 09-14, both closed history.
+  - 06-19 is still the only holiday cohort (VOID, excluded). No new gaps and no new holiday cohort.
+  - The Saturday `data: scan 2026-10-03` commit added no 10-03 cohort.
+  - All cohorts 09-17 → 10-02 published at 07:56 ET, inside the 06:00 floor and 09:20 cutoff.
+- **Claims == data** (all except §9 above match):
+  - Logged **1,402**, graded **1,260**, win rate **33%** (33.33: 420 W / 840 M).
+  - Median net **−2.7%** (−2.71), mean net **−1.7%** (−1.67) **†**, avg worst dip **−18.1%** (−18.07), 5-day mean −6.44 (n 1,157).
+  - † text "−2.6% without JAGX 2026-09-22 (+1115.7%)" reproduces: removing it moves the mean 0.89pp, against a threshold of 0.51.
+  - Tier table, n / tickers / mean / median: A 426 / 307 / −2.2 / −3.4; B 87 / 52 / −2.7 / −4.0; C 346 / 20 / +0.0† (−3.2 without JAGX) / −2.4; D 401 / 16 / −2.4 / −2.4. All match.
+  - Only C carries a †. A is a near-miss again: PFSA moves it 0.498pp against a 0.5pp floor.
+  - Win rate by tier (computed; the page shows no by-tier win-rate figure): A 38.0 / B 33.3 / C 33.5 / D 28.2%.
+  - Overdue note "4 picks … (A: 4)" = AREN 09-04, GTBP 09-08, LRHC 09-08, PHGE 09-16. ✓ CTSO resolved.
+  - Tier-ordering sentence (C > A > D > B, and A > D > B > C without JAGX) is consistent with the table.
+- **Exclusions reproduce from scratch.**
+  - Late: **128 across 7 cohorts**, same per-date counts.
+  - Frozen-quote: **12 (BNZI 12)**.
+  - Scale-mismatch: **12**: VMAR 7, SUGP 1, CPHI 1, SLE 1, NCT 1, and **IMCC 1, new this week**. The on-site note already lists IMCC.
+  - 1,554 − 152 = 1,402 ✓.
+- **Honest grading.**
+  - All **1,399** rows carrying data reproduce (close/open − 1) − 2% (max deviation 0.005pp).
+  - 0 duplicate `pick_id`s, 0 orphans, `win` consistent on all 1,399.
+  - All 25 ungradeable rows carry a note: 14 phantom-holiday VOID, 9 no entry bar, 2 UNGRADEABLE.
+- **Chips reconcile.** Graded 1,260 + Pending 118 + Void 24 = All 1,402 ✓. Wins 420 + Misses 840 = Graded.
+- **Disclaimers.** The text educational / not investment advice / not an RIA / not a broker-dealer is present on index, method and disclaimer.
+- **Validity backing.**
+  - (a) Tiers render as heat ("⚠ hot / ○ cool"; §9 says "heat scale, not a quality grade"). MAE is monotone; MFE is not (see FAIL). Clustered CIs on mean net all overlap: A [−3.9, −0.1], B [−5.0, −0.6], C [−3.8, +7.0], D [−3.0, −1.8]. No ordering is established, as the page says.
+  - (b) The "unvalidated" label is present (15× on the rendered index, plus method). Gate-1 is not rendered here.
+  - (c) All three validity docs, plus Empirical / Dossier / Generalizability, return 200 and are linked from method.html §9.
+
+**Alarm.** GitHub issue [#8](https://github.com/joshldavis/ThePickLog/issues/8) opened. No front-end changes made, no deploy.
+
+**Grading in the coming week.** 118 pending.
+- Main cohorts: **09-28 (23) → ~10-05**, **09-29 (22) → ~10-06**, **09-30 (23) → ~10-07**, **10-01 (23) → ~10-08**, **10-02 (22) → ~10-09**.
+- Stragglers:
+  - HWH 09-23 (B), inside the slack window, goes overdue after ~10-05 if it is still ungraded.
+  - AREN / GTBP / LRHC / PHGE are already overdue and should resolve to explicit UNGRADEABLE rows.
+
 ## 2026-09-26 — Weekly verifiability audit — **✅ All claims verify**
 
 *Snapshot: live build `9ddb917` (stamp "2026-09-26 07:57 ET"), CSVs fetched same-origin at ~13:10 UTC. Latest cohort 09-25, latest grade 09-25 23:45Z.*
