@@ -72,14 +72,14 @@ concurrency:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned 2026-10-07: ubuntu-latest moves to Ubuntu 26 on 2026-10-19
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - name: Install deps
-        run: pip install yfinance
+        run: pip install "yfinance==1.7.0" "pandas==3.0.6" "numpy==2.4.6"   # pinned 2026-10-07 (versions CI ran through Sept–Oct)
       # The pre-open rule is load-bearing for every claim on the site, so its
       # selftest gates the run rather than merely reporting. If timeliness logic
       # is broken, logging nothing is the correct outcome.

@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   report:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # pinned 2026-10-07: ubuntu-latest moves to Ubuntu 26 on 2026-10-19
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -34,7 +34,7 @@ jobs:
           SNAPSHOT: "1"
         run: python hypo_eval.py   # merges house registry.json + fetched user rules → leaderboard.json
       - name: Install deps for exit study
-        run: pip install yfinance
+        run: pip install "yfinance==1.7.0" "pandas==3.0.6" "numpy==2.4.6"   # pinned 2026-10-07 (versions CI ran through Sept–Oct)
       - name: Run exit-rule study (daily-resolution, in-sample)
         run: python exit_sim.py || true   # network/data hiccup must not block the report commit
       - name: Seal integrity ledger (tamper-evident hash chain)
