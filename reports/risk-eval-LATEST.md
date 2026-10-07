@@ -6,10 +6,10 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 ### v0.2-yf — n_post = 437
 
-- score -> |MAE| (drawdown depth): rho=+0.139 CI[-0.003,+0.277] n=437 tickers=16 ns
-- score -> range (MFE-MAE): rho=+0.293 CI[+0.134,+0.440] n=437 tickers=16 SIG
+- score -> |MAE| (drawdown depth): rho=+0.139 CI[-0.001,+0.278] n=437 tickers=16 ns
+- score -> range (MFE-MAE): rho=+0.295 CI[+0.136,+0.440] n=437 tickers=16 SIG
 - score -> same-day return *(must stay ns)*: rho=-0.024 CI[-0.133,+0.084] n=437 tickers=16 ns
-- score -> 5-day return *(must stay ns)*: rho=+0.096 CI[-0.048,+0.206] n=437 tickers=16 ns
+- score -> 5-day return *(must stay ns)*: rho=+0.009 CI[-0.131,+0.128] n=437 tickers=16 ns
 - consecutive weekly snapshots with positive |MAE| rho: **9** (need >= 3)
 
 **v0.2-yf verdict: not yet established** — score -> |MAE| is not positive and significant
@@ -19,10 +19,10 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> |MAE| (drawdown depth): rho=+0.307 CI[+0.209,+0.406] n=343 tickers=269 SIG
 - score -> range (MFE-MAE): rho=+0.345 CI[+0.245,+0.439] n=343 tickers=269 SIG
 - score -> same-day return *(must stay ns)*: rho=+0.050 CI[-0.059,+0.152] n=343 tickers=269 ns
-- score -> 5-day return *(must stay ns)*: rho=-0.185 CI[-0.295,-0.068] n=343 tickers=269 SIG
+- score -> 5-day return *(must stay ns)*: rho=-0.248 CI[-0.353,-0.138] n=343 tickers=269 SIG
 - consecutive weekly snapshots with positive |MAE| rho: **9** (need >= 3)
 
-**v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.185), so the score also carries DIRECTION information; that fails H-RISK1 as registered
+**v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.248), so the score also carries DIRECTION information; that fails H-RISK1 as registered
 
 ---
 
