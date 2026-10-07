@@ -563,6 +563,7 @@
       <h1>We test what's being sold to traders.<br>Starting with our own strategy.</h1>
       <p class="lead">Retail trading runs on claims nobody checks. We freeze a rule with a date <i>before</i> we look, grade it forward on public data, and publish the verdict either way. We started with our own screener &mdash; it failed, and we published that too.</p>
       <p class="hero-strip">Rule frozen before the fact &nbsp;&bull;&nbsp; Graded forward, winners <i>and</i> losers &nbsp;&bull;&nbsp; Recomputable from public data &nbsp;&bull;&nbsp; Published either way</p>
+      <p class="hero-by">Run by an I/O psychologist, using the standards that decide whether a hiring test is allowed to be used. <a href="about.html">Who runs this &rarr;</a></p>
 
       <form class="hero-cta" onsubmit="return tplVerdicts(event)">
         <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails">
@@ -590,7 +591,7 @@
           <div class="exp-no">EXPERIMENT 02 <span class="exp-pill v-run">RUNNING</span></div>
           <h3>The 2-period RSI "high win rate" trade</h3>
           <p>The most published retail setup of the last twenty years, always sold on its win rate. We're testing whether a high win rate survives contact with expectancy.</p>
-          <div class="exp-meta">registered 2026-07-29 &middot; <b>verdict due Sep 2026</b></div>
+          <div class="exp-meta">registered 2026-07-29 &middot; <b>verdict due 2 Nov 2026</b></div>
         </a>
         <a class="panel exp-card" href="experiment-03.html">
           <div class="exp-no">EXPERIMENT 03 <span class="exp-pill v-run">RUNNING</span></div>
@@ -1043,6 +1044,8 @@
   .hero h1{text-wrap:balance;text-shadow:0 1px 0 #0006}
   .hero .lead{max-width:60ch;font-size:16.5px}
   .hero-strip{color:var(--green);font-weight:600;margin:0 auto 22px;max-width:76ch;font-size:14px;line-height:1.7}
+  .hero-by{color:var(--dim);margin:-12px auto 22px;max-width:76ch;font-size:13.5px;line-height:1.6}
+  .hero-by a{color:var(--blue);text-decoration:none}
   .hero-cta{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 auto;max-width:460px}
   .hero-cta input{flex:1;min-width:190px;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
     border-radius:10px;padding:12px 13px;font:inherit;font-size:16px}
@@ -1086,6 +1089,7 @@
     .hero{padding:18px 0 4px}
     .hero .lead{font-size:15.5px;margin-bottom:18px}
     .hero-strip{font-size:13px;text-align:left;margin-bottom:18px}
+    .hero-by{text-align:left;margin-top:-8px}
     .hero-cta{max-width:none}
     .hero-cta input,.hero-cta .btn{width:100%;flex:none}
     .trust-strip{text-align:left}
