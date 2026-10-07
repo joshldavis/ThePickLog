@@ -642,8 +642,19 @@ def _selftest():
     print(f"hypo_eval self-test: PARITY OK (6/6 vs independent reference, {len(outs)} outcomes) "
           f"+ H-IND1 cluster bootstrap OK", file=sys.stderr)
 
+def _assert_no_nan(outs_path="outcomes.csv"):
+    """INCIDENT 2026-10-07: a literal 'nan' in outcomes.csv used to surface only as a baffling
+    parity failure ('(715, 49, nan, nan) vs (715, 49, nan, nan)'). Fail first, by name."""
+    cols = ("entry_open", "same_day_close", "ret_open_close_net", "ret_open_5dclose_net", "mfe_5d", "mae_5d")
+    bad = [(o["pick_id"], k) for o in csv.DictReader(open(outs_path))
+           for k in cols if str(o.get(k, "")).strip().lower() in ("nan", "inf", "-inf")]
+    assert not bad, (f"DATA: {len(bad)} non-finite value(s) in {outs_path} "
+                     f"(first: {bad[:3]}). See AUDIT_LOG 'INCIDENT 2026-10-07'.")
+
+
 if __name__ == "__main__":
     import os
+    _assert_no_nan()
     _selftest()
     # The Action writes fetched Supabase rows to this file (see report.yml); absent
     # locally => house rules only. Never fatal: a bad/missing file yields no user rows.

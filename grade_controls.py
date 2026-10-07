@@ -45,6 +45,7 @@ USAGE
 import argparse
 import csv
 import io
+import math
 import os
 import sys
 from datetime import datetime, timedelta
@@ -83,6 +84,9 @@ def _read(path):
 def grade_from_bars(bars):
     entry = bars[0]["o"]
     if not entry or entry <= 0:
+        return None
+    # INCIDENT 2026-10-07: never grade off a non-finite bar.
+    if not all(math.isfinite(b[k]) for b in bars[:WINDOW + 1] for k in ("o", "h", "l", "c")):
         return None
     same_close = bars[0]["c"]
     last_close = bars[WINDOW]["c"]
@@ -139,6 +143,10 @@ def fetch_bars(ticker, start):
     w = df.iloc[idx[0]:idx[0] + WINDOW + 1]
     if len(w) < WINDOW + 1:
         return None  # not matured yet — try again on a later run
+    # INCIDENT 2026-10-07: the last session's bar is not final on its own ET date.
+    from market_time import trading_date_et
+    if str(w.iloc[WINDOW]["d"]) >= trading_date_et():
+        return None
     return [{"o": float(r["Open"]), "h": float(r["High"]),
              "l": float(r["Low"]), "c": float(r["Close"])} for _, r in w.iterrows()]
 

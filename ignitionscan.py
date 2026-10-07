@@ -27,6 +27,7 @@ NOTHING HERE IS INVESTMENT ADVICE. The model is unvalidated until report says ot
 """
 
 import argparse, csv, os, sys, uuid, statistics, time
+import math
 from datetime import datetime, timedelta, timezone
 # One shared definition of "before the open" — see market_time.py and the
 # 2026-08-04 late-cohort correction in AUDIT_LOG.md.
@@ -708,9 +709,21 @@ def cmd_grade():
                 else:
                     failed_by_ticker[p["ticker"]].append((p, tds))
                 continue
+            # INCIDENT 2026-10-07 (NaN 5-day grades, see AUDIT_LOG). Yahoo can serve the last
+            # session's bar before it is final: open/high/low present, Close = NaN. 125 picks
+            # were graded off such bars 09-29..10-07 and the NaN went into the permanent log.
+            # Two guards: (1) never grade on the same ET date as the window's last session —
+            # that bar is not final yet; the next run grades it. (2) never write a non-finite
+            # number; treat it like a missing fetch (transient, retried next run).
+            if str(window.iloc[GRADE]["d"]) >= trading_date_et():
+                continue
             o = float(window.iloc[0]["Open"]); c = float(window.iloc[0]["Close"])
             close_5d = float(window.iloc[GRADE]["Close"])
             hi = float(window["High"].max()); lo = float(window["Low"].min())
+            if not all(math.isfinite(v) for v in (o, c, close_5d, hi, lo)):
+                print(f"  non-finite bar for {p['ticker']} {start} — deferring (INCIDENT 2026-10-07 guard)")
+                failed_by_ticker[p["ticker"]].append((p, tds))
+                continue
             roc = (c-o)/o*100 - haircut
             r5d = (close_5d-o)/o*100 - haircut
             append_row(OUTCOMES_CSV, OUTCOME_FIELDS, {

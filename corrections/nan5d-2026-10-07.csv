@@ -1,0 +1,858 @@
+pick_id,ticker,trading_date,file,field,old,new,reason
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,107.76,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,paths.csv,session5.open,*,6.99,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,paths.csv,session5.high,*,7.25,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,paths.csv,session5.low,*,5.8,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,paths.csv,session5.close,*,6.02,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,paths.csv,session5.volume,*,1413300,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4d1c3387-7b92-4ce9-9c53-e9e11b2c3089,JAGX,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-60.88,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,paths.csv,session5.open,*,4.28,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,paths.csv,session5.high,*,4.28,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,paths.csv,session5.low,*,2.14,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,paths.csv,session5.close,*,2.5,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,paths.csv,session5.volume,*,239400,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+90979f7e-103d-431e-8d1a-a87d7f406ec1,NCT,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-14.71,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,paths.csv,session5.open,*,0.85,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,paths.csv,session5.high,*,0.868,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,paths.csv,session5.low,*,0.807,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,paths.csv,session5.close,*,0.838,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,paths.csv,session5.volume,*,129400,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+5ec0bad5-9e8c-4b0b-8639-4e7a93fad3ae,MASK,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,0.01,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,paths.csv,session5.open,*,2.03,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,paths.csv,session5.high,*,2.07,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,paths.csv,session5.low,*,2.03,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,paths.csv,session5.close,*,2.03,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,paths.csv,session5.volume,*,2800,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6e7b10ed-b65b-4d9f-a185-e36c15054a7c,IOTR,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,1.11,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,paths.csv,session5.open,*,0.935,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,paths.csv,session5.high,*,0.96,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,paths.csv,session5.low,*,0.925,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,paths.csv,session5.close,*,0.96,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,paths.csv,session5.volume,*,249200,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9fafe4c-4a4b-4206-a14f-ba080aed2348,BJDX,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-3.35,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,paths.csv,session5.open,*,2.23,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,paths.csv,session5.high,*,2.319,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,paths.csv,session5.low,*,2.12,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,paths.csv,session5.close,*,2.2,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,paths.csv,session5.volume,*,10000,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2ddeb4b5-98d3-49d0-a46c-88be6526dcb3,ATPC,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,6.94,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,paths.csv,session5.open,*,1.97,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,paths.csv,session5.high,*,2.09,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,paths.csv,session5.low,*,1.908,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,paths.csv,session5.close,*,1.95,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,paths.csv,session5.volume,*,134400,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+7ead196b-8d0c-4fd0-af4d-7b87107b46c5,CUPR,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,13.63,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,paths.csv,session5.open,*,1.11,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,paths.csv,session5.high,*,1.15,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,paths.csv,session5.low,*,1.08,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,paths.csv,session5.close,*,1.11,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,paths.csv,session5.volume,*,177000,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+a7e758a0-f7a6-498e-94e0-05e53c4da2c4,CODX,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-2.0,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,paths.csv,session5.open,*,7.02,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,paths.csv,session5.high,*,7.02,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,paths.csv,session5.low,*,6.68,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,paths.csv,session5.close,*,6.9,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,paths.csv,session5.volume,*,6200,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+1ef6f255-1899-49ce-8822-f8ae75407300,PW,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,3.33,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,paths.csv,session5.open,*,2.915,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,paths.csv,session5.high,*,2.92,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,paths.csv,session5.low,*,2.504,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,paths.csv,session5.close,*,2.57,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,paths.csv,session5.volume,*,76600,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a9d11e2-cb10-48eb-8ae4-6342fcd52ac3,HKIT,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-1.93,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,paths.csv,session5.open,*,7.74,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,paths.csv,session5.high,*,8.05,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,paths.csv,session5.low,*,7.35,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,paths.csv,session5.close,*,7.4,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,paths.csv,session5.volume,*,9900,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+c5a2e98f-43db-49e7-b174-b926710fca25,VMAR,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-24.6,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,paths.csv,session5.open,*,1.47,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,paths.csv,session5.high,*,1.47,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,paths.csv,session5.low,*,1.36,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,paths.csv,session5.close,*,1.37,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,paths.csv,session5.volume,*,63400,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+4cc16b4f-9b15-4e3f-b0e9-3939b3d52a25,UZX,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-24.01,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,paths.csv,session5.open,*,2.9,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,paths.csv,session5.high,*,2.93,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,paths.csv,session5.low,*,2.46,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,paths.csv,session5.close,*,2.48,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,paths.csv,session5.volume,*,319000,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+6c2d6cf5-5641-42fa-a21a-48819e238ebe,IMCC,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-42.24,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,paths.csv,session5.open,*,0.411,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,paths.csv,session5.high,*,0.42,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,paths.csv,session5.low,*,0.388,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,paths.csv,session5.close,*,0.404,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,paths.csv,session5.volume,*,1435900,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+2a325481-fb7e-422d-8c58-621415845edd,GIPR,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,10.28,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,paths.csv,session5.open,*,4.34,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,paths.csv,session5.high,*,4.57,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,paths.csv,session5.low,*,4.27,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,paths.csv,session5.close,*,4.39,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,paths.csv,session5.volume,*,30300,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+576fa149-6eaf-4540-9a3d-2afccefcff13,TNMG,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-26.3,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,paths.csv,session5.open,*,2.445,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,paths.csv,session5.high,*,2.548,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,paths.csv,session5.low,*,2.37,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,paths.csv,session5.close,*,2.43,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,paths.csv,session5.volume,*,15600,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+8d050e8d-f7e1-49f5-92df-7c9b79999200,PRPL,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-34.04,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,paths.csv,session5.open,*,1.33,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,paths.csv,session5.high,*,1.37,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,paths.csv,session5.low,*,1.11,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,paths.csv,session5.close,*,1.135,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,paths.csv,session5.volume,*,320200,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+e9331f5e-4801-4eb1-bb47-6b554ff54170,ZTG,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-9.69,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,paths.csv,session5.open,*,1.32,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,paths.csv,session5.high,*,1.34,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,paths.csv,session5.low,*,1.07,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,paths.csv,session5.close,*,1.08,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,paths.csv,session5.volume,*,2932800,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+3a0a7ad0-77f1-400d-8399-8c69af8cbb45,NCPL,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-8.91,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,paths.csv,session5.open,*,0.839,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,paths.csv,session5.high,*,0.86,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,paths.csv,session5.low,*,0.82,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,paths.csv,session5.close,*,0.835,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,paths.csv,session5.volume,*,217900,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+fcac2ca5-4326-40a3-b395-cbc32052018a,OLOX,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-18.07,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,paths.csv,session5.open,*,1.46,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,paths.csv,session5.high,*,1.48,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,paths.csv,session5.low,*,1.4,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,paths.csv,session5.close,*,1.41,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,paths.csv,session5.volume,*,125900,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b58807b2-742a-4057-af0f-4b14ca80e1fc,FNUC,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,outcomes.csv,ret_open_5dclose_net,nan,-16.36,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,paths.csv,session5.open,*,5.73,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,paths.csv,session5.high,*,5.89,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,paths.csv,session5.low,*,5.372,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,paths.csv,session5.close,*,5.575,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,paths.csv,session5.volume,*,2041400,replace the unfinished 5th-session bar with the final bar (2026-09-28)
+b5b64867-ce9a-4d04-9192-9ac189349578,DFDV,2026-09-21,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,85.99,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,paths.csv,session5.open,*,5.37,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,paths.csv,session5.high,*,6.1,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,paths.csv,session5.low,*,5.0,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,paths.csv,session5.close,*,5.32,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,paths.csv,session5.volume,*,943900,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e54bf4d7-a047-473f-b711-438da5b53068,JAGX,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-74.08,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,paths.csv,session5.open,*,2.35,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,paths.csv,session5.high,*,2.35,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,paths.csv,session5.low,*,1.75,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,paths.csv,session5.close,*,1.89,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,paths.csv,session5.volume,*,207300,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+36d357ee-4b22-4042-9cd1-df98342b8501,NCT,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,2.9,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,paths.csv,session5.open,*,1.09,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,paths.csv,session5.high,*,1.1,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,paths.csv,session5.low,*,1.05,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,paths.csv,session5.close,*,1.07,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,paths.csv,session5.volume,*,98900,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+33459ac5-841c-4694-94ca-768bfdde20b7,CODX,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-3.4,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,paths.csv,session5.open,*,0.82,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,paths.csv,session5.high,*,0.859,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,paths.csv,session5.low,*,0.81,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,paths.csv,session5.close,*,0.843,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,paths.csv,session5.volume,*,437300,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+a10789b0-2c5f-4073-bca7-cf24c04adb09,MASK,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,4.35,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,paths.csv,session5.open,*,2.0,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,paths.csv,session5.high,*,2.149,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,paths.csv,session5.low,*,2.0,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,paths.csv,session5.close,*,2.01,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,paths.csv,session5.volume,*,42800,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ba74a1a6-04a3-45af-8082-6768f715ed50,CUPR,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-7.83,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,outcomes.csv,mae_5d,-6.28,-8.52,5th-session bar was partial at grade time; window max/min recomputed from final bars
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,paths.csv,session5.open,*,2.24,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,paths.csv,session5.high,*,2.24,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,paths.csv,session5.low,*,2.04,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,paths.csv,session5.close,*,2.1,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,paths.csv,session5.volume,*,8900,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+d1c13731-c4ab-4c97-baeb-6793085f9dee,ATPC,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-0.2,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,paths.csv,session5.open,*,7.4,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,paths.csv,session5.high,*,7.76,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,paths.csv,session5.low,*,7.35,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,paths.csv,session5.close,*,7.625,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,paths.csv,session5.volume,*,27400,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+719cc021-c03a-44fc-adc2-44fb41c2a2c8,VMAR,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,7.19,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,paths.csv,session5.open,*,2.05,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,paths.csv,session5.high,*,2.05,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,paths.csv,session5.low,*,1.94,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,paths.csv,session5.close,*,2.02,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,paths.csv,session5.volume,*,2400,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+ffd07b73-6ff7-405f-906f-c6cf772ed246,IOTR,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-3.17,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,paths.csv,session5.open,*,2.64,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,paths.csv,session5.high,*,2.667,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,paths.csv,session5.low,*,2.485,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,paths.csv,session5.close,*,2.54,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,paths.csv,session5.volume,*,14600,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+eb082d40-83ea-4858-98d0-e88bac2bd9c1,HKIT,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-0.12,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,outcomes.csv,mfe_5d,4.34,5.06,5th-session bar was partial at grade time; window max/min recomputed from final bars
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,paths.csv,session5.open,*,7.22,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,paths.csv,session5.high,*,7.27,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,paths.csv,session5.low,*,6.9,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,paths.csv,session5.close,*,7.05,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,paths.csv,session5.volume,*,5400,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f83ac63a-800d-4bcd-bd31-7e8806eb2260,PW,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,1.19,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,paths.csv,session5.open,*,0.96,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,paths.csv,session5.high,*,0.97,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,paths.csv,session5.low,*,0.926,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,paths.csv,session5.close,*,0.939,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,paths.csv,session5.volume,*,264800,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+60a6a5cb-f6d7-49fd-8ef1-4054ec7a3a89,BJDX,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-14.03,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,paths.csv,session5.open,*,1.59,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,paths.csv,session5.high,*,1.63,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,paths.csv,session5.low,*,1.555,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,paths.csv,session5.close,*,1.557,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,paths.csv,session5.volume,*,7400,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+787cfea5-07b8-4285-923e-fa4e10c46246,PULM,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e388dc5d-cdf4-4ff5-8974-7d25d03fc451,VRME,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,,no price history available on re-fetch (2026-10-07); left ungraded on this horizon
+e388dc5d-cdf4-4ff5-8974-7d25d03fc451,VRME,2026-09-22,outcomes.csv,note,,5d horizon ungradeable: last bar never finalized (INCIDENT 2026-10-07),disclosure
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-27.44,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,outcomes.csv,mae_5d,-33.8,-33.98,5th-session bar was partial at grade time; window max/min recomputed from final bars
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,paths.csv,session5.open,*,0.421,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,paths.csv,session5.high,*,0.474,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,paths.csv,session5.low,*,0.41,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,paths.csv,session5.close,*,0.463,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,paths.csv,session5.volume,*,1793800,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cd2857e4-a405-43b5-b4b8-4e1142360191,BTTC,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,55.91,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,paths.csv,session5.open,*,6.9,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,paths.csv,session5.high,*,7.383,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,paths.csv,session5.low,*,6.55,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,paths.csv,session5.close,*,6.79,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,paths.csv,session5.volume,*,485200,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+e04d5d4a-7b5c-479b-aa3a-2095d7d421ee,AVX,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-14.38,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,paths.csv,session5.open,*,0.575,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,paths.csv,session5.high,*,0.58,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,paths.csv,session5.low,*,0.531,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,paths.csv,session5.close,*,0.538,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,paths.csv,session5.volume,*,271800,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+dde7bafa-f7ce-4d21-8ed3-68a183f0b6e3,LOBO,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-28.23,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,paths.csv,session5.open,*,1.28,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,paths.csv,session5.high,*,1.39,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,paths.csv,session5.low,*,1.25,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,paths.csv,session5.close,*,1.35,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,paths.csv,session5.volume,*,413300,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+859d718c-cd06-4dc9-886a-8db4714ac087,GDC,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,1.83,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,paths.csv,session5.open,*,1.9,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,paths.csv,session5.high,*,2.061,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,paths.csv,session5.low,*,1.85,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,paths.csv,session5.close,*,1.9,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,paths.csv,session5.volume,*,2087800,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+cca60b5b-8b91-473d-b9d7-ee4235695a60,AVAT,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,18.79,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,paths.csv,session5.open,*,1.34,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,paths.csv,session5.high,*,1.86,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,paths.csv,session5.low,*,1.17,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,paths.csv,session5.close,*,1.22,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,paths.csv,session5.volume,*,36540200,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+608f09ce-2264-4233-a193-d2e1e4a53e06,NCPL,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,11.57,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,paths.csv,session5.open,*,4.356,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,paths.csv,session5.high,*,5.01,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,paths.csv,session5.low,*,4.26,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,paths.csv,session5.close,*,4.52,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,paths.csv,session5.volume,*,66200,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+0d9d3514-4966-49fc-9841-d41c25a901ca,SLMT,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,outcomes.csv,ret_open_5dclose_net,nan,-2.06,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,paths.csv,session5.open,*,7.77,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,paths.csv,session5.high,*,7.8,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,paths.csv,session5.low,*,7.76,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,paths.csv,session5.close,*,7.79,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,paths.csv,session5.volume,*,1629700,replace the unfinished 5th-session bar with the final bar (2026-09-29)
+f9d5b389-61ea-487f-9b11-1709ccc8a15b,PRTH,2026-09-22,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-10.24,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,paths.csv,session5.open,*,0.803,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,paths.csv,session5.high,*,0.83,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,paths.csv,session5.low,*,0.803,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,paths.csv,session5.close,*,0.813,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,paths.csv,session5.volume,*,197200,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+3d1f8bb0-646d-436c-a0c7-4609639bf7fd,MASK,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-75.78,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,paths.csv,session5.open,*,1.92,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,paths.csv,session5.high,*,1.95,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,paths.csv,session5.low,*,1.29,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,paths.csv,session5.close,*,1.56,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,paths.csv,session5.volume,*,1128400,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+c553ac91-665e-44fe-8e5c-4bc0336aa48f,NCT,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-11.04,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,paths.csv,session5.open,*,0.937,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,paths.csv,session5.high,*,0.938,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,paths.csv,session5.low,*,0.83,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,paths.csv,session5.close,*,0.855,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,paths.csv,session5.volume,*,395400,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+37f4d305-5d31-4d8c-a315-913c65960e17,BJDX,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-3.83,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,paths.csv,session5.open,*,1.08,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,paths.csv,session5.high,*,1.1,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,paths.csv,session5.low,*,1.05,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,paths.csv,session5.close,*,1.07,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,paths.csv,session5.volume,*,86900,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+b93216ea-0ef8-4102-b3c2-532e9a3d6516,CODX,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-8.63,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,paths.csv,session5.open,*,7.77,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,paths.csv,session5.high,*,7.9,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,paths.csv,session5.low,*,7.25,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,paths.csv,session5.close,*,7.32,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,paths.csv,session5.volume,*,16900,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+1a98aaa8-47f9-4f4b-9f5a-27760ff91f65,VMAR,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,12.57,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,paths.csv,session5.open,*,2.06,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,paths.csv,session5.high,*,2.79,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,paths.csv,session5.low,*,2.06,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,paths.csv,session5.close,*,2.28,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,paths.csv,session5.volume,*,904900,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+889e3370-4eb1-4b55-9da3-1421e2c6e318,CUPR,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-10.07,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,paths.csv,session5.open,*,2.1,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,paths.csv,session5.high,*,2.176,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,paths.csv,session5.low,*,2.04,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,paths.csv,session5.close,*,2.05,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,paths.csv,session5.volume,*,13400,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+05fa8447-b049-4504-80e6-d7206dd48d73,ATPC,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-3.57,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,paths.csv,session5.open,*,1.97,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,paths.csv,session5.high,*,1.97,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,paths.csv,session5.low,*,1.94,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,paths.csv,session5.close,*,1.94,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,paths.csv,session5.volume,*,2000,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+624e6745-0782-4e7a-a942-f7371ddfc6b5,IOTR,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-0.44,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,paths.csv,session5.open,*,2.74,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,paths.csv,session5.high,*,2.74,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,paths.csv,session5.low,*,2.47,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,paths.csv,session5.close,*,2.6,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,paths.csv,session5.volume,*,19500,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+46e17158-c3fb-41f6-82b9-3ac2d944582b,HKIT,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-2.43,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,paths.csv,session5.open,*,6.77,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,paths.csv,session5.high,*,7.1,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,paths.csv,session5.low,*,6.7,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,paths.csv,session5.close,*,7.02,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,paths.csv,session5.volume,*,6800,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+fb88fc4e-bb33-493e-a950-4a24b0393f9d,PW,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-31.77,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,paths.csv,session5.open,*,0.56,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,paths.csv,session5.high,*,0.56,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,paths.csv,session5.low,*,0.51,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,paths.csv,session5.close,*,0.512,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,paths.csv,session5.volume,*,294600,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+509c9bbd-eb01-47b4-9605-1ee023446140,LHSW,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-31.25,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,paths.csv,session5.open,*,2.47,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,paths.csv,session5.high,*,2.48,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,paths.csv,session5.low,*,2.21,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,paths.csv,session5.close,*,2.25,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,paths.csv,session5.volume,*,418800,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+5b33d354-2736-4022-81f6-a691c82c90ec,IMCC,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-57.23,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,paths.csv,session5.open,*,2.16,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,paths.csv,session5.high,*,2.2,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,paths.csv,session5.low,*,1.915,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,paths.csv,session5.close,*,1.97,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,paths.csv,session5.volume,*,238000,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+a7c7d6b1-5c48-4886-98f9-733d9920dc8b,DCOY,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-10.88,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,paths.csv,session5.open,*,0.81,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,paths.csv,session5.high,*,0.86,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,paths.csv,session5.low,*,0.789,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,paths.csv,session5.close,*,0.8,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,paths.csv,session5.volume,*,45800,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+29f099b0-6e2b-4c05-bcf4-411f3054a391,RAIN,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-9.7,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,paths.csv,session5.open,*,0.621,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,paths.csv,session5.high,*,0.637,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,paths.csv,session5.low,*,0.607,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,paths.csv,session5.close,*,0.611,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,paths.csv,session5.volume,*,121900,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0aa4f4e7-92d5-4075-8fad-70d4f8d96ea7,CWD,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-14.75,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,paths.csv,session5.open,*,1.33,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,paths.csv,session5.high,*,1.33,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,paths.csv,session5.low,*,1.26,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,paths.csv,session5.close,*,1.3,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,paths.csv,session5.volume,*,52200,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+0b461f23-ad4c-4929-a653-73dec1ab0b4f,EPSM,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-25.15,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,paths.csv,session5.open,*,0.62,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,paths.csv,session5.high,*,0.654,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,paths.csv,session5.low,*,0.6,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,paths.csv,session5.close,*,0.601,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,paths.csv,session5.volume,*,326500,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+f80d1ed9-3e47-4d50-9ee1-5dc9a4c9c91d,BFRG,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-35.91,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,paths.csv,session5.open,*,0.595,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,paths.csv,session5.high,*,0.595,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,paths.csv,session5.low,*,0.52,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,paths.csv,session5.close,*,0.532,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,paths.csv,session5.volume,*,313500,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+149c62c2-f0ff-42e3-911b-403dc115d529,QNME,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,outcomes.csv,ret_open_5dclose_net,nan,-11.38,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,paths.csv,session5.open,*,1.547,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,paths.csv,session5.high,*,1.579,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,paths.csv,session5.low,*,1.52,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,paths.csv,session5.close,*,1.545,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,paths.csv,session5.volume,*,33800,replace the unfinished 5th-session bar with the final bar (2026-09-30)
+408700f9-a765-4642-8c3b-96b92920fef6,JTAI,2026-09-23,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-45.81,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,paths.csv,session5.open,*,4.34,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,paths.csv,session5.high,*,4.48,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,paths.csv,session5.low,*,3.822,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,paths.csv,session5.close,*,3.95,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,paths.csv,session5.volume,*,463600,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+08e9da17-f37e-4d75-95c1-ab6d474bb1f3,JAGX,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+fea1a66e-8afc-4136-8ae4-0a338c90da3f,GCDT,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-12.7,GCDT 1:6 reverse split after grading; return computed on the consistently split-adjusted window (returns are split-invariant; stored MFE/MAE reproduce to <0.1pp)
+fea1a66e-8afc-4136-8ae4-0a338c90da3f,GCDT,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-4.61,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,paths.csv,session5.open,*,2.55,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,paths.csv,session5.high,*,2.74,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,paths.csv,session5.low,*,2.542,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,paths.csv,session5.close,*,2.61,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,paths.csv,session5.volume,*,19700,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+0edcc5af-1727-421f-bae7-98450b6ea2ab,HKIT,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-7.93,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,paths.csv,session5.open,*,0.812,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,paths.csv,session5.high,*,0.82,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,paths.csv,session5.low,*,0.8,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,paths.csv,session5.close,*,0.809,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,paths.csv,session5.volume,*,128400,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+4df56c6f-a44c-422d-8f8b-6c4052dff22c,MASK,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-74.76,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,paths.csv,session5.open,*,1.56,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,paths.csv,session5.high,*,1.67,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,paths.csv,session5.low,*,1.37,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,paths.csv,session5.close,*,1.46,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,paths.csv,session5.volume,*,252300,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+bd47ebf9-3432-4762-82ed-0b6be04e098d,NCT,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-10.7,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,paths.csv,session5.open,*,7.32,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,paths.csv,session5.high,*,7.325,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,paths.csv,session5.low,*,6.72,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,paths.csv,session5.close,*,6.72,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,paths.csv,session5.volume,*,27100,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+646172c2-96b5-4d28-8765-2871d1c64e02,VMAR,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,37.34,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,paths.csv,session5.open,*,2.34,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,paths.csv,session5.high,*,2.678,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,paths.csv,session5.low,*,2.31,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,paths.csv,session5.close,*,2.55,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,paths.csv,session5.volume,*,144400,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+1bd47f50-c2f2-4208-914a-ae4a6e0f0eb7,CUPR,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-11.13,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,paths.csv,session5.open,*,0.86,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,paths.csv,session5.high,*,0.866,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,paths.csv,session5.low,*,0.835,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,paths.csv,session5.close,*,0.846,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,paths.csv,session5.volume,*,59500,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+b7cc3d31-727c-4525-8581-7dc8b170fdc7,BJDX,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-11.82,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,paths.csv,session5.open,*,2.03,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,paths.csv,session5.high,*,2.055,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,paths.csv,session5.low,*,2.02,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,paths.csv,session5.close,*,2.02,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,paths.csv,session5.volume,*,10300,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+dd9ae4a1-c6ee-4272-beb4-058ee2bb1664,ATPC,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,1.89,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,paths.csv,session5.open,*,7.63,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,paths.csv,session5.high,*,7.63,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,paths.csv,session5.low,*,6.64,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,paths.csv,session5.close,*,6.95,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,paths.csv,session5.volume,*,11100,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+a89794c8-5209-43dc-878c-a1fb86d06362,PW,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-4.7,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,paths.csv,session5.open,*,1.06,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,paths.csv,session5.high,*,1.09,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,paths.csv,session5.low,*,1.06,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,paths.csv,session5.close,*,1.08,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,paths.csv,session5.volume,*,141000,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+822f89dc-5e77-4035-97d8-1ce0252182f8,CODX,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-23.76,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,paths.csv,session5.open,*,1.36,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,paths.csv,session5.high,*,1.78,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,paths.csv,session5.low,*,1.36,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,paths.csv,session5.close,*,1.51,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,paths.csv,session5.volume,*,4343000,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e548b8ca-b808-4fd2-b847-e451baf539bf,BENF,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-35.72,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,paths.csv,session5.open,*,3.17,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,paths.csv,session5.high,*,3.17,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,paths.csv,session5.low,*,2.85,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,paths.csv,session5.close,*,2.85,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,paths.csv,session5.volume,*,146500,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+13a99be0-44e8-4cb9-86f2-b766ae88e236,WHLR,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-15.13,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,paths.csv,session5.open,*,2.19,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,paths.csv,session5.high,*,2.48,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,paths.csv,session5.low,*,2.19,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,paths.csv,session5.close,*,2.25,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,paths.csv,session5.volume,*,21900,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+66821f9d-55bb-4bd1-8112-e56418af7517,VSA,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-23.36,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,paths.csv,session5.open,*,4.04,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,paths.csv,session5.high,*,4.07,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,paths.csv,session5.low,*,3.8,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,paths.csv,session5.close,*,3.83,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,paths.csv,session5.volume,*,92400,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+6f8c1e89-0537-45ec-ab47-8450dfbd46fc,ARTL,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-52.0,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,paths.csv,session5.open,*,1.96,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,paths.csv,session5.high,*,1.99,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,paths.csv,session5.low,*,1.791,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,paths.csv,session5.close,*,1.855,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,paths.csv,session5.volume,*,167600,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+49172ddd-67b5-4cae-8899-26385e8b7524,DCOY,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a55ec6d0-4bd0-40be-9e23-119dd5b40a44,GCDT,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-12.7,GCDT 1:6 reverse split after grading; return computed on the consistently split-adjusted window (returns are split-invariant; stored MFE/MAE reproduce to <0.1pp)
+a55ec6d0-4bd0-40be-9e23-119dd5b40a44,GCDT,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-12.36,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,paths.csv,session5.open,*,0.78,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,paths.csv,session5.high,*,0.78,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,paths.csv,session5.low,*,0.704,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,paths.csv,session5.close,*,0.744,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,paths.csv,session5.volume,*,881700,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+e5bc86cf-abe9-44f2-b112-af1a34a05896,ONCO,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-14.97,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,paths.csv,session5.open,*,1.69,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,paths.csv,session5.high,*,1.69,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,paths.csv,session5.low,*,1.6,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,paths.csv,session5.close,*,1.61,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,paths.csv,session5.volume,*,82200,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+fa1540ca-db04-4b87-b09f-97d47b69b303,MSS,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-24.94,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,paths.csv,session5.open,*,0.608,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,paths.csv,session5.high,*,0.63,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,paths.csv,session5.low,*,0.59,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,paths.csv,session5.close,*,0.628,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,paths.csv,session5.volume,*,309800,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+921813a5-1992-4c15-828a-288723ce9ae3,BFRG,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,outcomes.csv,ret_open_5dclose_net,nan,-3.75,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,paths.csv,session5.open,*,4.07,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,paths.csv,session5.high,*,4.07,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,paths.csv,session5.low,*,3.92,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,paths.csv,session5.close,*,3.94,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,paths.csv,session5.volume,*,24000,replace the unfinished 5th-session bar with the final bar (2026-10-01)
+7ad9b605-1f5f-499e-be71-b9c2c2f34ca1,KOSS,2026-09-24,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+33b09bac-c50c-4081-80b1-cb174009ef91,GCDT,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-34.54,GCDT 1:6 reverse split after grading; return computed on the consistently split-adjusted window (returns are split-invariant; stored MFE/MAE reproduce to <0.1pp)
+33b09bac-c50c-4081-80b1-cb174009ef91,GCDT,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-61.74,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,paths.csv,session5.open,*,4.15,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,paths.csv,session5.high,*,4.296,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,paths.csv,session5.low,*,3.5,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,paths.csv,session5.close,*,3.66,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,paths.csv,session5.volume,*,591500,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+0529a05f-4b11-4191-998e-f767a5252474,JAGX,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-63.02,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,paths.csv,session5.open,*,1.52,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,paths.csv,session5.high,*,1.99,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,paths.csv,session5.low,*,1.41,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,paths.csv,session5.close,*,1.68,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,paths.csv,session5.volume,*,2867400,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+741b576c-72ec-42c0-b887-e7d9ae5f1d29,NCT,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-2.47,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,outcomes.csv,mae_5d,-6.36,-6.95,5th-session bar was partial at grade time; window max/min recomputed from final bars
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,paths.csv,session5.open,*,0.8,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,paths.csv,session5.high,*,0.87,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,paths.csv,session5.low,*,0.79,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,paths.csv,session5.close,*,0.845,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,paths.csv,session5.volume,*,122600,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+bdc79ba1-1221-4783-ba3a-286755b62e31,MASK,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-22.1,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,outcomes.csv,mae_5d,-21.72,-21.91,5th-session bar was partial at grade time; window max/min recomputed from final bars
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,paths.csv,session5.open,*,6.8,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,paths.csv,session5.high,*,6.89,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,paths.csv,session5.low,*,6.255,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,paths.csv,session5.close,*,6.4,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,paths.csv,session5.volume,*,42700,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+409a55d9-1a64-4cae-bc05-09b35d26bd88,VMAR,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-4.01,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,paths.csv,session5.open,*,1.953,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,paths.csv,session5.high,*,1.953,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,paths.csv,session5.low,*,1.95,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,paths.csv,session5.close,*,1.95,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,paths.csv,session5.volume,*,1100,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+27ed1d96-ccea-4ae4-8107-fc0c5812ca9d,IOTR,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-8.09,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,paths.csv,session5.open,*,1.08,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,paths.csv,session5.high,*,1.1,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,paths.csv,session5.low,*,1.06,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,paths.csv,session5.close,*,1.08,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,paths.csv,session5.volume,*,83400,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+995edb82-5e37-4255-b0ed-50c678fa7ea3,CODX,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,0.31,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,paths.csv,session5.open,*,7.25,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,paths.csv,session5.high,*,7.25,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,paths.csv,session5.low,*,6.59,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,paths.csv,session5.close,*,6.65,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,paths.csv,session5.volume,*,40100,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c537ced7-0454-447f-b2c0-69e326bd2814,PW,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,30.24,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,paths.csv,session5.open,*,2.54,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,paths.csv,session5.high,*,2.54,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,paths.csv,session5.low,*,2.03,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,paths.csv,session5.close,*,2.42,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,paths.csv,session5.volume,*,331700,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+82388017-3939-446f-b373-0235bf40368c,CUPR,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-13.99,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,paths.csv,session5.open,*,0.847,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,paths.csv,session5.high,*,0.85,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,paths.csv,session5.low,*,0.83,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,paths.csv,session5.close,*,0.837,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,paths.csv,session5.volume,*,114600,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+728987f3-c242-460d-8a8f-55474dadf14b,BJDX,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-7.34,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,paths.csv,session5.open,*,2.58,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,paths.csv,session5.high,*,2.63,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,paths.csv,session5.low,*,2.45,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,paths.csv,session5.close,*,2.48,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,paths.csv,session5.volume,*,15900,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+55da4beb-7e91-4a92-925a-0c83c19de2a0,HKIT,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-10.4,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,paths.csv,session5.open,*,2.05,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,paths.csv,session5.high,*,2.155,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,paths.csv,session5.low,*,2.05,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,paths.csv,session5.close,*,2.061,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,paths.csv,session5.volume,*,5600,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a7785de0-7092-4e9f-baa6-d64fb0345e42,ATPC,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-63.3,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,outcomes.csv,mae_5d,-61.54,-62.74,5th-session bar was partial at grade time; window max/min recomputed from final bars
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,paths.csv,session5.open,*,4.1,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,paths.csv,session5.high,*,4.16,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,paths.csv,session5.low,*,3.1,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,paths.csv,session5.close,*,3.22,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,paths.csv,session5.volume,*,138400,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+a3977d73-43f3-46bd-ac4f-26fa4fec7ef3,APUS,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-36.11,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,paths.csv,session5.open,*,0.938,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,paths.csv,session5.high,*,0.938,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,paths.csv,session5.low,*,0.825,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,paths.csv,session5.close,*,0.85,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,paths.csv,session5.volume,*,337400,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+7c1a760b-05fd-44b9-b4a9-1ac8b83c4a2b,PMAX,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-39.41,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,paths.csv,session5.open,*,1.83,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,paths.csv,session5.high,*,1.833,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,paths.csv,session5.low,*,1.67,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,paths.csv,session5.close,*,1.69,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,paths.csv,session5.volume,*,363100,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+ad2292c2-2eee-412c-9b16-feb0abbf79cd,PFSA,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-24.7,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,paths.csv,session5.open,*,2.299,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,paths.csv,session5.high,*,2.43,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,paths.csv,session5.low,*,2.26,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,paths.csv,session5.close,*,2.35,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,paths.csv,session5.volume,*,8600,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+5aef5cdb-7700-46b7-b9f6-db1a2c821d78,SPHL,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-24.46,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,paths.csv,session5.open,*,2.55,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,paths.csv,session5.high,*,2.69,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,paths.csv,session5.low,*,2.456,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,paths.csv,session5.close,*,2.59,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,paths.csv,session5.volume,*,237600,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+f75d56c8-5a0f-426f-a4de-183a892f8b5e,VBIO,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-9.52,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,paths.csv,session5.open,*,2.07,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,paths.csv,session5.high,*,2.165,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,paths.csv,session5.low,*,2.07,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,paths.csv,session5.close,*,2.09,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,paths.csv,session5.volume,*,10400,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+3d35f289-3b8a-4b55-ad2a-9c34e15e9276,FOFO,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,11.35,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,paths.csv,session5.open,*,7.16,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,paths.csv,session5.high,*,7.55,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,paths.csv,session5.low,*,6.17,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,paths.csv,session5.close,*,6.2,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,paths.csv,session5.volume,*,446400,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c4b1ca92-7845-4a30-a41f-957ec71631f2,AVX,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-35.62,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,paths.csv,session5.open,*,0.86,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,paths.csv,session5.high,*,0.87,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,paths.csv,session5.low,*,0.8,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,paths.csv,session5.close,*,0.863,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,paths.csv,session5.volume,*,63900,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+627ea7a4-d865-4a89-b482-d9ce39fb2bf2,IFBD,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-12.57,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,paths.csv,session5.open,*,1.1,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,paths.csv,session5.high,*,1.11,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,paths.csv,session5.low,*,1.07,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,paths.csv,session5.close,*,1.1,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,paths.csv,session5.volume,*,280700,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+c16e0208-a9aa-4985-bd26-988df37c31ac,STAK,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,outcomes.csv,ret_open_5dclose_net,nan,-22.56,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,paths.csv,session5.open,*,0.86,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,paths.csv,session5.high,*,0.916,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,paths.csv,session5.low,*,0.85,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,paths.csv,session5.close,*,0.85,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,paths.csv,session5.volume,*,50000,replace the unfinished 5th-session bar with the final bar (2026-10-02)
+cd1de55e-ff7b-4258-ad05-ee6f9bc5eb62,EZGO,2026-09-25,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+6742d854-2df8-4d23-a242-fd1a9b58ec55,GCDT,2026-09-28,outcomes.csv,ret_open_5dclose_net,nan,-37.96,GCDT 1:6 reverse split after grading; return computed on the consistently split-adjusted window (returns are split-invariant; stored MFE/MAE reproduce to <0.1pp)
+6742d854-2df8-4d23-a242-fd1a9b58ec55,GCDT,2026-09-28,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,2.66,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,paths.csv,session5.open,*,6.56,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,paths.csv,session5.high,*,7.27,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,paths.csv,session5.low,*,5.34,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,paths.csv,session5.close,*,5.62,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,paths.csv,session5.volume,*,26950200,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6b32cfcc-4982-4f1a-ac2c-cb9eb7f49ce7,JAGX,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-38.17,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,paths.csv,session5.open,*,1.69,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,paths.csv,session5.high,*,1.75,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,paths.csv,session5.low,*,1.431,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,paths.csv,session5.close,*,1.5,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,paths.csv,session5.volume,*,314100,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d83e7076-3cdb-4715-b53d-7d41a7740890,NCT,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-8.86,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,outcomes.csv,mae_5d,-9.09,-10.61,5th-session bar was partial at grade time; window max/min recomputed from final bars
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,paths.csv,session5.open,*,2.43,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,paths.csv,session5.high,*,2.49,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,paths.csv,session5.low,*,2.36,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,paths.csv,session5.close,*,2.459,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,paths.csv,session5.volume,*,8700,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+da9f24a8-98a2-4712-8715-246737ebd9e4,HKIT,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,6.5,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,paths.csv,session5.open,*,2.31,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,paths.csv,session5.high,*,2.31,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,paths.csv,session5.low,*,2.02,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,paths.csv,session5.close,*,2.17,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,paths.csv,session5.volume,*,42400,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+28e671d2-80a2-4e29-9a5b-d7255fb0be5e,CUPR,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-15.51,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,paths.csv,session5.open,*,6.08,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,paths.csv,session5.high,*,6.41,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,paths.csv,session5.low,*,5.95,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,paths.csv,session5.close,*,6.4,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,paths.csv,session5.volume,*,17600,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7ded7222-4a2b-4659-829f-2abc055fd289,VMAR,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-0.29,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,paths.csv,session5.open,*,0.812,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,paths.csv,session5.high,*,0.842,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,paths.csv,session5.low,*,0.811,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,paths.csv,session5.close,*,0.834,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,paths.csv,session5.volume,*,37200,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d2815683-2228-43ab-8430-a0588ad99f9d,MASK,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-17.52,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,paths.csv,session5.open,*,0.78,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,paths.csv,session5.high,*,0.84,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,paths.csv,session5.low,*,0.763,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,paths.csv,session5.close,*,0.811,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,paths.csv,session5.volume,*,6910400,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+dee6076f-4c68-4631-90ae-36fa0bf0e38f,BJDX,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-4.91,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,paths.csv,session5.open,*,7.15,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,paths.csv,session5.high,*,7.48,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,paths.csv,session5.low,*,6.97,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,paths.csv,session5.close,*,7.01,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,paths.csv,session5.volume,*,11600,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+65d898c9-fed9-497f-a6ed-5087b550176d,PW,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-9.14,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,paths.csv,session5.open,*,2.15,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,paths.csv,session5.high,*,2.17,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,paths.csv,session5.low,*,2.08,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,paths.csv,session5.close,*,2.08,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,paths.csv,session5.volume,*,4800,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+ee0eeb87-1303-4b33-b9e1-51fdd6be0969,ATPC,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,3.5,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,paths.csv,session5.open,*,1.12,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,paths.csv,session5.high,*,1.17,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,paths.csv,session5.low,*,1.05,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,paths.csv,session5.close,*,1.15,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,paths.csv,session5.volume,*,886500,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8d0d230b-2772-417a-b041-229fb07b342b,CODX,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-4.93,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,paths.csv,session5.open,*,1.97,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,paths.csv,session5.high,*,1.99,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,paths.csv,session5.low,*,1.94,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,paths.csv,session5.close,*,1.99,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,paths.csv,session5.volume,*,2800,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+e8927059-4aa1-4733-8c64-4e3b7a39ade4,IOTR,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-0.65,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,paths.csv,session5.open,*,2.16,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,paths.csv,session5.high,*,2.3,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,paths.csv,session5.low,*,2.111,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,paths.csv,session5.close,*,2.26,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,paths.csv,session5.volume,*,34500,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+083010de-5a61-4b1b-aa2b-44923271373b,NAMI,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,16.62,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,paths.csv,session5.open,*,4.655,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,paths.csv,session5.high,*,4.9,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,paths.csv,session5.low,*,4.62,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,paths.csv,session5.close,*,4.745,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,paths.csv,session5.volume,*,12100,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+d7a77257-df29-48a6-8aa0-fe26e6f50537,EGG,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-68.43,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,paths.csv,session5.open,*,0.235,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,paths.csv,session5.high,*,0.243,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,paths.csv,session5.low,*,0.228,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,paths.csv,session5.close,*,0.233,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,paths.csv,session5.volume,*,473800,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c1ac828e-d8bf-417b-a2b8-a4c8dbe0a2c9,KNRX,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-16.75,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,paths.csv,session5.open,*,1.55,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,paths.csv,session5.high,*,1.6,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,paths.csv,session5.low,*,1.5,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,paths.csv,session5.close,*,1.56,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,paths.csv,session5.volume,*,94000,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+7836590b-dcff-4dfd-ade0-286b7a821ce2,BNKK,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-3.23,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,paths.csv,session5.open,*,6.51,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,paths.csv,session5.high,*,6.54,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,paths.csv,session5.low,*,6.44,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,paths.csv,session5.close,*,6.45,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,paths.csv,session5.volume,*,1232100,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+3a3a04ff-2f86-4310-9bdd-5862ffeb982f,LFCR,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-23.28,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,paths.csv,session5.open,*,3.2,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,paths.csv,session5.high,*,3.36,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,paths.csv,session5.low,*,3.04,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,paths.csv,session5.close,*,3.07,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,paths.csv,session5.volume,*,629800,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+6ad51795-0bdb-463d-95b7-1020b0dfe3aa,MEDS,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-10.37,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,paths.csv,session5.open,*,3.95,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,paths.csv,session5.high,*,4.26,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,paths.csv,session5.low,*,3.84,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,paths.csv,session5.close,*,4.05,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,paths.csv,session5.volume,*,102300,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+c5574ddd-d993-41b1-ba36-8d9c1e8120dc,CLRO,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-24.11,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,paths.csv,session5.open,*,0.75,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,paths.csv,session5.high,*,0.774,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,paths.csv,session5.low,*,0.73,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,paths.csv,session5.close,*,0.74,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,paths.csv,session5.volume,*,132400,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8a0f78d7-c388-44cf-a698-f3e584efd1da,WBUY,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,outcomes.csv,ret_open_5dclose_net,nan,-34.84,"5th-session bar was not final at grade time (Close=NaN); value recomputed from the final bar, same grader formula (close5-open)/open*100-2"
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,paths.csv,session5.open,*,3.14,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,paths.csv,session5.high,*,3.46,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,paths.csv,session5.low,*,3.14,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,paths.csv,session5.close,*,3.15,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,paths.csv,session5.volume,*,69300,replace the unfinished 5th-session bar with the final bar (2026-10-06)
+8848cd22-fab6-469f-aeb5-2ef7ed133d3f,TMCR,2026-09-29,outcomes.csv,note,,5d values corrected 2026-10-07: last bar was unfinished at grade time (INCIDENT 2026-10-07),disclosure

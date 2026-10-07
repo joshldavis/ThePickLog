@@ -1,5 +1,23 @@
 # ThePickLog — Audit Log
 
+## 2026-10-07 — INCIDENT: 125 five-day grades written as NaN — **❌ found, corrected, guarded**
+
+**What happened.** From the 09-29 grade run through 10-07, every pick reaching its 5th session was graded off a bar Yahoo had not finished: open/high/low present, **Close = NaN**. The grader wrote `ret_open_5dclose_net = nan` into `outcomes.csv` for **125 picks (cohorts 09-21 → 09-29)** and the same unfinished bar into `paths.csv`. Nothing checked for a non-finite number, so it went into the permanent record. `entry_open`, `same_day_close` and `ret_open_close_net` were never affected (they come from the entry bar). On 7 rows the partial bar also understated the window's extreme (6 MAE, 1 MFE).
+
+**How it surfaced.** The 10-03 weekly report failed: `PARITY FAIL H-EX1: (715, 49, nan, nan) vs (715, 49, nan, nan)`. The self-test was right to stop — it refused to publish a NaN — but the message hid the cause, since `nan != nan`.
+
+**What was NOT affected.** Every published same-day figure. The H-JEV1/H-JEV2 forward window (picks from 10-02) — none of its picks had been graded yet; the guard lands before the first one is. H-RISK1/2 and H-JEV use `mae_5d`; 6 of the 125 MAE values moved by 0.2–2.2pp and are corrected below.
+
+**Correction (append-only evidence, not a silent rewrite).** `corrections/nan5d-2026-10-07.csv` lists every changed cell with old value, new value and reason; `fix_nan5d_2026_10_07.py` applies it, refusing any cell whose current value is not the expected old one, and touches no other line. New values are Yahoo's final daily bars under the grader's own formula — a stranger can reproduce each one.
+- **120 rows:** 5-day return filled; final 5th-session bar replaces the unfinished one in `paths.csv`; MAE/MFE corrected on the 7 rows where the partial bar moved them.
+- **4 GCDT rows:** 1:6 reverse split after grading; return computed on the consistently split-adjusted window (returns are split-invariant; stored MFE/MAE reproduce to <0.1pp). `paths.csv` bar left as captured (unadjusted units).
+- **1 VRME row:** no history on re-fetch; 5-day horizon left blank (ungraded), disclosed in `note`.
+- Every corrected row's `note` says so. Ledger sealed with event `correction-nan5d-2026-10-07`.
+
+**Guard (so it can't recur).** `ignitionscan.py` grade and `grade_controls.py`: (1) never grade on the same ET date as the window's last session — that bar isn't final; the next run grades it (adds ≤1 day of lag); (2) never write a non-finite number — treat it as a transient missing fetch. `hypo_eval.py` now fails first with `DATA: n non-finite value(s) in outcomes.csv` instead of a parity riddle.
+
+**Observation for the next weekly audit (no action taken).** A control re-grade of 40 older rows (graded 08-15 → 09-28): 5 differ by reverse splits (known split-adjustment trap), and 4 non-split rows now differ from what Yahoo serves today — e.g. **PMI 08-25: stored 5d −23.98 vs −36.24 today**; RKDA, HUIZ, PW small MAE/MFE shifts. By design the log keeps what was seen at grade time; worth checking whether those were also graded off partial bars.
+
 ## 2026-10-03 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 *Snapshot: live build `67f7793` (stamp "2026-10-03 07:57 ET"). Both served CSVs match `origin/main@67f7793` byte for byte (SHA-256 `6eebe567…` picks, `6bd45900…` outcomes). Latest cohort 10-02.*
