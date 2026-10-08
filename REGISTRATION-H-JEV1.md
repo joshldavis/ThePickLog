@@ -89,3 +89,15 @@ Neither change can make a pass easier. Exposure, strata, estimate, CI, bar, wind
 H-JEV2 (`REGISTRATION-H-JEV2.md`) was registered today as a second forward test. Two tests mean two chances at a false pass, so H-JEV1 Part B is now judged with H-JEV2 under **Holm's step-down**. A test passes on its 97.5% CI, or on its 95% CI once the other has passed on its 97.5% CI. Before this amendment H-JEV1 needed only its 95% CI, so the bar can only have risen. Exposure, window, estimate, effect bar and ticker floor are unchanged, and Part A's reported numbers are unchanged; `result_A.json` only gains a `ci_level` field on re-run.
 
 For the record, here is the rule applied to Part A's data, which shows the tightening has teeth. H-JEV1's 97.5% CI is [−7.99, +0.37], so it would not pass at step 1. It would pass at step 2 only because the 8-K flag's 97.5% CI is [−11.40, −0.99]. Part A still cannot establish either hypothesis.
+
+---
+
+## Amendment 3 — 2026-10-08, before any Part B outcome exists (procedural guards only)
+
+An automated code review on PR #10 found that the code did not enforce three things the registration already says. `jev_backfill.py` 1.2.0 now enforces them:
+
+1. **One look.** `analyze --part B` refuses to run if `jev_backfill/result_B.json` exists, and writes it in exclusive-create mode. The single look can't be repeated or overwritten.
+2. **Complete data.** Part B refuses to run, *before summarizing any outcome*, if any pick in the window is still unselected or has no filing read, or if more than 5% of picks are ungraded.
+3. **The registered instrument.** `read` refuses unless the model is exactly `jev-1.13.0` and the question block is v2 (`394e6c22687a…`). The analysis refuses if any event it would use came from anything else. All 756 Part A reads and every Part B read so far pass.
+
+None of these changes the exposure, the windows, the estimate, the bar or Holm. Each can only stop a run, never make a pass easier. Part A re-runs byte-identical.

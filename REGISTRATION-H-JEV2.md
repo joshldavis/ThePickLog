@@ -25,3 +25,5 @@ The estimate D, the strata, the ticker-clustered bootstrap (2,000 resamples, see
 
 - **PASS:** the 8-K risk label may ship on pick cards with the framing above.
 - **FAIL or INSUFFICIENT:** no 8-K risk label, and this flag is not re-tested on 2026 Q4 data.
+
+**2026-10-08:** H-JEV1 amendment 3 (one look, complete data, registered instrument) applies here too. It is enforced by the same `analyze --part B` run.

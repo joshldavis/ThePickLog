@@ -180,15 +180,16 @@ def score(rows, answers, labels):
         bins = [[] for _ in range(BINS)]
         for p, c, _, _ in pts:
             i = min(BINS - 1, int(p * BINS))
-            bins[i].append(c)
+            bins[i].append((p, c))
         rel, ece = [], 0.0
         for i, b in enumerate(bins):
             if not b:
                 rel.append({"bin": i, "lo": i / BINS, "hi": (i + 1) / BINS, "n": 0}); continue
-            acc = sum(b) / len(b)
-            mid = (i + 0.5) / BINS
-            ece += abs(acc - mid) * len(b) / n
-            rel.append({"bin": i, "lo": i / BINS, "hi": (i + 1) / BINS, "n": len(b), "accuracy": round(acc, 4)})
+            acc = sum(c for _, c in b) / len(b)
+            conf = sum(p for p, _ in b) / len(b)        # standard ECE: mean predicted p, not the bin midpoint
+            ece += abs(acc - conf) * len(b) / n
+            rel.append({"bin": i, "lo": i / BINS, "hi": (i + 1) / BINS, "n": len(b), "accuracy": round(acc, 4),
+                        "mean_p": round(conf, 4)})
         res["ece"] = round(ece, 4)
         res["reliability"] = rel
         top = [c for p, c, _, _ in pts if p >= TOP_BIN]

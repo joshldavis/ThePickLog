@@ -59,7 +59,7 @@ import time
 from datetime import date, datetime, timezone
 from html.parser import HTMLParser
 
-__version__ = "0.2.0-gate2"
+__version__ = "0.2.1-gate2"
 
 # ---------------------------------------------------------------------------
 # Tunables (explicit, auditable)
@@ -596,9 +596,11 @@ def call_jev(request):
 
 
 def snapshot(ticker, cik, recent, asof, pick_id="", call=call_jev, fetch=fetch_doc,
-             log_path="filing_events.jsonl", dry_run=False):
+             log_path="filing_events.jsonl", dry_run=False, skip=None, max_reads=None):
     """Per-ticker orchestration for edgar_lens.snapshot() (gate 3). NON-FATAL: any
-    failure degrades to blanks with a note. dry_run: select + fetch nothing, call nothing."""
+    failure degrades to blanks with a note. dry_run: select + fetch nothing, call nothing.
+    skip: accessions already logged for this pick (never re-read). max_reads: the most
+    filings this call may send to Jev, so a caller's budget holds inside one pick too."""
     out = dict(FL_BLANK)
     notes = []
     try:
@@ -610,6 +612,14 @@ def snapshot(ticker, cik, recent, asof, pick_id="", call=call_jev, fetch=fetch_d
         out["fl_filings_read"] = len(selected)
         out["fl_note"] = "dry_run:" + ",".join(f"{f['form']}@{f['filingDate']}({f['reason']})" for f in selected)
         return out
+    if skip:
+        n0 = len(selected)
+        selected = [f for f in selected if f.get("accession") not in skip]
+        if n0 - len(selected):
+            notes.append(f"already_logged:{n0 - len(selected)}")
+    if max_reads is not None and len(selected) > max(0, max_reads):
+        notes.append(f"budget_cut:{len(selected) - max(0, max_reads)}")
+        selected = selected[:max(0, max_reads)]
     results = []
     for f in selected:
         if not f.get("primaryDocument"):
@@ -881,6 +891,25 @@ def _selftest():
     assert len(lines) == 1 and lines[0]["pick_id"] == "p1" and lines[0]["model"] == MODEL, [l["pick_id"] for l in lines]
     assert s2["skipped_logged"] == 1 and s2["read"] == 0 and len(open(lp).readlines()) == 1, "idempotent"
     assert s3["cap_reached"] and not os.path.exists(os.path.join(td, "e2.jsonl")), s3
+    # idempotency is per FILING: a pick cut off mid-way gets its unread filings next run,
+    # and the read budget holds inside a pick (2 filings, budget 1 -> exactly 1 read).
+    two = sel[0:2]
+    rec2 = {"form": [f["form"] for f in two], "filingDate": [f["filingDate"] for f in two],
+            "items": [f["items"] for f in two], "accessionNumber": [f["accession"] for f in two],
+            "primaryDocument": [f["primaryDocument"] for f in two]}
+    lp2 = os.path.join(td, "e3.jsonl")
+    kw2 = dict(kw, log_path=lp2, recent_of=lambda c: rec2)
+    JEV_MODEL = MODEL
+    try:
+        s4 = shadow("2026-09-22", max_reads=1, **kw2)
+        s5 = shadow("2026-09-22", **kw2)
+        s6 = shadow("2026-09-22", **kw2)
+    finally:
+        JEV_MODEL = saved
+    accs = [json.loads(l)["accession"] for l in open(lp2)]
+    assert s4["read"] == 1 and s4["cap_reached"], s4
+    assert s5["read"] == 1 and sorted(accs) == sorted(f["accession"] for f in two), (s5, accs)
+    assert s6["read"] == 0 and s6["skipped_logged"] == 1 and len(accs) == 2, s6
 
     print(f"filing_lens selftest OK  (lens {__version__}, questions sha {QUESTIONS_SHA256[:12]}, "
           f"{len(QUESTION_ORDER)} questions, {len(FL_FIELDS)} sidecar fields)")
@@ -910,19 +939,17 @@ def shadow(trading_date, picks_path="picks.csv", log_path="filing_events.jsonl",
         from edgar_lens import submissions_recent as recent_of
     if cik_of is None:
         from asof_grader import ticker_to_cik as cik_of
-    done = set()
+    done = {}                                   # pick_id -> accessions already logged
     if os.path.exists(log_path):
         for line in open(log_path):
             try:
-                done.add(json.loads(line).get("pick_id", ""))
+                rec = json.loads(line)
             except ValueError:
                 continue
+            done.setdefault(rec.get("pick_id", ""), set()).add(rec.get("accession", ""))
     rows = [r for r in csv.DictReader(open(picks_path)) if r.get("trading_date") == trading_date]
     summary["picks"] = len(rows)
     for r in rows:
-        if r["pick_id"] in done:
-            summary["skipped_logged"] += 1
-            continue
         if summary["read"] >= max_reads:
             summary["cap_reached"] = True
             break
@@ -932,9 +959,16 @@ def shadow(trading_date, picks_path="picks.csv", log_path="filing_events.jsonl",
                 summary["no_cik"] += 1
                 continue
             recent = recent_of(cik)
+            skip = done.get(r["pick_id"], set())
             out = snapshot(r["ticker"], cik, recent, trading_date, pick_id=r["pick_id"],
-                           call=call, fetch=fetch, log_path=log_path)
-            summary["read"] += int(out.get("fl_filings_read") or 0)
+                           call=call, fetch=fetch, log_path=log_path,
+                           skip=skip, max_reads=max_reads - summary["read"])
+            n_read = int(out.get("fl_filings_read") or 0)
+            summary["read"] += n_read
+            if skip and not n_read:
+                summary["skipped_logged"] += 1
+            if "budget_cut" in (out.get("fl_note") or ""):
+                summary["cap_reached"] = True
             if out.get("fl_note"):
                 summary["notes"].append(f"{r['ticker']}:{out['fl_note'][:80]}")
         except Exception as e:                      # one ticker never stops the rest

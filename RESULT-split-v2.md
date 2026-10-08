@@ -52,7 +52,7 @@ No label corrections were made, so "as labeled" and "corrected" are the same fil
 
 These are genuine ambiguities, and none of them touches the primary outcome. They were not corrected.
 
-**Calibration is underconfident, not overconfident.** ECE for `reverse_split` is 0.063, which is not gated. Right answers sit below 0.90 more often than wrong answers sit above it. The floor that would give 0.95 precision is 0.50.
+**Calibration is good, and underconfident where it errs.** ECE for `reverse_split` is **0.021**, which is not gated. *(Corrected 2026-10-08: first reported as 0.063, from a bin-midpoint bug. See `CORRECTION-ece-2026-10-08.md`.)* All 7 answers with p from 0.60 to 0.90 were right, and the 3 below 0.60 were wrong. The floor that would give 0.95 precision is 0.50.
 
 **The labels come from a model reader, not a person.** Each label carries a verbatim quote (`calibration_v2/labels_model_v2.json`). Yahoo split history was recorded as evidence only (`evidence_yahoo.csv`) and never used as a label. It agrees with the labels:
 

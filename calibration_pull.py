@@ -65,9 +65,11 @@ def stratum_of(f):
         return "S-3"
     items = fl._items_of(f["items"])
     # priority: the rarest / most decision-relevant item wins when an 8-K has several
-    for it in ("5.03", "3.01", "3.02", "1.01", "8.01"):
+    for it in ("5.03", "3.03", "3.01", "3.02", "1.01", "8.01"):
         if it in items:
-            return f"8k_{it}"
+            # 3.03 (material modification of holders' rights) is where a split can be reported
+            # without 5.03; the production prefilter reads it, so it samples with the split stratum.
+            return "8k_5.03" if it == "3.03" else f"8k_{it}"
     return None
 
 

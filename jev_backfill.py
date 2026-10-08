@@ -43,7 +43,7 @@ except Exception:                                   # pragma: no cover
 
 import filing_lens as fl
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 OUT_DIR   = "jev_backfill"
 PICKMAP   = os.path.join(OUT_DIR, "pick_filings.csv")
@@ -60,6 +60,11 @@ PART_B = ("2026-10-01", "2026-12-31")     # forward, confirmatory: one look, on/
 # judged by Holm's step-down: a test passes on its 97.5% CI, or on its 95% CI once the
 # other test has passed on its 97.5% CI. Part A stays at 95% as originally reported.
 JEV2_WINDOW  = ("2026-10-02", "2026-12-31")
+# Amendment 3 (2026-10-08): the registered instrument, enforced on every read and every
+# event the analysis uses; and Part B may run only on complete data, exactly once.
+REG_MODEL    = "jev-1.13.0"
+REG_QSHA     = "394e6c22687a3ce282e839b69041d31418df6135e1e9267c077967db71726c6a"
+MAX_UNGRADED = 0.05                        # Part B refuses to run above this share
 CI_FAMILY    = 0.975
 EFFECT_BAR   = -3.0                        # percentage points of mae_5d
 MIN_TICKERS  = 25                          # distinct tickers required in EACH arm
@@ -185,6 +190,9 @@ def read(max_reads, call=None, fetch=None):
     fetch = fetch or fl.fetch_doc
     if call is fl.call_jev and not (fl.JEV_API_KEY and fl.JEV_MODEL):
         raise SystemExit("JEV_API_KEY and JEV_MODEL (pinned) are required for read")
+    if call is fl.call_jev and (fl.JEV_MODEL != REG_MODEL or fl.QUESTIONS_SHA256 != REG_QSHA):
+        raise SystemExit(f"refusing: instrument is {fl.JEV_MODEL} / questions {fl.QUESTIONS_SHA256[:12]}, "
+                         f"registered is {REG_MODEL} / {REG_QSHA[:12]} (set FILING_LENS_QUESTIONS=v2)")
     done = set(_events())
     todo, seen = [], set()
     for r in _load_pickmap():
@@ -310,10 +318,35 @@ def cluster_boot(rows, ykey, flagkey, B=BOOT, seed=SEED, level=0.95):
     return (est[int(tail * len(est))], est[int((1.0 - tail) * len(est)) - 1])
 
 
+def check_instrument(events):
+    """Every event must come from the registered model and question block."""
+    bad = [a for a, e in events.items()
+           if e.get("model") != REG_MODEL or e.get("questions_sha256") != REG_QSHA]
+    if bad:
+        raise SystemExit(f"refusing: {len(bad)} event(s) not from {REG_MODEL} / {REG_QSHA[:12]}, e.g. {bad[:3]}")
+
+
+def part_b_blockers(status):
+    """-> list of reasons Part B may not run yet (empty = ready)."""
+    n = sum(v for k, v in status.items() if k != "ungraded")
+    why = []
+    for k in ("not_selected_yet", "unread"):
+        if status.get(k):
+            why.append(f"{status[k]} pick(s) {k}")
+    if n and status.get("ungraded", 0) / n > MAX_UNGRADED:
+        why.append(f"{status['ungraded']} of {n} picks ungraded (> {MAX_UNGRADED:.0%})")
+    if not n:
+        why.append("no picks in the window")
+    return why
+
+
 def build_rows(part, picks_path=PICKS, outcomes_path=OUTCOMES, pickmap=None, events=None):
     lo, hi = PART_A if part == "A" else PART_B
     pickmap = _load_pickmap() if pickmap is None else pickmap
     events = _events() if events is None else events
+    check_instrument({r["accession"]: events[r["accession"]] for r in pickmap
+                      if r.get("status") == "selected" and r["accession"] in events
+                      and lo <= r["trading_date"] <= hi})
     flags = pick_flags(pickmap, events)
     outs = {o["pick_id"]: o for o in csv.DictReader(open(outcomes_path))}
     picks = [p for p in csv.DictReader(open(picks_path)) if lo <= p["trading_date"] <= hi]
@@ -473,6 +506,16 @@ def _selftest():
     assert verdict({**base, "ci95": [-6, 0.1]}) == "FAIL"
     assert verdict({**base, "tickers_clean": 24}).startswith("INSUFFICIENT")
     assert tercile_cuts([1, 2, 3, 4, 5, 6]) == (3, 5)
+    assert part_b_blockers({"ok": 100, "no_filings": 20, "ungraded": 3}) == []
+    assert part_b_blockers({"ok": 100, "ungraded": 6})[0].startswith("6 of 100")
+    assert part_b_blockers({"ok": 100, "unread": 1}) == ["1 pick(s) unread"]
+    assert part_b_blockers({"ok": 100, "not_selected_yet": 4})[0].startswith("4 pick(s)")
+    try:
+        check_instrument({"x": {"model": "jev-9.9.9", "questions_sha256": REG_QSHA}})
+        raise AssertionError("foreign model accepted")
+    except SystemExit:
+        pass
+    check_instrument({"x": {"model": REG_MODEL, "questions_sha256": REG_QSHA}})
     assert verdict({"tickers_flag": 30, "tickers_clean": 30, "D_stratified": -4.0, "ci": [-7, -0.1]}) == "PASS"
     G = lambda hi: {"tickers_flag": 30, "tickers_clean": 30, "D_stratified": -4.0, "ci": [-7, hi]}
     assert holm(G(-0.5), G(0.3), G(-2), G(-1)) == ("PASS (95% CI, Holm step 2)", "PASS (97.5% CI, Holm step 1)")
@@ -501,11 +544,20 @@ def main():
     elif a.stage == "read":
         print(json.dumps(read(a.max_reads), indent=1))
     elif a.stage == "analyze":
-        if a.part == "B" and date.today() < date(2027, 1, 11):
-            raise SystemExit("Part B has one registered look, on or after 2027-01-11.")
+        out_path = os.path.join(OUT_DIR, f"result_{a.part}.json")
+        if a.part == "B":
+            if date.today() < date(2027, 1, 11):
+                raise SystemExit("Part B has one registered look, on or after 2027-01-11.")
+            if os.path.exists(out_path):
+                raise SystemExit(f"Part B already looked: {out_path} exists. One look only; it is never replaced.")
+            _, status, _ = build_rows("B")            # counts only; no outcome is summarized
+            why = part_b_blockers(status)
+            if why:
+                raise SystemExit("Part B not ready, nothing analyzed: " + "; ".join(why))
         res = analyze(a.part)
         os.makedirs(OUT_DIR, exist_ok=True)
-        json.dump(res, open(os.path.join(OUT_DIR, f"result_{a.part}.json"), "w"), indent=1)
+        with open(out_path, "x" if a.part == "B" else "w") as fh:
+            json.dump(res, fh, indent=1)
         print(json.dumps(res, indent=1))
     else:
         ap.print_help()
