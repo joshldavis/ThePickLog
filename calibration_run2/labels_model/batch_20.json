@@ -1,0 +1,674 @@
+[
+ {
+  "cal_id": "CAL-0473",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-15",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split will become effective as of 5:00 p.m. Eastern Time on May 1, 2025",
+   "split_ratio": "our Board of Directors approved a 1-for-15 reverse stock split of the Company's issued and outstanding shares of Common Stock",
+   "listing_status": "to enable the Company to comply with the Nasdaq Stock Market's continued listing requirements",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filed 2025-04-30; effective May 1 after filing date."
+ },
+ {
+  "cal_id": "CAL-0474",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "other",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split will be effective as of 5:00 p.m. Eastern Time on Wednesday, December 17, 2025",
+   "split_ratio": "at a ratio of 1-for-17.85 (the \"Reverse Stock Split\")",
+   "listing_status": "to satisfy the $1.00 minimum bid price requirement, as set forth in Listing Rule 5450(a)(1)",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "announcing that the Company has cancelled its 2025 Special Meeting of Stockholders"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "medium",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Non-integer ratio 1-for-17.85 mapped to other; no deficiency notice explicitly described."
+ },
+ {
+  "cal_id": "CAL-0475",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-10",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Certificate of Amendment will become effective at 12:01 AM Eastern Time on June 17, 2026",
+   "split_ratio": "every 10 shares of common stock, par value $0.0001 per share (the \"Common Stock\"), issued and outstanding will be converted into one share",
+   "listing_status": "not mentioned",
+   "dilution_event": "increases the number of shares of the Company's common stock ... reserved for issuance under the 2024 Plan",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Equity plan reserve increase treated as non-transaction."
+ },
+ {
+  "cal_id": "CAL-0476",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-20",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split became effective as of 12:01 a.m. Eastern Time on December 5, 2025",
+   "split_ratio": "the board of directors approved a one-for-twenty (1-for-20) reverse split",
+   "listing_status": "primarily intended to bring the Company into compliance with Nasdaq's Bid Price Rule requirement",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0477",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-50",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split became effective as of February 4, 2026",
+   "split_ratio": "to implement a 1-for-50 reverse split of the Company's common stock",
+   "listing_status": "began trading on the OTCQB marketplace on a post-split basis",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0478",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-3",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Split will be effective as of 5:00 p.m. Eastern Time on July 24, 2026",
+   "split_ratio": "to effect a one-for-three (1-for-3) reverse stock split",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Effective time on filing date (2026-07-24) -> effective per rule."
+ },
+ {
+  "cal_id": "CAL-0479",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "The Board has not yet determined the ratio of the Reverse Stock Split and/or determined to move forward with the Reverse Stock Split",
+   "split_ratio": "by a ratio of between one-for-ten to one-for-twenty, inclusive",
+   "listing_status": "not mentioned",
+   "dilution_event": "certain investors (the \"PIPE Investors\") subscribed for and purchased an aggregate of 6,363,637 shares of PEDEVCO Series A Preferred Stock",
+   "going_concern": "not mentioned",
+   "other_material": "PEDEVCO Corp., a Texas corporation (the \"Company\", \"PEDEVCO\", \"we\" and \"us\"), entered into an Agreement and Plan of Merger"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "PIPE of convertible preferred; could be convertible_or_warrants."
+ },
+ {
+  "cal_id": "CAL-0480",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-20",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "effective as of 12:01 a.m. Pacific Time on February 6, 2026 (the \"Effective Time\"), the Reverse Stock Split",
+   "split_ratio": "approved by unanimous written consent a 1-for-twenty reverse stock split",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0481",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-5",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "On July 6, 2026, we effected a reverse split of our common shares of beneficial interest",
+   "split_ratio": "every five of our common shares of beneficial interest ... were converted and reclassified into one common share of beneficial interest",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0482",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-6",
+   "listing_status": "regained_compliance",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Split will be effective as of 12:01 a.m. Eastern Time on June 13, 2025",
+   "split_ratio": "to effect a one-for-six (1-for-6) reverse stock split",
+   "listing_status": "received a formal notification via letter from Nasdaq confirming that the Company had regained compliance with the minimum bid price requirement",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Effective time on filing date (2025-06-13)."
+ },
+ {
+  "cal_id": "CAL-0483",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-6",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Company expects that the Reverse Stock Split will become effective as of 5:00 p.m., Eastern Time, on December 22, 2025",
+   "split_ratio": "at a ratio of 1-for-6 (the \"Reverse Stock Split\")",
+   "listing_status": "to enable the Company to manage continued compliance with Nasdaq Listing Rule 5550(a)(2)",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0484",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-23",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "Effective as of 4:05 p.m. Eastern Time on January 15, 2025, AlloVir filed the Reverse Stock Split Amendment and effected a 1-for-23 reverse stock split",
+   "split_ratio": "the Board approved a reverse stock split of the Common Stock at a ratio of 1-for-23",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "This communication relates to the Reverse Stock Split in connection with the proposed merger involving AlloVir and Kalaris Therapeutics, Inc."
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Pending Kalaris merger referenced only in legend; not a reported event here."
+ },
+ {
+  "cal_id": "CAL-0485",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-5",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Company expects that the Reverse Stock Split will become effective as of 5:01 p.m., Eastern Time, on February 14, 2025",
+   "split_ratio": "at a ratio of 1-for-5 (the \"Reverse Stock Split\")",
+   "listing_status": "the Company had been granted an additional 180 calendar day extension, or until February 24, 2025, to regain compliance with the Bid Price Rule",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0486",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-6",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split has become effective as of 9:30 a.m., Eastern Time, on June 22, 2026",
+   "split_ratio": "at a ratio of 1-for-6 (the \"Reverse Stock Split\")",
+   "listing_status": "to enable the Company to manage continued compliance with Nasdaq Listing Rule 5550(a)(2)",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0487",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-3",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "the Reverse Stock Split shall be effective as of 4:01 p.m., Eastern Time, on October 23, 2025",
+   "split_ratio": "the Board determined to fix the Reverse Stock Split ratio at 3:1",
+   "listing_status": "will begin trading on the OTCQB Venture Market on a reverse split-adjusted basis",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0488",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-12",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split will become effective as of 5:00 p.m. Eastern Time on March 6, 2026",
+   "split_ratio": "the Board approved a 1-for-12 reverse stock split",
+   "listing_status": "to enable the Company to comply with The Nasdaq Capital Market's (\"Nasdaq\") continued listing requirements",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0489",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-4",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "Certificate of Change for Hartford Creative Group, Inc., effective as of March 31, 2025.",
+   "split_ratio": "at a ratio of 1-for-4",
+   "listing_status": "to gain compliance with the minimum bid price requirement of $4.00 per share of Common Stock for initial listing on the Nasdaq Capital Market",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Effectiveness only stated via exhibit caption (March 31, before 2025-04-07 filing); body uses 'will be combined'."
+ },
+ {
+  "cal_id": "CAL-0490",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-5",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Amendment, effective as of 5:00 p.m. Eastern Time on September 19, 2025 (the \"Effective Time\"), converted every five shares",
+   "split_ratio": "the previously announced one-for-five reverse stock split",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0491",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-10",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "the Reverse Split was effective and the Class A Ordinary Shares began trading on a split-adjusted basis when the market opened on July 20, 2026",
+   "split_ratio": "Aptorum effectuated a 10 for 1 share consolidation of its authorized share capital",
+   "listing_status": "not mentioned",
+   "dilution_event": "a total of 1,979,216 shares of Niki Common Stock were issued to current stockholders of DiamiR",
+   "going_concern": "not mentioned",
+   "other_material": "Aptorum consummated its previously announced merger (the \"Closing\") pursuant to that certain Agreement and Plan of Merger"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "low",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Merger consideration shares issued; no dilution category fits, labeled none."
+ },
+ {
+  "cal_id": "CAL-0492",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-16",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "which effected a 1-for-16 reverse stock split as of 12:01 a.m. Eastern Standard Time on January 28, 2025",
+   "split_ratio": "each sixteen (16) shares of the Company's issued and outstanding common stock prior to the Certificate of Amendment automatically converted into one share",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0493",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-5",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "the Trust completed a one-for-five Reverse Split of the outstanding Common Shares, effective at 5:00 p.m. ET on November 10, 2025",
+   "split_ratio": "each outstanding Common Share, par value $0.0001 per share, automatically reclassified into 1/5th of a Common Share",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0494",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-10",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Split will be effective as of 12:01 AM Eastern Standard Time on January 2, 2026",
+   "split_ratio": "the stockholders approved a 1-for-10 reverse stock split of the Company's common stock",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0495",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "other",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "We are implementing a 1-for-1,500 reverse split of the Company's common stock ... effective as of the close of business on October 16, 2025",
+   "split_ratio": "every 1,500 pre-Reverse Split shares of common stock outstanding will automatically combine into one new share",
+   "listing_status": "not mentioned",
+   "dilution_event": "it has no specific plans, arrangements, or understandings to do so",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Effective at close of business on filing date; 8-K/A."
+ },
+ {
+  "cal_id": "CAL-0496",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "other",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The name change and reverse split were processed by the Financial Industry Regulatory Authority (FINRA) on May 15, 2025 and effective as of May 16",
+   "split_ratio": "effect a reverse split of its common stock on the basis of 6,500 to 1",
+   "listing_status": "not mentioned",
+   "dilution_event": "Ambex is issuing 38,000,000 shares of company common stock to Ambex",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "low",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Shares issued to Ambex for JV contribution; closest category private_placement. Shell-status change / JVs not in other_material list."
+ }
+]

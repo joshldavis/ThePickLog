@@ -1,0 +1,177 @@
+{
+  "registration": "REGISTRATION-split-v2.md",
+  "model": "jev-1.13.0",
+  "questions_sha256": "394e6c22687a3ce282e839b69041d31418df6135e1e9267c077967db71726c6a",
+  "sample": 196,
+  "scope_8k_503_303": 196,
+  "floor": 0.9,
+  "as_labeled": {
+    "corrections_applied": 0,
+    "effective": {
+      "predicted": 24,
+      "correct": 24,
+      "precision": 1.0,
+      "labeled_positives": 30,
+      "recall": 0.8,
+      "false_positives": [],
+      "missed": [
+        {
+          "cal_id": "V2-0051",
+          "jev": "effective",
+          "p": 0.6
+        },
+        {
+          "cal_id": "V2-0057",
+          "jev": "effective",
+          "p": 0.8
+        },
+        {
+          "cal_id": "V2-0062",
+          "jev": "effective",
+          "p": 0.89
+        },
+        {
+          "cal_id": "V2-0086",
+          "jev": "effective",
+          "p": 0.79
+        },
+        {
+          "cal_id": "V2-0098",
+          "jev": "announced",
+          "p": 0.54
+        },
+        {
+          "cal_id": "V2-0166",
+          "jev": "historical",
+          "p": 0.44
+        }
+      ]
+    },
+    "announced": {
+      "predicted": 29,
+      "correct": 29,
+      "precision": 1.0,
+      "labeled_positives": 29,
+      "recall": 1.0,
+      "false_positives": [],
+      "missed": []
+    },
+    "split_ratio_given_split": {
+      "n": 59,
+      "correct": 59,
+      "accuracy": 1.0
+    },
+    "confusion_label_vs_jev": {
+      "announced->announced": 29,
+      "effective->announced": 1,
+      "effective->effective": 28,
+      "effective->historical": 1,
+      "historical->historical": 1,
+      "historical->none": 1,
+      "none->none": 135
+    },
+    "accuracy_all_questions": {
+      "reverse_split": 0.9847,
+      "split_ratio": 0.9949,
+      "listing_status": 0.9541,
+      "dilution_event": 0.8878,
+      "going_concern": 0.9847,
+      "other_material": 0.9643
+    }
+  },
+  "corrected": {
+    "corrections_applied": 0,
+    "effective": {
+      "predicted": 24,
+      "correct": 24,
+      "precision": 1.0,
+      "labeled_positives": 30,
+      "recall": 0.8,
+      "false_positives": [],
+      "missed": [
+        {
+          "cal_id": "V2-0051",
+          "jev": "effective",
+          "p": 0.6
+        },
+        {
+          "cal_id": "V2-0057",
+          "jev": "effective",
+          "p": 0.8
+        },
+        {
+          "cal_id": "V2-0062",
+          "jev": "effective",
+          "p": 0.89
+        },
+        {
+          "cal_id": "V2-0086",
+          "jev": "effective",
+          "p": 0.79
+        },
+        {
+          "cal_id": "V2-0098",
+          "jev": "announced",
+          "p": 0.54
+        },
+        {
+          "cal_id": "V2-0166",
+          "jev": "historical",
+          "p": 0.44
+        }
+      ]
+    },
+    "announced": {
+      "predicted": 29,
+      "correct": 29,
+      "precision": 1.0,
+      "labeled_positives": 29,
+      "recall": 1.0,
+      "false_positives": [],
+      "missed": []
+    },
+    "split_ratio_given_split": {
+      "n": 59,
+      "correct": 59,
+      "accuracy": 1.0
+    },
+    "confusion_label_vs_jev": {
+      "announced->announced": 29,
+      "effective->announced": 1,
+      "effective->effective": 28,
+      "effective->historical": 1,
+      "historical->historical": 1,
+      "historical->none": 1,
+      "none->none": 135
+    },
+    "accuracy_all_questions": {
+      "reverse_split": 0.9847,
+      "split_ratio": 0.9949,
+      "listing_status": 0.9541,
+      "dilution_event": 0.8878,
+      "going_concern": 0.9847,
+      "other_material": 0.9643
+    }
+  },
+  "reproducibility": {
+    "n": 30,
+    "seed": 2028,
+    "changed": {
+      "reverse_split": [],
+      "split_ratio": [],
+      "listing_status": [],
+      "dilution_event": [],
+      "going_concern": [],
+      "other_material": []
+    },
+    "max_probability_move": 0.07
+  },
+  "verdict": {
+    "primary_effective_precision_ge_0.95_with_30_pos": true,
+    "sanity_as_labeled_ge_0.90": true,
+    "secondary_announced_ge_0.95": true,
+    "secondary_ratio_ge_0.95": true,
+    "secondary_repro_0_changed": true,
+    "PASS": true
+  }
+}
