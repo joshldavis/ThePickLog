@@ -43,7 +43,7 @@ except Exception:                                   # pragma: no cover
 
 import filing_lens as fl
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 OUT_DIR   = "jev_backfill"
 PICKMAP   = os.path.join(OUT_DIR, "pick_filings.csv")
@@ -228,7 +228,11 @@ def read(max_reads, call=None, fetch=None):
             with open(ERRORS, "a") as fh:
                 fh.write(json.dumps({"accession": f["accession"], "ticker": r["ticker"], "error": err,
                                      "at": datetime.now(timezone.utc).isoformat(timespec="seconds")}) + "\n")
-    summary["remaining"] = max(0, len(todo) - max_reads)
+    # remaining = every accession still unread after this run: never tried (budget) PLUS
+    # tried and failed (retried next run). A run that reads 0 with remaining > 0 means the
+    # rest are failing persistently; errors.jsonl says why.
+    summary["remaining"] = len(todo) - summary["read"]
+    summary["failed_this_run"] = summary["errors"]
     return dict(summary)
 
 
@@ -327,12 +331,15 @@ def check_instrument(events):
 
 
 def part_b_blockers(status):
-    """-> list of reasons Part B may not run yet (empty = ready)."""
-    n = sum(v for k, v in status.items() if k != "ungraded")
+    """-> list of reasons Part B may not run yet (empty = ready). A filing that was tried
+    and failed (errors.jsonl) does not block: the registration excludes and counts picks
+    whose filings could not be read. A filing never tried does block."""
+    n = sum(v for k, v in status.items() if k not in ("ungraded", "untried_filings"))
     why = []
-    for k in ("not_selected_yet", "unread"):
-        if status.get(k):
-            why.append(f"{status[k]} pick(s) {k}")
+    if status.get("not_selected_yet"):
+        why.append(f"{status['not_selected_yet']} pick(s) not_selected_yet")
+    if status.get("untried_filings"):
+        why.append(f"{status['untried_filings']} selected filing(s) never attempted")
     if n and status.get("ungraded", 0) / n > MAX_UNGRADED:
         why.append(f"{status['ungraded']} of {n} picks ungraded (> {MAX_UNGRADED:.0%})")
     if not n:
@@ -348,6 +355,13 @@ def build_rows(part, picks_path=PICKS, outcomes_path=OUTCOMES, pickmap=None, eve
                       if r.get("status") == "selected" and r["accession"] in events
                       and lo <= r["trading_date"] <= hi})
     flags = pick_flags(pickmap, events)
+    tried = set(events)
+    if os.path.exists(ERRORS):
+        for line in open(ERRORS):
+            try:
+                tried.add(json.loads(line).get("accession", ""))
+            except ValueError:
+                continue
     outs = {o["pick_id"]: o for o in csv.DictReader(open(outcomes_path))}
     picks = [p for p in csv.DictReader(open(picks_path)) if lo <= p["trading_date"] <= hi]
     status = collections.Counter()
@@ -369,6 +383,11 @@ def build_rows(part, picks_path=PICKS, outcomes_path=OUTCOMES, pickmap=None, eve
                      "flag_8k": bool(fg and fg["flag_8k"]), "cats": sorted(fg["cats"]) if fg else [],
                      "mae": _f(o["mae_5d"]), "r0": _f(o["ret_open_close_net"]),
                      "r5": _f(o["ret_open_5dclose_net"])})
+    window_ids = {p["pick_id"] for p in picks}
+    untried = {r["accession"] for r in pickmap if r.get("status") == "selected" and r["accession"]
+               and r["pick_id"] in window_ids and r["accession"] not in tried}
+    if untried:
+        status["untried_filings"] = len(untried)
     cuts = {c: tercile_cuts([r["score"] for r in rows if r["cohort"] == c])
             for c in {r["cohort"] for r in rows}}
     for r in rows:
@@ -508,7 +527,8 @@ def _selftest():
     assert tercile_cuts([1, 2, 3, 4, 5, 6]) == (3, 5)
     assert part_b_blockers({"ok": 100, "no_filings": 20, "ungraded": 3}) == []
     assert part_b_blockers({"ok": 100, "ungraded": 6})[0].startswith("6 of 100")
-    assert part_b_blockers({"ok": 100, "unread": 1}) == ["1 pick(s) unread"]
+    assert part_b_blockers({"ok": 99, "unread": 1}) == [], "tried-and-failed is excluded, not blocking"
+    assert part_b_blockers({"ok": 100, "untried_filings": 2}) == ["2 selected filing(s) never attempted"]
     assert part_b_blockers({"ok": 100, "not_selected_yet": 4})[0].startswith("4 pick(s)")
     try:
         check_instrument({"x": {"model": "jev-9.9.9", "questions_sha256": REG_QSHA}})

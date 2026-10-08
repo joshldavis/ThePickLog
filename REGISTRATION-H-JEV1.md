@@ -97,7 +97,7 @@ For the record, here is the rule applied to Part A's data, which shows the tight
 An automated code review on PR #10 found that the code did not enforce three things the registration already says. `jev_backfill.py` 1.2.0 now enforces them:
 
 1. **One look.** `analyze --part B` refuses to run if `jev_backfill/result_B.json` exists, and writes it in exclusive-create mode. The single look can't be repeated or overwritten.
-2. **Complete data.** Part B refuses to run, *before summarizing any outcome*, if any pick in the window is still unselected or has no filing read, or if more than 5% of picks are ungraded.
+2. **Complete data.** Part B refuses to run, *before summarizing any outcome*, if any pick in the window is still unselected, if any selected filing has **never been attempted**, or if more than 5% of picks are ungraded. A filing that was tried and failed (logged in `errors.jsonl`) doesn't block the run: as this registration already says, picks whose filings couldn't be read are excluded and counted. `read` now reports every still-unread filing in `remaining`, failures included.
 3. **The registered instrument.** `read` refuses unless the model is exactly `jev-1.13.0` and the question block is v2 (`394e6c22687a…`). The analysis refuses if any event it would use came from anything else. All 756 Part A reads and every Part B read so far pass.
 
 None of these changes the exposure, the windows, the estimate, the bar or Holm. Each can only stop a run, never make a pass easier. Part A re-runs byte-identical.
