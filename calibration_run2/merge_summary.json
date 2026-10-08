@@ -1,0 +1,103 @@
+{
+  "rows": 543,
+  "label_sources": {
+    "dilution_event:model": 543,
+    "going_concern:model": 543,
+    "listing_status:model": 543,
+    "other_material:model": 510,
+    "other_material:truth": 33,
+    "reverse_split:model": 268,
+    "reverse_split:model+rule": 4,
+    "reverse_split:truth": 271,
+    "split_ratio:model": 272,
+    "split_ratio:truth": 271
+  },
+  "truth_vs_model_agreement": {
+    "reverse_split": {
+      "n": 271,
+      "agree": 0.967
+    },
+    "split_ratio": {
+      "n": 271,
+      "agree": 0.974
+    },
+    "other_material": {
+      "n": 33,
+      "agree": 0.758
+    }
+  },
+  "label_distribution": {
+    "reverse_split": {
+      "none": 426,
+      "announced": 49,
+      "effective": 61,
+      "historical": 7
+    },
+    "split_ratio": {
+      "none": 430,
+      "1-for-25": 8,
+      "1-for-249": 1,
+      "1-for-21": 1,
+      "1-for-7": 2,
+      "1-for-30": 7,
+      "1-for-75": 1,
+      "1-for-35": 2,
+      "1-for-17": 2,
+      "1-for-5": 9,
+      "1-for-16": 2,
+      "1-for-4": 5,
+      "1-for-15": 7,
+      "1-for-20": 10,
+      "1-for-10": 15,
+      "1-for-9": 2,
+      "1-for-50": 5,
+      "1-for-200": 2,
+      "1-for-8": 2,
+      "1-for-6": 4,
+      "1-for-100": 2,
+      "1-for-18": 1,
+      "1-for-60": 1,
+      "other": 4,
+      "1-for-3": 4,
+      "1-for-23": 1,
+      "1-for-12": 7,
+      "1-for-37": 1,
+      "1-for-14": 1,
+      "1-for-27": 1,
+      "1-for-250": 1,
+      "1-for-113": 1,
+      "1-for-11": 1
+    },
+    "listing_status": {
+      "regained_compliance": 22,
+      "deficiency_notice": 81,
+      "none": 358,
+      "delisting_determination": 39,
+      "halt": 43
+    },
+    "dilution_event": {
+      "none": 351,
+      "convertible_or_warrants": 74,
+      "atm_or_equity_line": 35,
+      "priced_offering": 32,
+      "private_placement": 51
+    },
+    "going_concern": {
+      "no": 532,
+      "yes": 11
+    },
+    "other_material": {
+      "none": 485,
+      "merger_or_acquisition": 44,
+      "officer_departure": 6,
+      "auditor_change": 3,
+      "restatement": 1,
+      "bankruptcy": 4
+    }
+  },
+  "flagged_rows": 80,
+  "audit_rows": 73,
+  "audit_hard_disagreements": 43,
+  "questions_sha256": "6be36476189ab9339d97e5061f4036140f0c2adf51cfd64af78a38588e4534b8",
+  "seed": 7
+}

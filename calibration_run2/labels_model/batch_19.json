@@ -1,0 +1,646 @@
+[
+ {
+  "cal_id": "CAL-0450",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "maintain the halt in trading of Company Common Stock, which was effective following the closing of after-hours trading on September 2, 2026",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "on September 3, 2026, Merger Sub merged with and into the Company (the \"Merger\"), with the Company surviving the Merger as a wholly owned subsidiary"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Completed AbbVie acquisition; Nasdaq halt maintained and Form 25 requested. Directors/officers ceased but merger is primary."
+ },
+ {
+  "cal_id": "CAL-0451",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "trading in the Common Stock on Nasdaq has been suspended since April 28, 2026",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filing is a voluntary Form 25 withdrawal after delisting determination and denied appeal; suspension still in effect so halt chosen per rule."
+ },
+ {
+  "cal_id": "CAL-0452",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "bankruptcy"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "On November 29, 2024, the Nasdaq Stock Market LLC (\"Nasdaq\") suspended trading of CareMax, Inc. Class A common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "the Company's ability to fund its planned operations through the Chapter 11 Cases and its ability to continue as a going concern",
+   "other_material": "commenced filing voluntary petitions (the \"Chapter 11 Cases\") in the U.S. Bankruptcy Court for the Northern District of Texas"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "medium"
+  },
+  "notes": "Cover-page footnote states Nasdaq suspension and OTC Pink trading. Going concern appears only as a forward-looking risk factor, not a substantial-doubt statement. Chapter 11 is ongoing (monthly operating reports)."
+ },
+ {
+  "cal_id": "CAL-0453",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "yes",
+   "other_material": "bankruptcy"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "On November 29, 2024, the Nasdaq Stock Market LLC (\"Nasdaq\") suspended trading of CareMax, Inc. Class A common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "included an explanatory paragraph indicating that there was substantial doubt as to the Company's ability to continue as a going concern",
+   "other_material": "On January 31, 2025, the Bankruptcy Court entered the Confirmation Order confirming the Plan"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Ambiguous going_concern: substantial doubt is quoted from PwC's FY2023 audit report within Item 4.01 auditor-dismissal boilerplate. Also auditor_change and CEO/CFO departures, but plan confirmation/equity cancellation dominates."
+ },
+ {
+  "cal_id": "CAL-0454",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Warrants ceased trading on The New York Stock Exchange (\"NYSE\") and were delisted, with the trading suspension announced on March 21, 2025",
+   "dilution_event": "announcing the results of the completed redemption of all of its outstanding public warrants",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "low",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Ambiguous: only the warrants were suspended/delisted; common stock continues to trade normally, so listing_status set to none. Warrant redemption text does not state exercises or share issuance."
+ },
+ {
+  "cal_id": "CAL-0455",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "commenced proceedings to delist the Company's common (ticker symbol: QTI) from Nasdaq, and suspended trading in the Company's common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Earnings release 8-K; halt/delisting proceedings stated only in cover-page footnote (suspension effective January 28, 2025)."
+ },
+ {
+  "cal_id": "CAL-0456",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "commenced proceedings to delist the Company's common (ticker symbol: QTI) from Nasdaq, and suspended trading in the Company's common stock",
+   "dilution_event": "entered into a Securities Purchase Agreement, dated April 9, 2025 ... for a private placement (the \"Private Placement\") of securities",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "784,929 shares plus a warrant sold to the Chairman and CEO in a private placement; halt stated only in cover footnote."
+ },
+ {
+  "cal_id": "CAL-0457",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "effective April 22, 2025, our Class A common stock has been suspended from trading on the New York Stock Exchange",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Company appealed NYSE staff delisting determination; trading remains suspended during appeal."
+ },
+ {
+  "cal_id": "CAL-0458",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "commenced proceedings to delist the Company's common stock (ticker symbol: QTI) from Nasdaq, and suspended trading in the Company's common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Quarterly earnings release; halt only in cover-page footnote."
+ },
+ {
+  "cal_id": "CAL-0459",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "commenced proceedings to delist the Company's common stock (ticker symbol: QTI) from Nasdaq, and suspended trading in the Company's common stock",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Investor presentation Reg FD 8-K; halt only in cover-page footnote."
+ },
+ {
+  "cal_id": "CAL-0460",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "bankruptcy"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "The Nasdaq Stock Market suspended trading of the Company's common stock at the opening of business on March 27, 2025",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "On May 22, 2025, the Bankruptcy Court entered an order authorizing the Asset Sale (as defined below) pursuant to the terms of the APA"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Section 363 sale of substantially all assets in Chapter 11 closed May 23, 2025; Item 1.03 invoked. Directors resigned; interim CEO continues."
+ },
+ {
+  "cal_id": "CAL-0461",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "commenced proceedings to delist the Company's common stock (ticker symbol: QTI) from Nasdaq, and suspended trading in the Company's common stock",
+   "dilution_event": "gives effect to the amendments entered into by the Company on June 11, 2025 to the warrants previously issued",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Pro forma financials for previously disclosed warrant amendments; amendment of existing warrants treated as repricing, not new issuance."
+ },
+ {
+  "cal_id": "CAL-0462",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Warrants ceased trading on the Nasdaq Global Select Market (\"Nasdaq\") and will be delisted, with the trading suspension effective on July 11, 2025",
+   "dilution_event": "announcing the results of the completed redemption of all of its outstanding public warrants",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "low",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Ambiguous: only warrants suspended/delisted upon redemption; Common Stock continues to trade on Nasdaq. No exercise/share issuance figures stated in the text."
+ },
+ {
+  "cal_id": "CAL-0463",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "is currently subject to a temporary trading suspension imposed by the British Columbia Securities Commission (BCSC)",
+   "dilution_event": "there is no transfer of control or equity",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Ambiguous: suspension imposed by a Canadian provincial securities regulator (BCSC), not an exchange or the SEC; company has no exchange listing. CEO bridge loan is debt with no equity. New PCAOB/CPAB auditor engaged but no prior auditor resignation/dismissal stated."
+ },
+ {
+  "cal_id": "CAL-0464",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "officer_departure"
+  },
+  "rationale": {
+   "reverse_split": "a reverse stock split of the Common Stock in the range of not less than 1-for-2 and not more than 1-for-10",
+   "split_ratio": "not less than 1-for-2 and not more than 1-for-10, with the specific ratio to be determined by, and the implementation to be in",
+   "listing_status": "no permanent suspension or other trading suspension for more than three consecutive trading days of the Common Stock",
+   "dilution_event": "entered into a Securities Purchase Agreement (the \"Purchase Agreement\") with David E. Lazar ... that provides for the Company to sell in a private placement",
+   "going_concern": "not mentioned",
+   "other_material": "as Chief Executive Officer upon the effectiveness of the First Closing, with the Company's former Chief Executive Officer, Justin Hall, continuing with the Company"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Ambiguous dilution: PIPE of Series D/E convertible preferred to a named investor (private_placement chosen over convertible_or_warrants). Reverse split only proposed as a range. Trading suspension is a hypothetical closing condition. CEO replaced by Lazar; view truncated before Item 5.02 detail."
+ },
+ {
+  "cal_id": "CAL-0465",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "no trading suspension of the Shares as a result of a listing measure",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "Keurig Dr Pepper Inc. (\"KDP\" or the \"Company\") and JDE Peet's N.V. (\"JDE Peet's\") entered into a merger protocol"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Definitive agreement to acquire JDE Peet's via cash tender offer; trading suspension mention is a hypothetical condition about the target's Euronext shares."
+ },
+ {
+  "cal_id": "CAL-0466",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "bankruptcy"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "The Nasdaq Stock Market suspended trading of the Company's common stock at the opening of business on March 27, 2025",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "the Debtors filed a motion with the Bankruptcy Court seeking to convert their Chapter 11 Cases into Chapter 7 Cases"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Nasdaq also announced delisting on July 2, 2025, but suspension is stated so halt chosen. Company states shares are worthless; no substantial-doubt language."
+ },
+ {
+  "cal_id": "CAL-0467",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "As a result, Nasdaq has halted trading in the Company's Common Stock and Warrants while it seeks clarification of these matters from the Company",
+   "dilution_event": "the Lender may elect to convert the unpaid principal amount into a total of 650,000 shares of Common Stock of CN Healthy",
+   "going_concern": "not mentioned",
+   "other_material": "On September 30, 2025, the Business Combination was consummated"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "low",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Ambiguous dilution: de-SPAC closing issued shares to Seller (no matching category), plus consulting shares, a convertible Jiao Note, and reserve shares securing Sponsor/DBC notes; convertible_or_warrants chosen. View truncated; going concern not visible."
+ },
+ {
+  "cal_id": "CAL-0468",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Warrants ceased trading on the New York Stock Exchange (the \"NYSE\") and will be delisted, with the trading suspension effective on November 18, 2025",
+   "dilution_event": "4,746,358 Warrants were subsequently exercised for approximately 6.9 million shares of Common Stock at the exercise price of $11.50 per Warrant",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Only warrants suspended/delisted upon redemption; Common Stock continues to trade on NYSE, so listing_status none. Warrant exercises issued ~6.9M shares."
+ },
+ {
+  "cal_id": "CAL-0469",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "halt",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Trading in the Company's securities on Nasdaq remains halted as of the date of this Current Report on Form 8-K",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Ongoing Nasdaq halt with Nasdaq and SEC information requests."
+ },
+ {
+  "cal_id": "CAL-0470",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "a reverse stock split of the Ordinary Shares in the range of not less than 1-for-2 and not more than 1-for-99",
+   "split_ratio": "not less than 1-for-2 and not more than 1-for-99, with the specific ratio to be determined by, and the implementation to be in",
+   "listing_status": "no permanent suspension or other trading suspension for more than three consecutive trading days of the Ordinary Shares",
+   "dilution_event": "entered into a Securities Purchase Agreement (the \"Purchase Agreement\") with David E. Lazar that provides for the sale in a private placement",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Ambiguous dilution: PIPE of Series A-E convertible preferred to a named investor (private_placement chosen over convertible_or_warrants), plus 1,000,000 vested restricted shares. Reverse split only a proposed range. Settlement agreements with officers/directors but no resignation stated."
+ },
+ {
+  "cal_id": "CAL-0471",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the SEC may, in its discretion and based on the facts and circumstances, issue an order temporarily suspending trading in the Company's securities",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Unlisted OTC issuer warning of future reporting delinquency; SEC trading suspension is hypothetical. Funding shortfall stated but no substantial-doubt language."
+ },
+ {
+  "cal_id": "CAL-0472",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Nasdaq filed with the SEC a Notification of Removal from Listing and/or Registration ... on Form 25 to remove shares of Calavo Common Stock",
+   "dilution_event": "The total aggregate consideration payable in the Mergers was approximately 17,531,182 Mission Produce Shares and $265,922,425",
+   "going_concern": "not mentioned",
+   "other_material": "completed the previously announced mergers pursuant to the Agreement and Plan of Merger (the \"Merger Agreement\") dated January 14, 2026"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Form 25 relates to the acquired target (Calavo), not the registrant. Registrant issued ~17.5M S-4 registered shares as merger consideration, which fits none of the dilution categories; none chosen."
+ }
+]
