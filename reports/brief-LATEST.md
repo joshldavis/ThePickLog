@@ -1,40 +1,39 @@
-# ThePickLog — Morning Brief · 2026-10-08
+# ThePickLog — Morning Brief · 2026-10-09
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **SXTC** (tier A, score 100.0) — very high relative volume (39×); thin float (0.4M); large up-gap (+57%). Watch level (reference only, +20%): $2.3544.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BIYA** (tier A, score 100.0) — very high relative volume (18×); thin float (3.0M); large up-gap (+40%). Watch level (reference only, +20%): $2.292.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **DKI** (tier A, score 100.0) — very high relative volume (43×); thin float (0.4M); large up-gap (+226%). Watch level (reference only, +20%): $5.328.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SMXT** (tier A, score 99.8) — very high relative volume (12×); large up-gap (+24%). Watch level (reference only, +20%): $5.0798.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **PFAI** (tier A, score 99.6) — very high relative volume (62×); large up-gap (+59%). Watch level (reference only, +20%): $5.124.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **FLYE** (tier A, score 100.0) — very high relative volume (38×); thin float (1.6M); large up-gap (+81%). Watch level (reference only, +20%): $2.7599.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **JZ** (tier A, score 100.0) — very high relative volume (47×); thin float (1.4M); large up-gap (+79%). Watch level (reference only, +20%): $1.008.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **AIXI** (tier A, score 100.0) — very high relative volume (14×); thin float (0.5M); large up-gap (+33%). Watch level (reference only, +20%): $2.1.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **GRAN** (tier A, score 97.5) — very high relative volume (34×); large up-gap (+19%). Watch level (reference only, +20%): $1.356.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **XELB** (tier A, score 94.7) — very high relative volume (45×); large up-gap (+17%). Watch level (reference only, +20%): $0.7379.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **SXTC**: already extended pre-market — chasing buys the top.
-- **SXTC**: ultra-thin float — spreads and slippage can be severe.
-- **BIYA**: already extended pre-market — chasing buys the top.
-- **DKI**: already extended pre-market — chasing buys the top.
-- **DKI**: ultra-thin float — spreads and slippage can be severe.
-- **SMXT**: already extended pre-market — chasing buys the top.
-- **PFAI**: already extended pre-market — chasing buys the top.
-- **SBFM**: already extended pre-market — chasing buys the top.
-- **SBFM**: sub-$1 — heightened manipulation / delisting risk.
-- **IRIX**: already extended pre-market — chasing buys the top.
-- **IRIX**: sub-$1 — heightened manipulation / delisting risk.
-- **MNDR**: ultra-thin float — spreads and slippage can be severe.
-- **CPHI**: sub-$1 — heightened manipulation / delisting risk.
+- **FLYE**: already extended pre-market — chasing buys the top.
+- **JZ**: already extended pre-market — chasing buys the top.
+- **JZ**: sub-$1 — heightened manipulation / delisting risk.
+- **AIXI**: already extended pre-market — chasing buys the top.
+- **AIXI**: ultra-thin float — spreads and slippage can be severe.
+- **XELB**: sub-$1 — heightened manipulation / delisting risk.
+- **OLB**: already extended pre-market — chasing buys the top.
+- **OLB**: sub-$1 — heightened manipulation / delisting risk.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **RDHL**: sub-$1 — heightened manipulation / delisting risk.
+- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **PROF**: already extended pre-market — chasing buys the top.
+- **PARA**: sub-$1 — heightened manipulation / delisting risk.
+- **SAIQ**: already extended pre-market — chasing buys the top.
 - **GCDT**: ultra-thin float — spreads and slippage can be severe.
 - **GCDT**: sub-$1 — heightened manipulation / delisting risk.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: sub-$1 — heightened manipulation / delisting risk.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
-- **HKIT**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: sub-$1 — heightened manipulation / delisting risk.
 
 ## Finding A — the one edge that holds (from your own log)
