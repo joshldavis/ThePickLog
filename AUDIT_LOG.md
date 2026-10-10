@@ -1,5 +1,89 @@
 # ThePickLog — Audit Log
 
+## 2026-10-10 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+*Snapshot: live build `cdcf364` (stamp "2026-10-10 07:57 ET"). Both served CSVs match `origin/main@cdcf364` byte for byte (SHA-256 `d1e4809a…` picks, `915152c6…` outcomes). Latest cohort 10-09.*
+
+Every number on the Track record re-derives from the CSVs, and the 10-07 NaN correction holds (0 non-finite 5-day values). The one failure is the 10-03 finding, still unfixed: method.html §9 still says "both tails widen monotonically … the hottest tier … makes the biggest run", and tier B's mean MFE still beats tier A's.
+
+- **⚠️ FAIL (carried from 10-03, issue #8 still open). Method §9 MFE monotonicity (check 8a / claims == data).**
+  - Mean MFE A **+42.85** / B **+47.26** / C +22.18 / D +15.00. Not monotone.
+  - Median MFE A 14.01 / B 14.61. Also inverted.
+  - Without each tier's top MFE: A +39.09 (CPHI 07-16) / B +33.58 (JAGX 09-21) / C +18.43 / D +13.82. That is monotone again, so the cause is still one stock. But the sentence is hard-coded, and a stranger can falsify it from the CSVs today.
+  - MAE is still monotone: −23.55 / −21.13 / −15.19 / −13.89.
+  - The unmerged branch `site/credibility-fixes-2026-10-07` does not touch method.html, so nothing in flight fixes this.
+  - **Fix (unchanged from 10-03):**
+    - Either scope the sentence to what holds, e.g. "the hottest tier digs the deepest hole; the upside tail also widens toward the hot end, but one stock (JAGX 09-21, tier B) currently reorders A and B on mean".
+    - Or replace it with a live-computed line on the Track record that reuses `_oneStock`.
+    - Do not hard-code a new ordering.
+- **Data served.**
+  - `/picks.csv` 200, 294,056 B, 1,663 rows. `/outcomes.csv` 200, 200,716 B, 1,515 rows.
+  - All 23 HTML pages 200. All 50 same-origin link/asset targets resolve.
+  - The 4 regex hits that 404'd are JS concatenation fragments (`/r/'+…`, `/u/'+…`, `'+vurl+'`). Real receipt links (`/r/p-<pick_id>`, 1,343 rendered) return 200.
+- **Real data shown.** 1,506 picks logged, real log, no sample fallback. The only "sample" strings are "out-of-sample" and "the real sample is closer to that number".
+- **No silent gaps.**
+  - 80 distinct `trading_date`s, 06-09 → 10-09.
+  - The only missing sessions are the seven already declared (08-27 → 09-03 outage and 09-14), both closed history.
+  - 06-19 is still the only holiday cohort (VOID, excluded). No new gaps and no new holiday cohort. The Saturday `data: scan 2026-10-10` commit added no 10-10 cohort.
+  - All cohorts 09-24 → 10-09 published at 07:56 ET, inside the 06:00 floor and 09:20 cutoff.
+  - "1506 picks across 72 trading days" = 73 dates in the kept set minus 06-19 ✓.
+- **Claims == data.**
+  - Logged **1,506**, graded **1,343**, win rate **33%** (32.91: 442 W / 901 M).
+  - Median net **−2.7%** (−2.72), mean net **−1.9%** (−1.86) **†**, avg worst dip **−18.1%** (−18.09), 5-day swing −7.2% (−7.17, n 1,342).
+  - † "−2.7% without JAGX 2026-09-22 (+1115.7%)" reproduces (Δ 0.83pp).
+  - Tier table (n / tickers / mean / median):
+    - A 464 / 326 / −2.2 / −3.1
+    - B 96 / 55 / −3.9 / −4.5
+    - C 360 / 20 / −0.1† (−3.2 without JAGX) / −2.4
+    - D 423 / 16 / −2.5 / −2.6
+    - All match. Only C carries a †. A is a near-miss (Δ 0.457 vs 0.5pp floor).
+  - Ordering sentence "C > A > D > B → A > D > C > B without JAGX" ✓.
+  - Win rate by tier (computed; the page shows no by-tier figure): A 38.6 / B 30.2 / C 33.1 / D 27.2%.
+  - Overdue note "3 picks … (A: 2, B: 1)" = PHGE 09-16 (A), HWH 09-23 (B), BTLN 09-28 (A) ✓. AREN / GTBP / LRHC resolved to explicit UNGRADEABLE rows, as predicted.
+- **Exclusions reproduce from scratch.**
+  - Late: **128 across 7 cohorts**, same per-date counts.
+  - Frozen-quote: **12 (BNZI 12)**.
+  - Scale-mismatch: **17** = SUGP 4, CPHI 1, VMAR 7, SLE 1, NCT 1, IMCC 1, GCDT 2. That is **+5 this week**: SUGP 09-29 / 09-30 / 10-01 and GCDT 09-30 / 10-01. The on-site note matches exactly.
+  - 1,663 − 157 = 1,506 ✓.
+- **Honest grading.**
+  - All **1,487** rows carrying data reproduce (close/open − 1) − 2% (max deviation 0.005pp).
+  - 0 duplicate `pick_id`s, 0 orphans, `win` consistent on all 1,487.
+  - All 28 ungradeable rows carry a note: 14 phantom-holiday VOID, 11 no entry bar, 3 UNGRADEABLE.
+  - 0 NaN 5-day values. The 10-07 guard is working: the 09-30 and 10-01 cohorts graded the evening *after* their last session.
+- **Chips reconcile.** Graded 1,343 + Pending 136 + Void 27 = All 1,506 ✓. Wins 442 + Misses 901 = Graded.
+- **Disclaimers.** The text educational / not investment advice / not an RIA / not a broker-dealer is present on index, method and disclaimer.
+- **Validity backing.**
+  - (a) Tiers render as heat; §9 says "heat scale, not a quality grade".
+    - MAE is monotone; MFE is not (see FAIL).
+    - Clustered CIs on mean net: A [−3.8, −0.3], B [−6.2, −1.7], C [−3.8, +6.5], D [−3.0, −2.0]. All six pairs overlap, so no ordering is established, as the page says.
+    - The page now says A, B and D separate from zero, all negative.
+  - (b) The "unvalidated" label is present (15× rendered on the index, plus method). Gate-1 is not rendered here.
+  - (c) Messick Framework, Domain-Coverage Spec and Structural Justification all return 200 and are linked from method.html §9.
+
+**Observations (no action taken, not fails).**
+- **The scanner is still screening split names on the old scale.** GCDT 10-08 ($0.73) and 10-09 ($0.57), and SUGP 10-02 ($0.51), are pending. GCDT's 1:6 reverse split means it trades around $3. Expect the scale-mismatch exclusion to grow to about 20 once these grade. The derived exclusion catches them, but only after grading. A pre-log check of `price_at_screen` against the prior close's scale would stop them from being logged at all.
+- **Partial-bar exposure on the 5-day column, following up the 10-07 note.**
+  - 1,304 of the 1,487 graded rows were 5-day-graded on the same ET date as their window's last session, all before the 10-07 guard. Almost every pre-guard row has the exposure that produced the NaNs.
+  - The headline (same-day) figures are unaffected.
+  - The 5-day swing (−7.2%) and MAE/MFE could carry drift like PMI 08-25.
+  - Suggest a control re-grade of a random ~100 pre-guard rows to size it before deciding anything.
+- **Same ticker twice in one cohort.** This has happened 11 times; the latest are JAGX 10-06, JAGX 10-07 and NCT 10-05. The pick_ids are distinct, so it is not a check failure. It does double-weight one bet, which matters for the one-stock and tier means.
+
+**Alarm.** GitHub issue [#11](https://github.com/joshldavis/ThePickLog/issues/11) opened. It references #8, which stays open. No front-end changes, no deploy.
+
+**Grading in the coming week.** 136 pending. Under the 10-07 guard, a cohort grades the evening *after* its 5th session.
+- Main cohorts:
+  - **10-02 (22) → Mon 10-12**
+  - **10-05 (21) → 10-13**
+  - **10-06 (21) → 10-14**
+  - **10-07 (21) → 10-15**
+  - **10-08 (23) → 10-16**
+  - **10-09 (23) → Mon 10-19**
+- Stragglers:
+  - HWH 09-29 (B) and HKIT 10-01 (D) are inside the slack window and go overdue around 10-12 / 10-13.
+  - PHGE 09-16, HWH 09-23 and BTLN 09-28 are already overdue and should resolve to explicit UNGRADEABLE rows.
+- The 12 pending BNZI rows are frozen-quote exclusions and never grade.
+
 ## 2026-10-07 — INCIDENT: 125 five-day grades written as NaN — **❌ found, corrected, guarded**
 
 **What happened.** From the 09-29 grade run through 10-07, every pick reaching its 5th session was graded off a bar Yahoo had not finished: open/high/low present, **Close = NaN**. The grader wrote `ret_open_5dclose_net = nan` into `outcomes.csv` for **125 picks (cohorts 09-21 → 09-29)** and the same unfinished bar into `paths.csv`. Nothing checked for a non-finite number, so it went into the permanent record. `entry_open`, `same_day_close` and `ret_open_close_net` were never affected (they come from the entry bar). On 7 rows the partial bar also understated the window's extreme (6 MAE, 1 MFE).
