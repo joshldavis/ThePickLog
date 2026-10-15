@@ -7,11 +7,11 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP03-MACD — The MACD bullish crossover
 
 - status: **registered**, registered 2026-07-31, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **44** (need 30) over **27** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.017%**, median **+0.024%**, 10% trimmed **-0.038%**, clustered 95% CI [-0.346, +0.326] over 27 names
-- day-matched excess, 5 sessions: mean **-0.645%**, median **-1.565%**
-- win rate 43% *(reported only — not a pass criterion)*
-- **read: accruing — 44/30 graded signals over 27/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- graded signals: **49** (need 30) over **28** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **+0.012%**, median **+0.117%**, 10% trimmed **-0.001%**, clustered 95% CI [-0.290, +0.281] over 28 names
+- day-matched excess, 5 sessions: mean **-0.202%**, median **-0.719%**
+- win rate 47% *(reported only — not a pass criterion)*
+- **read: accruing — 49/30 graded signals over 28/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
 
 > Registered prior: The most widely taught indicator signal in retail trading — on every platform, in every beginner course. Published, universally known, and therefore the least likely thing in the world to still contain an edge. Registered expectation: the day-matched excess is indistinguishable from zero. Estimated probability it clears the bar: ~1 in 6. Being widely believed is not evidence, which is the point of testing it.
 
@@ -29,11 +29,11 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP07-SMAPULL — The moving-average pullback (buy the dip in an uptrend)
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **107** (need 30) over **29** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **+0.190%**, median **+0.216%**, 10% trimmed **+0.185%**, clustered 95% CI [-0.032, +0.426] over 29 names
-- day-matched excess, 5 sessions: mean **+0.690%**, median **+0.949%**
+- graded signals: **112** (need 30) over **30** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **+0.160%**, median **+0.204%**, 10% trimmed **+0.151%**, clustered 95% CI [-0.078, +0.396] over 30 names
+- day-matched excess, 5 sessions: mean **+0.777%**, median **+1.043%**
 - win rate 52% *(reported only — not a pass criterion)*
-- **read: accruing — 107/30 graded signals over 29/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- **read: accruing — 112/30 graded signals over 30/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
 
 > Registered prior: The most widely taught swing entry in existence — nearly every course teaches some form of buying the pullback to the 20-day in an uptrend. The mechanism (short-term reversion inside medium-term momentum) is at least coherent, which earns it a slightly better prior than a raw indicator flip: call it ~1 in 5. Registered expectation is still that the day-matched excess is indistinguishable from zero — textbook status is exactly what arbitrages an edge away.
 
@@ -51,11 +51,11 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP09-NR7 — Volatility contraction (NR7) in an uptrend
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **110** (need 30) over **31** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.042%**, median **-0.011%**, 10% trimmed **-0.012%**, clustered 95% CI [-0.284, +0.183] over 31 names
-- day-matched excess, 5 sessions: mean **+0.219%**, median **+0.249%**
-- win rate 39% *(reported only — not a pass criterion)*
-- **read: accruing — 110/30 graded signals over 31/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- graded signals: **113** (need 30) over **31** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.051%**, median **-0.008%**, 10% trimmed **-0.018%**, clustered 95% CI [-0.295, +0.177] over 31 names
+- day-matched excess, 5 sessions: mean **+0.209%**, median **+0.270%**
+- win rate 40% *(reported only — not a pass criterion)*
+- **read: accruing — 113/30 graded signals over 31/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
 
 > Registered prior: That contraction precedes expansion (Crabel's NR7) is well documented; what is SOLD is the direction, and direction is the part with no documented edge. This is also the honest daily-bar version of an intraday claim: entry is the next open, not a break of the range, because our pre-open logging gate forbids acting on the open print. That deviation is disclosed wherever this experiment is published. Registered expectation: excess indistinguishable from zero; ~1 in 6.
 
