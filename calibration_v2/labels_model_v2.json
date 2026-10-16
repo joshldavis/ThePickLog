@@ -1,0 +1,5438 @@
+[
+ {
+  "cal_id": "V2-0001",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "increase the number of authorized shares of the Company's common stock, par value $0.05 per share (the \"Common Stock\"), to a total of 112,500,000 shares",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0002",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Registered direct offering via SPA with unnamed institutional investors at $0.37; also triggers Series A preferred/warrant anti-dilution reset.",
+  "rationale": {
+   "dilution_event": "Common Stock\"), in a registered direct offering (the \"Offering\"). The Purchasers in this offering have agreed to purchase, and the Company has agreed to sell",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0003",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "deficiency_notice",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Notice goes to Hearings Panel as 'additional basis for delisting' while a Panel extension (cure) runs to July 24; deficiency vs delisting_determination ambiguous. Series B preferred (1 share, non-convertible) not a common equivalent.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "informing the Company that it no longer complies with the requirement under Nasdaq Listing Rule 5550(b)(1) to maintain a minimum of $2,500,000 in stockholders' equity",
+   "other_material": "not mentioned",
+   "reverse_split": "The Company intends to hold its 2024 annual meeting on July 1, 2024, in part, to request shareholder approval for a reverse stock split.",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0004",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "the Holders agree to waive the Company's requirement to reserve a ratable portion of the Company's authorized but unissued shares of Common Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0005",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-15"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "Effective June 12, 2024, Pineapple Energy Inc. (the \"Company\") amended its Fourth Amended and Restated Articles of Incorporation to implement a fifteen-for-one reverse stock split.",
+   "split_ratio": "every 15 shares of common stock then issued and outstanding automatically were combined into one share of common stock"
+  }
+ },
+ {
+  "cal_id": "V2-0006",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "medium"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "regained_compliance",
+   "other_material": "none",
+   "reverse_split": "historical",
+   "split_ratio": "1-for-15"
+  },
+  "notes": "Also reports shareholder approval of a new 1-for-2 to 1-for-200 range (no ratio fixed). Still out of compliance with Equity Rule, under Panel review.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "informing the Company that it has regained compliance with the bid price requirement in Listing Rule 5550(a)(2)",
+   "other_material": "not mentioned",
+   "reverse_split": "on a post-split basis reflecting the 1-for-15 reverse stock split that took effect on June 12, 2024 (the \"June 2024 Reverse Stock Split\")",
+   "split_ratio": "the 1-for-15 reverse stock split that took effect on June 12, 2024"
+  }
+ },
+ {
+  "cal_id": "V2-0007",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "in exchange for shares of Series C Convertible Preferred Stock of the Company (the \"Series C Preferred Stock\"), convertible at the Conversion Price",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0008",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "The Third Advance, together with all accrued but unpaid interest thereon, are convertible into shares of Common Stock at the Conversion Price.",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0009",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-50"
+  },
+  "notes": "Split effective at market open on the filing date. Mentions Nasdaq bid price requirement as motivation only.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "Effective October 17, 2024, the Company amended its Fourth Amended and Restated Articles of Incorporation (\"Articles of Amendment\") to implement a one-for-fifty reverse stock split.",
+   "split_ratio": "every 50 shares of common stock then issued and outstanding automatically were combined into one share of common stock"
+  }
+ },
+ {
+  "cal_id": "V2-0010",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Reincorporation to Delaware, name/ticker change.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0011",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Shareholder rights plan (poison pill); rights not exercisable. Item 3.01 in header but no listing text.",
+  "rationale": {
+   "dilution_event": "the Board declared a dividend of one preferred share purchase right (each, a \"Right\" and, collectively, the \"Rights\") for each outstanding share of common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0012",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Termination of share purchase agreement; shares returned.",
+  "rationale": {
+   "dilution_event": "Elite Fun transferring back to the Company all of the shares of common stock previously issued to Elite Fun pursuant to the SPA",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0013",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Shareholders approved a range; no ratio fixed.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "Effect a Reverse Stock Split at a Ratio between 1-for-5 and 1-for-15, Inclusive",
+   "split_ratio": "at a reverse stock split ratio of 1-for-5 to 1-for-15, inclusive"
+  }
+ },
+ {
+  "cal_id": "V2-0014",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-10"
+  },
+  "notes": "Filing date 2024-07-16; effective 2024-07-17. Signature dated July 18, 2024 (inconsistent).",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Charter Amendment provides that the Reverse Split will become effective on July 17, 2024 at 5:00 p.m. Eastern Time",
+   "split_ratio": "in order to effect a reverse stock split of the Company's common stock at a ratio of 1-for-10 (the \"Reverse Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0015",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "low",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-10"
+  },
+  "notes": "8-K/A filed 2024-07-17, the same day the split takes effect at 5:00 p.m. ET; text is prospective ('will become effective') and signed July 16. Could be effective if filed after 5 p.m.; could also be read as historical since it restates the Initial 8-K.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Charter Amendment provides that the Reverse Split will become effective on July 17, 2024 at 5:00 p.m. Eastern Time",
+   "split_ratio": "in order to effect a reverse stock split of the Company's common stock at a ratio of 1-for-10 (the \"Reverse Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0016",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Shareholder approval of share issuance to a named lender to repay a loan; no terms given.",
+  "rationale": {
+   "dilution_event": "The stockholders approved the issuance of shares of the Company's common stock to repay a Loan Agreement with Mr. Trung Doan",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0017",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Bylaw quorum amendment.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0018",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "8-K/A revising charter amendment effective date; same vote results as V2-0016.",
+  "rationale": {
+   "dilution_event": "The stockholders approved the issuance of shares of the Company's common stock to repay a Loan Agreement with Mr. Trung Doan",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0019",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Name change only.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0020",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "SPAC deadline extension.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0021",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Warrant price adjustment; also discloses a prior PIPE subscription and PIPE warrant for new director. Director (not CEO/CFO) departure.",
+  "rationale": {
+   "dilution_event": "the adjustment to the warrant price of the Warrants from $11.50 per share to $5.79 per shares of Class A common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "Dr. Ma resigned from the Company's Board of Directors (the \"Board\") as a director, effective January 22, 2024",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0022",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Warrant-for-share exchange plus Series J preferred (exchangeable for common) issued to Streeterville. '1-for-2.5' is a warrant exchange ratio, not a split.",
+  "rationale": {
+   "dilution_event": "the Company exchanged the PIPE Warrants to purchase up to 7,535,000 shares of Common Stock for 18,837,500 shares of Common Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0023",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "De-SPAC closing (merger completed). Also CEO Nessim resigned and new auditor appointed.",
+  "rationale": {
+   "dilution_event": "the Company issued and sold to the PIPE Investor, an aggregate of 1,500,000 Series A Preferred Stock for a purchase price of $9.60 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "Not applicable.",
+   "other_material": "On March 15, 2024, the parties to the Business Combination Agreement consummated the Business Combination Agreement.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0024",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "8-K/A of V2-0023 (exhibit signatures). De-SPAC closing; CEO resigned; auditor appointed.",
+  "rationale": {
+   "dilution_event": "the Company issued and sold to the PIPE Investor, an aggregate of 1,500,000 Series A Preferred Stock for a purchase price of $9.60 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "Not applicable.",
+   "other_material": "On March 15, 2024, the parties to the Business Combination Agreement consummated the Business Combination Agreement.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0025",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "increase the number of authorized shares of the Company's Class A Common Stock, par value $0.001 per share from 114,000,000 to 228,000,000 shares",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0026",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "SPAC deadline extension; routine",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "The Charter Amendment extends the date by which the Company has to consummate a business combination",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0027",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "adopted Amended and Restated Bylaws",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0028",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved the Second Amended and Restated Bylaws of the Company",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0029",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-60"
+  },
+  "notes": "Split effective 12:01am on filing date (May 23)",
+  "rationale": {
+   "dilution_event": "entered into an amendment (the \"Second ATM Amendment\") to that certain At the Market Offering Agreement",
+   "going_concern": "not mentioned",
+   "listing_status": "trading of the Company's Common Stock will continue on The Nasdaq Capital Market on a Reverse Stock Split-adjusted basis",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will become effective in accordance with the terms of the Eighth Amendment at 12:01 am Eastern Time on May 23, 2024",
+   "split_ratio": "the Board approved a one-for-sixty (60) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0030",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "no additional securities were issued or sold as a result",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0031",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "The Charter Amendment extends the date by which the Company has to consummate a business combination",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0032",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Director (not CEO/CFO) resignation",
+  "rationale": {
+   "dilution_event": "the Company completed its IPO of 2,800,000 shares of its common stock at a public offering price of $8.00 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "Les Kreis, Jr. resigned from the Board effective immediately prior to the closing",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0033",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "no additional securities were issued or sold as a result",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0034",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-50"
+  },
+  "notes": "Effective Sept 13; filed Sept 16",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split Amendment became effective at 5:00 p.m. Eastern Time on the date of filing of the related Certificate of Amendment",
+   "split_ratio": "the Board selected a reverse stock split of the Class A Common Stock at a final ratio of 1-for-50"
+  }
+ },
+ {
+  "cal_id": "V2-0035",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "The Charter Amendment extends the date by which the Company has to consummate a business combination",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0036",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "PIPE of Series A preferred is previously disclosed; this filing amends terms (PIK dividend option) and a credit facility",
+  "rationale": {
+   "dilution_event": "Company may elect to pay up to 50% of the accrued and unpaid dividends outstanding by the delivery of additional shares of Series A Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "entered into a Credit Agreement (the \"Credit Agreement\") with Byline Bank, as lender",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0037",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-35"
+  },
+  "notes": "Filed June 26; effective June 27",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "The Company's common stock will continue to trade on the Nasdaq Capital Market under the symbol \"NUWE.\"",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will become effective as of 5:00 p.m. Eastern Time on June 27, 2024",
+   "split_ratio": "the Board approved a one-for-thirty-five reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0038",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "yes",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "De-SPAC super 8-K; also convertible notes and warrants issued; going-concern doubt stated for Adagio (operating sub) via proxy reference",
+  "rationale": {
+   "dilution_event": "an aggregate of 7,951,913 shares of New Adagio Common Stock were issued to the PIPE Investors in connection with the PIPE Financing",
+   "going_concern": "Adagio's management believes raises substantial doubt about Adagio's ability to continue as a going concern",
+   "listing_status": "New Adagio Common Stock began trading on the Nasdaq",
+   "other_material": "consummated the previously announced business combination (the \"Business Combination\")",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0039",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "entered into warrant inducement offer letters (the \"Inducement Letters\") with certain investors to immediately exercise approximately 1.8 million of the April 2024 Warrants",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0040",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "deficiency_notice",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-4"
+  },
+  "notes": "No explicit Nasdaq notice described; noncompliance implied by 'to regain compliance'",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "effected to regain compliance with the $1.00 minimum bid price required for continued listing on The Nasdaq Capital Market",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split became effective on September 30, 2024",
+   "split_ratio": "at a ratio of 1-for-4 (the \"Reverse Stock Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0041",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Unregistered convertible preferred issuances (could also be read as private_placement)",
+  "rationale": {
+   "dilution_event": "the customer received 200,000 shares of the Company's Series B-2 Resettable Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0042",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "delisting_determination",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Also 3,920,208 common shares issued to a consultant (unregistered); range-only split approval",
+  "rationale": {
+   "dilution_event": "the Company issued 6,932 shares of its Series B-4 Resettable Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "the Staff determined to delist the Company's securities from The Nasdaq Capital Market (the \"Staff Determination\")",
+   "other_material": "not mentioned",
+   "reverse_split": "in the range of 1-for-10 to 1-for-100, with the exact ratio to be determined by the Company's Board of Directors, if at all",
+   "split_ratio": "at a ratio in the range of 1-for-10 to 1-for-100"
+  }
+ },
+ {
+  "cal_id": "V2-0043",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-20"
+  },
+  "notes": "Filed April 5; effective April 12",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the Reverse Stock Split will be effective at 12:01 a.m., Eastern Time, on April 12, 2024",
+   "split_ratio": "at a ratio of 1-for-20 (the \"Reverse Stock Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0044",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-80"
+  },
+  "notes": "Filed April 16; effective April 18",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split is expected to become effective at 12:01 a.m. Eastern Time on April 18, 2024",
+   "split_ratio": "to effect the Reverse Stock Split at a ratio of 1-for-80"
+  }
+ },
+ {
+  "cal_id": "V2-0045",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "entered into a Securities Purchase Agreement (the \"Purchase Agreement\") with the purchasers named therein",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0046",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "entered into a master clinical supply agreement (\"Roche Supply Agreement\") with F. Hoffmann-La Roche Ltd.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0047",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Range approved only",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "at a ratio in the range of 1-for-2 to 1-for-15, inclusive, with such ratio to be determined by the Board in its sole discretion",
+   "split_ratio": "at a ratio in the range of 1-for-2 to 1-for-15, inclusive"
+  }
+ },
+ {
+  "cal_id": "V2-0048",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Also common stock issued to Greenbrook holders under Section 3(a)(10) in the Arrangement; no category fits that exactly",
+  "rationale": {
+   "dilution_event": "The Warrant Certificate is exercisable into 600,000 shares of the Company's common stock.",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "the Company agreed to acquire all of the issued and outstanding common shares of Greenbrook",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0049",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-15"
+  },
+  "notes": "Filing date Feb 1; effective Jan 31",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the Reverse Split will become effective on January 31, 2024 at 5:00 p.m. Eastern Time",
+   "split_ratio": "every 15 shares of the Company's issued and outstanding common stock will automatically be combined and converted into 1 share"
+  }
+ },
+ {
+  "cal_id": "V2-0050",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "De-SPAC close; merger-consideration shares issued but no offering/PIPE/ATM/convertible category fits; CEO/CFO of SPAC also resigned at closing",
+  "rationale": {
+   "dilution_event": "cancelled in exchange for the right to receive a pro-rata portion of 10,500,000 shares of common stock of Brilliant",
+   "going_concern": "not mentioned",
+   "listing_status": "Nukkleus Common Stock and Nukkleus Warrants began trading on December 26, 2023 on the NASDAQ",
+   "other_material": "Merger Sub merged with and into Old Nukk, and the separate corporate existence of Merger Sub ceased",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0051",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-10"
+  },
+  "notes": "No exchange notice described; split only intended to regain bid-price compliance.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "The Reverse Stock Split is intended for the Company to regain compliance with the minimum bid price requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split was effective at 12:01 a.m., Eastern Time, on January 4, 2024",
+   "split_ratio": "to effect a 1-for-10 reverse stock split (the \"Reverse Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0052",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved and adopted amendments to the Bylaws of the Company",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0053",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "to change its name to Gaxos.ai Inc.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0054",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "low",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-8"
+  },
+  "notes": "Certificate filed Jan 12 but no effective time stated; split-adjusted trading begins Jan 22, after the Jan 16 filing date. Could be read as effective on filing.",
+  "rationale": {
+   "dilution_event": "entered into a securities subscription agreement (\"Subscription Agreement\") with Farooq M. Arjomand",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "will begin trading on the Nasdaq Capital Market on a Reverse Stock Split-adjusted basis at the market open on Monday, January 22, 2024",
+   "split_ratio": "to effect a reverse stock split of its issued Common Stock in the ratio of 1-for-8"
+  }
+ },
+ {
+  "cal_id": "V2-0055",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-3"
+  },
+  "notes": "Stockholders approved a fixed 1-for-3 ratio, date not yet set by Board. Dilution: approval of share issuance under existing convertible notes/warrant.",
+  "rationale": {
+   "dilution_event": "transactions involving unsecured convertible senior promissory notes and a common stock purchase warrant of the Company",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "by a ratio of 1-for-3, with such action to be effected at such time and date, if at all, as determined by the Board",
+   "split_ratio": "a reverse stock split of the Common Stock by a ratio of 1-for-3"
+  }
+ },
+ {
+  "cal_id": "V2-0056",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "low",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Going concern mention is only the predecessor SPAC's prior auditor report (Item 4.01); also an auditor change, but SPAC closing judged most important.",
+  "rationale": {
+   "dilution_event": "All New Investor Convertible Notes issued pursuant to the New Investor Note Purchase Agreements converted into 4,163,510 New Borealis Common Shares",
+   "going_concern": "except for an explanatory paragraph in such report regarding the substantial doubt about Oxus' ability to continue as a going concern",
+   "listing_status": "not mentioned",
+   "other_material": "consummated the transactions (collectively, the \"Transaction\") contemplated by the Business Combination Agreement",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0057",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-10"
+  },
+  "notes": "Split effective Feb 9, reported as this filing's Item 3.03 event (filed Feb 15); a Jan 30 press release had announced it.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "to satisfy the $1.00 minimum bid price requirement for continued listing of the common stock on the NASDAQ Stock Market",
+   "other_material": "not mentioned",
+   "reverse_split": "On February 9, 2024, Singularity Future Technology Ltd. (the \"Company\") effectuated a 1-for-10 reverse stock split of its common stock.",
+   "split_ratio": "effectuated a 1-for-10 reverse stock split of its common stock"
+  }
+ },
+ {
+  "cal_id": "V2-0058",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-3"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "effective as of 5:00 p.m., Eastern Time, on February 29, 2024 (the \"Effective Time\")",
+   "split_ratio": "to effect a reverse stock split at a ratio of 1:3"
+  }
+ },
+ {
+  "cal_id": "V2-0059",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-12"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split became effective at 4:01p.m., Eastern Time, on March 7, 2024",
+   "split_ratio": "to effectuate a 1-for-12 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0060",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "to extend the date by which the Company must consummate a business combination",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0061",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "low",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "8-K/A of V2-0056 adding financials; same events. Going concern mention is only predecessor SPAC's prior auditor report.",
+  "rationale": {
+   "dilution_event": "All New Investor Convertible Notes issued pursuant to the New Investor Note Purchase Agreements converted into 4,163,510 New Borealis Common Shares",
+   "going_concern": "except for an explanatory paragraph in such report regarding the substantial doubt about Oxus' ability to continue as a going concern",
+   "listing_status": "not mentioned",
+   "other_material": "consummated the transactions (collectively, the \"Transaction\") contemplated by the Business Combination Agreement",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0062",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-20"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "with an effective time of 12:01 a.m. Eastern Time on May 2, 2024 (the \"Effective Time\")",
+   "split_ratio": "at a ratio of 1-for-20 (the \"Reverse Stock Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0063",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-10"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will become legal effective as of 4:01 p.m. Eastern Standard Time on May 31, 2024",
+   "split_ratio": "at a ratio of 1-for-10 (the \"Reverse Stock Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0064",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Shareholders approved a range only; authorized share increase is not an issuance.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "by one of several fixed ratios between 1-for-2 and 1-for-10 (the \"Reverse Stock Split\"), with the final decision of whether to proceed",
+   "split_ratio": "the exact ratio of the Reverse Stock Split to be determined in the future by the Company's board of directors"
+  }
+ },
+ {
+  "cal_id": "V2-0065",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved an amendment (the \"Amendment\") to the Company's Amended and Restated Bylaws",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0066",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amendment to existing merger agreement (merger price cut); no explicit share issuance described.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "the Company entered into Amendment No 1 to the Merger Agreement",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0067",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-8"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split became effective as of 12:01 a.m. (Eastern time) on June 20, 2024",
+   "split_ratio": "to implement the 1-for-8 reverse split of its common stock"
+  }
+ },
+ {
+  "cal_id": "V2-0068",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "extended the date by which Plum has to consummate a business combination to September 14, 2024",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0069",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "auditor_change",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Dilution: one non-convertible super-voting preferred share sold to the CEO (unregistered); could be read as convertible_or_warrants (preferred issuance) or none. Future reverse split proposal has no ratio.",
+  "rationale": {
+   "dilution_event": "agreed to issue and sell one share of the Company's newly designated Series A Preferred Stock, par value $0.0001 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "Macias Gini & O'Connell LLP (\"MGO\") was engaged as the independent registered public accounting firm",
+   "reverse_split": "\"Reverse Stock Split Proposal\" means any proposal approved by the Board and submitted to the stockholders",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0070",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "NOL rights plan: dividend of preferred purchase rights exercisable only on a trigger; could be read as convertible_or_warrants.",
+  "rationale": {
+   "dilution_event": "The Rights are not exercisable until the Distribution Time.",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "entered into a rights agreement and declared a dividend of one preferred share purchase right",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0071",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Range only; authorized share and incentive plan increases, no issuance transaction.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "a ratio of any whole number in the range of 1-for-2 to 1-for-40, with such ratio to be determined in the discretion of the Board",
+   "split_ratio": "such ratio to be determined in the discretion of the Board"
+  }
+ },
+ {
+  "cal_id": "V2-0072",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-40"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "effective as of 5:00 p.m., Eastern Time, on August 16, 2024 (the \"Effective Time\")",
+   "split_ratio": "to effect a reverse stock split at a ratio of 1:40"
+  }
+ },
+ {
+  "cal_id": "V2-0073",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "low",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Going concern appears only as description of dismissed auditor's prior report on the SPAC (TenX). Shares also issued to Sponsor for notes (unregistered); could be private_placement. Auditor change also present.",
+  "rationale": {
+   "dilution_event": "the note converted automatically on August 13, 2024, the day after the closing, into 128,854 shares of Company Common Stock",
+   "going_concern": "except for the substantial doubt about the Company's ability to continue as a going concern",
+   "listing_status": "not mentioned",
+   "other_material": "the Company completed the previously announced business combination",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0074",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "deficiency_notice",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "approximately 6.6 million shares of Common Stock were issued upon the exercise of Class D warrants",
+   "going_concern": "not mentioned",
+   "listing_status": "Nasdaq's Listing Qualifications Staff notified the Company that it has extended the time period for the Company to regain compliance",
+   "other_material": "not mentioned",
+   "reverse_split": "if necessary, it will implement a reverse stock split of its outstanding common stock (if approved by the Company's stockholders)",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0075",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Private placement of convertible Series B preferred plus warrants; convertible_or_warrants also plausible.",
+  "rationale": {
+   "dilution_event": "agreed to sell, issue and deliver to the Investors, in a private placement offering (the \"Offering\")",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0076",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Delisting is a 2023 background fact about predecessor; share offer to legacy holders uses registered escrowed shares, not a classic offering; convertible note only amended.",
+  "rationale": {
+   "dilution_event": "make a 30 day offer from the date of the offer to issue up to 1,478,817 new shares at $6.45 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "As a result of SeqLL's delisting from the Nasdaq Capital Market following the August 2023 shareholder meeting",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0077",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "50,556 shares of the Company's common stock were redeemed",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "A proposal to approve the amendment of the Company's amended and restated certificate of incorporation to extend the date",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0078",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "listing_status": "medium",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Super 8-K; also auditor change (Marcum dismissed) and CFO resignation; closing of business combination chosen as most important. Going-concern paragraph refers to predecessor SPAC's prior audit; company states sufficient cash.",
+  "rationale": {
+   "dilution_event": "entered into note purchase agreements ... for the sale of unsecured subordinated convertible promissory notes",
+   "going_concern": "Marcum's report on Plum's financial statements as of December 31, 2023 and 2022 contained an explanatory paragraph relating to going concern",
+   "listing_status": "the Common Stock and publicly traded warrants began trading on Nasdaq under the symbols \"VEEA\" and \"VEEAW,\" respectively",
+   "other_material": "the registrant consummated its previously announced business combination with Veea Inc.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0079",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved a change in the Company's fiscal year end from December 31 to April 30, effective immediately",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0080",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "SPAC IPO plus concurrent private placement of units.",
+  "rationale": {
+   "dilution_event": "the Company consummated the IPO of 5,750,000 units (the \"Units\"). ... The Units were sold at an offering price of $10.00 per Unit",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0081",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "the Company's stockholders ratified the Company's Stockholder Rights Agreement",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0082",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "reducing the threshold required to establish a quorum for its meetings of stockholders from a majority",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0083",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "deficiency_notice",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-8"
+  },
+  "notes": "Deficiency implied by compliance goal; no explicit notice described.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "with the goal of bringing the Company back into compliance with Nasdaq Listing Rule 5550(a)(2)",
+   "other_material": "not mentioned",
+   "reverse_split": "which will become effective 12:01 am eastern time on October 24, 2024",
+   "split_ratio": "unanimously approved a reverse stock split of the Company's common stock at a ratio of one-for-eight"
+  }
+ },
+ {
+  "cal_id": "V2-0084",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "The consideration for the Acquired Assets consisted of the issuance of 1,600,000 shares of newly designated Series B Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "the Healthcare Triangle, Inc. (the \"Company\") acquired substantially all of the business, assets, and operations relating to cloud and technology domain",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0085",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "regained_compliance",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Regained bid-price compliance but 'remains out of compliance' with MVPHS and MVLS rules; also debt conversion with warrant and director resignations.",
+  "rationale": {
+   "dilution_event": "entered into a securities purchase agreement ... pursuant to which the Company sold 110,707 shares of its common stock at a purchase price of $2.09456",
+   "going_concern": "not mentioned",
+   "listing_status": "stating that the Company has regained compliance with the minimum closing bid price requirement in Nasdaq Listing Rule 5450(a)(1)",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0086",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-50"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split became effective as of 12:01 a.m. (Eastern time) on November 18, 2024",
+   "split_ratio": "to implement a 1-for-50 reverse split of its common stock"
+  }
+ },
+ {
+  "cal_id": "V2-0087",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "deficiency_notice",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-25"
+  },
+  "notes": "Deficiency implied by intent to regain compliance; no notice described.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "The Reverse Stock Split is intended for the Company to regain compliance with the minimum bid price requirement of $1.00 per share",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split became effective at 5:00 p.m., Eastern Time, on November 25, 2024",
+   "split_ratio": "effect a 1-for-25 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0088",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved a change in the Company's fiscal year end from June 30 to December 31",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0089",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "IPO plus concurrent private placement of pre-funded-style common warrants.",
+  "rationale": {
+   "dilution_event": "sold an aggregate of 1,687,500 shares of Common Stock at an initial public offering price of $4.00 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0090",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "low",
+   "reverse_split": "medium",
+   "split_ratio": "medium"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Redomiciliation share exchange (1 for 2,160 ordinaries) is not a reverse split of registrant stock; ADS suspension is part of voluntary succession to NEUP listing, not an exchange halt.",
+  "rationale": {
+   "dilution_event": "Neuphoria will issue a warrant to purchase 1,054,381 shares of common stock in Neuphoria",
+   "going_concern": "not mentioned",
+   "listing_status": "Bionomics' ADSs were suspended from trading on Nasdaq prior to the start of trading on the Effective Date",
+   "other_material": "the redomiciliation (\"Redomiciliation\") of Bionomics Limited, an Australian corporation (\"Bionomics\"), was implemented",
+   "reverse_split": "holders of ordinary shares of Bionomics received one share of common stock in Neuphoria for every 2,160 ordinary shares of Bionomics",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0091",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "medium"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-12"
+  },
+  "notes": "Effective date not stated explicitly; certificate filed March 20, trading adjusted March 22.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to affect a 1 - 12 reverse stock split ... of the shares of the Company's common stock ... on March 20, 2024",
+   "split_ratio": "to affect a 1 - 12 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0092",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved an amendment (the \"Amendment\") to the Company's Second Amended and Restated Bylaws",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0093",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Could also be private_placement (subscription agreements with accredited investors).",
+  "rationale": {
+   "dilution_event": "the sale of an aggregate of 1,210 shares of newly designated Series AAA Junior Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0094",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Could also be private_placement.",
+  "rationale": {
+   "dilution_event": "the sale of an aggregate of 551 shares of newly designated Series AAA-2 Junior Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0095",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amendment to Series A convertible preferred; dividends payable in new common shares.",
+  "rationale": {
+   "dilution_event": "the dividends due on October 1, 2024 ... shall be payable in shares of Common Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0096",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Could also be private_placement.",
+  "rationale": {
+   "dilution_event": "each Unit consisting of (i) one share of newly designated Series AAA-3 Junior Convertible Preferred Stock ... and (ii) a warrant",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0097",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Could also be private_placement.",
+  "rationale": {
+   "dilution_event": "each Unit consisting of (i) one share of newly designated Series AAA-4 Junior Convertible Preferred Stock ... and (ii) a warrant",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0098",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-20"
+  },
+  "notes": "Effective time Oct 24 precedes Oct 28 filing date, though text uses future tense.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the Reverse Stock Split will become effective in accordance with the terms of the Amendment at 11:59 p.m. Eastern Time on October 24, 2024",
+   "split_ratio": "approved a one-for-twenty (1:20) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0099",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Accrued Series A convertible preferred amounts settled in new common shares.",
+  "rationale": {
+   "dilution_event": "will be satisfied by delivery of shares of Common Stock on or prior to November 25, 2024",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0100",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Share delivery is recapped as previously reported; this filing's own event is the certificate filing. Could be 'none'.",
+  "rationale": {
+   "dilution_event": "will be satisfied by delivery of shares of Common Stock on or prior to November 25, 2024",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0101",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "officer_departure",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "Effective January 25, 2024, Michael James retired from his positions as Chief Financial Officer, Treasurer, Secretary and Director of the Company.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0102",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-20"
+  },
+  "notes": "Split effective April 5 after April 2 filing; listing mentioned only in forward-looking risk language.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company's ability to regain compliance with the Nasdaq Listing Standards and maintain the listing of its securities",
+   "other_material": "not mentioned",
+   "reverse_split": "at a ratio of 1-for-20 shares, effective as 12:01 am Eastern Time on April 5, 2024",
+   "split_ratio": "at a ratio of 1-for-20 shares"
+  }
+ },
+ {
+  "cal_id": "V2-0103",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "One non-convertible voting preferred share sold to CEO; not a common-share equivalent, but could be read as private_placement.",
+  "rationale": {
+   "dilution_event": "purchased one share of the Company's newly designated Series B Preferred Stock ... The Series B Preferred Stock is not convertible into common stock.",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0104",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-110"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Certificate of Amendment will become effective with the State of Delaware on October 2, 2024.",
+   "split_ratio": "for the purpose of effecting a 1-for-110 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0105",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company's shares of common stock will trade under the symbol \"BCHT\" on both the TSXV and OTCQB",
+   "other_material": "changed its corporate name to \"Birchtech Corp.\"",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0106",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "TSXV-to-TSX graduation treated as voluntary tier transfer.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "in connection with the listing of the Company's shares on the Toronto Stock Exchange (\"TSX\") and graduation from the TSX Venture Exchange",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0107",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Also authorized-share increase; warrants from Oct 2024 private placement approved for full exercise.",
+  "rationale": {
+   "dilution_event": "the approval of the exercise in full of warrants to purchase an aggregate of 837,104 shares of the Company's common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0108",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "SPAC de-SPAC close; CEO Chan also resigned as CEO (secondary). Shares to EF Hutton are an unregistered issuance in lieu of fees.",
+  "rationale": {
+   "dilution_event": "the Company issued 149,443 shares of the Company's common stock to EF Hutton. Such securities were issued pursuant to the exemption from registration",
+   "going_concern": "not mentioned",
+   "listing_status": "The Company requested that Nasdaq delist Alset's units and warrants that previously traded under the symbols \"ACAXU\" and \"ACAXW\"",
+   "other_material": "On January 9, 2024 (the \"Closing Date\"), the parties consummated the Business Combination.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0109",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "low",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "SPAC extension; merger agreement (Oct 2023) mentioned only as background, so not chosen.",
+  "rationale": {
+   "dilution_event": "the Company issued a promissory note to Citius Pharma with a principal amount of $200,000 (the \"Note\"). The Note bears no interest",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "the Company's shareholders approved the Extension Amendment Proposal on January 17, 2024",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0110",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved and adopted amendments to the Company's amended and restated bylaws",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0111",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "its Class A common stock will begin to trade on the Nasdaq Global Market LLC under the ticker symbol \"TRUG\"",
+   "other_material": "on January 31, 2024, it consummated the business combination (the \"Closing\") contemplated by the previously announced Amended and Restated Agreement and Plan of Merger",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0112",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-30"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The reverse stock split will become effective at 5:00 p.m. Eastern time, on February 2, 2024.",
+   "split_ratio": "at a ratio of 1-for-30"
+  }
+ },
+ {
+  "cal_id": "V2-0113",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "halt",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Listing: literal 'suspended' of SPAC securities as part of de-SPAC ticker change; could be none. Dilution: merger consideration shares plus referenced PIPE convertible notes/warrants.",
+  "rationale": {
+   "dilution_event": "the issuance of PIPE Convertible Notes and PIPE Warrants in connection with the PIPE Financing",
+   "going_concern": "not mentioned",
+   "listing_status": "Trading of DMAQ's Class A common stock, and units was suspended at 5 p.m. on January 31, 2024.",
+   "other_material": "On January 31, 2024 (the \"Closing Date\") the parties completed the Business Combination.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0114",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-30"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to effect a 1-for-30 reverse stock split ... effective as of 4:05 p.m. Eastern Standard Time on February 14, 2024",
+   "split_ratio": "to effect a 1-for-30 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0115",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "low",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Reincorporation merger into own subsidiary; not treated as M&A.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "continue to trade on the Nasdaq Capital Market under the symbol \"MYMD.\"",
+   "other_material": "merged with and into its wholly-owned subsidiary ... for the purpose of changing the Company's state of incorporation from New Jersey to Delaware",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0116",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "the Company issued to the PIPE Investors an aggregate of 7,194,244 units at a purchase price per unit of $1.39",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "consummated the previously announced merger (the \"Closing\") of FaZe Holdings Inc.",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0117",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "approved a resolution to classify the Board pursuant to Section 3-803 of the MGCL",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0118",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-44"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Certificate of Amendment became effective at 5:00 p.m. (Eastern Time) on March 20, 2024",
+   "split_ratio": "to effectuate a reverse stock split ... on a 1-for-44 basis"
+  }
+ },
+ {
+  "cal_id": "V2-0119",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "to correct an inadvertent error in the number of shares of common stock ... that the Company is authorized to issue",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0120",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "entered into subscription agreements with six investors. Pursuant thereto, the Company issued and sold issued 1,511,025 shares of common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0121",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "regained_compliance",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "exchange $10,000,000 of that certain Secured Promissory Note ... for shares of the Company's newly created Series D Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company believes it has regained compliance with the minimum $2.5 million stockholders' equity requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0122",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "regained_compliance",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amendment adds conditional 'may be subject to delisting' language; compliance statement still controls.",
+  "rationale": {
+   "dilution_event": "exchange $10,000,000 of that certain Secured Promissory Note ... for shares of the Company's newly created Series D Convertible Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company believes it has regained compliance with the minimum $2.5 million stockholders' equity requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0123",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "none of the 1,400,000 authorized shares of Series A Preferred Stock or 100,000 authorized shares of Series B Preferred Stock were issued and outstanding",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0124",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amends terms of existing Series F convertible preferred (issued 2023); no new issuance described.",
+  "rationale": {
+   "dilution_event": "the Required Holders agreed (i) to defer payment of the Installment Amounts ... and (ii) to waive any breach",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0125",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-8"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the Board approved a 1-for-8 reverse stock split ... which will become effective as of 5:00 p.m. Eastern Time on April 19, 2024",
+   "split_ratio": "the Board approved a 1-for-8 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0126",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-5"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "Certificate of Amendment ... which became effective at 4:30 p.m. on May 17, 2024 (the \"Effective Time\") to effect a one-for-five (1:5) reverse stock split",
+   "split_ratio": "to effect a one-for-five (1:5) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0127",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Also convertible preferred + warrants; private_placement chosen as the SPA/unregistered sale framing.",
+  "rationale": {
+   "dilution_event": "entered into a Securities Purchase Agreement (the \"Series G Purchase Agreement\") with certain accredited investors",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0128",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Closing of previously announced private placement of convertible preferred + warrants.",
+  "rationale": {
+   "dilution_event": "On May 23, 2024, the Company completed the Private Placements for aggregate gross proceeds of $14 million",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0129",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "the Participating Holders agreed to exercise for cash the Existing Warrants at a reduced exercise price of $0.155 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0130",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-150"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "reverse stock split ... in the ratio of 1-for-150 (the \"Reverse Stock Split\"), which was effective at 11:59 p.m. eastern on May 31, 2024",
+   "split_ratio": "in the ratio of 1-for-150"
+  }
+ },
+ {
+  "cal_id": "V2-0131",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0132",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "low",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-12"
+  },
+  "notes": "Amendment filed June 4 but no explicit effective time; split described in future tense with split-adjusted trading June 7 (after June 5 filing). Could be effective.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "The purpose of the reverse stock split is to maintain the Company's listing of its common stock",
+   "other_material": "not mentioned",
+   "reverse_split": "each twelve (12) shares of the Company's outstanding common stock, $0.00001 par value per share, will be automatically combined and converted into one (1)",
+   "split_ratio": "each twelve (12) shares of the Company's outstanding common stock ... will be automatically combined and converted into one (1) outstanding share"
+  }
+ },
+ {
+  "cal_id": "V2-0133",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Only a shareholder approval of warrant-share issuance and an authorized-share increase; could be none.",
+  "rationale": {
+   "dilution_event": "The stockholders approved the issuance of up to an aggregate of 1,632,000 shares of the Company's Common Stock upon the exercise of ... warrants",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0134",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0135",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "low",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Departing officer is President/CMO, not titled CEO or CFO; dilution is only an amendment enabling PIK convertible preferred.",
+  "rationale": {
+   "dilution_event": "increase the number of authorized shares of Preferred Stock from 8,950 to 12,826,273, in order to authorize ... payment of dividends ... \"in kind\"",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "the Company and Christopher Chapman, M.D. mutually agreed on the separation of Dr. Chapman from his position as President, Chief Medical Officer",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0136",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Listing only referenced in forward-looking-statement boilerplate (Nasdaq hearing/appeal), no event reported.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company's intent or ability to regain compliance with the Minimum Bid Price Requirement ... the outcome of the Nasdaq hearing and appeal process",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0137",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amendment to existing convertible preferred terms; could be none.",
+  "rationale": {
+   "dilution_event": "On June 17, 2024, the Company filed the Certificate of Amendment ... to increase the number of authorized shares of Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0138",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Offering is non-convertible perpetual preferred, not common equivalents; could be none.",
+  "rationale": {
+   "dilution_event": "sold in an underwritten public offering ... of 109,054 ... shares of ... Series D Preferred Stock ... at a price of $16.00 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0139",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-17"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split is expected to become effective at 5:00 p.m. Eastern time, after the close of trading ... on June 28, 2024",
+   "split_ratio": "relating to a 1-for-17 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0140",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-20"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to implement a 1-for-20 reverse stock split. Our common stock began to trade on a reverse split adjusted basis on June 27th",
+   "split_ratio": "to implement a 1-for-20 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0141",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amendment of conversion terms of existing convertible preferred.",
+  "rationale": {
+   "dilution_event": "The COD Amendment amended the definition of \"Series A Conversion Price\"",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0142",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-10"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Certificate of Amendment became effective at 5:00 p.m. Eastern Time on July 17, 2024, at which time every ten (10) shares",
+   "split_ratio": "The Board subsequently approved the reverse stock split of the Common Stock (the \"Reverse Stock Split\") at a final ratio of 1-for-10 (one-for-ten)."
+  }
+ },
+ {
+  "cal_id": "V2-0143",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company's common stock ceased trading under the ticker symbol \"MYMD\" and began trading on the Nasdaq Stock Market under the ticker symbol \"TNFA\"",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0144",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Only stockholder approval of issuance underlying previously sold convertibles/warrants plus authorized-share increase.",
+  "rationale": {
+   "dilution_event": "Authorization ... of the issuance of shares of Common Stock underlying shares of Series F-1 Preferred Stock, Series G Preferred Stock and warrants",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0145",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-11"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "which will effect a 1-for-11 Reverse Split ... which will become effective at 12:01 AM Eastern Time on August 5, 2024",
+   "split_ratio": "will effect a 1-for-11 Reverse Split"
+  }
+ },
+ {
+  "cal_id": "V2-0146",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-70"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split became effective at 4:01p Eastern Time on August 1, 2024",
+   "split_ratio": "to effectuate a 1-for-70 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0147",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Also a registered direct offering of 360,000 shares (no per-share price stated) with concurrent private warrants under an SPA; multiple dilution types.",
+  "rationale": {
+   "dilution_event": "the Holders of the Existing Warrants agreed to exercise for cash the Existing Warrants ... at the lower exercise price of $1.25 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0148",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "restatement",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-8"
+  },
+  "notes": "Restatement mentioned via note waiver; no explicit non-reliance statement.",
+  "rationale": {
+   "dilution_event": "The Company intends to conduct an equity offering in the near term",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "related to the restatement and reaudit of the Company's financial statements for the years ended December 31, 2022 and 2023",
+   "reverse_split": "The Reverse Stock Split will become effective at the start of trading on August 13, 2024",
+   "split_ratio": "the Board approved a one-for-eight (1:8) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0149",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0150",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Amendment to PIK terms of existing convertible preferred; could be none.",
+  "rationale": {
+   "dilution_event": "amend the means by which the number of shares of Preferred Stock to be issued for the payment of dividends ... is determined",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0151",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Warrant exchange issuing ~2.4M common shares; mapped to warrant exercise category.",
+  "rationale": {
+   "dilution_event": "each outstanding redeemable warrant will be mandatorily exchanged for 0.24741 shares of common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0152",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-20"
+  },
+  "notes": "Split effective Aug 30, 2024; filed Aug 28.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to effect a 1-for-20 reverse stock split",
+   "split_ratio": "to effect a 1-for-20 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0153",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-20"
+  },
+  "notes": "Filed on effective date Aug 30; opens 'As previously disclosed' but reports the effectiveness itself.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will become effective on August 30, 2024.",
+   "split_ratio": "to effect a 1-for-20 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0154",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Range only. Dilution is shareholder approval of issuance under existing preferred/warrant.",
+  "rationale": {
+   "dilution_event": "potentially issue shares of the Company's common stock underlying the Series B Preferred Stock and the warrant issued by the Company to Ionic",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "at a ratio not less than one-for-two and not greater than one-for-one thousand, with the exact ratio to be set",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0155",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0156",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Authorized share increase and forward purchase termination; no issuance.",
+  "rationale": {
+   "dilution_event": "RiverNorth agreed to return the approximately 23,651 unsold shares",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0157",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "deficiency_notice",
+   "other_material": "merger_or_acquisition",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Merger consideration includes common, convertible preferred and a convertible debenture.",
+  "rationale": {
+   "dilution_event": "Series C-1 Preferred will automatically convert into approximately 29,515,315 shares of the Company's common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company is not currently in compliance with the requirement to maintain a minimum bid price of $1.00 per share",
+   "other_material": "the Company's acquisition of NAYA Biosciences, Inc.",
+   "reverse_split": "reverse stock split of the Company's common stock at a ratio ranging from any whole number between 1-for-2 and 1-for-20",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0158",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0159",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Registered direct + concurrent private placement warrants; per-share price not explicitly stated (gross proceeds given).",
+  "rationale": {
+   "dilution_event": "in a registered direct offering, 2,048,294 shares (the \"Shares\") of the Company's common stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0160",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-50"
+  },
+  "notes": "Effective Nov 5, 2024; filed Nov 1.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to effect a 1-for-50 reverse stock split",
+   "split_ratio": "every 50 shares of the Company's issued and outstanding Common Stock"
+  }
+ },
+ {
+  "cal_id": "V2-0161",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0162",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0163",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Termination of a merger agreement, not a new definitive agreement.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "entered into a Mutual Termination and Release Agreement (the \"Termination Agreement\") to terminate the Merger Agreement",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0164",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "low",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-225"
+  },
+  "notes": "Filed Nov 8. Bid-price non-compliance implied but no exchange notice described.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "to, among others, regain compliance with the NASDAQ Stock Market LLC listing rules",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Split will be effective as of 12:01 a.m. on November 12, 2024",
+   "split_ratio": "the Board unanimously approved a 1-for-225 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0165",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "medium",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-50"
+  },
+  "notes": "Filed Nov 8; completion reported here as own 8.01 event, though split was announced in Nov 1 8-K.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "intended to bring the Company into compliance with the $1.00 minimum bid price requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "On November 5, 2024, Qualigen Therapeutics, Inc. (the \"Company\") effected a one-for-fifty (1:50) reverse stock split",
+   "split_ratio": "effected a one-for-fifty (1:50) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0166",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "low",
+   "split_ratio": "medium"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "none"
+  },
+  "notes": "8-K/A filed Nov 12 (same day as 12:01 a.m. effectiveness); ratio only in original report, not in this text. Could be read as historical.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "the Reverse Stock Split will regain the Company's compliance with the Minimum Bid Price Requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "The effective date and time of the Certificate of Amendment will remain 12:01 a.m. on November 12, 2024.",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0167",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Designation of preferred only; no issuance transaction described.",
+  "rationale": {
+   "dilution_event": "providing for and authorizing issuance of 450,000 shares of preferred stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0168",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Private placement of convertible preferred; also note exchange. Could be convertible_or_warrants.",
+  "rationale": {
+   "dilution_event": "the Company agreed to sell and issue shares of Qualigen's newly designated Series A-2 Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "the Company has equity above $2.5 million as of the date of this report",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0169",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "increase the authorized number of shares designated as \"Series B Preferred Stock\" from 4,000,000 to 5,000,000",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0170",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Shareholder approval for warrant-share issuance; option repricing not a listed category.",
+  "rationale": {
+   "dilution_event": "the issuance of shares of our common stock underlying warrants issued by us pursuant to the terms of that certain Securities Purchase Agreement",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0171",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-15"
+  },
+  "notes": "Filed Dec 3.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will be effective as of 12:01 am on December 6, 2024",
+   "split_ratio": "every fifteen (15) shares of our pre-Reverse Stock Split Common Stock will be combined and reclassified into one (1) share"
+  }
+ },
+ {
+  "cal_id": "V2-0172",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-50"
+  },
+  "notes": "Filed Dec 13.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Amendment became effective at 5:00 PM ET on December 12, 2024.",
+   "split_ratio": "to effectuate the Reverse Stock Split at a ratio of 1-for-50"
+  }
+ },
+ {
+  "cal_id": "V2-0173",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "amends certain provisions of the Series A-2 Preferred Stock",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0174",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0175",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "medium",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Poison-pill rights dividend; contingent rights, not treated as a share issuance.",
+  "rationale": {
+   "dilution_event": "adopted a shareholder rights plan and declared a dividend of one right",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0176",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-10"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will become effective at 12:01 am Eastern Time on August 6, 2024",
+   "split_ratio": "the Board approved a one-for-ten (1:10) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0177",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "low",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "historical",
+   "split_ratio": "1-for-10"
+  },
+  "notes": "8-K/A filed Aug 6 reporting corrective certificates; split previously reported in Aug 1 8-K; this text does not restate the effective date, so historical vs effective is ambiguous.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "No substantive change was made to the terms or timing of the Reverse Stock Split as previously reported.",
+   "split_ratio": "in connection with the one-for-ten (1:10) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0178",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0179",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-8"
+  },
+  "notes": "Bid-price compliance motive mentioned but no exchange notice or cure period described.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "The Reverse Stock Split was intended to bring the Company into compliance with the $1.00 minimum bid price requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "On December 30, 2024, Janover Inc. (the \"Company\") effected a one-for-eight (1:8) reverse stock split",
+   "split_ratio": "effected a one-for-eight (1:8) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0180",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-8"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "effective at 5:00 p.m. Eastern Time on that date (the \"Effective Date\")",
+   "split_ratio": "to effect a 1-for-8 reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0181",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Designation of convertible preferred; issuance itself not separately described.",
+  "rationale": {
+   "dilution_event": "the general effect of the issuance of the shares of Series A Preferred Stock on the Company's other classes of registered securities",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0182",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "low",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "auditor_change",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Auditor change mentioned as previously reported in a June 4 8-K; otherwise routine annual meeting results.",
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "to dismiss PricewaterhouseCoopers LLP (\"PwC\") as the Company's independent registered public accounting firm, effective as of June 4, 2024",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0183",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-15"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to effect the Reverse Stock Split, effective as of 4:01 p.m., Eastern Time, on August 23, 2024",
+   "split_ratio": "the Board approved the reverse stock split at a ratio of 1-for-15"
+  }
+ },
+ {
+  "cal_id": "V2-0184",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-25"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the reverse stock split became effective as of 5:00 P.M. Eastern Time on February 26, 2024",
+   "split_ratio": "to effect a reverse stock split of the Company's common stock at a ratio of one-for-twenty five"
+  }
+ },
+ {
+  "cal_id": "V2-0185",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-20"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "to effect a 1-for-20 reverse stock split of our issued and outstanding common stock, effective August 29, 2024, 5:00pm EDT",
+   "split_ratio": "the Board of Directors selected the 1-for-20 reverse stock split ratio"
+  }
+ },
+ {
+  "cal_id": "V2-0186",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0187",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0188",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "effective",
+   "split_ratio": "1-for-7"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the Reverse Stock Split became effective as of 4:01 p.m. Eastern Time on January 29, 2024",
+   "split_ratio": "at a ratio of 1-for-7 (the \"Reverse Stock Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0189",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-13"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "the Reverse Stock Split will become effective as of 4:01 p.m. Eastern Time on June 17, 2024",
+   "split_ratio": "at a ratio of 1-for-13 (the \"Reverse Stock Split\")"
+  }
+ },
+ {
+  "cal_id": "V2-0190",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "offering the Holders the opportunity to exercise all of their Prior Warrants for cash at a reduced exercise price equal to $1.00 per share",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0191",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0192",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-20"
+  },
+  "notes": "Dilution: only stockholder approval of share issuance upon exercise of previously issued warrants.",
+  "rationale": {
+   "dilution_event": "approved the issuance of shares of common stock upon the exercise of the warrants issued by the Company to investors and the placement agent",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "which will be effective on July 16, 2024 to effect a one-for-twenty (1:20) reverse stock split",
+   "split_ratio": "to effect a one-for-twenty (1:20) reverse stock split"
+  }
+ },
+ {
+  "cal_id": "V2-0193",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Shareholder rights plan (poison pill); rights are contingent, treated as no share issuance.",
+  "rationale": {
+   "dilution_event": "Each Right entitles the holder to purchase from the Company six shares of Common Stock of the Company at an exercise price of $6.21",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ },
+ {
+  "cal_id": "V2-0194",
+  "confidence": {
+   "dilution_event": "low",
+   "going_concern": "high",
+   "listing_status": "medium",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Reverse split only proposed as a range in proxy; warrant approval proposal references a prior offering.",
+  "rationale": {
+   "dilution_event": "the issuance of certain warrants to purchase shares of the Common Stock in connection with an offering and sale of securities of the Company",
+   "going_concern": "not mentioned",
+   "listing_status": "a proactive effort to regain compliance with Nasdaq's $1.00 minimum bid price listing requirement",
+   "other_material": "not mentioned",
+   "reverse_split": "effect a reverse stock split of the Common Stock at a ratio between 1-for-50 and 1-for-100",
+   "split_ratio": "at a ratio between 1-for-50 and 1-for-100 at any time within one year after shareholder approval is obtained"
+  }
+ },
+ {
+  "cal_id": "V2-0195",
+  "confidence": {
+   "dilution_event": "high",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "none",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "announced",
+   "split_ratio": "1-for-100"
+  },
+  "rationale": {
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "The Reverse Stock Split will become effective at 5:00 p.m. Pacific Time on October 8, 2024",
+   "split_ratio": "the Board determined to implement the reverse stock split of the Common Stock at a 1-for-100 ratio"
+  }
+ },
+ {
+  "cal_id": "V2-0196",
+  "confidence": {
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "listing_status": "high",
+   "other_material": "high",
+   "reverse_split": "high",
+   "split_ratio": "high"
+  },
+  "labels": {
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "listing_status": "none",
+   "other_material": "none",
+   "reverse_split": "none",
+   "split_ratio": "none"
+  },
+  "notes": "Unregistered sale of convertible Series X Preferred to named affiliate; could also fit convertible_or_warrants.",
+  "rationale": {
+   "dilution_event": "entered into a Securities Purchase Agreement (the \"Purchase Agreement\"), between the Company and Strandler, LLC",
+   "going_concern": "not mentioned",
+   "listing_status": "not mentioned",
+   "other_material": "not mentioned",
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned"
+  }
+ }
+]

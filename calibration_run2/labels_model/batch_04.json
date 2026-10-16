@@ -1,0 +1,702 @@
+[
+ {
+  "cal_id": "CAL-0076",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "will exchange such Claims for a settlement amount payable in shares of common stock of the Company (the \"Settlement Shares\")",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Section 3(a)(10) court-approved settlement share issuance to a single named counterparty (SHC); no listed category is exact, private_placement is closest (unregistered issuance to a named party)."
+ },
+ {
+  "cal_id": "CAL-0077",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "the Company issued to the Arena Investors Debentures in an aggregate principal amount of $1,666,667 (the \"Third Closing Debentures\")",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0078",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "NorthView's securities were delisted from the Nasdaq Capital Market on December 27, 2024",
+   "dilution_event": "New Profusa would issue to certain investors the PIPE Convertible Notes (the \"PIPE Subscription Agreement\")",
+   "going_concern": "not mentioned",
+   "other_material": "To consider and adopt the Merger Agreement and Plan of Reorganization, dated as of November 7, 2022"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "De-SPAC proxy/prospectus; view truncated. Sponsor loans also to convert to shares at $2.22. PIPE convertible notes chosen as the dilution category; private_placement also defensible."
+ },
+ {
+  "cal_id": "CAL-0079",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "regained_compliance",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company believes that, as of December 31, 2025, it has regained compliance with the Stockholders' Equity Requirement",
+   "dilution_event": "the Company agreed to issue an aggregate of 185,771 shares of Common Stock (the \"Exchange Shares\") to the Arena Investors",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Company is under a Hearings Panel appeal of a delisting determination and states it believes it has regained compliance but awaits formal Nasdaq determination; regained_compliance chosen over delisting_determination. Warrant-for-shares exchange under 4(a)(2) labeled private_placement; also mentions a prior $6.5M subscription agreement and an unused equity line."
+ },
+ {
+  "cal_id": "CAL-0080",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Quorum reduction charter amendment only."
+ },
+ {
+  "cal_id": "CAL-0081",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-17",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "the reverse stock split became effective as of 5:00 P.M. Eastern Time on March 28, 2025",
+   "split_ratio": "to effect a reverse stock split of the Company's common stock at a ratio of one-for-seventeen (17)",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0082",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company has 180 calendar days from the date of the Notice, or through January 11, 2027 (the \"Compliance Date\"), to regain compliance",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0083",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "regained_compliance",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Nasdaq has determined that the Company now complies with the stockholders' equity requirement as set forth in Nasdaq Listing Rule 5550(b)(1)",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0084",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "the Buyers will purchase senior convertible notes (\"Notes\") and warrants to purchase the Notes (the \"Incremental Warrants\") for a total purchase price of approximately $20,000,000",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Item 5.02 covers director committee appointments only, not an officer departure."
+ },
+ {
+  "cal_id": "CAL-0085",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "the Company expects to seek stockholder approval to effect a reverse stock split of its Class A common stock",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Nasdaq Hearings Panel (the \"Panel\") of The Nasdaq Stock Market LLC (\"Nasdaq\") had determined to grant the Company an extension to regain compliance",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Staff had issued a delisting notice (subject to delisting unless hearing requested); after the hearing the Panel granted an extension, so the current state is a running cure period. deficiency_notice chosen over delisting_determination."
+ },
+ {
+  "cal_id": "CAL-0086",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "$1,850,000 of the registrant's Common Stock that may be issued and sold under an at the market offering agreement with H.C. Wainwright",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "S-3 shelf ($15M) that also contains an ATM prospectus with H.C. Wainwright; view truncated before risk factors."
+ },
+ {
+  "cal_id": "CAL-0087",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-5",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "of the Company's issued and outstanding shares of its common stock, par value $0.001 per share, effective on December 26, 2025",
+   "split_ratio": "the Board approved a reverse stock split ratio of 1-for-5 and authorized such filing",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Effective December 26, 2025, before the December 29, 2025 filing date; split-adjusted trading on OTCQB begins December 31, 2025."
+ },
+ {
+  "cal_id": "CAL-0088",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "delisting_determination",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "its staff has determined to delist the Company's securities pursuant to its discretionary authority under Listing Rule 5101",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "References a prior February 2025 private placement with reset warrants only as the basis for the delisting concern; no new issuance described in this filing."
+ },
+ {
+  "cal_id": "CAL-0089",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "the Company issued 9,715,360 shares of Common Stock to the Backstop Purchasers",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Closing of a rights offering (4,284,640 shares at $1.00 to subscribers) plus 9,715,360 backstop shares issued to an affiliated purchaser under Section 4(a)(2). Labeled private_placement for the larger unregistered backstop issuance; priced_offering also defensible for the rights offering itself."
+ },
+ {
+  "cal_id": "CAL-0090",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "provides a compliance period of 180 calendar days, or until July 7, 2025, in which to regain compliance with the Market Value Standard",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Item 5.02 is a director resignation/appointment, not a CEO/CFO departure."
+ },
+ {
+  "cal_id": "CAL-0091",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company has 45 calendar days from the date of the Letter to submit a plan to regain compliance",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0092",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-16",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "convertible_or_warrants",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "at a ratio of 1-for-16, with a post-share consolidation par value of $0.0016, effective on September 23, 2025",
+   "split_ratio": "approved the Share Consolidation of the Company's outstanding ordinary shares at a ratio of 1-for-16",
+   "listing_status": "our Ordinary Shares must have a closing bid price of at least $1.00 for a minimum of 10 consecutive business days by September 29, 2025",
+   "dilution_event": "Up to $70,000,000 aggregate original principal amount of our Series A Senior Secured Convertible Notes",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Effective date September 23, 2025 equals the filing date, so labeled effective. Also discloses an ATM agreement and a $30M concurrent private placement of notes; convertible notes is the primary offering. View truncated before risk factors."
+ },
+ {
+  "cal_id": "CAL-0093",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "in shares of Common Stock equal to 19.99% of the shares of Common Stock outstanding on the date of execution of the Purchase Agreement",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Amendment to a Common Stock Purchase Agreement with a Commitment Fee, Beneficial Ownership Limitation and Resale Registration Statement, i.e. an equity line structure; the filing never uses the words 'equity line'. Commitment fee shares are a specific issuance to the investor."
+ },
+ {
+  "cal_id": "CAL-0094",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "regained_compliance",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the Company received a letter from the Staff notifying the Company that it had regained compliance with the Bid Price Rule",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": ""
+ },
+ {
+  "cal_id": "CAL-0095",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-4",
+   "listing_status": "regained_compliance",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "following the effectiveness of its recent 1-for-4 reverse stock split",
+   "split_ratio": "following the effectiveness of its recent 1-for-4 reverse stock split",
+   "listing_status": "Nasdaq determined that the Company complies with the Publicly Held Shares Requirement as of August 21, 2026 and no further action is required",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "medium",
+   "split_ratio": "high",
+   "listing_status": "medium",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Reverse split referenced only as an already-effective prior event, not the subject of the filing. Nasdaq letter simultaneously flagged and cleared the publicly-held-shares deficiency; forward-looking statements reference a pending Panel decision on bid price/MVLS/MVPHS and a possible Note conversion, but no transaction is described."
+ },
+ {
+  "cal_id": "CAL-0096",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Litigation against asset manager 10X Capital; no listed category applies."
+ },
+ {
+  "cal_id": "CAL-0097",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "This prospectus may not be used to offer and sell securities unless accompanied by a prospectus supplement for those securities.",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "$60M universal shelf base prospectus with no specific priced deal; view truncated."
+ },
+ {
+  "cal_id": "CAL-0098",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Nasdaq provided the Company a cure period in order to regain compliance",
+   "dilution_event": "may be paid in the form of restricted shares, in lieu of payment in cash at a price of $2.00 per share",
+   "going_concern": "not mentioned",
+   "other_material": "the Company's misstated financial statements previously disclosed in the Current Report on Form 8-K filed by the Company"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "Audit-committee deficiency with cure period. 183,333 restricted shares issued to existing note Buyers as a registration delay payment (unregistered issuance to named investors). The misstated financial statements were disclosed in a prior November 2024 8-K, so restatement not labeled as this filing's event."
+ },
+ {
+  "cal_id": "CAL-0099",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "issuance and sale in a private placement of the following securities to the Investors for gross proceeds of approximately $24 million",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Shares at $46.00 plus pre-funded warrants at $45.99 under a securities purchase agreement (PIPE)."
+ },
+ {
+  "cal_id": "CAL-0100",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "will be issued and sold by methods deemed to be an \"at-the-market offering\" as defined in Rule 415(a)(4)",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Amendment reducing ATM capacity from $20M to $5M under a new S-3."
+ }
+]
