@@ -1,5 +1,81 @@
 # ThePickLog — Audit Log
 
+## 2026-10-17 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+*Snapshot: live build `12b33f8` ("data: grade 2026-10-16"). Both served CSVs match `origin/main@12b33f8` byte for byte (SHA-256 `f0d8188e…` picks, `9925e678…` outcomes). Latest cohort 10-16. The week brought data-only commits; index.html and method.html are unchanged since 10-10.*
+
+Every number on the Track record re-derives from the CSVs, including the clustered CIs, which reproduce exactly. The one failure is the 10-03 finding, now in its third week: method.html §9 still says both tails widen monotonically, and tier B's mean MFE still beats tier A's. New this week, as a heads-up rather than a fail: HKIT's frozen quote gets past the stale-quote guard (see Observations).
+
+- **⚠️ FAIL (carried from 10-03; #8 and #11 still open, new issue [#12](https://github.com/joshldavis/ThePickLog/issues/12)). Method §9 MFE monotonicity (check 8a / claims == data).**
+  - Mean MFE A **+41.94** / B **+46.36** / C +21.99 / D +14.98. Median MFE A 14.01 / B 14.35. Both inverted.
+  - Without each tier's top MFE: A +38.55 / B +32.96 / C +18.50 / D +13.86. Monotone again, so one stock is still the cause.
+  - MAE is still monotone: −24.07 / −21.59 / −15.10 / −13.69.
+  - **Fix (unchanged):** scope the sentence to what holds, or replace it with a live-computed line that reuses `_oneStock`. Do not hard-code a new ordering.
+- **Data served.**
+  - `/picks.csv` 200, 313,662 B, 1,773 rows. `/outcomes.csv` 200, 214,701 B, 1,625 rows.
+  - All 22 crawled HTML pages 200. All 48 same-origin link/asset targets resolve.
+  - The only "404s" are the JS concatenation prefixes `r/` and `u/`. Real receipts (`/r/p-<pick_id>`, 1,442 rendered) return 200.
+- **Real data shown.** 1,612 picks logged, real log, no sample fallback.
+- **No silent gaps.**
+  - 85 distinct `trading_date`s, 06-09 → 10-16.
+  - The only missing sessions are the seven already declared (08-27 → 09-03 outage and 09-14), both closed history.
+  - 06-19 is still the only holiday cohort (VOID, excluded). No new gap, no new holiday cohort.
+  - 10-07 → 10-15 cohorts published at 07:56 ET; 10-16 at 08:06–08:07 ET. All inside the 06:00 floor and 09:20 cutoff.
+  - "1612 picks across 77 trading days" = 78 kept dates minus 06-19 ✓.
+- **Claims == data.**
+  - Logged **1,612**, graded **1,442**, win rate **33%** (32.73: 472 W / 970 M).
+  - Median net **−2.8%** (−2.75), mean net **−1.9%** (−1.89) †, avg worst dip **−18.3%** (−18.30), 5-day swing −7.5% (−7.52, n 1,441).
+  - † "without JAGX 2026-09-22 (+1115.7%)" reproduces (−2.66, Δ 0.78pp).
+  - Tier table (n / tickers / mean / median / CI), all matching:
+    - A 514 / 349 / −2.2 / −3.2 / [−3.8, −0.4]
+    - B 98 / 55 / −3.9 / −4.5 / [−6.2, −1.7]
+    - C 386 / 20 / −0.2† (−3.1 without JAGX) / −2.4 / [−3.7, +5.8] ns
+    - D 444 / 16 / −2.5 / −2.5 / [−3.1, −2.0]
+  - Ordering sentence "C > A > D > B → A > D > C > B without JAGX" ✓.
+  - Win rate by tier (computed; not shown on the page): A 38.3 / B 29.6 / C 33.4 / D 26.4%.
+  - Overdue note "3 picks … (A: 1, B: 2)" = HWH 09-23 (B), BTLN 09-28 (A), HWH 09-29 (B) ✓. PHGE 09-16 resolved.
+- **Exclusions reproduce from scratch.**
+  - Late: **128 across 7 cohorts**, same per-date counts.
+  - Frozen-quote: **12 (BNZI 12)**.
+  - Scale-mismatch: **21** = SUGP 5, CPHI 1, VMAR 7, SLE 1, NCT 1, IMCC 1, GCDT 2, SXTC 1, DKI 1, SBFM 1. That is **+4 this week**: SUGP 10-02, SXTC 10-08, DKI 10-08, SBFM 10-08. The on-site note matches exactly.
+  - 1,773 − 161 = 1,612 ✓.
+- **Honest grading.**
+  - All **1,590** rows carrying data reproduce (close/open − 1) − 2% (max deviation 0.005pp).
+  - 0 duplicate `pick_id`s, 0 orphans, `win` consistent on all 1,590. 0 non-finite 5-day values.
+  - All 35 ungradeable rows carry a note: 14 phantom-holiday VOID, 12 no entry bar, 9 UNGRADEABLE. The 9 include **6 new HKIT rows** (10-01 → 10-08), marked on 10-15.
+- **Chips reconcile.** Graded 1,442 + Pending 136 + Void 34 = All 1,612 ✓. Wins 472 + Misses 970 = Graded.
+- **Disclaimers.** The text educational / not investment advice / not an RIA / not a broker-dealer is present on index, method and disclaimer.
+- **Validity backing.**
+  - (a) Tiers render as heat; §9 says "heat scale, not a quality grade". Nothing implies higher tier = better.
+    - MAE is monotone; MFE is not (see FAIL).
+    - All six tier CI pairs on mean net overlap, so no ordering is established, as the page says.
+  - (b) The "unvalidated" label is present (16× in the index DOM, plus method). Gate-1 is not rendered here.
+  - (c) Messick Framework, Domain-Coverage Spec and Structural Justification all return 200 and are linked from method.html §9.
+
+**Observations (no action taken, not fails).**
+- **HKIT frozen quote gets past the stale-quote guard. This is the BNZI failure again; detail in #12.**
+  - HKIT is logged as **tier A** in every cohort from 10-09 to 10-16 (6 pending picks).
+  - Price 2.53, gap 4.98% and float 726,315 are identical each session; only `rvol` drifts (42.41 → 31.78). That defeats the 4-field key.
+  - The grader already calls HKIT unpriceable.
+  - No published figure is wrong yet, because pending rows aren't averaged. Expect these to resolve to UNGRADEABLE and the Void chip to grow by ~6.
+  - Fix: drop `rvol` from the frozen-quote key, or treat a repeated exact price+gap as frozen. Apply it at scan time too.
+- **GCDT 10-08 graded inside the scale band.** The entry was $0.87 vs a screen price of $0.73, so last week's predicted GCDT exclusions did not happen. The scale exclusion is still catching new split names only after they grade (4 this week). A pre-log scale check would stop them being logged at all.
+- **HKIT 10-08 was marked UNGRADEABLE on 10-15, one session before that cohort's window closed.** It's harmless here (no bars since 10-01), but the "6 consecutive past-due cohorts" note is slightly inaccurate for that row.
+- Carried: the pre-guard 5-day partial-bar exposure, and same-ticker-twice-in-a-cohort (11 cases; none new since 10-07).
+
+**Alarm.** GitHub issue [#12](https://github.com/joshldavis/ThePickLog/issues/12) opened; #8 and #11 stay open. No front-end changes, no deploy.
+
+**Grading in the coming week.** 136 pending. A cohort grades the evening after its 5th session.
+- Main cohorts:
+  - **10-09 (23) → Mon 10-19**
+  - **10-12 (23) → 10-20**
+  - **10-13 (22) → 10-21**
+  - **10-14 (22) → 10-22**
+  - **10-15 (21) → 10-23**
+- 10-16 (22) grades → Mon 10-26.
+- The 3 overdue rows (HWH ×2, BTLN) should resolve to explicit UNGRADEABLE rows.
+- The 6 HKIT tier-A rows, one in each cohort from 10-09 to 10-16, will likely be UNGRADEABLE.
+
 ## 2026-10-10 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 *Snapshot: live build `cdcf364` (stamp "2026-10-10 07:57 ET"). Both served CSVs match `origin/main@cdcf364` byte for byte (SHA-256 `d1e4809a…` picks, `915152c6…` outcomes). Latest cohort 10-09.*
