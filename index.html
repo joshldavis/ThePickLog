@@ -1784,7 +1784,11 @@ async function fmpGet(fn, p){
     const r=await fetch(url); if(!r.ok) throw new Error("HTTP "+r.status); return r.json();
   }
   if(FMP_PROXY_OFF) throw new Error("proxy unconfigured");
-  const _params=Object.assign({fn}, p); if(FMP_TOKEN) _params.t=FMP_TOKEN;
+  // Visitors hold no token and the proxy is owner-gated, so every visitor call would
+  // be a guaranteed 403 logged as a console error (2026-10-23 sweep: four per page
+  // load). Skip the round trip; the labeled Sample-data fallback is unchanged.
+  if(!FMP_TOKEN){ FMP_PROXY_OFF=true; throw new Error("owner-only"); }
+  const _params=Object.assign({fn}, p); _params.t=FMP_TOKEN;
   const qs=new URLSearchParams(_params).toString();
   const r=await fetch("/api/fmp?"+qs);
   let j=null; try{ j=await r.json(); }catch{}
@@ -2940,7 +2944,11 @@ function toast(msg, kind){
 
 async function callAlpaca(payload){
   const headers={"Content-Type":"application/json"};
-  const tok=ownerToken(); if(tok) headers["x-owner-token"]=tok;
+  const tok=ownerToken();
+  // No owner token = the proxy's guaranteed 401. Answer locally with the same message
+  // instead of making a request that shows up as a console error for every visitor.
+  if(!tok) return {ok:false, status:401, data:{error:"Owner token required — this Alpaca paper account belongs to the site owner. Sign in on the Compete tab to trade with $100,000 in play money instead."}};
+  headers["x-owner-token"]=tok;
   const r=await fetch(ALPACA_API,{
     method:"POST",
     headers,

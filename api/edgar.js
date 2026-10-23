@@ -76,7 +76,7 @@ export default async function handler(req, res) {
   try {
     const map = await getTickerMap();
     const hit = map[sym];
-    if (!hit) return res.status(404).json({ error: `No SEC CIK for ${sym} (may be foreign/OTC or not an SEC filer).` });
+    if (!hit) return res.status(200).json({ noData: true, error: `No SEC CIK for ${sym} (may be foreign/OTC or not an SEC filer).` }); // 200: a valid "no data" answer, not a failure (2026-10-23)
 
     const facts = await getFacts(hit.cik);
     const G = (facts.facts && facts.facts["us-gaap"]) || {};
@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     const STD   = fyMap(G, ["LongTermDebtCurrent", "DebtCurrent", "ShortTermBorrowings"]);
 
     const years = Object.keys(REV).map(Number).sort((a, b) => b - a).slice(0, 4);
-    if (!years.length) return res.status(422).json({ error: `No annual revenue in EDGAR for ${sym}.` });
+    if (!years.length) return res.status(200).json({ noData: true, error: `No annual revenue in EDGAR for ${sym}.` }); // 200: see above
 
     const arr = (m) => years.map((y) => (m[y] != null ? m[y] : null));
     const grossProfit = years.map((y) => GP[y] != null ? GP[y] : (REV[y] != null && COST[y] != null ? REV[y] - COST[y] : null));
