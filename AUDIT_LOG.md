@@ -159,6 +159,11 @@ Every number on the Track record re-derives from the CSVs, and the 10-07 NaN cor
   - HWH 09-29 (B) and HKIT 10-01 (D) are inside the slack window and go overdue around 10-12 / 10-13.
   - PHGE 09-16, HWH 09-23 and BTLN 09-28 are already overdue and should resolve to explicit UNGRADEABLE rows.
 - The 12 pending BNZI rows are frozen-quote exclusions and never grade.
+## 2026-10-07 — Site copy: Experiment 02's verdict date was stale — **✏️ corrected**
+
+**What was wrong.** The homepage card, `experiment-02.html`, `experiments.html` and `feed.xml` still said Experiment 02's verdict was due "Sep 2026" / "around September". The 2026-08-28 amendment in `HYPOTHESES.md` had already fixed a single evaluation date of **2026-11-02** (and added a ≥ 20-distinct-ticker floor); the site copy was never updated, so on 2026-10-07 the public pages showed a verdict as overdue that was not due.
+
+**Correction.** All four places now give 2026-11-02 as the earliest verdict date (the verdict is written at the first read on or after it at which every floor is met) and say the date was fixed before looking. `experiment-02.html` explains the change in plain words and lists the ticker floor as pass condition 5, marked as a 2026-08-28 tightening. **No outcome file was opened to make this correction**, and no rule, threshold, date or data row changed — this is copy catching up with the registered record.
 
 ## 2026-10-07 — INCIDENT: 125 five-day grades written as NaN — **❌ found, corrected, guarded**
 

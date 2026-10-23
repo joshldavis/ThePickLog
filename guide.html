@@ -200,6 +200,28 @@ function toggleMenu(force){
     <b>And one that catches the honest ones too.</b> Not every bad number is dishonest &mdash; some are a data bug nobody noticed. The most common one silently rewrites price history whenever a company splits, and in cheap stocks it <i>always</i> makes results look better. We found it in our own code after it had been inflating our numbers for weeks. If a service shows you a backtest, this is worth understanding before you judge it: <a href="split-adjustment-trap.html">the bug that makes your backtest look good &rarr;</a>
   </div>
 
+  <h2 id="ai-agents">Three more checks for AI trading agents</h2>
+  <p>A new kind of record is being sold now: an AI model that reads the news and the numbers, decides, and builds a track record. The seven checks above still apply, and the best AI-agent platforms already pass several of them (pre-registration, forward-only, a log they can't edit). These three are where the AI version of the record most often comes up short.</p>
+
+  <h3>8 · If many strategies or models are running, does the record correct for it?</h3>
+  <p>Run fifty strategies across five AI models and a few will look excellent by luck alone. Showing you the best one, or letting you pick the winner off a leaderboard, is survivorship with extra steps. An honest platform says how many were tried and adjusts for it, or shows the whole field so you can see where the winner sits.</p>
+  <p class="flag g">✓ Green flag: the number of strategies tried is published, and results are corrected for it (or every strategy is shown, ranked).</p>
+  <p class="flag r">✕ Red flag: a leaderboard of top performers with no count of how many were run. <a href="how-many-did-you-test.html">Why the count matters &rarr;</a></p>
+
+  <h3>9 · Is there a confidence interval, or just a Sharpe ratio?</h3>
+  <p>A Sharpe ratio, win rate or return over a few months is one draw from a very noisy process. Over 90 trading days, an annualized Sharpe ratio has a standard error of roughly 1.7 or more, so a 90-day Sharpe of 1.4 is statistically compatible with zero. A number without its uncertainty can't separate skill from luck, however long the waiting period before it was shown.</p>
+  <p class="flag g">✓ Green flag: every headline number comes with an interval, and the record says plainly when the interval still includes zero.</p>
+  <p class="flag r">✕ Red flag: a precise-looking Sharpe or return at 60 or 90 days, with no interval.</p>
+
+  <h3>10 · Is the AI's explanation being sold as proof?</h3>
+  <p>Seeing the model's reasoning for each trade is useful for auditing what it did. It is not evidence that the reasoning caused the result. Research on large language models finds their stated reasons are often not the real basis for their outputs, and their stated confidence runs high. The question that matters is whether the model's calls beat the simple rule it was layered on, forward, with an interval.</p>
+  <p class="flag g">✓ Green flag: the AI is graded against the same strategy run without it (the plain rule), and its stated confidence is checked against how often it was right.</p>
+  <p class="flag r">✕ Red flag: "read the model's reasoning" offered in place of a comparison against the simpler alternative.</p>
+
+  <div class="panel">
+    <b>Where we stand on 8&ndash;10.</b> #8: partly. Our 25-test calendar sweep was corrected for multiple testing (none survived), and <a href="how-many-did-you-test.html">our own count of tests is published</a>. The experiments running now are registered as one family with a Benjamini&ndash;Hochberg correction declared in advance; that correction is a written policy to be applied when they are read, and is not yet built into the code that grades them. #9: yes &mdash; every verdict carries a 95% interval built on the right independent unit: the company for the stock-picking tests, the monthly cycle or the week for the calendar tests, never the single trade. #10: we don&rsquo;t publish an AI&rsquo;s calls yet. When we do, it will be graded against the plain score it sees and checked for calibration, exactly as described above, before any of its output is shown as more than a test.
+  </div>
+
   <h2>The 60-second version</h2>
   <div class="panel">
     <ol class="checks">
@@ -210,6 +232,12 @@ function toggleMenu(force){
       <li><b>Hundreds</b> of picks, not a dozen?</li>
       <li>Log is <b>append-only</b> and machine-graded?</li>
       <li>A <b>stranger</b> could verify it all from public data?</li>
+    </ol>
+    <p class="muted" style="margin:4px 0 6px">If it&rsquo;s an AI trading agent, add:</p>
+    <ol class="checks" start="8" style="counter-reset:c 7;margin-top:0">
+      <li>Corrected for <b>how many strategies or models</b> were run?</li>
+      <li>An <b>interval</b>, not just a Sharpe?</li>
+      <li>AI graded <b>against the plain rule</b>, not on its explanations?</li>
     </ol>
     <p class="muted" style="margin:4px 0 0">Seven yeses: rare, and worth your attention. Any hard no on #1, #2, or #7: keep your money.</p>
     <p style="margin:12px 0 0"><a href="scorecard.html">Run these seven against a service and get the verdict &rarr;</a>
