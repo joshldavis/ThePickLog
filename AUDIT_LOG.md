@@ -1,5 +1,20 @@
 # ThePickLog — Audit Log
 
+## 2026-10-23 — Frozen-quote rule B (HKIT) + method §9 narrowed — **✏️ corrected** (closes #8, #11, #12)
+
+**1. HKIT was a frozen quote that the guard could not see.** From 2026-10-09 to 2026-10-20 HKIT was logged as **tier A on seven consecutive sessions** at price **2.53**, gap **exactly +4.98%**, float **726,315**: byte-identical every session. Only RVOL moved (42.41 → 31.81), because the volume average behind it kept updating. The 2026-08-29 rule keys on all four fields including RVOL, so it never matched. Raised in the 2026-10-17 audit (#12).
+
+**Fix, `quote_integrity.py` + its browser mirror in `index.html`.** Added **rule B**: a pick is a stale-quote echo if the same ticker repeats an *earlier* session's exact `price_at_screen`, **non-zero** `gap_pct` and `float_shares`. Reasoning: gap is premarket price vs the prior close, so the same non-zero gap at the same price needs both the prior close and the premarket print to repeat to the cent, which a trading stock does not do.
+- **0.00% gaps are excluded from rule B on purpose.** On an illiquid name with no premarket print the screen price *is* the prior close, and two identical flat closes are ordinary. Dropping RVOL from the key outright (one of #12's suggestions) was replayed and rejected: it would have flagged 31 rows, including ATPC 09-25/09-28, CODX 09-04/09-08, JAGX 08-04/08-05 and PW 10-21/10-22, all of which look like real flat closes.
+- **Only the later rows are flagged; the first session is kept**, because it was a fresh screen when taken (HKIT 10-09 is the day RVOL spiked to 42). This also keeps losing first-days in the record: PHGE 09-11 (−29%) stays.
+- **Rule A is unchanged**: the same 12 BNZI rows, byte-identical.
+- **Adds 14 rows**: HKIT 07-28 and 10-12→10-20 (7), MASK 06-16 and 07-14, PHGE 09-15 and 09-16, ATPC 08-17, GLMD 09-11, HWH 09-29. **Six were already graded** (returns +2.13, −6.00, −10.77, +1.93, −3.69, −9.90); the rest were pending or ungradeable.
+- **Direction, stated because it flatters us:** on the Track record's set, all-picks mean open→close net moves by about **+0.01pp** and tier A by about **+0.03pp**. Medians are unchanged to 0.1pp. Small, but in our favour, so it is disclosed rather than applied quietly.
+- Applied at scan time (`is_stale_candidate`), grade time (echoes are not graded) and read time (Track record). Python and browser sets verified identical on the live log (26 = 26). Selftests cover the HKIT shape, the flat-close exemption and the holiday filter.
+- Not changed: `weekly_report.py` and `hypo_eval.py` never applied read-time exclusions (stale-quote or scale). They rely on echoes going ungraded. The six already-graded rows therefore still count there. This is a pre-existing gap between the weekly report and the Track record; it is noted here and left for a separate change rather than altering registered-hypothesis inputs as a side effect of this one.
+
+**2. Method §9 claimed more than the data supports.** It said *both* tails widen monotonically with heat, the hottest tier making the biggest run. Since 2026-10-03 the upside half has been false on the mean: one tier-B pick (JAGX 2026-09-21, 5-day MFE above +1,300%) put tier B's mean MFE above tier A's (#8, #11, #12). Downside ordering still holds on both mean and median (median MAE A −22.1 / B −18.3 / C −11.3 / D −10.0), and A and B both run far bigger than C and D (median MFE 14.3 / 12.6 vs 9.7 / 8.3). The sentence now claims exactly that, says what it used to claim, and names the stock that broke it. No number was restated by hand beyond the history.
+
 ## 2026-10-17 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 *Snapshot: live build `12b33f8` ("data: grade 2026-10-16"). Both served CSVs match `origin/main@12b33f8` byte for byte (SHA-256 `f0d8188e…` picks, `9925e678…` outcomes). Latest cohort 10-16. The week brought data-only commits; index.html and method.html are unchanged since 10-10.*

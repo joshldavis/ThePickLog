@@ -100,11 +100,55 @@ def _tuple(row):
     return tuple(_num(row.get(k)) for k in QUOTE_KEY)
 
 
-def stale_quote_ids(rows, min_repeats=MIN_REPEATS):
-    """pick_ids whose quote tuple recurs for the same ticker across sessions.
+# ---------------------------------------------------------------- gap echo (2026-10-23)
+# RULE B. The 4-field key above misses a frozen quote whose RVOL keeps moving. HKIT
+# screened tier A seven sessions running (2026-10-09 -> 10-20) at price 2.53, gap
+# exactly +4.98%, float 726,315 -- byte-identical -- while RVOL drifted 42.41 -> 31.81
+# because the volume average behind it kept updating. Audit issue #12.
+#
+# A NON-ZERO gap is the tell. gap_pct = premarket price vs the prior close, so the same
+# non-zero gap to the cent, at the same price, on a later session needs BOTH the prior
+# close and the premarket print to repeat exactly -- a live stock does not do that. A
+# 0.00% gap is excluded on purpose: on an illiquid name with no premarket trade the
+# screen price IS the prior close, and two identical flat closes in a row are ordinary
+# (ATPC 09-25/09-28, CODX 09-04/09-08, PW 10-21/10-22 all look like that). Including
+# them would void real forecasts, the error this module is built to avoid.
+#
+# Only the LATER rows are flagged. The first session a tuple appears on was a fresh
+# screen when it was taken (HKIT 10-09 is the day its RVOL spiked to 42); the echoes
+# after it are the contamination. That keeps the rule conservative, and it means the
+# flagged set includes the losers' first appearances (PHGE 09-11, -29%) -- this rule
+# is not allowed to tidy away bad days.
+#
+# Replayed over the log on 2026-10-23 it adds 14 rows (HKIT 7, MASK 2, PHGE 2, ATPC,
+# GLMD, HWH 1 each) and leaves Rule A's 12 BNZI rows exactly as they were.
+ECHO_KEY = ("price_at_screen", "gap_pct", "float_shares")
 
-    `rows` is picks.csv as a list of dicts. Returns a set of pick_id.
-    """
+
+def _echo_tuple(row):
+    return tuple(_num(row.get(k)) for k in ECHO_KEY)
+
+
+def gap_echo_ids(rows):
+    """pick_ids that repeat an earlier session's exact (price, NON-ZERO gap, float)."""
+    groups = defaultdict(list)
+    for r in rows:
+        td = (r.get("trading_date") or "").strip()
+        if not td or not is_session(td):
+            continue
+        t = _echo_tuple(r)
+        if any(v is None for v in t) or t[1] == 0:
+            continue
+        groups[(r.get("ticker"), t)].append(r)
+    out = set()
+    for members in groups.values():
+        first = min(m.get("trading_date") for m in members)
+        out.update(m.get("pick_id") for m in members if m.get("trading_date") != first)
+    return out
+
+
+def _quote_key_ids(rows, min_repeats=MIN_REPEATS):
+    """RULE A (2026-08-29): the full 4-field tuple recurring across sessions."""
     groups = defaultdict(list)
     for r in rows:
         td = (r.get("trading_date") or "").strip()
@@ -117,6 +161,15 @@ def stale_quote_ids(rows, min_repeats=MIN_REPEATS):
         if len({m.get("trading_date") for m in members}) >= min_repeats:
             out.update(m.get("pick_id") for m in members)
     return out
+
+
+def stale_quote_ids(rows, min_repeats=MIN_REPEATS):
+    """pick_ids that are stale-quote echoes under Rule A OR Rule B.
+
+    `rows` is picks.csv as a list of dicts. Returns a set of pick_id. Mirrored in
+    index.html (staleQuoteIds); keep the two in step.
+    """
+    return _quote_key_ids(rows, min_repeats) | gap_echo_ids(rows)
 
 
 def is_stale_candidate(ticker, quote, prior_rows):
@@ -138,6 +191,16 @@ def is_stale_candidate(ticker, quote, prior_rows):
             continue
         td = (r.get("trading_date") or "").strip()
         if td and is_session(td) and _tuple(r) == want:
+            return True
+    # Rule B: same price, same NON-ZERO gap, same float as any earlier session.
+    e_want = _echo_tuple(quote)
+    if any(v is None for v in e_want) or e_want[1] == 0:
+        return False
+    for r in prior_rows:
+        if r.get("ticker") != ticker:
+            continue
+        td = (r.get("trading_date") or "").strip()
+        if td and is_session(td) and _echo_tuple(r) == e_want:
             return True
     return False
 
@@ -348,6 +411,24 @@ def _selftest():
     dup = [row("a", "X", "2026-08-11", "1.0", "1.0"),
            row("b", "X", "2026-08-11", "1.0", "1.0")]
     check("same-session duplicate", stale_quote_ids(dup), set())
+
+    # RULE B (2026-10-23, the HKIT shape): RVOL drifts, price/gap/float frozen.
+    hk = [row("h1", "HKIT", "2026-10-09", "2.53", "4.98", "42.41", "726315"),
+          row("h2", "HKIT", "2026-10-12", "2.53", "4.98", "32.2", "726315"),
+          row("h3", "HKIT", "2026-10-13", "2.53", "4.98", "31.79", "726315")]
+    check("rule B flags the echoes, spares the first screen", stale_quote_ids(hk), {"h2", "h3"})
+    flat = [row("f1", "ILLQ", "2026-09-25", "2.24", "0.0", "0.02"),
+            row("f2", "ILLQ", "2026-09-28", "2.24", "0.0", "0.0")]
+    check("rule B ignores a 0.00% gap (flat illiquid close)", stale_quote_ids(flat), set())
+    hol_b = [row("a", "PW", "2026-06-19", "9.54", "2.03", "1.0"),
+             row("b", "PW", "2026-06-22", "9.54", "2.03", "2.0")]
+    check("rule B respects the session filter", stale_quote_ids(hol_b), set())
+    check("rule B guard blocks a live HKIT-shaped candidate",
+          is_stale_candidate("HKIT", {"price_at_screen": 2.53, "gap_pct": 4.98, "rvol": 31.0,
+                                      "float_shares": 726315}, hk[:1]), True)
+    check("rule B guard passes a 0.00% gap repeat",
+          is_stale_candidate("ILLQ", {"price_at_screen": 2.24, "gap_pct": 0.0, "rvol": 0.5,
+                                      "float_shares": 1000}, flat[:1]), False)
 
     # Scan-time guard.
     prior = [row("a", "DEAD", "2026-08-11", "1.91", "0.0")]
