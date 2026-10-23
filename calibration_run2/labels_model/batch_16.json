@@ -1,0 +1,664 @@
+[
+ {
+  "cal_id": "CAL-0376",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "The Company will not make any sales of its common stock pursuant to the Sales Agreement, unless and until a new prospectus",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filing terminates the ATM prospectus and suspends sales; the Sales Agreement remains in force but no shares will be issued under it. Labeled none rather than atm_or_equity_line."
+ },
+ {
+  "cal_id": "CAL-0377",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "press release announcing that preparations for the commercial launch of LYMPHIR"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0378",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "entered into a Confidential Settlement Agreement and Release"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0379",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "press release announcing its Direct Listing on the Nasdaq Global Market under the stock ticker \"NTHI\"",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Direct listing on Nasdaq is a new listing, not a deficiency/delisting/halt/compliance event; a direct listing issues no new shares."
+ },
+ {
+  "cal_id": "CAL-0380",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "priced_offering",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "Although our common stock is currently listed on The Nasdaq Capital Market, we may not be able to continue to meet",
+   "dilution_event": "Common Stock Offered by Us 2,857,144 shares... Based on an offering price of $0.70 per share",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Registered direct offering of 2,857,144 shares at $0.70 with concurrent private placement of unregistered warrants; priced_offering chosen as the primary transaction. View truncated."
+ },
+ {
+  "cal_id": "CAL-0381",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "the Company decided to adjourn the Special Meeting to provide stockholders with additional time to vote"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0382",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-6",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Common Stock began trading on a reverse stock split-adjusted basis on The Nasdaq Capital Market on September 8, 2026",
+   "split_ratio": "effect an 1-for-6 reverse stock split of the shares of the Company's common stock",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0383",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-4",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "the Reverse Stock Split will become effective in accordance with the terms of the Amendment at 12:01 a.m. Eastern Time on August 17, 2026",
+   "split_ratio": "approved a one-for-four (1:4) reverse stock split (the \"Reverse Stock Split\") of the Company's common stock",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filing date 2026-08-14; effective date August 17, 2026 is in the future, so announced."
+ },
+ {
+  "cal_id": "CAL-0384",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "our common stock will trade on the NASDAQ Stock Market under the new ticker symbol \"AIFA\"",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "change our corporate name from \"Allied Gaming & Entertainment Inc.\" to \"All In FutureTech Alliance, Inc.\""
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Name and ticker change only; ticker change is not a listing-status event under the criteria."
+ },
+ {
+  "cal_id": "CAL-0385",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "amount of Common Stock that the Company has the right... to require White Lion to purchase... increased from $10,000,000 to $50,000,000",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0386",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "atm_or_equity_line",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "issuance and sale of up to $1,419,265 of the Company's shares of Series A common stock... in an at-the-market public offering",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0387",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-100",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split became effective at 12:01 a.m., Eastern Time, on July 13, 2026.",
+   "split_ratio": "to effect a one-for-one hundred (1-for-100) reverse stock split",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0388",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "received a notice... stating that the Company was not in compliance with Nasdaq Listing Rule 5550(a)(2)... has 180 calendar days",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0389",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "reduce the amount of shares of the Company's Class A common stock... the Company is required to reserve in connection with the future conversion",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Amendment and waiver to existing convertible notes/preferred reduces share reserve and permits buyback; no new issuance described, so none rather than convertible_or_warrants."
+ },
+ {
+  "cal_id": "CAL-0390",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "extraordinary general meeting held on November 20, 2025, to approve the business combination and the Extension Meeting"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "SPAC 8-K/A correcting extension fee; business combination is referenced only in passing as the subject of a prior meeting, no agreement described, so other_material none."
+ },
+ {
+  "cal_id": "CAL-0391",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "sold one thousand six hundred (1,600) shares of its newly designated Series C Preferred Stock... to Clarkston Companies, Inc.",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Unregistered sale of $8M redeemable Series C preferred to an affiliated investor under a Securities Purchase Agreement; preferred has no stated conversion feature, so may arguably be none for common dilution."
+ },
+ {
+  "cal_id": "CAL-0392",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "entered into a purchase agreement pursuant to which the Company will supply Buyer-branded products to the Buyer"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0393",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "votes to approve the potential issuance of shares of the Company's common stock pursuant to the ELOC Purchase Agreement",
+   "going_concern": "not mentioned",
+   "other_material": "ratify the appointment of CBIZ CPAs P.C. as independent registered accounting firm for fiscal year 2025"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Annual meeting results; stockholders approved potential issuance under pre-existing ELOC and Series B/warrant SPAs, but no new transaction is described in this filing. Could arguably be atm_or_equity_line."
+ },
+ {
+  "cal_id": "CAL-0394",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "no longer in compliance with the minimum stockholders' equity requirement... has 45 calendar days, or until July 6, 2026, to submit a plan",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  }
+ },
+ {
+  "cal_id": "CAL-0395",
+  "labels": {
+   "reverse_split": "announced",
+   "split_ratio": "1-for-18",
+   "listing_status": "deficiency_notice",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split is expected to become effective at 12:01 a.m. Eastern Time on October 27, 2025",
+   "split_ratio": "approved a reverse stock split of Common Stock at a final ratio of 1-for-18 (one-for-eighteen)",
+   "listing_status": "granting the Company an extension through December 31, 2025, to regain compliance with Nasdaq Listing Rule 5550(b)(1)",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "appointed Mr. Michael Mulica to serve as Executive Chairman of the Board"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Filing date 2025-10-20, split effective October 27, 2025 (future). Stockholders' equity deficiency with extended cure period through Dec 31, 2025. Executive Chairman appointment is not a CEO/CFO departure."
+ },
+ {
+  "cal_id": "CAL-0396",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "merger_or_acquisition"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "Shares issued to Foundation in connection with Business Combination 3,000,000",
+   "going_concern": "management concluded that the conditions and events considered in the aggregate do not raise substantial doubt about the Company's ability to continue",
+   "other_material": "the Business Combination with Mountain Lake Acquisition Corp. (\"MLAC\"), which closed on June 11, 2026"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "low",
+   "going_concern": "high",
+   "other_material": "medium"
+  },
+  "notes": "424B3 wrapping a 10-Q. De-SPAC business combination consummated in the quarter; shares issued as merger consideration/reverse recapitalization do not fit the dilution categories cleanly, so none. View truncated."
+ },
+ {
+  "cal_id": "CAL-0397",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "private_placement",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "not mentioned",
+   "split_ratio": "not mentioned",
+   "listing_status": "the risk of being delisted from Nasdaq if we fail to meet any of its applicable listing requirements",
+   "dilution_event": "On December 29, 2025, we entered into a Securities Purchase Agreement... with an investor (the \"Investor\") relating to the Private Placement",
+   "going_concern": "our ability to continue as a going concern",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "medium",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Resale S-3 for selling stockholders (company sells nothing), but Recent Developments describes the December 2025 SPA private placement of pre-funded and common warrants that this registration covers. Could be none (secondary) or convertible_or_warrants. Going concern appears only as a risk-factor bullet, not a substantial-doubt statement. View truncated."
+ },
+ {
+  "cal_id": "CAL-0398",
+  "labels": {
+   "reverse_split": "effective",
+   "split_ratio": "1-for-5",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "The Reverse Stock Split will become effective as of 10:00 a.m. Eastern Time on July 31, 2026 (the \"Effective Date\")",
+   "split_ratio": "authorizing a 1-for-5 reverse stock split (the \"Reverse Stock Split\")",
+   "listing_status": "including but not limited dilution management and continued compliance with Nasdaq Listing Rule 5550(a)(2)",
+   "dilution_event": "not mentioned",
+   "going_concern": "not mentioned",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "high",
+   "other_material": "high"
+  },
+  "notes": "Effective date July 31, 2026 equals the filing date, so effective. No deficiency notice is described."
+ },
+ {
+  "cal_id": "CAL-0399",
+  "labels": {
+   "reverse_split": "none",
+   "split_ratio": "none",
+   "listing_status": "none",
+   "dilution_event": "none",
+   "going_concern": "no",
+   "other_material": "none"
+  },
+  "rationale": {
+   "reverse_split": "We implemented a 1-for-28 reverse stock split of our outstanding common stock, which became effective on June 26, 2025",
+   "split_ratio": "not mentioned",
+   "listing_status": "not mentioned",
+   "dilution_event": "we may offer and sell separately or together in any combination the securities described in this prospectus in one or more offerings up to",
+   "going_concern": "our ability to continue as a going concern",
+   "other_material": "not mentioned"
+  },
+  "confidence": {
+   "reverse_split": "high",
+   "split_ratio": "high",
+   "listing_status": "high",
+   "dilution_event": "high",
+   "going_concern": "medium",
+   "other_material": "high"
+  },
+  "notes": "Universal shelf S-3 ($200M) with no specific priced deal. The 1-for-28 split is historical background (retroactively adjusted share information), so none. Going concern appears only in forward-looking statements list. View truncated."
+ }
+]

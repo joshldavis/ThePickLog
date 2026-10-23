@@ -251,6 +251,25 @@ jobs:
         continue-on-error: true
         run: python risk_eval.py || echo "risk eval skipped (non-fatal)"
 
+      # filing_lens GATE 3 — SHADOW MODE (added 2026-09-28). Reads the prefiltered SEC
+      # filings of the picks this scan just logged through TypeSafe AI's Jev (pinned
+      # model) and appends every answer to filing_events.jsonl. LOGS ONLY: nothing it
+      # returns touches picks.csv, edgar_snapshot.csv, a grade, or a count, and its
+      # routing column acts on nothing. It runs AFTER both scans so the pre-open rule
+      # never waits on an outside model; continue-on-error + a 10-minute cap mean it can
+      # never block the data commit. With no JEV_API_KEY secret it is a logged no-op.
+      # Idempotent by pick_id, capped at FILING_LENS_MAX_READS filings per run.
+      - name: filing_lens shadow read (gate 3, logs only)
+        if: steps.cmd.outputs.cmd == 'scan'
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
+          JEV_MODEL: jev-1.13.0
+          FILING_LENS_QUESTIONS: v2
+          FILING_LENS_SHA: ${{ github.sha }}
+          FILING_LENS_MAX_READS: "40"
+        run: python filing_lens.py --shadow || echo "filing_lens shadow skipped (non-fatal)"
       - name: Seal integrity ledger (tamper-evident hash chain)
         # Records SHA-256 of picks/outcomes/paths into integrity_ledger.csv, chained
         # to the prior row so any later edit to a past entry is provable. Non-fatal:
@@ -277,6 +296,7 @@ jobs:
           [ -f outcomes.csv ] && git add outcomes.csv || true
           [ -f paths.csv ] && git add paths.csv || true
           [ -f edgar_snapshot.csv ] && git add edgar_snapshot.csv || true
+          [ -f filing_events.jsonl ] && git add filing_events.jsonl || true
           [ -f leaderboard.json ] && git add leaderboard.json || true
           [ -f integrity_ledger.csv ] && git add integrity_ledger.csv || true
           [ -f skipped_sessions.csv ] && git add skipped_sessions.csv || true

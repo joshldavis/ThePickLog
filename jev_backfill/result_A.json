@@ -1,0 +1,163 @@
+{
+ "part": "A",
+ "window": [
+  "2026-06-01",
+  "2026-09-30"
+ ],
+ "confirmatory": false,
+ "status_counts": {
+  "ok": 956,
+  "no_cik": 69,
+  "no_filings": 372,
+  "ungraded": 62
+ },
+ "score_tercile_cuts": {
+  "v0.2-yf": [
+   43.1,
+   47.7
+  ],
+  "v0.3-yf": [
+   89.1,
+   98.9
+  ]
+ },
+ "n_rows": 1291,
+ "n_tickers": 323,
+ "primary": {
+  "label": "PRIMARY: mae_5d, any Jev flag",
+  "y": "mae",
+  "flag": "flag_any",
+  "n_flag": 900,
+  "n_clean": 391,
+  "tickers_flag": 199,
+  "tickers_clean": 135,
+  "mean_flag": -19.319,
+  "mean_clean": -15.147,
+  "D_stratified": -4.513,
+  "ci95": [
+   -7.62,
+   -0.478
+  ],
+  "verdict": "RETROSPECTIVE: numeric bar PASS; Part A cannot establish H-JEV1"
+ },
+ "secondary": [
+  {
+   "label": "S1: mae_5d within form-code dilution_flag offering/shelf",
+   "y": "mae",
+   "flag": "flag_any",
+   "n_flag": 755,
+   "n_clean": 156,
+   "tickers_flag": 185,
+   "tickers_clean": 59,
+   "mean_flag": -19.403,
+   "mean_clean": -16.493,
+   "D_stratified": -3.159,
+   "ci95": [
+    -7.093,
+    4.532
+   ]
+  },
+  {
+   "label": "S2: mae_5d, flag from 8-K text only",
+   "y": "mae",
+   "flag": "flag_8k",
+   "n_flag": 214,
+   "n_clean": 1077,
+   "tickers_flag": 78,
+   "tickers_clean": 262,
+   "mean_flag": -24.022,
+   "mean_clean": -16.87,
+   "D_stratified": -6.421,
+   "ci95": [
+    -10.941,
+    -2.117
+   ]
+  },
+  {
+   "label": "S3: same-day return (direction; expected null)",
+   "y": "r0",
+   "flag": "flag_any",
+   "n_flag": 900,
+   "n_clean": 391,
+   "tickers_flag": 199,
+   "tickers_clean": 135,
+   "mean_flag": -1.496,
+   "mean_clean": -1.843,
+   "D_stratified": 0.158,
+   "ci95": [
+    -2.592,
+    2.992
+   ]
+  },
+  {
+   "label": "S4: 5-day return (direction; expected null)",
+   "y": "r5",
+   "flag": "flag_any",
+   "n_flag": 869,
+   "n_clean": 380,
+   "tickers_flag": 191,
+   "tickers_clean": 129,
+   "mean_flag": -7.601,
+   "mean_clean": -2.554,
+   "D_stratified": -4.867,
+   "ci95": [
+    -13.388,
+    1.903
+   ]
+  }
+ ],
+ "sensitivity": [
+  {
+   "label": "A-sens1: primary excluding the 23 replay-seen tickers",
+   "y": "mae",
+   "flag": "flag_any",
+   "n_flag": 804,
+   "n_clean": 390,
+   "tickers_flag": 177,
+   "tickers_clean": 134,
+   "mean_flag": -19.045,
+   "mean_clean": -15.096,
+   "D_stratified": -4.296,
+   "ci95": [
+    -7.403,
+    -0.358
+   ],
+   "verdict_if_this_were_B": "PASS"
+  },
+  {
+   "label": "A-sens2: primary excluding picks with an unread filing",
+   "y": "mae",
+   "flag": "flag_any",
+   "n_flag": 900,
+   "n_clean": 391,
+   "tickers_flag": 199,
+   "tickers_clean": 135,
+   "mean_flag": -19.319,
+   "mean_clean": -15.147,
+   "D_stratified": -4.513,
+   "ci95": [
+    -7.62,
+    -0.478
+   ]
+  }
+ ],
+ "flag_categories_pick_counts": {
+  "dilution_event:convertible_or_warrants": 568,
+  "reverse_split:historical": 445,
+  "going_concern:yes": 414,
+  "dilution_event:priced_offering": 297,
+  "dilution_event:atm_or_equity_line": 291,
+  "listing_status:regained_compliance": 145,
+  "other_material:auditor_change": 100,
+  "dilution_event:private_placement": 90,
+  "other_material:merger_or_acquisition": 82,
+  "listing_status:deficiency_notice": 69,
+  "reverse_split:announced": 30,
+  "other_material:officer_departure": 16,
+  "reverse_split:effective": 15,
+  "other_material:restatement": 6,
+  "listing_status:delisting_determination": 4,
+  "listing_status:halt": 2
+ },
+ "flag_rate": 0.697
+}
