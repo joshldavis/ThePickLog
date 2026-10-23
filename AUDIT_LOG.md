@@ -1,5 +1,9 @@
 # ThePickLog — Audit Log
 
+## 2026-10-23 — The 11-02 family read made mechanical before the read — **🔒 frozen**
+
+Two gaps in the 2026-11-02 read were found before it happened. (1) The batch #10 family policy (Benjamini–Hochberg across EXP02–EXP09) existed only as text, and guide.html said so publicly. (2) H-EXP02 had no automatic lock. On top of that, the weekly snapshots its bar requires had never been stored, although the 08-28 amendment says they "keep being recorded". `family_verdict.py` closes all three, and the choices are recorded in the HYPOTHESES.md implementation note of the same date: excess_1d primary, snapshots rebuilt from the append-only `graded_at` stamps, harness-identical bootstrap, q = 0.05, m = 8 with unread tests at p = 1, one look per experiment. **No outcome value was opened to write it;** only row counts and last-logged dates were checked. The script refuses to compute before 2026-11-02, and its selftest proves bootstrap parity with the harness. It runs in the daily workflow after the harness.
+
 ## 2026-10-23 — Frozen-quote rule B (HKIT) + method §9 narrowed — **✏️ corrected** (closes #8, #11, #12)
 
 **1. HKIT was a frozen quote that the guard could not see.** From 2026-10-09 to 2026-10-20 HKIT was logged as **tier A on seven consecutive sessions** at price **2.53**, gap **exactly +4.98%**, float **726,315**: byte-identical every session. Only RVOL moved (42.41 → 31.81), because the volume average behind it kept updating. The 2026-08-29 rule keys on all four fields including RVOL, so it never matched. Raised in the 2026-10-17 audit (#12).

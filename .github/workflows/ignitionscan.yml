@@ -222,6 +222,12 @@ jobs:
         if: steps.cmd.outputs.cmd == 'grade'
         continue-on-error: true
         run: python experiment_harness.py grade || echo "harness grade skipped (non-fatal)"
+      # family_verdict.py (2026-10-23) — the single 2026-11-02 family read: locks H-EXP02 once
+      # and applies the declared BH-FDR across EXP02-EXP09 (m=8). A no-op before 11-02 that
+      # prints nothing about the data. Runs after the harness so its locks exist. Non-fatal.
+      - name: Family verdict (EXP02 lock + BH-FDR, gated to 2026-11-02)
+        continue-on-error: true
+        run: python family_verdict.py || echo "family verdict skipped (non-fatal)"
 
       # CALENDAR EXPERIMENTS (EXP04 turn-of-month + EXP05 overnight-vs-intraday,
       # batch #9 registered 2026-08-06): timing claims on QQQ (SPY replication read)
@@ -290,6 +296,7 @@ jobs:
           [ -f rsi2_outcomes.csv ] && git add rsi2_outcomes.csv || true
           [ -d experiments ] && git add experiments || true
           [ -f reports/experiments-LATEST.md ] && git add reports/experiments-LATEST.md || true
+          [ -f reports/family-verdict-LATEST.md ] && git add reports/family-verdict-LATEST.md || true
           [ -f reports/calendar-experiments-LATEST.md ] && git add reports/calendar-experiments-LATEST.md || true
           [ -f risk_snapshots.csv ] && git add risk_snapshots.csv || true
           [ -f reports/risk-eval-LATEST.md ] && git add reports/risk-eval-LATEST.md || true

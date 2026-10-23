@@ -1318,3 +1318,37 @@ Binding framing: a risk label, not alpha; selection unchanged.
 Full registration: `REGISTRATION-H-JEV2.md`. Forward window 2026-10-02 → 2026-12-31 (one look on/after
 2027-01-11). Chosen after seeing H-JEV1 Part A's S2 result, which is disclosed in the registration and
 is not evidence. Same bar as H-JEV1; the two are judged together under Holm (H-JEV1 amendment 2).
+
+## Implementation note — the 2026-11-02 family read is now code (`family_verdict.py`), frozen 2026-10-23
+
+**Written before the read. No outcome value from any EXP02–EXP09 file was opened.** Only row
+counts and last dates were checked, to confirm the pipelines are logging. Two gaps would otherwise
+have been improvised on verdict day: the batch #10 FAMILY POLICY (BH-FDR across EXP02–EXP09) had no
+code, and H-EXP02 had no automatic lock (`rsi2_scanner.py` prints "write it ONCE, today"). Every
+choice below is either already registered or the stricter of the readings available.
+
+1. **H-EXP02 primary exit = `excess_1d`** (same-session). This is the headline `rsi2_scanner.py` has
+   printed since registration and what the harness scores for EXP03/06–09. The 5-session and
+   RSI(2) > 70 exits are reported as secondary and **cannot rescue a fail**.
+2. **H-EXP02 weekly snapshots were never stored**, although the 2026-08-28 amendment says they "keep
+   being recorded". They are rebuilt exactly: `rsi2_outcomes.csv` is append-only and stamps
+   `graded_at` on every row, so the state on any Saturday is the rows graded on or before it, and git
+   history shows the file was never rewritten. "Direction holding across ≥ 3 consecutive weekly
+   snapshots" = **the last three Saturdays up to the read** each show mean AND median on the same side
+   of zero as the read. That is stricter than "any three": the run has to end at the read.
+3. **H-EXP02 interval** uses the harness's own cluster bootstrap (BOOT 3000, seed 7), so it is computed
+   the same way as EXP03/06–09. It locks once to `experiments/EXP02-verdict.csv` at the first run on or
+   after 2026-11-02 where n ≥ 30 and ≥ 20 tickers. If the floors are not met it says UNDERPOWERED and
+   locks later, as the harness does.
+4. **Family correction:** two-sided p from the same bootstrap that produced each interval;
+   Benjamini–Hochberg at **q = 0.05**; **m = 8 always** (the declared family). EXP04/EXP05 (read in
+   2027) and any experiment not yet locked count as **p = 1**. A larger m and p = 1 placeholders can
+   only make survival harder.
+5. **One look per experiment:** an experiment's corrected status is computed at the run where its own
+   verdict first locks, from the p-values locked by then, and is appended to `experiments/FAMILY-fdr.csv`.
+   It is never recomputed, and a later lock cannot revise an earlier row. A pass that does not survive
+   is published as *consistent with chance*, as the family policy already says.
+
+None of this changes a rule, universe, entry, exit, cost, floor, date or stored row. It makes the
+registered read mechanical so it cannot be steered on the day.
+
