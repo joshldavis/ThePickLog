@@ -1,6 +1,6 @@
 # Bayesian read-out — H-EX1 +10% touch rate
 
-_Generated 2026-10-17 16:52Z by `bayes_h_ex1.py` (selftest passed). Priors frozen 2026-07-02 — see the
+_Generated 2026-10-24 17:14Z by `bayes_h_ex1.py` (selftest passed). Priors frozen 2026-07-02 — see the
 script docstring. This is a read-out, **not** the registered pass/fail judge —
 that remains `reports/LATEST.md` §4d. Slippage caveat (HYPOTHESES.md H-EX1) applies._
 
@@ -12,27 +12,27 @@ propagated — roadmap R3).
 
 ## all-time (in-sample context)
 
-n = **940** evaluable graded picks, hits (mfe_5d ≥ 10) = **446** (47.4%). Plug-ins:
-m (mean 5d-close net of misses) = **-14.40%**, baseline EV (same-day close) = **-1.75%**.
-Breakeven touch rates: beat-baseline p\* = **56.5%** · absolute-profit p\* = **64.3%**.
+n = **998** evaluable graded picks, hits (mfe_5d ≥ 10) = **475** (47.6%). Plug-ins:
+m (mean 5d-close net of misses) = **-14.83%**, baseline EV (same-day close) = **-1.76%**.
+Breakeven touch rates: beat-baseline p\* = **57.2%** · absolute-profit p\* = **65.0%**.
 
 | prior | posterior mean | 90% credible interval | P(p > beat-baseline p\*) | P(p > absolute p\*) |
 |---|---|---|---|---|
-| flat Beta(1,1) — headline | 47.5% | 44.8% – 50.1% | 0.0% | 0.0% |
-| Jeffreys Beta(0.5,0.5) | 47.4% | 44.8% – 50.1% | 0.0% | 0.0% |
-| skeptical Beta(10,10) | 47.5% | 44.9% – 50.2% | 0.0% | 0.0% |
+| flat Beta(1,1) — headline | 47.6% | 45.0% – 50.2% | 0.0% | 0.0% |
+| Jeffreys Beta(0.5,0.5) | 47.6% | 45.0% – 50.2% | 0.0% | 0.0% |
+| skeptical Beta(10,10) | 47.6% | 45.1% – 50.2% | 0.0% | 0.0% |
 
 ## post-2026-06-23 (the honest OOS test)
 
-n = **818** evaluable graded picks, hits (mfe_5d ≥ 10) = **375** (45.8%). Plug-ins:
-m (mean 5d-close net of misses) = **-13.62%**, baseline EV (same-day close) = **-1.62%**.
-Breakeven touch rates: beat-baseline p\* = **55.5%** · absolute-profit p\* = **63.0%**.
+n = **876** evaluable graded picks, hits (mfe_5d ≥ 10) = **404** (46.1%). Plug-ins:
+m (mean 5d-close net of misses) = **-14.15%**, baseline EV (same-day close) = **-1.64%**.
+Breakeven touch rates: beat-baseline p\* = **56.5%** · absolute-profit p\* = **63.9%**.
 
 | prior | posterior mean | 90% credible interval | P(p > beat-baseline p\*) | P(p > absolute p\*) |
 |---|---|---|---|---|
-| flat Beta(1,1) — headline | 45.9% | 43.0% – 48.7% | 0.0% | 0.0% |
-| Jeffreys Beta(0.5,0.5) | 45.8% | 43.0% – 48.7% | 0.0% | 0.0% |
-| skeptical Beta(10,10) | 45.9% | 43.1% – 48.8% | 0.0% | 0.0% |
+| flat Beta(1,1) — headline | 46.1% | 43.4% – 48.9% | 0.0% | 0.0% |
+| Jeffreys Beta(0.5,0.5) | 46.1% | 43.4% – 48.9% | 0.0% | 0.0% |
+| skeptical Beta(10,10) | 46.2% | 43.5% – 48.9% | 0.0% | 0.0% |
 
 **How to read it.** P(p > p\*) near 50% = the log genuinely doesn't know yet;
 near 0% or 100% = the log is speaking. If the three priors disagree materially,
