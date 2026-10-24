@@ -1,5 +1,60 @@
 # ThePickLog — Audit Log
 
+## 2026-10-24 — Weekly verifiability audit — **✅ All claims verify**
+
+*Snapshot: live build `360f248` ("data: grade 2026-10-23"). Both served CSVs match `origin/main@360f248` byte for byte (SHA-256 `30141303…` picks, `a8199c6b…` outcomes). Latest cohort 10-23.*
+
+Every Track-record number re-derives from the CSVs. The 10-23 fixes hold: rule B catches HKIT, and the narrowed method §9 sentence is true on today's data. #8, #11 and #12 stay closed.
+
+- **Data served.** `/picks.csv` 200, 328,763 B, 1,858 rows. `/outcomes.csv` 200, 228,270 B, 1,734 rows. All 23 HTML pages return 200. All 48 same-origin link and asset targets resolve. A sample receipt (`/r/p-…`) returns 200.
+- **Real data shown.** 1,682 picks logged from the real log, with no sample fallback.
+- **No silent gaps.**
+  - 89 distinct `trading_date`s, 06-09 → 10-23. Missing sessions: 08-27 → 09-03 and 09-14 (closed history), plus **10-19 (new this week, declared)**. On 10-19 the scheduler fired at 10:22 ET, the pre-open gate refused it, and the refusal is recorded in `skipped_sessions.csv`. The Track record names it in its skipped-sessions sentence. There are no 10-19 rows. That makes it a disclosed gap, not a silent one.
+  - 06-19 is still the only holiday cohort (VOID, excluded). No new holiday cohort.
+  - Publish times: 10-16 08:06–08:07 ET; 10-20 08:33; 10-21 08:44; 10-22 08:47–08:48; 10-23 08:26. All are inside the 06:00 floor and 09:20 cutoff.
+  - "1682 picks across 81 trading days" = 82 kept dates minus 06-19 ✓.
+- **Claims == data.**
+  - Logged **1,682**, graded **1,543**, win rate **33%** (33.18: 512 W / 1,031 M).
+  - Median net **−2.7%** (−2.72). Mean net **−1.8%** (−1.78) †. Avg worst dip **−18.4%** (−18.45). 5-day swing **−7.7%** (−7.72, n 1,542).
+  - † "−2.5% without JAGX 2026-09-22 (+1115.7%)" reproduces (−2.51).
+  - Tier table (n / tickers / mean / median), all matching:
+    - A 556 / 371 / −1.8 / −3.0
+    - B 111 / 63 / −4.1 / −4.4
+    - C 413 / 20 / −0.4† (−3.1 without JAGX) / −2.4
+    - D 463 / 16 / −2.4 / −2.5
+  - Ordering sentence "C > A > D > B → A > D > C > B without JAGX" ✓.
+  - Win rate by tier (computed; not shown on the page): A 38.7 / B 28.8 / C 34.1 / D 26.8%.
+- **Exclusions reproduce from scratch.**
+  - Late: **128 across 7 cohorts**, same per-date counts as the note.
+  - Frozen-quote: **26** = rule A 12 (BNZI) + rule B 14 (HKIT 7, MASK 2, PHGE 2, ATPC 1, GLMD 1, HWH 1). The on-site note matches ticker for ticker.
+  - Scale-mismatch: **22** = SUGP 5, CPHI 1, VMAR 7, SLE 1, NCT 1, IMCC 1, GCDT 2, SXTC 1, DKI 1, SBFM 1, **AMTD 1 (new this week)**. The on-site note matches.
+  - 1,858 − 176 = 1,682 ✓.
+- **Honest grading.**
+  - All **1,698** rows carrying data reproduce (close/open − 1) − 2%, within 0.01pp.
+  - 0 duplicate `pick_id`s in either file, 0 orphans, and `win` agrees with the sign on all 1,698. 0 non-finite values.
+  - All 36 ungradeable rows carry a note: 14 phantom-holiday VOID, 12 no entry bar, 6 HKIT unpriceable, and 4 "only n of 6 sessions". Last week's 3 overdue rows (HWH ×2, BTLN) resolved to explicit UNGRADEABLE rows, as predicted.
+- **Chips reconcile.** Graded 1,543 + Pending 105 + Void 34 = All 1,682 ✓. Wins 512 + Misses 1,031 = Graded.
+- **Disclaimers.** Educational / not investment advice / not an RIA / not a broker-dealer: present on index, method and disclaimer.
+- **Validity backing.**
+  - (a) §9 now claims only that the downside widens with heat and that A and B run bigger than C and D. Both hold:
+    - Mean MAE −24.05 / −21.78 / −15.37 / −13.68; median MAE −22.05 / −17.87 / −11.55 / −10.00. Monotone.
+    - Median MFE 14.44 / 12.66 / 9.56 / 8.44; mean MFE 41.83 / 42.10 / 21.42 / 15.19. A and B ≫ C and D.
+    - "Tier A still has the larger median run" ✓. B > A on mean MFE, which the sentence discloses.
+    - All six tier CI pairs on mean net overlap (A [−3.5, −0.4], B [−6.2, −2.0], C [−3.7, +5.3], D [−2.9, −1.9]), so no ordering is established, as §9 says. Tiers are framed as "heat scale, not a quality grade", and nothing implies higher tier = better.
+  - (b) The "unvalidated" label is present (16× in the index DOM, plus method). Gate-1 is not rendered here.
+  - (c) The Messick Framework, Domain-Coverage Spec and Structural Justification all return 200 and are linked from method.html §9.
+
+**Observations (not fails).** Publish times have drifted from 07:56 ET (10-07 → 10-15) to 08:26–08:48 ET this week, and the 10-19 run fired at 10:22. Everything that did log is well inside the cutoff. But the scheduler's lateness is now costing whole sessions again (one this week), so it's worth a look before it stacks up the way 08-27 → 09-03 did.
+
+**Alarm.** None. Clean pass. No issue opened, no front-end changes, no deploy.
+
+**Grading in the coming week.** 105 pending. A cohort grades the session after its 6-session window closes.
+- **10-16 (21) → Mon 10-26**
+- **10-20 (21) → Wed 10-28**
+- **10-21 (21) → Thu 10-29**
+- **10-22 (21) → Fri 10-30**
+- 10-23 (21) → Mon 11-02.
+
 ## 2026-10-23 — The 11-02 family read made mechanical before the read — **🔒 frozen**
 
 Two gaps in the 2026-11-02 read were found before it happened. (1) The batch #10 family policy (Benjamini–Hochberg across EXP02–EXP09) existed only as text, and guide.html said so publicly. (2) H-EXP02 had no automatic lock. On top of that, the weekly snapshots its bar requires had never been stored, although the 08-28 amendment says they "keep being recorded". `family_verdict.py` closes all three, and the choices are recorded in the HYPOTHESES.md implementation note of the same date: excess_1d primary, snapshots rebuilt from the append-only `graded_at` stamps, harness-identical bootstrap, q = 0.05, m = 8 with unread tests at p = 1, one look per experiment. **No outcome value was opened to write it;** only row counts and last-logged dates were checked. The script refuses to compute before 2026-11-02, and its selftest proves bootstrap parity with the harness. It runs in the daily workflow after the harness.
