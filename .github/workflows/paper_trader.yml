@@ -14,7 +14,8 @@ on:
         description: "enter, arm, or manage"
         default: manage
   schedule:
-    - cron: "0 12 * * 1-5"    # ~8:00am ET — enter: OPG buys for today's v0.3 picks
+    # enter moved into the daily scan workflow 2026-10-25: this cron ran 4-5h late, after
+    # the open, when Alpaca no longer accepts OPG orders. Manual dispatch still works.
     - cron: "40 13 * * 1-5"   # ~9:40am ET — arm: +10% GTC limits from actual fills
     - cron: "45 19 * * 1-5"   # ~3:45pm ET — manage: 5-session time exits + fill snapshots
 
@@ -42,7 +43,6 @@ jobs:
         id: mode
         run: |
           MODE=manage
-          if [ "${{ github.event.schedule }}" = "0 12 * * 1-5" ]; then MODE=enter; fi
           if [ "${{ github.event.schedule }}" = "40 13 * * 1-5" ]; then MODE=arm; fi
           if [ -n "${{ github.event.inputs.mode }}" ]; then MODE="${{ github.event.inputs.mode }}"; fi
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"

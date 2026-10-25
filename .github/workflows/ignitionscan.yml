@@ -193,6 +193,19 @@ jobs:
       # UNPUBLISHED candidates forward so the discriminant test becomes answerable at all.
       # Append-only into control_outcomes.csv. continue-on-error + the script's own
       # catch-all mean a control-data problem can never block the picks/outcomes commit.
+      # PAPER TRADER ENTRY (moved here 2026-10-25). H-V3-PAPER buys today's v0.3 picks with
+      # market-on-open (OPG) orders, which Alpaca accepts only until ~09:28 ET. On its own
+      # GitHub cron (0 12 * * 1-5) the run arrived 4-5h late, after the open, so every
+      # entry would have been rejected. Running it here, right after the v0.3 picks are
+      # logged, inherits the scan's pre-open guarantee. Idempotent by pick_id; no-ops
+      # without the ALPACA secrets; non-fatal so it can never cost a scan.
+      - name: Paper trader — enter (H-V3-PAPER, pre-open OPG)
+        if: steps.cmd.outputs.cmd == 'scan'
+        continue-on-error: true
+        env:
+          ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: python paper_trader.py enter || echo "paper trader enter skipped (non-fatal)"
       - name: Grade control pool (H-CTRL)
         if: steps.cmd.outputs.cmd == 'grade'
         continue-on-error: true
@@ -294,6 +307,7 @@ jobs:
           [ -f control_outcomes.csv ] && git add control_outcomes.csv || true
           [ -f rsi2_signals.csv ] && git add rsi2_signals.csv || true
           [ -f rsi2_outcomes.csv ] && git add rsi2_outcomes.csv || true
+          [ -f paper_trades.csv ] && git add paper_trades.csv || true
           [ -d experiments ] && git add experiments || true
           [ -f reports/experiments-LATEST.md ] && git add reports/experiments-LATEST.md || true
           [ -f reports/family-verdict-LATEST.md ] && git add reports/family-verdict-LATEST.md || true
