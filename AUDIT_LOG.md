@@ -1,5 +1,39 @@
 # ThePickLog — Audit Log
 
+## 2026-10-25 — Investigations: the 10-19 lost session, cross-cohort duplicates, 5-day re-grade
+
+**1. Why 10-19 was lost — root cause found and alarmed (commit `da58573`).**
+- The primary trigger is Vercel Cron → `workflow_dispatch`, at 11:56 UTC.
+- It fired every day from 09-16 to 10-15, stopped completely from 10-16 to 10-24, and resumed on 10-25.
+- 09-16 + 30 days = 10-16, the pattern of a 30-day fine-grained PAT expiring. Vercel's own logs aren't retained on Hobby, so this is inferred from GitHub's event history.
+- For that week, every cohort was logged by the late GitHub backup rungs: 10-16 at 08:06, 10-20 at 08:33, 10-21 at 08:44, 10-22 at 08:47 ET. On 10-19 all of them missed the 09:20 cutoff.
+- Nothing alarmed, because cohorts kept landing.
+- **Alarm added:** a scheduled run that has to scan, or is refused, on a real session means the primary trigger didn't log the cohort. It now opens or comments on a GitHub issue that first morning.
+- **Early warning added:** `cron-scan.js` reads GitHub's `github-authentication-token-expiration` header and passes it to the workflow, which opens an issue 14 days before expiry. If GitHub rejects the new input, the dispatch retries without it.
+- **Owner action:** check the current token's expiry at github.com/settings/personal-access-tokens.
+
+**2. Same ticker twice in a cohort — not a bug; impact below display precision. No change made.**
+- All 11 cases are cross-cohort: the same stock-day picked by both v0.2 (watchlist) and v0.3 (market-wide). The dedupe guard is deliberately per-cohort (H-UNIV1).
+- 10 of the 11 survive the exclusions. Every one has identical returns in both cohorts (same entry bar).
+- Pooled vs deduplicated (keeping the v0.2 row):
+  - logged 1,682 → 1,672; graded 1,543 → 1,533
+  - win rate 33.18 → 33.14
+  - median −2.72 → −2.72
+  - mean −1.782 → −1.770
+  - tier A mean −1.85 → −1.81; B/C/D unchanged
+- Every displayed figure is unchanged at one decimal. The clustered CIs already resample by ticker, so the dependence is accounted for there.
+
+**3. 5-day partial-bar re-grade — headline clean; 5-day fields drift on four grade runs. No correction applied yet.**
+- 1,306 graded rows were graded on the same ET date as their window's last session. All 1,306 were re-fetched with the grader's exact formula (1,206 still priceable; 100 delisted).
+- **Open→close (the headline): 0 rows off by more than 0.08pp.**
+- 5-day fields: 45 rows off by more than 1pp on at least one of 5-day net / MFE / MAE (196 cells off by more than 0.05pp).
+- The drift clusters in four grade runs: 08-13, 08-14, 09-02 and 09-24 UTC, where 25–40% of rows moved. Elsewhere it is at most 1 row per run.
+- Effect on published aggregates:
+  - 5-day swing −7.72 → −7.78 to −7.80
+  - avg worst dip −18.45 → −18.45 to −18.48
+- Two re-fetched values look like Yahoo artifacts rather than finals: GMEX 07-27 MFE +22.8 → +665.8, and FRGT 09-17 5-day net −60.3 → −97.8. A blind overwrite would import new errors.
+- The candidate cells are in `regrade-5day-candidates-2026-10-25.csv`, beside the repo, not committed. Decision pending on whether to apply a correction under the 10-07 precedent (corrections CSV, old/new per cell, sealed in the ledger).
+
 ## 2026-10-25 — Change: Experiments 06–09 published (registration only); Experiment 03 page brought in line with its amended bar
 
 EXP06–09 have been registered since 2026-08-06 (HYPOTHESES.md batch #10) and running in the harness, but their pages 404'd. Their verdicts are read on 2026-11-02 alongside EXP02/03, so the pages now exist before that date, carrying the frozen rule only.
