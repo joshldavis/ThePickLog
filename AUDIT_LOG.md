@@ -1,5 +1,17 @@
 # ThePickLog — Audit Log
 
+## 2026-10-25 — Change: Experiments 06–09 published (registration only); Experiment 03 page brought in line with its amended bar
+
+EXP06–09 have been registered since 2026-08-06 (HYPOTHESES.md batch #10) and running in the harness, but their pages 404'd. Their verdicts are read on 2026-11-02 alongside EXP02/03, so the pages now exist before that date, carrying the frozen rule only.
+
+- **New:** `experiment-06.html` … `experiment-09.html`, share images `og/experiment-06…09.png`, four cards on `experiments.html`, sitemap entries, one feed item. Built from the experiment-03 template, so nav, footer and type-scale contracts are byte-identical.
+- **Content is the registration, nothing else.** Entry rules, tie-breaks, costs, control, priors and the EXP09 next-open deviation are taken from HYPOTHESES.md batch #10 and the `EXPERIMENTS` declarations in `experiment_harness.py`. **No signal or outcome file was opened to write them;** no count, mean or interim number appears.
+- **Pass bar as amended 2026-08-07:** n ≥ 30 over ≥ 20 distinct names; mean and median excess > 0; ticker-clustered CI excludes 0; one look on 2026-11-02, locked; BH-FDR across EXP02–09.
+- **experiment-03.html corrected.** Its status box and bar still described the pre-amendment rule (verdict "needs 30 trades", repeated weekly looks). It now states the ≥ 20-name floor, the single 2026-11-02 look and the family correction, as a dated addition under the original bar rather than a rewrite. This brings the page up to what the code already does; it loosens nothing.
+- **Navigation:** 03 → 04 and 05 → 06 forward links added; 06–09 chain prev/next.
+- **Checked:** 7 changed pages at 390px and 1280px — zero horizontal overflow, one `<h1>` each, zero page/console errors, every experiment/og/report link resolves.
+- **Knock-on:** the counsel brief states EXP06–09 are "registered but NOT published". That sentence is now out of date and must be updated before the brief is sent.
+
 ## 2026-10-25 — Change: scale pre-flight added in SHADOW mode (drops nothing)
 
 The read-time scale exclusion is exact but late: a stock still quoted on its pre-split scale gets logged and published, and is only excluded once it grades (22 rows so far). The ask was a pre-log check that refuses these names. I've shipped it **in shadow mode**, not as a filter, because the evidence for a filter isn't there yet:

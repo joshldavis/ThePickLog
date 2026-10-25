@@ -5,11 +5,19 @@
   <link>https://thepicklog.com/</link>
   <description>We test what's being sold to traders. Rules frozen before the fact, graded forward against a control, verdicts published either way — starting with our own strategy, which failed.</description>
   <language>en-us</language>
-  <lastBuildDate>Wed, 12 Aug 2026 12:00:00 GMT</lastBuildDate>
+  <lastBuildDate>Sun, 25 Oct 2026 18:00:00 GMT</lastBuildDate>
   <atom:link href="https://thepicklog.com/feed.xml" rel="self" type="application/rss+xml"/>
 
   <!-- New items go at the TOP. One item per published verdict, field note,
        correction, or experiment registration. Keep guids stable forever. -->
+
+  <item>
+    <title>Experiments 06&#8211;09 published: four retail techniques, one verdict date</title>
+    <link>https://thepicklog.com/experiment-06.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-06.html</guid>
+    <pubDate>Sun, 25 Oct 2026 18:00:00 GMT</pubDate>
+    <description>The Supertrend flip, the moving-average pullback, Bollinger Band mean reversion and NR7 volatility contraction &#8212; four techniques currently taught and sold to retail traders, registered together on 2026-08-06 and running forward on 40 large caps against a day-matched control. Each gets one verdict look on 2026-11-02, corrected for multiple testing across the eight experiments running at once.</description>
+  </item>
 
   <item>
     <title>Experiment 05 registered: does the market only make money while it's closed?</title>
