@@ -1,5 +1,18 @@
 # ThePickLog — Audit Log
 
+## 2026-10-25 — Change: scale pre-flight added in SHADOW mode (drops nothing)
+
+The read-time scale exclusion is exact but late: a stock still quoted on its pre-split scale gets logged and published, and is only excluded once it grades (22 rows so far). The ask was a pre-log check that refuses these names. I've shipped it **in shadow mode**, not as a filter, because the evidence for a filter isn't there yet:
+
+- **Yahoo's `.info` previous close can't be the reference.** More than 80 logged picks gapped +100% to +2,600% against it, then opened at the screened price (NXGL, UZX, CTSO and others). A gap-keyed rule would refuse real screens in the hottest tier.
+- **The `.history()` close can't be backtested honestly.** It's the independent series the grader uses, but today's history is retro-adjusted for every later split. It doesn't show what the scanner would have seen that morning. A check that can't prove it removes only bad rows must not remove any (the 09-03 lesson).
+
+**What it does.** After each cohort is written, it appends one public row per published pick to `scale_preflight.csv`: screen price, prior-session `.history()` close, ratio and would-refuse at the same 0.5–2.0 band. It covers both v0.2 and v0.3 cohorts, has a 120 s time box, and is non-fatal. It runs after the write, so it can't delay or alter a pick.
+
+**Score it yourself.** `python quote_integrity.py preflight` reports the confusion matrix against `scale_mismatch_ids` once picks grade.
+
+**Pre-registered promotion rule.** It becomes a filter only with zero false refusals across all graded checks, at least 10 true catches, and more true catches than misses. Expected limitation: on a split's first session, Yahoo's history may not be adjusted yet, so day 1 likely stays a read-time catch either way.
+
 ## 2026-10-24 — Weekly verifiability audit — **✅ All claims verify**
 
 *Snapshot: live build `360f248` ("data: grade 2026-10-23"). Both served CSVs match `origin/main@360f248` byte for byte (SHA-256 `30141303…` picks, `a8199c6b…` outcomes). Latest cohort 10-23.*

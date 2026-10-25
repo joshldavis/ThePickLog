@@ -319,6 +319,82 @@ def is_corporate_action(ticker, quote, prior_rows, lo=SCALE_LO, hi=SCALE_HI):
                   f"price_at_screen it will be excluded by scale_mismatch_ids")
 
 
+# ---------------------------------------------------------------- scale pre-flight (SHADOW)
+# PRE-LOG SCALE CHECK, SHADOW MODE (2026-10-25). scale_mismatch_ids above is exact but
+# late: it needs entry_open, so a stale-scale name is logged, published, and only
+# excluded once it grades (22 rows so far, 4 in the week to 10-17 alone). The obvious
+# fix is to refuse those names before they are logged. That fix is NOT safe to ship as
+# a filter yet, and the reason is in our own CSV:
+#
+#   * Yahoo's .info previousClose is unreliable on exactly these names. 80+ logged
+#     picks show gaps of +100% to +2,600% against it (NXGL +2,571%, UZX +2,237%,
+#     CTSO +1,901%) and then OPENED at the screened price — they were real screens
+#     with a bad reference, not bad screens. A rule keyed on gap would gut the
+#     hottest tier.
+#   * The candidate independent reference — the last daily close from .history(),
+#     the same series the grader uses — cannot be backtested honestly: today's
+#     history is retro-adjusted for every later split, so it does not show what the
+#     scanner would have seen on the morning.
+#
+# So this records, for every published pick, the screen price against the prior
+# session's .history() close, and DROPS NOTHING. evaluate_scale_preflight() scores the
+# recorded ratios against scale_mismatch_ids (the ground truth, once each pick grades).
+# Promotion to a filter is pre-registered: only if, across ALL graded checks, it has
+# ZERO false refusals (no refused pick that graded inside the band), at least 10 true
+# catches, and catches more mismatches than it misses (TP > FN). Until then a guard that cannot prove it only
+# removes bad rows must not remove any — the 2026-09-03 lesson.
+PREFLIGHT_LO, PREFLIGHT_HI = SCALE_LO, SCALE_HI   # same band as the read-time truth
+PREFLIGHT_FIELDS = ["pick_id", "ticker", "trading_date", "model_version", "checked_at",
+                    "price_at_screen", "ref_close", "ref_date", "ratio", "would_refuse",
+                    "note"]
+
+
+def scale_preflight(price_at_screen, ref_close, lo=PREFLIGHT_LO, hi=PREFLIGHT_HI):
+    """(would_refuse, ratio) for one candidate. ratio = ref_close / price_at_screen.
+
+    Fails OPEN: anything unreadable returns (False, None) — an unprovable check never
+    counts against a pick.
+    """
+    px, ref = _num(price_at_screen), _num(ref_close)
+    if not px or not ref or px <= 0 or ref <= 0:
+        return False, None
+    ratio = ref / px
+    return (ratio < lo or ratio > hi), ratio
+
+
+def evaluate_scale_preflight(preflight_rows, picks, outcomes, lo=PREFLIGHT_LO, hi=PREFLIGHT_HI):
+    """Confusion matrix of the shadow pre-flight against scale_mismatch_ids.
+
+    Only picks that have BOTH a recorded ratio and a graded entry_open are scored;
+    everything else is counted as unchecked/ungraded so nothing silently drops out.
+    Re-applies the band to the stored ratio, so a different band can be evaluated
+    without re-running anything.
+    """
+    truth = scale_mismatch_ids(picks, outcomes)
+    graded = {(o.get("pick_id") or "").strip() for o in outcomes if _num(o.get("entry_open"))}
+    res = {"tp": [], "fp": [], "fn": [], "tn": 0, "no_ratio": 0, "ungraded": 0}
+    for r in preflight_rows:
+        pid = (r.get("pick_id") or "").strip()
+        ratio = _num(r.get("ratio"))
+        if ratio is None:
+            res["no_ratio"] += 1
+            continue
+        if pid not in graded:
+            res["ungraded"] += 1
+            continue
+        refuse = ratio < lo or ratio > hi
+        tag = (r.get("ticker"), r.get("trading_date"), round(ratio, 3))
+        if refuse and pid in truth:
+            res["tp"].append(tag)
+        elif refuse:
+            res["fp"].append(tag)
+        elif pid in truth:
+            res["fn"].append(tag)
+        else:
+            res["tn"] += 1
+    return res
+
+
 def _selftest():
     fails = []
 
@@ -442,6 +518,26 @@ def _selftest():
           is_stale_candidate("FRESH", {"price_at_screen": "1.91", "gap_pct": "0.0",
                                        "rvol": "1.0", "float_shares": "1000"}, prior), False)
 
+    # Scale pre-flight (shadow, 2026-10-25).
+    check("preflight: VMAR stale scale would refuse", scale_preflight(0.703, 7.14)[0], True)
+    check("preflight: same scale passes", scale_preflight(5.0, 4.4)[0], False)
+    check("preflight: forward split would refuse", scale_preflight(7.26, 2.0)[0], True)
+    check("preflight: missing ref fails open", scale_preflight(5.0, ""), (False, None))
+    check("preflight: unreadable price fails open", scale_preflight(None, 4.0), (False, None))
+    ev_picks = [row("t", "V", "2026-08-19", "0.70", "1.0"), row("f", "OK", "2026-08-19", "5.0", "1.0"),
+                row("n", "M", "2026-08-19", "0.5", "1.0"), row("g", "G", "2026-08-19", "3.0", "1.0"),
+                row("u", "U", "2026-08-19", "3.0", "1.0")]
+    ev_out = [orow("t", "7.0"), orow("f", "5.1"), orow("n", "3.0"), orow("g", "3.1")]
+    ev_pre = [{"pick_id": "t", "ticker": "V", "ratio": "10.0"},   # refused, mismatch -> tp
+              {"pick_id": "f", "ticker": "OK", "ratio": "3.0"},   # refused, fine -> fp
+              {"pick_id": "n", "ticker": "M", "ratio": "1.0"},    # passed, mismatch -> fn
+              {"pick_id": "g", "ticker": "G", "ratio": "1.0"},    # passed, fine -> tn
+              {"pick_id": "u", "ticker": "U", "ratio": "1.0"},    # not graded yet
+              {"pick_id": "x", "ticker": "X", "ratio": ""}]       # no ref close
+    ev = evaluate_scale_preflight(ev_pre, ev_picks, ev_out)
+    check("evaluate: counts", (len(ev["tp"]), len(ev["fp"]), len(ev["fn"]), ev["tn"],
+                               ev["ungraded"], ev["no_ratio"]), (1, 1, 1, 1, 1, 1))
+
     if fails:
         print("SELFTEST FAILED:")
         [print("  -", f) for f in fails]
@@ -457,5 +553,24 @@ if __name__ == "__main__":
         print(f"{len(ids)} stale-quote echoes across {len({t for t, _ in hit})} ticker(s)")
         for t, d in hit:
             print(f"  {t:<7}{d}")
+    elif len(sys.argv) > 1 and sys.argv[1] == "preflight":
+        # Score the shadow pre-flight against the read-time truth. Anyone can run this.
+        import os
+        if not os.path.exists("scale_preflight.csv"):
+            print("scale_preflight.csv not found — no shadow checks recorded yet.")
+            sys.exit(0)
+        pre = list(csv.DictReader(open("scale_preflight.csv", newline="")))
+        picks = list(csv.DictReader(open("picks.csv", newline="")))
+        outs = list(csv.DictReader(open("outcomes.csv", newline="")))
+        ev = evaluate_scale_preflight(pre, picks, outs)
+        print(f"{len(pre)} shadow checks | scored {len(ev['tp'])+len(ev['fp'])+len(ev['fn'])+ev['tn']}"
+              f" | ungraded {ev['ungraded']} | no reference close {ev['no_ratio']}")
+        print(f"  would-refuse & mismatch (TP): {len(ev['tp'])}  {ev['tp']}")
+        print(f"  would-refuse & fine     (FP): {len(ev['fp'])}  {ev['fp']}")
+        print(f"  passed & mismatch       (FN): {len(ev['fn'])}  {ev['fn']}")
+        print(f"  passed & fine           (TN): {ev['tn']}")
+        ok = not ev["fp"] and len(ev["tp"]) >= 10 and len(ev["tp"]) > len(ev["fn"])
+        print("Promotion rule (pre-registered 2026-10-25): ZERO FP, TP >= 10, TP > FN. "
+              + ("MET — eligible for promotion to a filter." if ok else "Not met — shadow only."))
     else:
         _selftest()

@@ -321,6 +321,7 @@ jobs:
           [ -f leaderboard.json ] && git add leaderboard.json || true
           [ -f integrity_ledger.csv ] && git add integrity_ledger.csv || true
           [ -f skipped_sessions.csv ] && git add skipped_sessions.csv || true
+          [ -f scale_preflight.csv ] && git add scale_preflight.csv || true
           [ -f reports/brief-LATEST.md ] && git add reports/brief-LATEST.md || true
           if git diff --cached --quiet; then
             echo "No data changes to commit."

@@ -33,7 +33,8 @@ from datetime import datetime, timedelta, timezone
 # 2026-08-04 late-cohort correction in AUDIT_LOG.md.
 from market_time import pre_open_guard, before_scan_floor, is_session, trading_date_et, sessions_between
 from quote_integrity import (is_stale_candidate, stale_quote_ids,
-                             is_corporate_action, scale_mismatch_ids)
+                             is_corporate_action, scale_mismatch_ids,
+                             scale_preflight, PREFLIGHT_FIELDS)
 from collections import defaultdict
 
 MODEL_VERSION = "v0.2-yf"
@@ -444,8 +445,10 @@ def cmd_scan(sample=False):
         except Exception as e:
             print(f"  edgar_lens unavailable — Group-B capture skipped: {type(e).__name__} {str(e)[:60]}")
 
+    published = []
     for s in rows:
         pid = str(uuid.uuid4())
+        published.append((pid, s))
         snap = {}
         if edgar_mod:
             try:
@@ -463,6 +466,7 @@ def cmd_scan(sample=False):
             row.update({"pick_id":pid, "ticker":s["ticker"], "trading_date":today, "captured_at":now_iso})
             append_row(EDGAR_SNAPSHOT_CSV, edgar_mod.SNAPSHOT_FIELDS, row)
     print(f"\nLogged {len(rows)} picks -> {PICKS_CSV}")
+    record_scale_preflight(yf, published, today, MODEL_VERSION)   # shadow: after the write
 
 def cmd_scan_market():
     """v0.3 market-wide scan (H-UNIV1, registered 2026-07-08). Criteria-defined
@@ -596,6 +600,8 @@ def cmd_scan_market():
         print(f"  {c['ticker']:<7}{c['tier']:<3}{c['score']:>6.1f}  px {c['price_at_screen']}"
               f"  gap {c['gap_pct']}%  rvol {c['rvol']}  float {c['float_shares']/1e6:.1f}M")
     print(f"Logged {len(to_publish)} picks -> {PICKS_CSV}; {n_cand} candidates -> {CANDIDATES_CSV}")
+    record_scale_preflight(yf, [(published_ids[c["ticker"]], c) for c in to_publish],
+                           today, model_version)   # shadow: after the write
 
 
 # ------------------------------------------------------------------ skipped sessions
@@ -608,6 +614,67 @@ def cmd_scan_market():
 # public, and disclosed on the Track record.
 SKIPPED_CSV = os.path.join(HERE, "skipped_sessions.csv")
 SKIPPED_FIELDS = ["trading_date", "attempted_at", "reason", "detail"]
+
+# ------------------------------------------------------------ scale pre-flight (SHADOW)
+# See quote_integrity.py "scale pre-flight". Runs AFTER the cohort is written, so it
+# can never delay, drop or alter a pick; it only appends one public row per published
+# pick to scale_preflight.csv. Time-boxed and non-fatal end to end.
+SCALE_PREFLIGHT_CSV = os.path.join(HERE, "scale_preflight.csv")
+PREFLIGHT_BUDGET_S = 120
+
+
+def _ref_close(yf, symbol, today):
+    """(date, close) of the last daily bar BEFORE `today`, from the same .history()
+    series the grader reads (auto_adjust=False). (None, None) if unavailable."""
+    df = yf.Ticker(symbol).history(period="10d", auto_adjust=False)
+    last = (None, None)
+    for idx, row in df.iterrows():
+        d = idx.strftime("%Y-%m-%d")
+        c = row.get("Close")
+        if d < today and c is not None and c == c and c > 0:
+            last = (d, float(c))
+    return last
+
+
+def record_scale_preflight(yf, published, today, model_version):
+    """published: list of (pick_id, row-with-ticker-and-price_at_screen). Drops nothing."""
+    if not published:
+        return
+    try:
+        t0 = time.time()
+        now_iso = datetime.now(timezone.utc).isoformat()
+        flagged = 0
+        for pid, s in published:
+            ref_d, ref_c, note = None, None, ""
+            if time.time() - t0 > PREFLIGHT_BUDGET_S:
+                note = "time budget exhausted"
+            else:
+                try:
+                    ref_d, ref_c = _ref_close(yf, s["ticker"], today)
+                    if ref_c is None:
+                        note = "no prior daily bar"
+                except Exception as e:
+                    note = f"{type(e).__name__}: {str(e)[:60]}"
+                time.sleep(0.3)
+            refuse, ratio = scale_preflight(s.get("price_at_screen"), ref_c)
+            flagged += bool(refuse)
+            append_row(SCALE_PREFLIGHT_CSV, PREFLIGHT_FIELDS, {
+                "pick_id": pid, "ticker": s["ticker"], "trading_date": today,
+                "model_version": model_version, "checked_at": now_iso,
+                "price_at_screen": s.get("price_at_screen"),
+                "ref_close": "" if ref_c is None else round(ref_c, 4), "ref_date": ref_d or "",
+                "ratio": "" if ratio is None else round(ratio, 4),
+                "would_refuse": "1" if refuse else "0", "note": note,
+            })
+            if refuse:
+                print(f"NOTE (shadow, nothing dropped): scale pre-flight would refuse "
+                      f"{s['ticker']} — screen {s.get('price_at_screen')} vs {ref_d} close "
+                      f"{ref_c:.4f} ({ratio:.2f}x)")
+        print(f"Scale pre-flight (shadow): {len(published)} checked, {flagged} would-refuse "
+              f"-> {os.path.basename(SCALE_PREFLIGHT_CSV)}")
+    except Exception as e:
+        print(f"WARNING: scale pre-flight failed ({type(e).__name__}: {e}) — picks are "
+              f"unaffected; the read-time scale exclusion still applies.")
 
 
 def record_skipped_session(trading_date, why, reason="pre-open gate"):
