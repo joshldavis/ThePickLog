@@ -143,3 +143,22 @@ These are identical to 1a except:
 - **A final block:** *"Pre-open SEC filings (may say none were selected):\n{{TEXT}}"*.
 
 The exact bytes are fixed by the sha256 values above.
+
+---
+
+## Amendment 1 — 2026-10-25, about 40 minutes after registration and before any window pick existed
+
+**What was wrong.** This registration fixes the window as picks traded **2026-10-26 through 2026-12-31**, but neither `run_judge.py` nor `grade_judge.py` enforced the end date. `grade_judge.py`'s `load()` dropped picks before `--registered` and had no upper bound. Judge batches are allowed to run after the fact, so a January batch would have judged January picks, and the grader would have pulled them into the verdict sample: picks outside the registered window, and a sample whose size depends on when the batch happened to run.
+
+**The change, made to the grader only.** `grade_judge.py` gains `--until` (default `2026-12-31`), and `load()` drops any pick with `trading_date > until`. Nothing else changed. `run_judge.py` is untouched; it may still judge later picks, and those predictions are simply never graded under this registration.
+
+**Why this is safe.** At the moment of the change **zero window picks existed** (the window opens with the 2026-10-26 open), `judge/predictions.csv` did not exist, and no judge had been run on any window pick. It enforces the window the registration already states, and it can only shrink the sample to that window. It cannot make a pass easier.
+
+**Verified.** The synthetic smoke test grades the same as before when `--until` covers the data. With `--until` set before the data, it grades nothing.
+
+| file | sha256 (supersedes the row above) |
+|---|---|
+| `judge/grade_judge.py` | `c745189104a8b03eeff60f0efab0dbb8b2a8a5ddbaf282606dcbe31c886d183d` |
+
+Every other frozen file and hash above is unchanged. The grading command becomes:
+`python3 judge/grade_judge.py --registered 2026-10-26 --until 2026-12-31 --jev-flags <H-JEV flag_any CSV>`.
