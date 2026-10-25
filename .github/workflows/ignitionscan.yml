@@ -8,6 +8,12 @@ on:
       command:
         description: "scan or grade"
         default: scan
+      # Sent by api/cron-scan.js (2026-10-25): the expiry GitHub reports for the
+      # dispatch token, so this workflow can warn BEFORE the primary trigger dies.
+      token_expires:
+        description: "dispatch-token expiry reported by GitHub (set by the Vercel trigger)"
+        required: false
+        default: ""
   schedule:
     # 07:00 ET. Was 07:30 ET until 2026-08-04, when a review found GitHub's
     # best-effort cron had drifted past the 09:30 opening bell on 7 occasions and
@@ -50,6 +56,7 @@ on:
 
 permissions:
   contents: write
+  issues: write   # 2026-10-25: primary-trigger and token-expiry alarms (see below)
 
 # Two scan crons (10:00 and 11:00 UTC) plus the grade cron share this one workflow,
 # and GitHub runs concurrent dispatches in PARALLEL by default. Under the same drift
@@ -125,6 +132,61 @@ jobs:
           fi
           echo "refused=$REFUSED" >> "$GITHUB_OUTPUT"
           echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
+      # PRIMARY-TRIGGER ALARM (2026-10-25). The Vercel Cron → workflow_dispatch trigger
+      # fires at ~11:56 UTC and normally logs the cohort before any GitHub rung arrives,
+      # so every later scheduled run is a no-op. From 10-16 to 10-24 it silently stopped
+      # (the fine-grained dispatch token, first used 09-16, appears to have hit a 30-day
+      # expiry). Nothing alarmed: the late GitHub rungs still logged cohorts, so the
+      # watchdog and healthchecks stayed green — until 10-19, when every rung landed past
+      # the 09:20 cutoff and the session was lost. The signature was visible from day one:
+      # a SCHEDULED run that has to scan (or is refused) on a real session means the
+      # primary trigger did not log the cohort. Say so on that first morning, while there
+      # is still time to fix it before a session is lost. Never fails the run.
+      - name: Primary-trigger alarm
+        if: github.event_name == 'schedule' && (steps.cmd.outputs.cmd == 'scan' || steps.cmd.outputs.refused == '1')
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REFUSED: ${{ steps.cmd.outputs.refused }}
+        run: |
+          TODAY=$(TZ=America/New_York date +%F)
+          SESSION=$(python -c "from market_time import is_session; print(int(is_session('$TODAY')))")
+          [ "$SESSION" = "1" ] || { echo "$TODAY is not a session — nothing to check."; exit 0; }
+          NOW=$(TZ=America/New_York date '+%H:%M ET')
+          if [ "$REFUSED" = "1" ]; then WHAT="the backup rung arrived at $NOW, past the cutoff, and the session was LOST"; else WHAT="a late GitHub backup rung had to log the cohort at $NOW"; fi
+          TITLE="Primary scan trigger did not fire"
+          BODY="$TODAY: the Vercel Cron → workflow_dispatch trigger (api/cron-scan.js, ~07:56 ET) did not log today's cohort; $WHAT. Most likely cause: GITHUB_DISPATCH_TOKEN in Vercel expired or was revoked (it is a fine-grained PAT; check its expiry at github.com/settings/personal-access-tokens), or CRON_SECRET changed. Each further morning on the backup rungs alone risks a lost session. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          N=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number' 2>/dev/null || true)
+          if [ -n "$N" ]; then gh issue comment "$N" --body "$BODY"; else gh issue create --title "⚠️ $TITLE" --body "$BODY"; fi
+          echo "::warning::$TITLE — $WHAT"
+      # TOKEN-EXPIRY EARLY WARNING (2026-10-25). The Vercel trigger passes along the
+      # expiry GitHub reports for its token. Warn 14 days ahead, once per open issue.
+      - name: Dispatch-token expiry warning
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.token_expires != ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EXP: ${{ github.event.inputs.token_expires }}
+        run: |
+          echo "Dispatch token expiry reported: $EXP"
+          [ "$EXP" = "none" ] && exit 0
+          DAYS=$(python -c "
+          import sys, datetime as d
+          s=sys.argv[1].replace(' UTC','').strip()
+          for fmt in ('%Y-%m-%d %H:%M:%S %z','%Y-%m-%d %H:%M:%S','%Y-%m-%dT%H:%M:%SZ'):
+              try:
+                  e=d.datetime.strptime(s,fmt); break
+              except ValueError: e=None
+          if e is None: print(-999); sys.exit()
+          if e.tzinfo is None: e=e.replace(tzinfo=d.timezone.utc)
+          print((e-d.datetime.now(d.timezone.utc)).days)" "$EXP")
+          echo "days remaining: $DAYS"
+          [ "$DAYS" = "-999" ] && { echo "::warning::could not parse token expiry '$EXP'"; exit 0; }
+          [ "$DAYS" -ge 14 ] && exit 0
+          TITLE="Scan-trigger token expires soon"
+          N=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number' 2>/dev/null || true)
+          [ -n "$N" ] && { echo "issue #$N already open"; exit 0; }
+          gh issue create --title "⏳ $TITLE ($EXP)" --body "GITHUB_DISPATCH_TOKEN (the fine-grained PAT the Vercel cron uses to start the daily scan) expires $EXP — $DAYS day(s) from now. When it expires the primary trigger stops and only the late GitHub backup rungs remain (that is how 2026-10-19 was lost). Regenerate it at github.com/settings/personal-access-tokens (repo joshldavis/ThePickLog only, Actions: Read and write; choose the longest expiry you are comfortable with), then update GITHUB_DISPATCH_TOKEN in Vercel → thepicklog → Settings → Environment Variables and redeploy."
       - name: Run ${{ steps.cmd.outputs.cmd }}
         id: run
         if: steps.cmd.outputs.cmd != 'noop'

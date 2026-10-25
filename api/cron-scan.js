@@ -67,22 +67,44 @@ export default async function handler(req, res) {
     return res.status(401).json({ ok: false, error: "unauthorized" });
   }
 
-  const url = `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW}/dispatches`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "Content-Type": "application/json",
+    "User-Agent": "thepicklog-cron",
+  };
+  const base = `https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${WORKFLOW}`;
+
+  // TOKEN EXPIRY (2026-10-25). From 10-16 to 10-24 this trigger silently stopped —
+  // the fine-grained token, first used 09-16, appears to have hit a 30-day expiry —
+  // and 10-19 was lost. GitHub reports an expiring token's date in the
+  // `github-authentication-token-expiration` header on every authenticated response.
+  // Read it with a cheap GET and pass it to the workflow, which opens an issue 14 days
+  // ahead. Best-effort only: if this lookup fails, the dispatch still goes out.
+  let tokenExpires = "";
+  try {
+    const g = await fetch(base, { headers });
+    tokenExpires = g.headers.get("github-authentication-token-expiration") || (g.ok ? "none" : "");
+  } catch (_) { /* never block the dispatch on the expiry lookup */ }
+
+  const dispatch = (inputs) =>
+    fetch(`${base}/dispatches`, {
+      method: "POST", headers, body: JSON.stringify({ ref: "main", inputs }),
+    });
+
   let r;
   let body = "";
   try {
-    r = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-        "Content-Type": "application/json",
-        "User-Agent": "thepicklog-cron",
-      },
-      body: JSON.stringify({ ref: "main", inputs: { command: "scan" } }),
-    });
+    r = await dispatch(tokenExpires ? { command: "scan", token_expires: tokenExpires }
+                                    : { command: "scan" });
     body = await r.text();
+    // If the workflow on main does not (yet) declare token_expires, GitHub rejects the
+    // unknown input with 422. The scan matters more than the warning: retry without it.
+    if (r.status === 422 && tokenExpires) {
+      r = await dispatch({ command: "scan" });
+      body = await r.text();
+    }
   } catch (e) {
     return res.status(502).json({ ok: false, error: "dispatch request failed", detail: String(e) });
   }
@@ -93,6 +115,7 @@ export default async function handler(req, res) {
     ok,
     dispatched_at: new Date().toISOString(),
     github_status: r.status,
+    token_expires: tokenExpires || "unknown",
     detail: ok ? "scan dispatched" : body.slice(0, 500),
   });
 }
