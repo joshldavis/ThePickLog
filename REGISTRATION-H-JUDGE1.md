@@ -162,3 +162,27 @@ The exact bytes are fixed by the sha256 values above.
 
 Every other frozen file and hash above is unchanged. The grading command becomes:
 `python3 judge/grade_judge.py --registered 2026-10-26 --until 2026-12-31 --jev-flags <H-JEV flag_any CSV>`.
+
+---
+
+## Amendment 2 — 2026-10-25, before the 2026-10-26 open: a reported-only disagreement read
+
+**What is added.** One secondary analysis, `judge/disagree_route.py`. It is **reported only**. It has no pass/fail, it is not in the Holm family, and **nothing it prints can change an H-JUDGE1 or H-AUTH1 verdict**. A routing claim drawn from it needs its own forward registration.
+
+**The question.** Raters who share a prior and still disagree hold different information (Aumann 1976). So on picks where the three raters disagree, does an AI judge do better or worse than the score baseline, compared with picks where they agree? If better, disagreement is a signal to listen to the judge. If worse, disagreement is a signal to defer to B0.
+
+**Fixed now.**
+- **Raters, arm 1b only (the H-AUTH1 arm):** B0, J1 = `jev` 1b, J2 = `openai` 1b. Each judge's forecast for a pick follows the registered abstention rule: an abstained or unparseable repeat counts as B0, and the forecast is the mean over repeats. Only picks both judges answered are used. The rest are counted.
+- **Disagreement:** D = max − min of the three forecasts. **ASK if D ≥ 0.20**, the same margin as H-AUTH1 AUTO. All other picks are REST.
+- **Estimates, per judge J:** Brier(J) − Brier(B0) on ASK, the same on REST, and the difference-in-differences **DiD = ASK − REST**. Each has a ticker-cluster bootstrap 95% CI (2,000 resamples, seed 2026). DiD < 0 means the judge gains on B0 where raters disagree.
+- **Also reported:** ASK rate; Brier of B0, J1, J2 and the mean of the three on ASK and REST; the share of ASK picks where J is closer to the outcome than B0; ASK × H-AUTH1 route (AUTO, REVIEW, BLOCK). For this cross-tab only, a pick with missing float counts as thin.
+- **Floor:** at least 30 ASK picks on at least 20 tickers, or the read is labelled INSUFFICIENT.
+- **When:** once, at the 2027-01-12 readout, with the same window as the grader: `python3 judge/disagree_route.py --registered 2026-10-26 --until 2026-12-31`.
+
+**Why this is safe.** No window pick exists yet, and `judge/predictions.csv` does not exist. No frozen file changes, and every hash above still holds. The script only reads the frozen inputs.
+
+**Smoke test** (synthetic judges on historical v0.3-yf picks, not a result; `judge/_tests/disagree_smoke.py`). A J2 that has real signal on 40% of picks: ASK rate 0.36, J2 DiD −0.21 [−0.22, −0.20]. A J2 that is pure noise on 40% of picks: DiD +0.03 [−0.05, +0.11]. The noise J1: DiD −0.003 [−0.005, −0.000] in the first case and +0.001 [−0.003, +0.005] in the second, so a near-zero DiD can clear zero by chance. That is one reason this read stays reported-only.
+
+| file | sha256 |
+|---|---|
+| `judge/disagree_route.py` | `d99c00b43b757dcd570adffb5e3f0cd4cfe7fe5b4b04ab28c282a689cda297cb` |
