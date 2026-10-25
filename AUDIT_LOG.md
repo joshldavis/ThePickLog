@@ -1,5 +1,33 @@
 # ThePickLog — Audit Log
 
+## 2026-10-25 — Correction: 40 five-day windows skipped a real session (re-graded; headline unaffected)
+
+Following up item 3 of the entry below. That entry's diagnosis was "partial bars", and it was wrong. The real mechanism is narrower, and anyone can prove it from public data alone.
+
+- **The defect.** 40 stored windows in `paths.csv` skip a real NYSE session:
+  - 2026-08-11 (19 windows)
+  - 2026-08-28 (9)
+  - 2026-09-22 (12)
+
+  Yahoo's history was missing that session when the grader ran, so the "5th session after entry" was really the 6th. That covers all of the material drift in the 08-13, 08-14, 09-02 and 09-24 runs. Find them yourself with `python fix_window5d_2026_10_25.py --find`; it needs only `paths.csv` and the NYSE calendar.
+- **The correction** (`corrections/window5d-2026-10-25.csv`, applied by `fix_window5d_2026_10_25.py`):
+  - **38 windows** re-graded on the true 6-session window from Yahoo's final bars, with the grader's own formula. Bars from a later split are shown on the grade-time scale.
+  - The entry bar (entry_open / same_day_close) is kept byte-for-byte, so **win rate, median and mean net are unchanged**.
+  - Every corrected row recomputes exactly from its new `paths.csv` bars.
+  - **2 windows (HKIT, IPW 2026-09-16)** are no longer priceable. They get an explicit `5-DAY WINDOW DEFECT` note rather than a guessed number.
+  - Every cell is checked against its old value. 40 outcome lines and 100 path lines change; every other line is byte-identical; re-running is a no-op.
+  - Sealed in the ledger as `correction-window5d-2026-10-25`; `--verify-head` OK.
+- **Effect on published figures** (kept set):
+  - 5-day swing −7.72 → **−7.78**
+  - avg worst dip −18.45 → **−18.43**
+  - graded 1,543, win rate 33.18, median −2.72, mean −1.782: all unchanged
+- **Deliberately not changed.** Two re-fetched values look like Yahoo artifacts, not finals: GMEX 07-27 MFE (+22.8 → +665.8) and FRGT 09-17 5-day (−60.3 → −97.8). Neither window is misaligned. The other sub-point drifts (MFE/MAE revisions on correctly-dated bars) can't be shown to be errors, so the logged values stand. The broader candidate list stays out of the repo.
+- **Recurrence guard** (`ignitionscan.py`): the grader now requires the window to be exactly the entry session plus the next 5 NYSE sessions.
+  - If a session is missing, it defers and retries.
+  - The deferral deliberately doesn't count toward the dead-ticker rule: one gap spans up to six cohorts of the same ticker.
+  - Past the stale horizon, it grades the headline and writes the defect into `note`.
+  - Tested on a mocked feed: aligned → graded; fresh gap → deferred; stale gap → graded with note.
+
 ## 2026-10-25 — Investigations: the 10-19 lost session, cross-cohort duplicates, 5-day re-grade
 
 **1. Why 10-19 was lost — root cause found and alarmed (commit `da58573`).**

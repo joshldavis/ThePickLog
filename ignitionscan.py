@@ -716,6 +716,17 @@ def _trading_days_since(date_str):
         return 0
     return max(0, len(sessions_between(date_str, d1)) - 1)
 
+def _expected_sessions(start, n):
+    """The entry session plus the next n-1 real NYSE sessions, as YYYY-MM-DD strings."""
+    out = [start]
+    d = datetime.strptime(start, "%Y-%m-%d").date()
+    while len(out) < n:
+        d += timedelta(days=1)
+        if is_session(d.isoformat()):
+            out.append(d.isoformat())
+    return out
+
+
 def cmd_grade():
     yf = _yf()
     picks = read_rows(PICKS_CSV)
@@ -784,6 +795,27 @@ def cmd_grade():
             # number; treat it like a missing fetch (transient, retried next run).
             if str(window.iloc[GRADE]["d"]) >= trading_date_et():
                 continue
+            # WINDOW-ALIGNMENT GUARD (2026-10-25). Yahoo's daily history has dropped whole
+            # sessions for a while after they closed (08-11, 08-28 and 09-22 all went missing
+            # for some names), and the grader took the next bar it was given, so 40 windows
+            # measured "5 sessions" as 6. The headline (entry bar) was never affected; the
+            # 5-day net / MFE / MAE were. The window must be exactly the entry session plus
+            # the next GRADE real NYSE sessions. If it is not, the data is incomplete: defer
+            # and retry on the next run. Past the stale horizon, grade the headline anyway
+            # (the entry bar is sound) but say plainly that the 5-day window is not.
+            got_days = [str(x) for x in window["d"]]
+            want_days = _expected_sessions(start, GRADE + 1)
+            window_note = ""
+            if got_days != want_days:
+                missing = ",".join(sorted(set(want_days) - set(got_days)))
+                if not stale:
+                    # NOT added to failed_by_ticker: one missing session sits inside up to six
+                    # consecutive cohorts' windows for the same ticker, which would trip the
+                    # dead-ticker rule below and wrongly bury live picks as UNGRADEABLE.
+                    print(f"  {p['ticker']} {start}: Yahoo history skips session(s) {missing} — deferring")
+                    continue
+                window_note = (f"5-DAY WINDOW DEFECT: Yahoo history skips real session(s) {missing}; "
+                               f"5-day net/MFE/MAE span the wrong window, headline open->close unaffected")
             o = float(window.iloc[0]["Open"]); c = float(window.iloc[0]["Close"])
             close_5d = float(window.iloc[GRADE]["Close"])
             hi = float(window["High"].max()); lo = float(window["Low"].min())
@@ -799,7 +831,7 @@ def cmd_grade():
                 "entry_open":round(o,4), "same_day_close":round(c,4),
                 "ret_open_close_net":round(roc,2), "ret_open_5dclose_net":round(r5d,2),
                 "mfe_5d":round((hi-o)/o*100,2), "mae_5d":round((lo-o)/o*100,2),
-                "win": "1" if roc>0 else "0", "note":"",
+                "win": "1" if roc>0 else "0", "note":window_note,
             })
             persist_path(p, window)   # immutable daily path for reproducible exit study
             graded += 1
