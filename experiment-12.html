@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can an AI judge forecast a stock&rsquo;s drawdown better than the score? A pre-registered forward test | Experiment 12 — ThePickLog</title>
+<meta name="description" content="Two AI judges &mdash; a filing reader and a general model from a different company &mdash; graded forward on one question: do they forecast a stock&rsquo;s drawdown better than the plain four-number score they both see? Frozen before the first prediction, one look, verdict published either way.">
+<link rel="canonical" href="https://thepicklog.com/experiment-12.html">
+<meta property="og:title" content="Can an AI forecast a drawdown better than four numbers?">
+<meta property="og:description" content="Two pinned AI judges, three input versions, one frozen criterion, one look. Graded on whether they add anything to the plain score. Verdict published either way.">
+<meta property="og:type" content="article">
+<style>
+  :root{--a-text:#31b3aa;--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a-text)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0;margin-left:auto}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.menu-btn{display:flex}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:34px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.14}
+  h2{font-size:22px;margin:1.8em 0 .5em;letter-spacing:-.015em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18px;color:var(--dim);margin-bottom:1.4em}
+  .status{border:1px solid #5a3a22;background:#2a1d10;border-radius:14px;padding:16px 20px;margin:22px 0}
+  .status .h{font-size:12px;letter-spacing:.1em;color:var(--amber);font-weight:800;margin-bottom:5px}
+  .status .b{font-size:19px;font-weight:700;margin-bottom:6px}
+  .status p{color:var(--dim);font-size:14.5px;margin:0}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:20px 0}
+  .box h3{margin:0 0 10px;font-size:17px}
+  .box p:last-child{margin-bottom:0}
+  dl{margin:0}
+  dt{font-weight:700;font-size:14px;color:var(--tx);margin-top:12px}
+  dd{margin:2px 0 0;color:var(--dim);font-size:14.5px}
+  dt:first-child{margin-top:0}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+
+  /* ===== a11y baseline — UI audit 2026-08-19 =====
+     3.1 a visible focus ring everywhere (there were 2 :focus rules on the whole site)
+     3.2 footer links to a 24px touch target (they were 14px)
+     3.7 skip-to-content, so keyboard users don't tab 12 nav links on every page */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
+
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 =====
+     There were FIVE different navs across 19 pages. Method/Trust/Guide/Privacy were
+     unreachable from the homepage nav, and Compete existed ONLY on the homepage.
+     Both marker classes are styled so a page's own CSS can use either. */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  /* The mobile menu had no z-index on 16 of 19 pages, so the panel painted BEHIND
+     the article text, and a translucent background left it unreadable wherever
+     backdrop-filter did not apply. Opaque and lifted. */
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+
+  /* ===== 2.3 one long-form type scale — UI audit 2026-08-19 =====
+     Body copy ran 15px in an 820px column on the proof pages: ~113 characters a
+     line, the smallest text on the site on the pages that most need careful
+     reading. method.html set its section headings at 16px against 15px body, so
+     its hierarchy had effectively collapsed. H1 ranged 26–36px with no scale.
+     One scale now: 17px/1.65 in a 720px column (~80ch), H1 34 / H2 23 / H3 17.5. */
+  body{font-size:17px;line-height:1.65}
+  .wrap{max-width:720px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:.15em 0 .3em}
+  h2{font-size:23px;line-height:1.25;letter-spacing:-.015em;margin:1.7em 0 .45em}
+  h3{font-size:17.5px;line-height:1.35;margin:1.5em 0 .35em}
+  p{margin:0 0 1.05em}
+  .lead,.standfirst{font-size:18.5px;line-height:1.5}
+  @media(max-width:560px){
+    body{font-size:16.5px}
+    h1{font-size:28px}
+    h2{font-size:20.5px}
+    .lead,.standfirst{font-size:17px}
+  }
+</style>
+<meta property="og:image" content="https://thepicklog.com/og/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.com/og/card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.com/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html" class="active">Experiments</a>
+      <a href="field-notes.html">Field notes</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html" class="active">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+    <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+    <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+    <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap" id="main" tabindex="-1">
+  <span class="no">EXPERIMENT 12 · REGISTERED 2026-10-25 · RUNNING</span>
+  <h1>Can an AI judge forecast a drawdown better than four numbers?</h1>
+  <p class="standfirst">AI that reads the news and the filings and tells you what a stock will do is now one of the most heavily sold ideas in retail trading. Almost nobody selling it shows whether the AI adds anything to the simple rule underneath it. We froze that test before a single prediction was made: two AI judges, one criterion, one look.</p>
+
+  <div class="status">
+    <div class="h">STATUS</div>
+    <div class="b">Registered and running. Verdict on or after 2027-01-11.</div>
+    <p>The window is every pick our screen logs before the open from <b>26 October through 31 December 2026</b>. The verdict is computed <b>once</b>, on or after 11 January 2027, after the last of those picks has finished grading, and published whether it passes or fails. An interim readout at 150 picks is reported only and can change nothing. Registry id: H-JUDGE1, with the companion rule H-AUTH1.</p>
+  </div>
+
+  <h2>Why this one</h2>
+  <p>Our own record taught us two things. Nothing we have tested predicts the <i>direction</i> of these stocks: not our own score (Experiment 01) and not any rule in our July sweep. But the <b>size of the drop</b> is partly predictable. Hotter scores draw down further, and a backward-looking check found that picks with a risk event in their recent SEC filings drew down further still. That check cannot prove anything by itself, and its own forward test is running now.</p>
+  <p>That makes drawdown the honest place to ask whether AI helps. If an AI can&rsquo;t beat a four-number score at the one thing that is predictable here, the pitch that it can pick winners is in trouble.</p>
+  <p>It also matches the research. Published work finds that large language models can pull some signal out of financial text, mostly in small stocks and bad news, and that the effect fades as more people use them. The same work finds that their stated confidence runs high and that their stated reasons are often not the real ones. So we grade the AI the way you would grade any new test before letting it make decisions: does it agree with itself, does its 70% mean 70%, and does it add anything to what we already had.</p>
+
+  <h2>The bar and the two judges</h2>
+  <div class="box">
+    <p><b>The score (the bar).</b> The plain ThePickLog score (float, relative volume, gap, price), turned into a probability with a model fitted on 476 earlier picks and frozen on 7 October, before this window existed. On those earlier picks it already does a fair job of separating big drawdowns from small ones (AUC 0.667, measured on the data it was fitted to). Both AI judges have to beat it.</p>
+    <p><b>Judge 1: a filing reader.</b> Jev, version 1.13.0, pinned. It reads each pick&rsquo;s recent SEC filings and answers a fixed set of questions about them.</p>
+    <p><b>Judge 2: a general AI model from a different company.</b> OpenAI <code>gpt-5.5-2026-04-23</code>, a pinned, dated version, with no tools and no web access, asked for a probability. A second vendor means that when the two judges agree, it is not one model agreeing with itself.</p>
+    <p style="margin-bottom:0">Every reply is checked against the pinned version. A changed model is refused, not quietly accepted. If Judge 2&rsquo;s version is retired before every pick has been judged, it is reported as <i>insufficient</i>, never swapped for a newer one.</p>
+  </div>
+
+  <h2>The rule, frozen</h2>
+  <p><b>What each judge predicts.</b> The probability that the stock trades at least 20% below its opening price at some point that day or in the next five sessions. Our grader already records that for every pick, so nothing new is built on the outcome side. (Whether it closes up that day after costs is also asked, and reported only.)</p>
+  <p><b>What each judge sees.</b> Three versions, each asked three times:</p>
+  <div class="box">
+    <p><b>A. Numbers only, name hidden.</b> The same four inputs the score uses. Expected to add nothing: it checks whether the AI is just a fancier way of combining the same numbers.</p>
+    <p><b>B. Numbers plus filings, name hidden.</b> The same pre-open SEC filings our filing test reads, with the company name and ticker removed. This is the real test.</p>
+    <p style="margin-bottom:0"><b>C. Numbers plus filings, name shown.</b> Identical to B except the company is named. Published research found that hiding a company&rsquo;s name can make AI forecasts <i>better</i>, because what the model thinks it knows about the company gets in the way. B versus C tests whether that holds in tiny stocks the model probably knows little about.</p>
+  </div>
+  <p><b>No look-ahead.</b> Every input existed before the 9:30 open on the trading date: filings accepted before then, plus the screen&rsquo;s own fields. Both judges are pinned versions released before the window opened, with no web access, so no prediction can have seen its outcome. That is also why predictions may be made in batches after the fact, which the registration calls for at least monthly. The prediction log is append-only: each question is asked once, and the first answer is the record.</p>
+  <p><b>Nothing touches the site.</b> No judge&rsquo;s answer is shown on a pick, used to choose one, or used in a trade. A pass allows advisory use in shadow mode only. Showing it to anyone would need a new registration.</p>
+
+  <h2>What it has to clear</h2>
+  <p>Frozen at registration. For each judge and each version, all of these, at the single look:</p>
+  <div class="box">
+    <p><b>0. Enough evidence.</b> At least 300 graded picks <b>and</b> at least 100 different companies. Short of either, the result is <i>insufficient</i>: not a pass and not a fail.<br>
+    <b>1. It adds something to the score (the claim).</b> Score plus judge separates big drawdowns from small ones better than the score alone, by at least 0.03 AUC, with an interval that excludes zero, and the improvement is significant <b>after correcting for all six judge-and-version combinations tested</b> (Holm). A version that is missing counts as a failure in that correction, so it can never make the others easier to pass.<br>
+    <b>2. It ranks picks better than chance</b>, with a 95% interval that treats each company, not each pick, as the unit of evidence.<br>
+    <b>3. It beats the base rate</b> on accuracy (Brier skill above zero, interval excluding zero).<br>
+    <b>4. Its probabilities mean what they say once rescaled:</b> fitted on the first 100 picks, then checked on the rest. Its raw probabilities are reported too, and we expect them to be overconfident.<br>
+    <b>5. It agrees with itself:</b> asked the same question three times, its answers correlate at 0.80 or higher.</p>
+    <p style="margin-top:12px"><b>Kill conditions.</b> A judge whose repeats correlate below 0.60 is too noisy to be a rater at all. If the two judges agree with each other below 0.20, &ldquo;AI judgment&rdquo; here is just one model&rsquo;s quirks.</p>
+    <p style="margin-top:12px"><b>When a judge declines to answer</b>, that pick is scored as the plain score&rsquo;s forecast. Declined picks are never dropped, so a judge that declines everything simply reproduces the score and fails the claim.</p>
+    <p style="margin-top:12px;margin-bottom:0"><b>The AI&rsquo;s explanations are not evidence.</b> Each answer logs a one-line reason. Reasons are reported, never used to decide a pass.</p>
+  </div>
+
+  <h2>When may the AI act alone? (H-AUTH1)</h2>
+  <p>The same window also tests a rule, written down in advance, for when an AI&rsquo;s call could be trusted without a human. The filing reader&rsquo;s call is sorted three ways: <b>act alone</b> only when it is far from the base rate and the stock is neither among the thinnest-traded nor carrying a dilution flag; <b>send to a human</b> otherwise; <b>defer to the score</b> when the judge declines. The rule passes only if, on the &ldquo;act alone&rdquo; picks, the judge is more accurate than the score with an interval that excludes zero, and its probabilities are calibrated within 10 points. A good rule hands people exactly the cases where the AI is no better. Registered prior: about 1 in 4.</p>
+
+  <h2>What we expect to happen</h2>
+  <p>Stating a prediction before the data is part of the method, and it is uncomfortable on purpose.</p>
+  <p><b>Version A should fail.</b> A language model has no business beating a fitted score at combining the same four numbers. <b>Version B</b>: we put the chance of passing at roughly <b>1 in 4 for each judge</b>. The score is already strong, and the filing signal we found looking backward is real but modest. <b>B versus C</b>: no direction predicted.</p>
+  <p>A clean failure would still be one of the most useful results on this site for anyone being sold AI stock analysis. If two AI judges reading the same filings can&rsquo;t add anything to four numbers anyone can compute, the AI is the expensive part of the product, not the valuable part.</p>
+
+  <h2>How you&rsquo;ll be able to check it</h2>
+  <p>The full registration is public and dated: <a href="https://github.com/joshldavis/ThePickLog/blob/main/REGISTRATION-H-JUDGE1.md">REGISTRATION-H-JUDGE1.md</a>, with every prompt reproduced word for word. Its <a href="https://github.com/joshldavis/ThePickLog/commits/main/REGISTRATION-H-JUDGE1.md">commit history</a> is the timestamp: you can see it was written before the window opened and every change since. The judge code is kept off the public site, because one version reads third-party SEC filing text, so instead every judge file is frozen by its fingerprint (sha256) in the registration. Change one character and the fingerprint no longer matches. Outcomes come from the same public <a href="outcomes.csv">outcomes.csv</a> every other experiment uses.</p>
+  <p>Two amendments were made on registration day, both before the first window pick existed. The first makes the grader enforce the window&rsquo;s end date, which can only shrink the sample to the registered window. The second adds one <i>reported-only</i> analysis (do the judges do better or worse on picks where the raters disagree?) that cannot change any verdict. Both are dated in the registration file.</p>
+
+  <h3>What this experiment is not</h3>
+  <p>It is not a recommendation to trade anything, and no judge&rsquo;s output is shown on the site, attached to a pick, or used to choose one. It is not a review of any company that sells AI tools. And whichever way it lands, it describes these two model versions, on these stocks, over this window. It will not be evidence about AI in general.</p>
+
+
+  <!-- ===== FREE VERDICT-EMAIL LIST ===== -->
+  <div id="verdict-email" style="border:1px solid #1f6f6b55;background:var(--panel,#121826);border-radius:14px;padding:20px 22px;margin:34px 0 8px;scroll-margin-top:70px">
+    <h2 style="margin:0 0 6px;font-size:20px">Get every verdict by email</h2>
+    <p style="margin:0 0 12px;color:var(--dim,#8b97a7);font-size:14.5px">A verdict lands every few weeks. We'll email you each one, free, the day it publishes — and nothing else. No signals, no picks, no offers. Verdicts stay free and public for everyone either way; this just means you don't have to remember to check back.</p>
+    <form onsubmit="return tplVerdicts(event)" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails"
+        style="flex:1;min-width:200px;background:var(--panel2,#0f1521);border:1px solid var(--line,#1f2937);color:var(--tx,#e6edf3);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px">
+      <button type="submit" style="background:var(--a,#1f6f6b);border:0;color:#eafffb;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer">Email me each verdict</button>
+    </form>
+    <p class="vl-msg" role="status" aria-live="polite" style="margin:8px 0 0;font-size:13px"></p>
+    <p style="margin:8px 0 0;font-size:11.5px;color:var(--dim,#8b97a7)">One confirmation email first — you're not on the list until you click it. <a href="privacy.html" style="color:var(--dim,#8b97a7)">Privacy</a></p>
+  </div>
+
+<script>
+async function tplVerdicts(ev){
+  ev.preventDefault();
+  var f=ev.target, i=f.querySelector('input[name="email"]'), b=f.querySelector('button'),
+      m=f.parentElement.querySelector('.vl-msg');
+  var email=(i.value||'').trim();
+  var say=function(t,c){ if(m){ m.textContent=t; m.style.color=(c==='err')?'#f0506e':'#2ec27e'; } };
+  if(!email){ say('Enter an email first.','err'); return false; }
+  b.disabled=true; var lbl=b.textContent; b.textContent='Adding…'; say('');
+  try{
+    var ac=new AbortController(); var tmo=setTimeout(function(){ac.abort();},15000);
+      var r=await fetch('https://qkdgijiotxxndrfagexr.supabase.co/rest/v1/rpc/is_join_waitlist',{
+      method:'POST',
+      headers:{'content-type':'application/json','apikey':'sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3'},
+      body:JSON.stringify({p_email:email,p_tier:'any',p_source:'verdicts-experiment-12'}),signal:ac.signal});
+    clearTimeout(tmo);
+    var d=await r.json();
+    if(d && d.ok===false){
+      say(d.error==='invalid_email' ? "That doesn't look like an email address."
+        : d.error==='rate_limited' ? "We're getting an unusual number of signups right now — try again in a little while."
+        : "Couldn't add you just now — try again in a moment.",'err');
+    } else if(d && d.already){
+      say(d.confirmed ? "You're already confirmed on this list."
+                      : "You're already on this list — check for the confirmation email.",'ok');
+      f.style.display='none';
+    } else {
+      say("Almost — check your inbox and click the confirmation link. You're not on the list until you do.",'ok');
+      f.style.display='none';
+    }
+  }catch(e){ say("Couldn't add you just now — try again in a moment.",'err'); }
+  b.disabled=false; b.textContent=lbl;
+  return false;
+}
+</script>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida).
+    <br><a href="experiment-09.html">← Experiment 09: volatility contraction (NR7)</a>
+  
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
+  </p>
+</div>
+</body>
+</html>
