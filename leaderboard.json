@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-25",
+  "generated_at": "2026-10-26",
   "log": {
-    "picks": 1096,
+    "picks": 1107,
     "graded": 998
   },
   "baseline": {
@@ -38,7 +38,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 12.6,
+      "weeks_live": 12.7,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -87,7 +87,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 17.9,
+      "weeks_live": 18.0,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -154,7 +154,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 17.9,
+      "weeks_live": 18.0,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -203,7 +203,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 17.9,
+      "weeks_live": 18.0,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -255,7 +255,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 17.9,
+      "weeks_live": 18.0,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -304,7 +304,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "mixed",
-      "weeks_live": 17.9,
+      "weeks_live": 18.0,
       "caveats": [],
       "rule_spec": {
         "kind": "filter",
@@ -353,7 +353,7 @@
       "significant": false,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 14.9,
+      "weeks_live": 15.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -387,7 +387,7 @@
       "n_post": 876,
       "win_post": 49,
       "avg_post": -3.9,
-      "median_post": -0.6,
+      "median_post": -0.8,
       "baseline_avg_post": -1.6,
       "delta_post": -2.3,
       "ci95": [
@@ -397,7 +397,7 @@
       "significant": true,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 17.7,
+      "weeks_live": 17.9,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -441,7 +441,7 @@
       "significant": true,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 14.9,
+      "weeks_live": 15.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -475,17 +475,17 @@
       "n_post": 563,
       "win_post": 46,
       "avg_post": -5.2,
-      "median_post": -3.2,
+      "median_post": -3.0,
       "baseline_avg_post": -2.2,
       "delta_post": -3.0,
       "ci95": [
         -4.8,
-        -1.0
+        -1.1
       ],
       "significant": true,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 14.9,
+      "weeks_live": 15.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -497,8 +497,8 @@
         "predicates": []
       },
       "cluster_ci95": [
-        -4.8,
-        -1.1
+        -4.9,
+        -1.2
       ],
       "cluster_significant": true,
       "n_tickers": 394,
@@ -523,13 +523,13 @@
       "baseline_avg_post": -2.2,
       "delta_post": -3.6,
       "ci95": [
-        -5.3,
+        -5.4,
         -1.7
       ],
       "significant": true,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 14.9,
+      "weeks_live": 15.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy"
       ],
@@ -541,7 +541,7 @@
         "predicates": []
       },
       "cluster_ci95": [
-        -5.4,
+        -5.5,
         -1.8
       ],
       "cluster_significant": true,
@@ -573,7 +573,7 @@
       "significant": true,
       "state": "ranked",
       "stability": "stable",
-      "weeks_live": 14.9,
+      "weeks_live": 15.0,
       "caveats": [
         "slippage: +T% fills assumed exact; on thin floats limits gap through, so live results run worse than this proxy",
         "stop ordering unknown from MFE/MAE: when both the +T target and -S stop are reached, the stop is assumed to trigger first (conservative)"
