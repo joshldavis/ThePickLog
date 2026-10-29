@@ -1,32 +1,37 @@
-# ThePickLog — Morning Brief · 2026-10-28
+# ThePickLog — Morning Brief · 2026-10-29
 
 _Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **NUWE** (tier A, score 99.7) — very high relative volume (27×); large up-gap (+54%). Watch level (reference only, +20%): $5.736.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **EFOI** (tier A, score 97.0) — elevated relative volume (9.3×); thin float (2.7M); large up-gap (+20%). Watch level (reference only, +20%): $5.4066.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **POM** (tier A, score 95.9) — elevated relative volume (8.8×); thin float (1.1M); large up-gap (+31%). Watch level (reference only, +20%): $1.776.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **MCRP** (tier A, score 93.0) — elevated relative volume (9.6×); large up-gap (+24%). Watch level (reference only, +20%): $0.6084.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **TDIC** (tier A, score 89.2) — very high relative volume (12×); thin float (0.7M). Watch level (reference only, +20%): $2.004.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CHSN** (tier A, score 100.0) — very high relative volume (58×); thin float (2.1M); large up-gap (+20%). Watch level (reference only, +20%): $1.56.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **POM** (tier A, score 100.0) — very high relative volume (21×); thin float (1.1M); large up-gap (+31%). Watch level (reference only, +20%): $2.184.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **ONCO** (tier A, score 99.4) — very high relative volume (12×); large up-gap (+29%). Watch level (reference only, +20%): $0.7344.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **PDC** (tier A, score 97.9) — elevated relative volume (9.8×); large up-gap (+44%). Watch level (reference only, +20%): $3.528.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **PODC** (tier A, score 97.1) — very high relative volume (31×); large up-gap (+28%). Watch level (reference only, +20%): $2.7602.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **NUWE**: already extended pre-market — chasing buys the top.
+- **CHSN**: already extended pre-market — chasing buys the top.
 - **POM**: already extended pre-market — chasing buys the top.
-- **MCRP**: already extended pre-market — chasing buys the top.
-- **MCRP**: sub-$1 — heightened manipulation / delisting risk.
-- **TDIC**: ultra-thin float — spreads and slippage can be severe.
-- **IPST**: ultra-thin float — spreads and slippage can be severe.
-- **BRAI**: already extended pre-market — chasing buys the top.
-- **MBRX**: already extended pre-market — chasing buys the top.
-- **MBRX**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **ONCO**: already extended pre-market — chasing buys the top.
+- **ONCO**: sub-$1 — heightened manipulation / delisting risk.
+- **PDC**: already extended pre-market — chasing buys the top.
+- **PODC**: already extended pre-market — chasing buys the top.
+- **GCTK**: ultra-thin float — spreads and slippage can be severe.
+- **KPTI**: high short interest (32% of float) — squeeze-prone and violent both ways.
+- **KPTI**: already extended pre-market — chasing buys the top.
+- **KPTI**: sub-$1 — heightened manipulation / delisting risk.
+- **BOOM**: already extended pre-market — chasing buys the top.
+- **ELPW**: ultra-thin float — spreads and slippage can be severe.
+- **GIFT**: already extended pre-market — chasing buys the top.
+- **GIFT**: sub-$1 — heightened manipulation / delisting risk.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **NCT**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **MASK**: sub-$1 — heightened manipulation / delisting risk.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **NCT**: ultra-thin float — spreads and slippage can be severe.
 - **BJDX**: sub-$1 — heightened manipulation / delisting risk.
 - **SUGP**: high short interest (30% of float) — squeeze-prone and violent both ways.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
