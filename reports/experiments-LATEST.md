@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-11-01
+# ThePickLog — experiments under test · 2026-11-02
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
@@ -11,7 +11,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **+0.023%**, median **+0.117%**, 10% trimmed **+0.035%**, clustered 95% CI [-0.307, +0.313] over 30 names
 - day-matched excess, 5 sessions: mean **+0.129%**, median **-0.184%**
 - win rate 50% *(reported only — not a pass criterion)*
-- **read: accruing — 58/30 graded signals over 30/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=58 over 30 names — computed once and never recomputed)***
 
 > Registered prior: The most widely taught indicator signal in retail trading — on every platform, in every beginner course. Published, universally known, and therefore the least likely thing in the world to still contain an edge. Registered expectation: the day-matched excess is indistinguishable from zero. Estimated probability it clears the bar: ~1 in 6. Being widely believed is not evidence, which is the point of testing it.
 
@@ -22,7 +22,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **-0.086%**, median **+0.034%**, 10% trimmed **+0.010%**, clustered 95% CI [-0.569, +0.372] over 24 names
 - day-matched excess, 5 sessions: mean **-0.085%**, median **+0.689%**
 - win rate 50% *(reported only — not a pass criterion)*
-- **read: accruing — 26/30 graded signals over 24/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 26/30 graded signals over 24/20 distinct names. The verdict locks at the first run where it is.**
 
 > Registered prior: Currently the most heavily marketed single indicator in retail video content, almost always at exactly these default settings (10, 3). It is a mechanically sane ATR trailing band, which is why it demos well — and why, on forty of the most liquid names on earth, it should already be arbitraged flat. Deliberately tested with NO trend filter because the claim as sold has none. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
@@ -33,7 +33,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **+0.042%**, median **+0.173%**, 10% trimmed **+0.082%**, clustered 95% CI [-0.189, +0.277] over 31 names
 - day-matched excess, 5 sessions: mean **+0.695%**, median **+1.043%**
 - win rate 51% *(reported only — not a pass criterion)*
-- **read: accruing — 138/30 graded signals over 31/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=138 over 31 names — computed once and never recomputed)***
 
 > Registered prior: The most widely taught swing entry in existence — nearly every course teaches some form of buying the pullback to the 20-day in an uptrend. The mechanism (short-term reversion inside medium-term momentum) is at least coherent, which earns it a slightly better prior than a raw indicator flip: call it ~1 in 5. Registered expectation is still that the day-matched excess is indistinguishable from zero — textbook status is exactly what arbitrages an edge away.
 
@@ -44,7 +44,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **-0.250%**, median **-0.045%**, 10% trimmed **-0.224%**, clustered 95% CI [-0.549, +0.027] over 15 names
 - day-matched excess, 5 sessions: mean **-1.102%**, median **-1.012%**
 - win rate 31% *(reported only — not a pass criterion)*
-- **read: accruing — 39/30 graded signals over 15/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 39/30 graded signals over 15/20 distinct names. The verdict locks at the first run where it is.**
 
 > Registered prior: The same high-win-rate sales pitch as Experiment 02's RSI(2), through a different mechanism: the band adapts to volatility. Win-rate-flattering by construction — many small reverts punctuated by occasional large losses — which is precisely the shape the mean/median/clustered-CI reporting exists to expose. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
@@ -55,7 +55,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **-0.057%**, median **-0.011%**, 10% trimmed **-0.014%**, clustered 95% CI [-0.295, +0.153] over 33 names
 - day-matched excess, 5 sessions: mean **+0.396%**, median **+0.346%**
 - win rate 44% *(reported only — not a pass criterion)*
-- **read: accruing — 140/30 graded signals over 33/20 distinct names. **No verdict is computed before the single pre-declared verdict date of 2026-11-02**, and none is computed then unless both floors are met.**
+- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=140 over 33 names — computed once and never recomputed)***
 
 > Registered prior: That contraction precedes expansion (Crabel's NR7) is well documented; what is SOLD is the direction, and direction is the part with no documented edge. This is also the honest daily-bar version of an intraday claim: entry is the next open, not a break of the range, because our pre-open logging gate forbids acting on the open print. That deviation is disclosed wherever this experiment is published. Registered expectation: excess indistinguishable from zero; ~1 in 6.
 
