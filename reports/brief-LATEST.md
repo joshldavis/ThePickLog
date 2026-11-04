@@ -1,37 +1,32 @@
-# ThePickLog — Morning Brief · 2026-11-03
+# ThePickLog — Morning Brief · 2026-11-04
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **SEGG** (tier A, score 99.4) — very high relative volume (58×); large up-gap (+47%). Watch level (reference only, +20%): $2.345.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **BTOC** (tier A, score 97.5) — very high relative volume (40×); thin float (0.9M); large up-gap (+18%). Watch level (reference only, +20%): $3.144.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **LITB** (tier A, score 93.9) — elevated relative volume (8.7×); large up-gap (+24%). Watch level (reference only, +20%): $3.264.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **CLRO** (tier A, score 92.9) — elevated relative volume (8.0×); thin float (0.9M); large up-gap (+43%). Watch level (reference only, +20%): $5.844.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **GNTA** (tier A, score 89.9) — very high relative volume (20×); large up-gap (+33%). Watch level (reference only, +20%): $0.984.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CHSN** (tier A, score 100.0) — very high relative volume (31×); thin float (2.1M); large up-gap (+258%). Watch level (reference only, +20%): $4.2595.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **EHGO** (tier A, score 100.0) — very high relative volume (34×); thin float (0.3M); large up-gap (+36%). Watch level (reference only, +20%): $3.12.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **WFF** (tier A, score 100.0) — very high relative volume (10×); thin float (0.5M); large up-gap (+24%). Watch level (reference only, +20%): $1.656.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **NXXT** (tier A, score 94.1) — elevated relative volume (8.8×); thin float (0.8M); large up-gap (+18%). Watch level (reference only, +20%): $3.18.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **SRTS** (tier A, score 90.2) — very high relative volume (53×); large up-gap (+17%). Watch level (reference only, +20%): $3.876.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **SEGG**: already extended pre-market — chasing buys the top.
-- **BTOC**: ultra-thin float — spreads and slippage can be severe.
-- **LITB**: already extended pre-market — chasing buys the top.
-- **CLRO**: high short interest (28% of float) — squeeze-prone and violent both ways.
-- **CLRO**: already extended pre-market — chasing buys the top.
-- **CLRO**: ultra-thin float — spreads and slippage can be severe.
-- **GNTA**: already extended pre-market — chasing buys the top.
-- **GNTA**: sub-$1 — heightened manipulation / delisting risk.
-- **PMAX**: sub-$1 — heightened manipulation / delisting risk.
-- **ATYR**: already extended pre-market — chasing buys the top.
-- **WETO**: high short interest (35% of float) — squeeze-prone and violent both ways.
-- **WETO**: ultra-thin float — spreads and slippage can be severe.
-- **WETO**: sub-$1 — heightened manipulation / delisting risk.
-- **IFBD**: already extended pre-market — chasing buys the top.
+- **CHSN**: already extended pre-market — chasing buys the top.
+- **EHGO**: already extended pre-market — chasing buys the top.
+- **EHGO**: ultra-thin float — spreads and slippage can be severe.
+- **WFF**: already extended pre-market — chasing buys the top.
+- **WFF**: ultra-thin float — spreads and slippage can be severe.
+- **NXXT**: ultra-thin float — spreads and slippage can be severe.
+- **PSHG**: already extended pre-market — chasing buys the top.
+- **CABR**: already extended pre-market — chasing buys the top.
 - **JAGX**: ultra-thin float — spreads and slippage can be severe.
 - **JAGX**: sub-$1 — heightened manipulation / delisting risk.
-- **BJDX**: already extended pre-market — chasing buys the top.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
-- **PW**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **SUGP**: high short interest (30% of float) — squeeze-prone and violent both ways.
+- **SUGP**: ultra-thin float — spreads and slippage can be severe.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
+- **PW**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **1824** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 29%) vs **-11%** (rug 11%) for C/D.
