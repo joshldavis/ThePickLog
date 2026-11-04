@@ -113,3 +113,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 "
 2026-11-04T11:58:03+00:00,enter,,,error,,,,,"positions: HTTP 401: {""message"": ""unauthorized.""}
 "
+2026-11-04T20:31:56+00:00,arm,,,noop,,,,,nothing to arm
