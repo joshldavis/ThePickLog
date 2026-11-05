@@ -1,32 +1,34 @@
-# ThePickLog — Morning Brief · 2026-11-04
+# ThePickLog — Morning Brief · 2026-11-05
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **neutral**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **CHSN** (tier A, score 100.0) — very high relative volume (31×); thin float (2.1M); large up-gap (+258%). Watch level (reference only, +20%): $4.2595.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **EHGO** (tier A, score 100.0) — very high relative volume (34×); thin float (0.3M); large up-gap (+36%). Watch level (reference only, +20%): $3.12.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **WFF** (tier A, score 100.0) — very high relative volume (10×); thin float (0.5M); large up-gap (+24%). Watch level (reference only, +20%): $1.656.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **NXXT** (tier A, score 94.1) — elevated relative volume (8.8×); thin float (0.8M); large up-gap (+18%). Watch level (reference only, +20%): $3.18.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **SRTS** (tier A, score 90.2) — very high relative volume (53×); large up-gap (+17%). Watch level (reference only, +20%): $3.876.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CRIS** (tier A, score 100.0) — very high relative volume (44×); thin float (2.0M); large up-gap (+32%). Watch level (reference only, +20%): $1.1335.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **DKI** (tier A, score 100.0) — very high relative volume (34×); thin float (0.0M); large up-gap (+24%). Watch level (reference only, +20%): $2.2315.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **VRAX** (tier A, score 100.0) — very high relative volume (14×); thin float (0.5M); large up-gap (+24%). Watch level (reference only, +20%): $1.572.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **STEM** (tier A, score 95.8) — elevated relative volume (9.9×); large up-gap (+22%). Watch level (reference only, +20%): $3.48.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **PSHG** (tier A, score 85.2) — very high relative volume (10×). Watch level (reference only, +20%): $2.496.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **CHSN**: already extended pre-market — chasing buys the top.
-- **EHGO**: already extended pre-market — chasing buys the top.
-- **EHGO**: ultra-thin float — spreads and slippage can be severe.
-- **WFF**: already extended pre-market — chasing buys the top.
-- **WFF**: ultra-thin float — spreads and slippage can be severe.
-- **NXXT**: ultra-thin float — spreads and slippage can be severe.
-- **PSHG**: already extended pre-market — chasing buys the top.
-- **CABR**: already extended pre-market — chasing buys the top.
-- **JAGX**: ultra-thin float — spreads and slippage can be severe.
-- **JAGX**: sub-$1 — heightened manipulation / delisting risk.
-- **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **CRIS**: already extended pre-market — chasing buys the top.
+- **CRIS**: sub-$1 — heightened manipulation / delisting risk.
+- **DKI**: high short interest (68% of float) — squeeze-prone and violent both ways.
+- **DKI**: already extended pre-market — chasing buys the top.
+- **DKI**: ultra-thin float — spreads and slippage can be severe.
+- **VRAX**: already extended pre-market — chasing buys the top.
+- **VRAX**: ultra-thin float — spreads and slippage can be severe.
+- **STEM**: already extended pre-market — chasing buys the top.
+- **PMAX**: already extended pre-market — chasing buys the top.
+- **PMAX**: sub-$1 — heightened manipulation / delisting risk.
+- **AIMD**: sub-$1 — heightened manipulation / delisting risk.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **IOTR**: ultra-thin float — spreads and slippage can be severe.
+- **VMAR**: ultra-thin float — spreads and slippage can be severe.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: high short interest (30% of float) — squeeze-prone and violent both ways.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
-- **VMAR**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
 - Across **1845** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 29%) vs **-11%** (rug 11%) for C/D.
