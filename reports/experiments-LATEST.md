@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-11-04
+# ThePickLog — experiments under test · 2026-11-05
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
@@ -29,10 +29,10 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP07-SMAPULL — The moving-average pullback (buy the dip in an uptrend)
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **144** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **+0.036%**, median **+0.173%**, 10% trimmed **+0.090%**, clustered 95% CI [-0.192, +0.268] over 32 names
-- day-matched excess, 5 sessions: mean **+0.755%**, median **+1.142%**
-- win rate 51% *(reported only — not a pass criterion)*
+- graded signals: **146** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **+0.032%**, median **+0.164%**, 10% trimmed **+0.084%**, clustered 95% CI [-0.193, +0.263] over 32 names
+- day-matched excess, 5 sessions: mean **+0.731%**, median **+1.099%**
+- win rate 50% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=138 over 31 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: The most widely taught swing entry in existence — nearly every course teaches some form of buying the pullback to the 20-day in an uptrend. The mechanism (short-term reversion inside medium-term momentum) is at least coherent, which earns it a slightly better prior than a raw indicator flip: call it ~1 in 5. Registered expectation is still that the day-matched excess is indistinguishable from zero — textbook status is exactly what arbitrages an edge away.
@@ -51,9 +51,9 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP09-NR7 — Volatility contraction (NR7) in an uptrend
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **145** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.080%**, median **-0.013%**, 10% trimmed **-0.030%**, clustered 95% CI [-0.294, +0.115] over 33 names
-- day-matched excess, 5 sessions: mean **+0.313%**, median **+0.271%**
+- graded signals: **149** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.067%**, median **-0.013%**, 10% trimmed **-0.019%**, clustered 95% CI [-0.271, +0.125] over 33 names
+- day-matched excess, 5 sessions: mean **+0.368%**, median **+0.420%**
 - win rate 43% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=140 over 33 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
