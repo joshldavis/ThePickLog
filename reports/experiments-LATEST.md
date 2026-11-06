@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-11-05
+# ThePickLog — experiments under test · 2026-11-06
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
@@ -18,20 +18,20 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP06-SUPERTREND — The Supertrend flip
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **27** (need 30) over **25** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.072%**, median **+0.108%**, 10% trimmed **+0.021%**, clustered 95% CI [-0.538, +0.361] over 25 names
-- day-matched excess, 5 sessions: mean **-0.373%**, median **-0.368%**
-- win rate 48% *(reported only — not a pass criterion)*
-- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 27/30 graded signals over 25/20 distinct names. The verdict locks at the first run where it is.**
+- graded signals: **28** (need 30) over **25** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.024%**, median **+0.113%**, 10% trimmed **+0.073%**, clustered 95% CI [-0.489, +0.394] over 25 names
+- day-matched excess, 5 sessions: mean **-0.311%**, median **+0.490%**
+- win rate 50% *(reported only — not a pass criterion)*
+- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 28/30 graded signals over 25/20 distinct names. The verdict locks at the first run where it is.**
 
 > Registered prior: Currently the most heavily marketed single indicator in retail video content, almost always at exactly these default settings (10, 3). It is a mechanically sane ATR trailing band, which is why it demos well — and why, on forty of the most liquid names on earth, it should already be arbitraged flat. Deliberately tested with NO trend filter because the claim as sold has none. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
 ## EXP07-SMAPULL — The moving-average pullback (buy the dip in an uptrend)
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **146** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **+0.032%**, median **+0.164%**, 10% trimmed **+0.084%**, clustered 95% CI [-0.193, +0.263] over 32 names
-- day-matched excess, 5 sessions: mean **+0.731%**, median **+1.099%**
+- graded signals: **147** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **+0.026%**, median **+0.157%**, 10% trimmed **+0.076%**, clustered 95% CI [-0.199, +0.254] over 32 names
+- day-matched excess, 5 sessions: mean **+0.739%**, median **+1.128%**
 - win rate 50% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=138 over 31 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
@@ -51,9 +51,9 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP09-NR7 — Volatility contraction (NR7) in an uptrend
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **149** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.067%**, median **-0.013%**, 10% trimmed **-0.019%**, clustered 95% CI [-0.271, +0.125] over 33 names
-- day-matched excess, 5 sessions: mean **+0.368%**, median **+0.420%**
+- graded signals: **154** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.084%**, median **-0.027%**, 10% trimmed **-0.039%**, clustered 95% CI [-0.280, +0.100] over 33 names
+- day-matched excess, 5 sessions: mean **+0.400%**, median **+0.429%**
 - win rate 43% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=140 over 33 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
