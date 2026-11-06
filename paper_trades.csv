@@ -142,3 +142,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-06T20:04:17+00:00,arm,dbb16e55-60b5-4a27-b0d9-b9abc9353097,CCLD,tp_submitted,92,2.44,dd31b90e-2c7f-4845-892e-44a1d004b79a,pending_new,entry fill 2.22
 2026-11-06T20:04:17+00:00,arm,852cb94e-8dd3-4ea6-96a4-3cf57861859c,ENHA,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-06T20:04:17+00:00,arm,d4a200f6-e1fb-4505-b316-8f773f717a0c,KLRS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-06T23:49:16+00:00,manage,,,noop,,,,,nothing due
