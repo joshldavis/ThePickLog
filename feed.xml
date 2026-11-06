@@ -5,11 +5,19 @@
   <link>https://thepicklog.com/</link>
   <description>We test what's being sold to traders. Rules frozen before the fact, graded forward against a control, verdicts published either way — starting with our own strategy, which failed.</description>
   <language>en-us</language>
-  <lastBuildDate>Sun, 25 Oct 2026 18:00:00 GMT</lastBuildDate>
+  <lastBuildDate>Fri, 06 Nov 2026 20:00:00 GMT</lastBuildDate>
   <atom:link href="https://thepicklog.com/feed.xml" rel="self" type="application/rss+xml"/>
 
   <!-- New items go at the TOP. One item per published verdict, field note,
        correction, or experiment registration. Keep guids stable forever. -->
+
+  <item>
+    <title>Verdicts: MACD crossover, moving-average pullback and NR7 &#8212; no edge detected</title>
+    <link>https://thepicklog.com/experiments.html#verdicts-2026-11-02</link>
+    <guid isPermaLink="false">thepicklog-verdicts-2026-11-02</guid>
+    <pubDate>Fri, 06 Nov 2026 20:00:00 GMT</pubDate>
+    <description>Three of the six techniques read on 2026-11-02 met their sample floors and locked: Experiments 03 (MACD bullish crossover), 07 (moving-average pullback) and 09 (NR7 contraction). All three are INCONCLUSIVE &#8212; the excess over a day-matched control is indistinguishable from zero, and nothing survives the Benjamini&#8211;Hochberg correction across the eight-experiment family. That is what we registered in advance. Experiments 02, 06 and 08 had not yet met their floors; each locks automatically, once, at the first run where it does.</description>
+  </item>
 
   <item>
     <title>Experiment 12: can an AI judge forecast a drawdown better than four numbers?</title>
