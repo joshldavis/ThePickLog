@@ -1,31 +1,28 @@
-# ThePickLog — Morning Brief · 2026-11-05
+# ThePickLog — Morning Brief · 2026-11-06
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **CRIS** (tier A, score 100.0) — very high relative volume (44×); thin float (2.0M); large up-gap (+32%). Watch level (reference only, +20%): $1.1335.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **DKI** (tier A, score 100.0) — very high relative volume (34×); thin float (0.0M); large up-gap (+24%). Watch level (reference only, +20%): $2.2315.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **VRAX** (tier A, score 100.0) — very high relative volume (14×); thin float (0.5M); large up-gap (+24%). Watch level (reference only, +20%): $1.572.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **STEM** (tier A, score 95.8) — elevated relative volume (9.9×); large up-gap (+22%). Watch level (reference only, +20%): $3.48.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **PSHG** (tier A, score 85.2) — very high relative volume (10×). Watch level (reference only, +20%): $2.496.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **ZNB** (tier A, score 100.0) — very high relative volume (30×); thin float (0.6M); large up-gap (+70%). Watch level (reference only, +20%): $1.2719.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **HTCR** (tier A, score 100.0) — very high relative volume (11×); thin float (0.7M); large up-gap (+31%). Watch level (reference only, +20%): $2.04.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **INTZ** (tier A, score 89.1) — very high relative volume (12×); large up-gap (+20%). Watch level (reference only, +20%): $0.696.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **MASK** (tier A, score 86.2) — elevated relative volume (7.8×); thin float (0.1M); large up-gap (+15%). Watch level (reference only, +20%): $2.268.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **DTIL** (tier A, score 85.2) — elevated relative volume (9.9×); large up-gap (+21%). Watch level (reference only, +20%): $11.82.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **CRIS**: already extended pre-market — chasing buys the top.
-- **CRIS**: sub-$1 — heightened manipulation / delisting risk.
-- **DKI**: high short interest (68% of float) — squeeze-prone and violent both ways.
-- **DKI**: already extended pre-market — chasing buys the top.
-- **DKI**: ultra-thin float — spreads and slippage can be severe.
-- **VRAX**: already extended pre-market — chasing buys the top.
-- **VRAX**: ultra-thin float — spreads and slippage can be severe.
-- **STEM**: already extended pre-market — chasing buys the top.
-- **PMAX**: already extended pre-market — chasing buys the top.
-- **PMAX**: sub-$1 — heightened manipulation / delisting risk.
-- **AIMD**: sub-$1 — heightened manipulation / delisting risk.
-- **ATPC**: ultra-thin float — spreads and slippage can be severe.
+- **ZNB**: already extended pre-market — chasing buys the top.
+- **ZNB**: ultra-thin float — spreads and slippage can be severe.
+- **HTCR**: already extended pre-market — chasing buys the top.
+- **HTCR**: ultra-thin float — spreads and slippage can be severe.
+- **INTZ**: sub-$1 — heightened manipulation / delisting risk.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
+- **DTIL**: already extended pre-market — chasing buys the top.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
+- **ARQ**: already extended pre-market — chasing buys the top.
+- **CCLD**: already extended pre-market — chasing buys the top.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
 - **VMAR**: ultra-thin float — spreads and slippage can be severe.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: high short interest (30% of float) — squeeze-prone and violent both ways.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.

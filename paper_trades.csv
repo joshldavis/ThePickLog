@@ -122,3 +122,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-05T22:19:49+00:00,manage,,,noop,,,,,nothing due
 2026-11-05T22:24:14+00:00,manage,,,noop,,,,,nothing due
 2026-11-06T00:32:59+00:00,manage,,,noop,,,,,nothing due
+2026-11-06T11:58:24+00:00,enter,6554f571-faa3-443c-b071-3c715e00824f,ZNB,entry_submitted,188,,1c725f7a-eff2-428e-ab62-f8cdc3bb1501,pending_new,
+2026-11-06T11:58:24+00:00,enter,ce0f3ee8-ca67-442f-89c0-957891bee4fc,HTCR,entry_submitted,117,,1e423695-e3b9-408d-af09-dd099210d454,pending_new,
+2026-11-06T11:58:24+00:00,enter,ea97166f-a5e5-42b2-b001-8519a560795f,INTZ,entry_submitted,344,,92493d6d-724a-4039-9aed-771f304e0ced,pending_new,
+2026-11-06T11:58:24+00:00,enter,6e08e7bd-cbf5-4aea-8973-07bd15c347e1,DTIL,entry_submitted,20,,d401c51e-6ff2-4acc-9026-3106a90a718d,pending_new,
+2026-11-06T11:58:24+00:00,enter,86ae88e0-7f93-489d-9bcc-46f69a33725d,MASK,entry_submitted,108,,a0461550-c240-495c-a2a0-d5f54f3e1a44,pending_new,
+2026-11-06T11:58:24+00:00,enter,163f6e8c-6ca1-42a8-9a3b-3fb4bb8a015d,ARQ,entry_submitted,86,,922dda81-60cc-4194-bc8b-4fc752985475,pending_new,
+2026-11-06T11:58:24+00:00,enter,98a01722-183a-4a88-b6f9-a0f880837d53,FLYE,entry_submitted,101,,9e451617-ae60-4b17-9074-874eef95dfb1,pending_new,
+2026-11-06T11:58:24+00:00,enter,dbb16e55-60b5-4a27-b0d9-b9abc9353097,CCLD,entry_submitted,92,,3e4d96cf-397f-44e1-89a7-687f3b6a9466,pending_new,
+2026-11-06T11:58:24+00:00,enter,852cb94e-8dd3-4ea6-96a4-3cf57861859c,ENHA,entry_submitted,24,,fc2fc0b8-1911-499e-8dd6-7de4f36a1d4f,pending_new,
+2026-11-06T11:58:24+00:00,enter,d4a200f6-e1fb-4505-b316-8f773f717a0c,KLRS,entry_submitted,84,,1f83b821-2b40-43bd-948c-1ddd4c31dddd,pending_new,
