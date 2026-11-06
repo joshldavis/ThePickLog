@@ -210,6 +210,7 @@
     border-radius:999px;vertical-align:middle;margin-left:6px;font-family:inherit}
   .exp-pill.v-fail{background:#3a1c22;color:#ffb3c0;border:1px solid #5a2a33}
   .exp-pill.v-run{background:#2a1d10;color:var(--amber);border:1px solid #5a3a22}
+  .exp-pill.v-inc{background:#10202e;color:var(--blue);border:1px solid #24405a}
   .exp-pill.v-pass{background:#12331f;color:var(--green);border:1px solid #23543a}
   .exp-meta{margin-top:11px;font-size:11.5px;color:var(--muted);font-family:var(--mono);opacity:.8}
   /* waitlist capture on the coming-soon tiers */
@@ -580,7 +581,7 @@
         <h2 style="margin:0;font-size:19px">The experiments</h2>
         <a href="experiments.html" style="margin-left:auto;font-size:13.5px;color:var(--blue);text-decoration:none">All experiments &amp; how they work &rarr;</a>
       </div>
-      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch"><b>One finished. Nine running in public right now.</b> Each is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control it has to beat.</p>
+      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch"><b>Four decided, six running in public right now.</b> Each is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control it has to beat.</p>
       <div class="grid exp-cards">
         <a class="panel exp-card" href="experiment-01.html">
           <div class="exp-no">EXPERIMENT 01 <span class="exp-pill v-fail">FAILED</span></div>
@@ -592,13 +593,13 @@
           <div class="exp-no">EXPERIMENT 02 <span class="exp-pill v-run">RUNNING</span></div>
           <h3>The 2-period RSI "high win rate" trade</h3>
           <p>The most published retail setup of the last twenty years, always sold on its win rate. We're testing whether a high win rate survives contact with expectancy.</p>
-          <div class="exp-meta">registered 2026-07-29 &middot; <b>verdict on/after 2 Nov 2026</b></div>
+          <div class="exp-meta">registered 2026-07-29 &middot; <b>verdict date passed; locks when the sample floor is met</b></div>
         </a>
         <a class="panel exp-card" href="experiment-03.html">
-          <div class="exp-no">EXPERIMENT 03 <span class="exp-pill v-run">RUNNING</span></div>
+          <div class="exp-no">EXPERIMENT 03 <span class="exp-pill v-inc">INCONCLUSIVE</span></div>
           <h3>The MACD bullish crossover</h3>
-          <p>The most widely taught indicator signal in retail trading — which makes it the least likely to still contain an edge, and exactly the claim nobody bothers to check.</p>
-          <div class="exp-meta">registered 2026-07-31 &middot; <b>verdict due 2 Nov 2026</b></div>
+          <p>The most widely taught indicator signal in retail trading. Read on its verdict date: no edge detected &mdash; as were the moving-average pullback (07) and NR7 (09).</p>
+          <div class="exp-meta">verdict 2026-11-02 &middot; n=58 &middot; <b>excess +0.02%, CI includes zero</b></div>
         </a>
         <a class="panel exp-card" href="experiment-04.html">
           <div class="exp-no">EXPERIMENT 04 <span class="exp-pill v-run">RUNNING</span></div>

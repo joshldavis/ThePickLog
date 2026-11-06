@@ -1,5 +1,19 @@
 # ThePickLog — Audit Log
 
+## 2026-11-06 — Change: 2026-11-02 verdicts published (EXP03, EXP07, EXP09 — INCONCLUSIVE)
+
+The single pre-declared verdict read for the EXP02–09 family ran on 2026-11-02. Three experiments met both floors and locked; this change publishes them. **Nothing was recomputed.**
+
+- **Source of every number:** the locked rows in `experiments/HARNESS-verdicts.csv` and `experiments/FAMILY-fdr.csv` as committed in `fa59375` (2026-11-02). No signal or outcome file was opened to write the pages; the values were copied by script from those two files.
+- **Locked results** (same-day excess over the day-matched control, net of 0.1% cost; company-clustered 95% CI; BH across m = 8, unlocked experiments counted as p = 1):
+  - EXP03-MACD — n = 58 over 30 names; mean +0.023%, median +0.117%; CI [−0.307, +0.313]; p = 0.887, BH-adjusted 1.0.
+  - EXP07-SMAPULL — n = 138 over 31 names; mean +0.042%, median +0.173%; CI [−0.189, +0.277]; p = 0.733, BH-adjusted 1.0.
+  - EXP09-NR7 — n = 140 over 33 names; mean −0.057%, median −0.011%; CI [−0.295, +0.153]; p = 0.651, BH-adjusted 1.0.
+- **Verdict word:** harness "NO EDGE DETECTED" (CI includes zero) maps to **INCONCLUSIVE** under the five-outcome legend on `experiments.html`. Not described as a failure anywhere.
+- **Not locked:** EXP02, EXP06 and EXP08 had not met both floors (≥ 30 graded, ≥ 20 names) on 2026-11-02. Their pages now say the date has passed and the verdict locks automatically, once, at the first run where the floors are met. No running number was added to any page for them.
+- **Changed:** `experiment-03/07/09.html` (verdict box replaces the status box; og/twitter descriptions), `experiment-02/06/08.html` (status wording), `experiments.html` (pills, meta lines, verdict-calendar row), `index.html` (headline count, Exp 03 card, Exp 02 meta), `guide.html` (one sentence: the BH read happened), share images `og/experiment-03/07/09.png`, one `feed.xml` item, `sitemap.xml` lastmod.
+- **Knock-on:** the counsel brief should now say verdicts for 03/07/09 are published.
+
 ## 2026-10-31 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 *Snapshot: live build `4221356` ("data: scan 2026-10-31"). Both served CSVs match `origin/main@4221356` byte for byte (SHA-256 `ab9ab6f3…` picks, `f8d6cabd…` outcomes). Latest cohort is 10-30.*
