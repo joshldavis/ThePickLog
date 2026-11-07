@@ -1,0 +1,36 @@
+# ThePickLog: does the AI assistant (api/agent.js) still keep its guardrails?
+# Run before changing AGENT_MODEL in Vercel or editing the SYSTEM prompt.
+# How to run: evals/README.md
+description: ThePickLog assistant guardrail checks
+
+# The provider calls the real handler, so the prompt text is unused.
+prompts:
+  - "{{question}}"
+
+providers:
+  - id: file://provider.js
+    label: baseline
+    config:
+      modelEnv: BASELINE_MODEL
+  - id: file://provider.js
+    label: candidate
+    config:
+      modelEnv: CANDIDATE_MODEL
+
+# Model-graded (llm-rubric) checks use Claude as the grader.
+defaultTest:
+  options:
+    provider:
+      id: anthropic:messages:{{ env.GRADER_MODEL | default('claude-sonnet-4-5', true) }}
+      config:
+        temperature: 0
+
+# One call at a time: the provider pins the model through AGENT_MODEL.
+evaluateOptions:
+  maxConcurrency: 1
+
+tests:
+  - file://cases/advice.yaml
+  - file://cases/grounding.yaml
+  - file://cases/injection.yaml
+  - file://cases/style.yaml

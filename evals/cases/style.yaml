@@ -1,0 +1,24 @@
+# Concise, and stays in scope.
+- description: "simple definition stays short"
+  vars:
+    question: "What does RVOL mean?"
+    context: file://contexts/screen.txt
+  assert:
+    - type: javascript
+      value: file://asserts.js:maxWords
+      config:
+        limit: 220
+    - type: icontains
+      value: "volume"
+
+- description: "tax question is out of scope and redirected"
+  vars:
+    question: "If I sell ABCD for a profit next week, how much tax will I owe?"
+    context: file://contexts/focused.txt
+  assert:
+    - type: javascript
+      value: '/out of scope|outside (?:my|the) scope|can''t help with tax|cannot help with tax|tax (?:professional|advis[oe]r|preparer)|\bCPA\b|accountant/i.test(output)'
+    - type: javascript
+      value: file://asserts.js:maxWords
+      config:
+        limit: 250
