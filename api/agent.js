@@ -34,6 +34,78 @@ const MAX_TURNS = 24;          // cap conversation length
 const MAX_CHARS = 6000;        // per-message cap
 const MAX_CONTEXT = 14000;     // grounding-block cap
 const MAX_OUTPUT = 900;        // max tokens out (keeps cost + latency bounded)
+const MAX_TOTAL_CHARS = 60000; // budget across all kept messages; oldest turns
+                               // are dropped first (a real 24-turn chat with
+                               // 900-token replies stays well under this)
+const MAX_BODY_BYTES = 512 * 1024; // reject bigger request bodies before any
+                                   // model call (the page sends a few KB)
+
+/* ---------------------------------------------------------------------
+   ABUSE LIMITS (best effort, no new infrastructure)
+   This endpoint spends the site's model key, so it only answers the
+   site's own pages and caps how often one address can call it.
+   • Same-origin: the request's Origin (or Referer, if Origin is absent)
+     must name the same host the request was sent to. Browsers set Origin
+     themselves on POST, so the page on thepicklog.com — or on any Vercel
+     preview URL — passes, and other sites' pages can't spend the key.
+     A script outside a browser CAN forge these headers; this stops
+     casual and drive-by use, not a determined caller.
+   • Rate limit: RATE_MAX requests per RATE_WINDOW_MS per client IP,
+     kept in memory, so it is per warm instance and resets on a cold
+     start. A hard spend cap belongs in the Vercel Firewall (rate-limit
+     rule on /api/agent) and in the key's spend limit in the Anthropic
+     console.
+   --------------------------------------------------------------------- */
+const RATE_MAX = 20;
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_HITS = new Map();   // ip -> [timestamps]
+
+const header = (req, name) => {
+  const v = req && req.headers ? req.headers[name] : undefined;
+  return Array.isArray(v) ? v[0] : v == null ? "" : String(v);
+};
+
+function hostOf(url) {
+  try { return new URL(url).host.toLowerCase(); } catch { return ""; }
+}
+
+function sameOrigin(req) {
+  const host = (header(req, "host") || header(req, "x-forwarded-host")).split(",")[0].trim().toLowerCase();
+  if (!host) return false;
+  const origin = header(req, "origin");
+  const from = origin && origin !== "null" ? hostOf(origin) : hostOf(header(req, "referer"));
+  return from !== "" && from === host;
+}
+
+function clientIp(req) {
+  const fwd = header(req, "x-forwarded-for").split(",")[0].trim();
+  return fwd || header(req, "x-real-ip").trim() ||
+    (req && req.socket && req.socket.remoteAddress) || "unknown";
+}
+
+// Returns seconds to wait if this IP is over the limit, else 0 (and counts the hit).
+function rateLimited(ip, now = Date.now()) {
+  if (RATE_HITS.size > 5000) {   // keep memory bounded on a long-lived instance
+    for (const [k, ts] of RATE_HITS) if (!ts.length || now - ts[ts.length - 1] >= RATE_WINDOW_MS) RATE_HITS.delete(k);
+  }
+  const hits = (RATE_HITS.get(ip) || []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (hits.length >= RATE_MAX) {
+    RATE_HITS.set(ip, hits);
+    return Math.max(1, Math.ceil((hits[0] + RATE_WINDOW_MS - now) / 1000));
+  }
+  hits.push(now);
+  RATE_HITS.set(ip, hits);
+  return 0;
+}
+
+function bodyBytes(req) {
+  const len = Number(header(req, "content-length"));
+  if (Number.isFinite(len) && len > 0) return len;
+  const b = req ? req.body : undefined;
+  if (b == null) return 0;
+  if (typeof b === "string") return Buffer.byteLength(b);
+  try { return Buffer.byteLength(JSON.stringify(b)); } catch { return Infinity; }
+}
 
 const SYSTEM = `You are the ThePickLog assistant — a calm, plain-spoken guide built into a low-float pre-market stock SCREENER. ThePickLog ranks low-float names each morning on objective published criteria (float, relative volume, gap, price) and grades every pick publicly five days later. It is a research/education tool, not a brokerage and not an advisor.
 
@@ -49,10 +121,35 @@ HARD RULES
 
 const clampStr = (s, n) => String(s == null ? "" : s).slice(0, n);
 
+// The route Vercel serves: abuse limits first, then the assistant itself.
 export default async function handler(req, res) {
-  if (req.method !== "POST")
+  if (req.method !== "POST") {
+    if (typeof res.setHeader === "function") res.setHeader("Allow", "POST");
     return res.status(405).json({ error: "POST only" });
+  }
 
+  if (!sameOrigin(req))
+    return res.status(403).json({ error: "The assistant only answers requests from ThePickLog's own pages." });
+
+  const wait = rateLimited(clientIp(req));
+  if (wait) {
+    if (typeof res.setHeader === "function") res.setHeader("Retry-After", String(wait));
+    const mins = Math.ceil(wait / 60);
+    return res.status(429).json({
+      error: `You've asked a lot of questions in a short time. Please wait about ${mins} minute${mins === 1 ? "" : "s"} and try again.`,
+    });
+  }
+
+  if (bodyBytes(req) > MAX_BODY_BYTES)
+    return res.status(413).json({ error: "That conversation is too long to send. Reload the page to start a fresh chat." });
+
+  return runAgent(req, res);
+}
+
+// The assistant without the HTTP abuse limits. Vercel only routes the
+// default export, so this is reachable only by code that imports the
+// module (the offline model checks in evals/).
+export async function runAgent(req, res) {
   const KEY = process.env.ANTHROPIC_API_KEY;
   if (!KEY)
     return res.status(500).json({
@@ -72,7 +169,12 @@ export default async function handler(req, res) {
     .slice(-MAX_TURNS)
     .map((m) => ({ role: m.role, content: clampStr(m.content, MAX_CHARS) }));
 
-  if (!messages.length || messages[messages.length - 1].role !== "user")
+  // total budget: drop the oldest turns until the kept history fits
+  let total = messages.reduce((n, m) => n + m.content.length, 0);
+  while (messages.length > 1 && total > MAX_TOTAL_CHARS) total -= messages.shift().content.length;
+
+  const last = messages[messages.length - 1];
+  if (!last || last.role !== "user" || !last.content.trim())
     return res.status(400).json({ error: "Need at least one trailing user message." });
 
   // Inject grounding data as a system block — the client cannot edit the
