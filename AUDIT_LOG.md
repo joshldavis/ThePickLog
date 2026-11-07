@@ -1,5 +1,80 @@
 # ThePickLog — Audit Log
 
+## 2026-11-07 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+*Snapshot: live build `37de3ef` ("data: scan 2026-11-07"; build stamp in the served HTML). Both served CSVs match `origin/main@37de3ef` byte for byte (SHA-256 `50a79619…` picks, `c4507621…` outcomes). Latest cohort is 11-06.*
+
+Every Track-record number, chip, tier row, CI and exclusion note re-derives from the CSVs, including this week's jump in scale-mismatch exclusions (22 → 33). The one issue is carried from last week (#22), still open and unfixed: graded rows whose 5-day values don't recompute from their own `paths.csv` bars. This week's stricter re-run puts the count at **9 rows, not 5**. Headline figures are unaffected.
+
+- **Primary trigger health.** One `workflow_dispatch` run every day at 11:56 UTC from 10-27 through 11-07, all successful. No weekday missed. No open "Primary scan trigger did not fire" or "token expires soon" issue. The only open issue is #22, last week's audit.
+- **Data served.**
+  - `/picks.csv` 200, 364,190 B, 2,057 rows. `/outcomes.csv` 200, 251,931 B, 1,921 rows.
+  - All 24 sitemap pages, the three validity docs, `PRINCIPLES.md`, `skipped_sessions.csv` and `scale_preflight.csv` return 200.
+  - All 66 same-origin link targets resolve. The only 404s are JS-concatenation artifacts (`r/'+…`, `u/'+…`, `'+vurl+'`), not links. A sample receipt `/r/p-…` returns 200.
+- **Real data shown.** `getTrackRecord().real === true`. "1870 picks across 91 trading days" comes from the real log (92 distinct dates minus the 06-19 VOID holiday). The only "sample" in the view is prose ("the real sample is closer to…"), not a fallback badge.
+- **No silent gaps.**
+  - 99 distinct `trading_date`s, 06-09 → 11-06. This week (11-02 → 11-06) is complete, with 19–20 picks per cohort.
+  - Missing sessions are only the closed history: 08-27 → 09-03, 09-14 and 10-19. All 8 are in `skipped_sessions.csv` and named in the Track-record sentence.
+  - 06-19 is still the only holiday cohort (VOID). No new one.
+  - Publish times: 10-26 → 10-30 at 07:56 ET; 11-02 → 11-06 at 06:56 ET. The one-hour shift is the 11-01 DST change, since the cron is fixed at 11:56 UTC. All inside the 06:00–09:20 window.
+- **Claims == data.**
+  - Logged **1,870** (2,057 − 128 late − 26 frozen − 33 scale; holiday rows stay in as VOID).
+  - Graded **1,719**. Win rate **33%** (33.22: 571 W / 1,148 M). Median **−2.7%** (−2.72). Mean **−1.9%** (−1.879) †. Avg worst dip **−18.6%** (−18.60). 5-day swing **−8.1%** (−8.08, n 1,718).
+  - † "−2.5% without JAGX 2026-09-22 (+1115.7%)" reproduces (−2.53).
+  - Tier table (n / tickers / mean / median / clustered CI). All match the page, with CIs reproduced exactly under the double-emulated LCG:
+    - A 638 / 413 / −1.95 / −3.04 / [−3.43, −0.70]
+    - B 122 / 70 / −4.36 / −5.36 / [−6.37, −2.24]
+    - C 458 / 21 / −0.55† (−3.0 without JAGX; computed −2.99) / −2.50 / [−3.51, +4.34]
+    - D 501 / 16 / −2.40 / −2.42 / [−2.89, −1.90]
+  - Win rate by tier (computed): A 38.9 / B 27.0 / C 34.5 / D 26.3%.
+  - No "best pick" figure is published, which is correct.
+- **Exclusions reproduce from scratch.** All three sets match `quote_integrity.py` exactly.
+  - Late: **128 across 7 cohorts**, unchanged.
+  - Frozen-quote: **26** = rule A 12 (BNZI) + rule B 14 (HKIT 7, MASK 2, PHGE 2, ATPC/GLMD/HWH 1 each). Unchanged and equal to `python quote_integrity.py report`.
+  - Scale-mismatch: **33, up from 22.**
+    - The 11 new rows are BJDX ×5 and MASK ×5 (10-23, 10-26 → 10-29) and ONCO ×1 (10-29, v0.3).
+    - Each screened about 4× (BJDX, MASK) or about 10× (ONCO) below its `entry_open`. That is the reverse-split stale-scale pattern, e.g. BJDX screened at 0.585 and opened at 2.364.
+    - The rows became checkable as their cohorts graded this week. The on-site note lists all 14 tickers with the right counts.
+- **Honest grading.**
+  - All **1,885** rows carrying data reproduce (close/open − 1) − 2% within 0.01pp. `win` agrees with the sign on all of them.
+  - 0 duplicate `pick_id`s in either file, 0 orphans, 0 non-finite 5-day values.
+  - All 36 ungradeable rows carry a note: 14 Juneteenth VOID, 12 no entry bar, 6 HKIT unpriceable, 4 "only n of 6 sessions".
+  - `fix_window5d_2026_10_25.py --find` reports exactly the 2 known windows (HKIT and IPW 2026-09-16). No new misalignment, so the d6e7fbf guard holds.
+  - **⚠️ Paths spot-check (carried, #22).** 1,820 graded rows have 6 bars; 1,811 recompute exactly at 2dp. The 65 June rows predate `paths.csv`. **9 do not recompute**, all noted "5d values corrected 2026-10-07":
+    - The 5 already listed in #22: CUPR 09-22 MFE, plus QNME 09-23, ONCO 09-24, IFBD 09-25 and EZGO 09-25 MAE.
+      - QNME computes to −35.404 from the bars, so stored −35.39 is off by 0.01. That is the smallest of the five.
+    - **4 GCDT rows the 10-31 run missed:** 09-24 (both v0.2 and v0.3 rows), 09-25 and 09-28.
+      - Their stored session-5 bar (2026-10-01) has `close = nan`, yet `outcomes.csv` carries a corrected 5-day net (−12.70 / −34.54 / −37.96).
+      - A stranger cannot rebuild those 5-day nets from `paths.csv` at all.
+      - Their MFE/MAE do recompute.
+    - VRME 09-22 is consistent: it has a NaN bar and a blank 5-day value with an explicit note.
+
+    **Fix (updates #22):** when the 10-07 correction set is reconciled, also re-fetch the final 2026-10-01 bar for the GCDT windows and rewrite those `paths.csv` rows. Apply it through a `corrections/` CSV and a ledger seal, as for window5d-2026-10-25. The grader self-test/CI check should fail on any graded row whose stored bars hold a non-finite value, as well as on any value mismatch.
+- **Chips reconcile.** Graded 1,719 + Pending 117 + Void 34 (14 holiday + 20 ungradeable) = All 1,870 ✓. Wins 571 + Misses 1,148 = Graded ✓.
+- **Disclaimers.** Educational / not investment advice / not a registered investment adviser / not a broker-dealer: present on index, method and disclaimer.
+- **Validity backing.**
+  - (a) Method §9 wording is unchanged from 10-23. Both of its claims hold:
+    - Mean MAE A −24.01 / B −22.03 / C −15.77 / D −13.46: monotone, deepest at A.
+    - Mean MFE A 39.88 / B 39.11 ≫ C 20.21 / D 14.86, so min(A, B) > max(C, D).
+    - "Tier A still has the larger median run" ✓ (14.44 vs 10.89).
+    - All six tier CI pairs overlap, so no ordering is established, as stated. Tiers are framed as a heat scale. Nothing implies higher tier = better.
+    - *Observation, not a FAIL:* §9 still says the JAGX pick "lifted tier B's *average* run above tier A's". Since at least 10-31 that is no longer true: A's mean MFE is back above B's. The sentence is framed as history ("From 2026-10-03…"), so nothing currently claimed is false, but a reader could take it as the present state. Consider "…lifted tier B's average run above tier A's for several weeks…".
+  - (b) The "Unvalidated" label is present (13× in the index DOM, plus method). Gate-1 is not rendered here.
+  - (c) The Messick Framework, Domain-Coverage Spec and Structural Justification all return 200 and are linked from method.html §9.
+- **Scale pre-flight (shadow).**
+  - `quote_integrity.py preflight`: **199 checks** | scored 82 | ungraded 117 | no reference close 0.
+  - **TP 0 · FP 1** (NUWE 10-28, ratio 0.067) **· FN 9** (BJDX 10-26/27/28/29, MASK 10-26/27/28/29, ONCO 10-29, all ratios ≈ 1.0) **· TN 72**.
+  - Coverage: every one of the 199 picks published since 10-26 has exactly one row. No missing or duplicate rows. Both `would_refuse=1` picks are still in `picks.csv`, so nothing was dropped.
+  - **Promotion rule NOT met**, and as pre-registered it cannot be met any more: "ZERO FP across all graded checks" is already broken by NUWE.
+  - **Decision note for Josh (not acted on):** this week was the first live test of the shadow check, and it missed all 9 real scale mismatches. The reference close from `.history()` was on the same stale pre-split scale as the screen price, so the ratio read ≈ 1.0. The check is structurally blind to the case where both feeds lag a split. The read-time `entry_open` exclusion caught all 9.
+- **Grading in the coming week** (117 pending; the grader runs weekday evenings ET, and a cohort grades the evening after its 5th session, or a day late if Yahoo's history is missing a session):
+  - 10-30 ×20 → Mon 11-09
+  - 11-02 ×20 → Tue 11-10
+  - 11-03 ×19 → Wed 11-11
+  - 11-04 ×20 → Thu 11-12
+  - 11-05 ×19 → Fri 11-13
+  - 11-06 ×19 → Mon 11-16 (next week)
+
 ## 2026-11-06 — Change: 2026-11-02 verdicts published (EXP03, EXP07, EXP09 — INCONCLUSIVE)
 
 The single pre-declared verdict read for the EXP02–09 family ran on 2026-11-02. Three experiments met both floors and locked; this change publishes them. **Nothing was recomputed.**
