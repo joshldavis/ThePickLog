@@ -83,7 +83,7 @@ jobs:
                 ([.[] | select(.failureReason == 2)] | length) ] | map(tostring) | "| " + join(" | ") + " |"' eval-results.json
             echo
             echo "### Failed cases"
-            jq -r '.results.results[] | select(.success | not) | "- " + .provider.label + ": " + .testCase.description' eval-results.json
+            jq -r '.results.results[] | select(.success | not) | "- " + .provider.label + ": " + .testCase.description + ". Why: " + ((.gradingResult.reason // .error // "no reason given") | gsub("[\\r\\n]+"; " ") | .[0:400])' eval-results.json
           } >> "$GITHUB_STEP_SUMMARY"
           cat "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
