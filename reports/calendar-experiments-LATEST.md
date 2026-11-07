@@ -1,4 +1,4 @@
-# ThePickLog — calendar experiments (EXP04, EXP05) · 2026-11-06
+# ThePickLog — calendar experiments (EXP04, EXP05) · 2026-11-07
 
 Both experiments are forward-only from **2026-08-06** and scored against **time-matched controls** (see the `calendar_eval.py` header for why the harness's cross-sectional control does not apply to timing claims). Mean, median and a clustered 95% CI are reported together. **Win rate is reported but is never a pass criterion.** SPY is a replication read only — QQQ decides.
 
@@ -11,34 +11,34 @@ Both experiments are forward-only from **2026-08-06** and scored against **time-
 ## QQQ  (PRIMARY — this decides)
 
 ### EXP04 — turn-of-month
-- turn-of-month sessions graded: **20** (need 30); non-TOM control sessions: 42; complete cycles: **3** (need 12)
-- TOM mean **-0.036%**/session, median +0.238% vs rest mean -0.071%, median -0.116%
-- cycle-clustered 95% CI of the TOM-minus-rest difference: [-0.235, +0.182] over 3 cycles
-- TOM win rate 70% *(reported only)*
-- **read: accruing — 20/30 turn-of-month sessions and 3/12 complete cycles. **No verdict is computed before the single pre-declared verdict date of 2027-09-01**, and none is computed then unless the floors are met.**
+- turn-of-month sessions graded: **21** (need 30); non-TOM control sessions: 42; complete cycles: **3** (need 12)
+- TOM mean **+0.012%**/session, median +0.249% vs rest mean -0.071%, median -0.116%
+- cycle-clustered 95% CI of the TOM-minus-rest difference: [-0.007, +0.182] over 3 cycles
+- TOM win rate 71% *(reported only)*
+- **read: accruing — 21/30 turn-of-month sessions and 3/12 complete cycles. **No verdict is computed before the single pre-declared verdict date of 2027-09-01**, and none is computed then unless the floors are met.**
 
 ### EXP05 — overnight vs intraday (attribution claim)
-- sessions graded: **62** (need 30); ISO weeks: **14** (need 20)
-- overnight-minus-intraday: mean **+0.013%**/session, median +0.195%, week-clustered 95% CI [-0.214, +0.263] over 14 weeks
-- overnight leg wins 55% of sessions *(reported only)*
+- sessions graded: **63** (need 30); ISO weeks: **14** (need 20)
+- overnight-minus-intraday: mean **+0.012%**/session, median +0.192%, week-clustered 95% CI [-0.213, +0.251] over 14 weeks
+- overnight leg wins 54% of sessions *(reported only)*
 - tradeability footnote: capturing the overnight leg costs one round trip per session; at 0.02%/RT the mean must exceed 0.02% just to break even. EXP05 passing does NOT make it tradeable — that is the registered scope.
-- **read: accruing — 62/30 sessions and 14/20 ISO weeks. **No verdict is computed before the single pre-declared verdict date of 2027-01-04**, and none is computed then unless the floors are met.**
+- **read: accruing — 63/30 sessions and 14/20 ISO weeks. **No verdict is computed before the single pre-declared verdict date of 2027-01-04**, and none is computed then unless the floors are met.**
 
 ## SPY  (replication read only)
 
 ### EXP04 — turn-of-month
-- turn-of-month sessions graded: **20** (need 30); non-TOM control sessions: 42; complete cycles: **3** (need 12)
-- TOM mean **+0.026%**/session, median +0.100% vs rest mean -0.048%, median -0.071%
-- cycle-clustered 95% CI of the TOM-minus-rest difference: [-0.158, +0.179] over 3 cycles
-- TOM win rate 55% *(reported only)*
-- **read: accruing — 20/30 turn-of-month sessions and 3/12 complete cycles. **No verdict is computed before the single pre-declared verdict date of 2027-09-01**, and none is computed then unless the floors are met.**
+- turn-of-month sessions graded: **21** (need 30); non-TOM control sessions: 42; complete cycles: **3** (need 12)
+- TOM mean **+0.104%**/session, median +0.178% vs rest mean -0.048%, median -0.071%
+- cycle-clustered 95% CI of the TOM-minus-rest difference: [+0.112, +0.179] over 3 cycles
+- TOM win rate 57% *(reported only)*
+- **read: accruing — 21/30 turn-of-month sessions and 3/12 complete cycles. **No verdict is computed before the single pre-declared verdict date of 2027-09-01**, and none is computed then unless the floors are met.**
 
 ### EXP05 — overnight vs intraday (attribution claim)
-- sessions graded: **62** (need 30); ISO weeks: **14** (need 20)
-- overnight-minus-intraday: mean **+0.081%**/session, median +0.028%, week-clustered 95% CI [-0.056, +0.228] over 14 weeks
+- sessions graded: **63** (need 30); ISO weeks: **14** (need 20)
+- overnight-minus-intraday: mean **+0.090%**/session, median +0.029%, week-clustered 95% CI [-0.053, +0.236] over 14 weeks
 - overnight leg wins 52% of sessions *(reported only)*
 - tradeability footnote: capturing the overnight leg costs one round trip per session; at 0.02%/RT the mean must exceed 0.02% just to break even. EXP05 passing does NOT make it tradeable — that is the registered scope.
-- **read: accruing — 62/30 sessions and 14/20 ISO weeks. **No verdict is computed before the single pre-declared verdict date of 2027-01-04**, and none is computed then unless the floors are met.**
+- **read: accruing — 63/30 sessions and 14/20 ISO weeks. **No verdict is computed before the single pre-declared verdict date of 2027-01-04**, and none is computed then unless the floors are met.**
 
 ---
 
