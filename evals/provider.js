@@ -37,7 +37,7 @@ async function loadHandler(model) {
     if (model === "default") delete process.env.AGENT_MODEL;
     else process.env.AGENT_MODEL = model;
     const mod = await import(`${AGENT_URL}?model=${encodeURIComponent(model)}`);
-    handlers.set(model, mod.default);
+    handlers.set(model, mod.runAgent || mod.default);
   }
   return handlers.get(model);
 }
