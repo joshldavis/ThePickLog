@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "thepicklog-evals",
+  "description": "Model checks for the ThePickLog assistant (api/agent.js). Not part of the deployed app.",
+  "scripts": {
+    "eval:models": "PROMPTFOO_DISABLE_TELEMETRY=1 PROMPTFOO_DISABLE_UPDATE=1 npx --yes promptfoo@0.125.1 eval -c promptfooconfig.yaml --no-share",
+    "eval:offline": "node mock-anthropic.js --run"
+  }
+}

@@ -1,0 +1,94 @@
+name: Model checks
+
+# Runs the evals/ suite for the AI assistant (api/agent.js) against the real
+# Anthropic API. It never runs on its own: start it by adding the
+# "run-model-check" label to a pull request, or from the Actions tab once this
+# file is on main. Each run is about 30 short assistant calls for two models
+# plus 12 grader calls (a few cents). Needs the ANTHROPIC_API_KEY repository
+# secret. Models come from the repository variables AGENT_MODEL (set it to what
+# production uses in Vercel) and CANDIDATE_MODEL (one you're thinking of moving
+# to); either left unset means "default", the model agent.js ships with.
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      baseline:
+        description: "Model production uses now (blank: AGENT_MODEL variable, else agent.js default)"
+        required: false
+        default: ""
+      candidate:
+        description: "Model to compare (blank: CANDIDATE_MODEL variable, else the baseline)"
+        required: false
+        default: ""
+      grader:
+        description: "Model that grades the llm-rubric checks (blank: GRADER_MODEL variable, else claude-sonnet-4-5)"
+        required: false
+        default: ""
+      repeat:
+        description: "Runs per case (1 to 5)"
+        required: false
+        default: "1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: model-checks-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  eval:
+    if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'run-model-check'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      BASELINE_MODEL: ${{ inputs.baseline || vars.AGENT_MODEL || 'default' }}
+      CANDIDATE_MODEL: ${{ inputs.candidate || vars.CANDIDATE_MODEL || inputs.baseline || vars.AGENT_MODEL || 'default' }}
+      GRADER_MODEL: ${{ inputs.grader || vars.GRADER_MODEL || '' }}
+      REPEAT: ${{ inputs.repeat || '1' }}
+    steps:
+      - name: Check the API key is set
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::error::Add an ANTHROPIC_API_KEY repository secret (Settings > Secrets and variables > Actions), then run this again."
+            exit 1
+          fi
+          case "$REPEAT" in [1-5]) ;; *) echo "::error::repeat must be 1 to 5"; exit 1 ;; esac
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      # api/agent.js has no dependencies, so there is nothing to install; the
+      # eval tool itself comes through npx (pinned in evals/package.json).
+      - name: Run the suite
+        working-directory: evals
+        run: npm run eval:models -- --no-cache --repeat "$REPEAT" -o "$GITHUB_WORKSPACE/eval-results.json"
+      - name: Summarise
+        if: always()
+        run: |
+          if [ ! -f eval-results.json ]; then echo "No results file." >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          {
+            echo "## Model checks"
+            echo
+            echo "| Provider | Model | Passed | Failed | Errors |"
+            echo "|---|---|---|---|---|"
+            jq -r '.results.results | group_by(.provider.label)[] |
+              [ .[0].provider.label,
+                ([.[].response.metadata.model // empty] | unique | join(", ")),
+                ([.[] | select(.success)] | length),
+                ([.[] | select(.failureReason == 1)] | length),
+                ([.[] | select(.failureReason == 2)] | length) ] | map(tostring) | "| " + join(" | ") + " |"' eval-results.json
+            echo
+            echo "### Failed cases"
+            jq -r '.results.results[] | select(.success | not) | "- " + .provider.label + ": " + .testCase.description' eval-results.json
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model-check-results
+          path: eval-results.json
+          if-no-files-found: ignore
