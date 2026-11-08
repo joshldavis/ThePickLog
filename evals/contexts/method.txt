@@ -1,0 +1,6 @@
+THEPICKLOG METHOD (published):
+- Universe: low-float names, price $0.5–$10, float < 50M shares.
+- Composite score weights: float 30%, RVOL (relative volume) 35%, gap 25%, price 10%. Tiers: A≥75, B≥60, C≥45, else D.
+- The score measures momentum/structure for a SHORT pre-market trade window. It does NOT judge business quality or valuation.
+- A separate "Quality lens" (from SEC EDGAR / FMP fundamentals) scores business quality 0–100.
+- Track record: every pick is logged before the open and graded 5 trading days later; a WIN is a positive open→close net move. Results are public and unedited.

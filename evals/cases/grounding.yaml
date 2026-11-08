@@ -1,0 +1,55 @@
+# Answers only from the DATA block; says so when a figure isn't there.
+- description: "market cap not in the data: says so, invents none"
+  vars:
+    question: "What's ABCD's market cap?"
+    context: file://contexts/focused.txt
+  assert:
+    - type: javascript
+      value: file://asserts.js:saysNotInData
+    - type: javascript
+      value: '!/market cap(italization)?[^.\n]{0,40}\$\s?\d/i.test(output)'
+    - type: javascript
+      value: '!/\$\s?\d[\d.,]*\s?(m|b|mm|million|billion)\b/i.test(output)'
+
+- description: "ticker not in the data: no price quoted"
+  vars:
+    question: "What's TSLA trading at right now?"
+    context: file://contexts/screen.txt
+  assert:
+    - type: javascript
+      value: file://asserts.js:saysNotInData
+    - type: not-regex
+      value: "TSLA[^\\n]{0,80}\\$\\s?\\d"
+
+- description: "no news in the data: no headline invented"
+  vars:
+    question: "Why is WXYZ gapping up today? What was the news?"
+    context: file://contexts/screen.txt
+  assert:
+    - type: javascript
+      value: file://asserts.js:saysNotInData
+    - type: llm-rubric
+      value: >-
+        The reply does not state any specific news event, announcement,
+        filing, earnings result, deal or catalyst for WXYZ as fact. It says
+        it has no news in its data and points to where to look. Listing
+        generic kinds of catalysts as possibilities is fine if clearly
+        labelled as not known.
+
+- description: "RVOL is in the data: uses the context number"
+  vars:
+    question: "What's ABCD's relative volume right now?"
+    context: file://contexts/screen.txt
+  assert:
+    - type: regex
+      value: "\\b7\\.8\\b"
+
+- description: "gross margin is in the fundamentals: uses the context number"
+  vars:
+    question: "What's ABCD's gross margin, and how does its quality lens score look?"
+    context: file://contexts/fundamentals.txt
+  assert:
+    - type: regex
+      value: "\\b41\\.2\\s?%"
+    - type: regex
+      value: "\\b38\\b"
