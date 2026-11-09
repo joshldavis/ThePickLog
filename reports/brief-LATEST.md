@@ -1,30 +1,35 @@
-# ThePickLog — Morning Brief · 2026-11-06
+# ThePickLog — Morning Brief · 2026-11-09
 
-_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-off**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
+_Impersonal, educational watchlist — identical for all readers. Market regime: **risk-on**. Nothing here is a recommendation to buy, sell, or hold; it describes how names rank on objective, published criteria. Low-float / low-priced stocks are highly volatile._
 
 ## What stands out today
-- **ZNB** (tier A, score 100.0) — very high relative volume (30×); thin float (0.6M); large up-gap (+70%). Watch level (reference only, +20%): $1.2719.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **HTCR** (tier A, score 100.0) — very high relative volume (11×); thin float (0.7M); large up-gap (+31%). Watch level (reference only, +20%): $2.04.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **INTZ** (tier A, score 89.1) — very high relative volume (12×); large up-gap (+20%). Watch level (reference only, +20%): $0.696.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **MASK** (tier A, score 86.2) — elevated relative volume (7.8×); thin float (0.1M); large up-gap (+15%). Watch level (reference only, +20%): $2.268.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
-- **DTIL** (tier A, score 85.2) — elevated relative volume (9.9×); large up-gap (+21%). Watch level (reference only, +20%): $11.82.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **SMX** (tier A, score 100.0) — very high relative volume (27×); thin float (0.3M); large up-gap (+276%). Watch level (reference only, +20%): $5.9136.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CDT** (tier A, score 100.0) — very high relative volume (35×); thin float (0.0M); large up-gap (+32%). Watch level (reference only, +20%): $1.345.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **CIIT** (tier A, score 100.0) — very high relative volume (48×); thin float (0.7M); large up-gap (+34%). Watch level (reference only, +20%): $2.496.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **VSA** (tier A, score 100.0) — very high relative volume (38×); thin float (0.6M); large up-gap (+41%). Watch level (reference only, +20%): $2.604.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
+- **NAAS** (tier A, score 98.4) — elevated relative volume (9.7×); large up-gap (+27%). Watch level (reference only, +20%): $2.34.  ⚠️ **Finding A — runs hot:** highest-momentum tier; historically the *deepest* drawdowns. Hardest to hold.
 
 ## Risk area — read before anything
-- **ZNB**: already extended pre-market — chasing buys the top.
-- **ZNB**: ultra-thin float — spreads and slippage can be severe.
-- **HTCR**: already extended pre-market — chasing buys the top.
-- **HTCR**: ultra-thin float — spreads and slippage can be severe.
-- **INTZ**: sub-$1 — heightened manipulation / delisting risk.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **DTIL**: already extended pre-market — chasing buys the top.
-- **MASK**: ultra-thin float — spreads and slippage can be severe.
-- **ARQ**: already extended pre-market — chasing buys the top.
-- **CCLD**: already extended pre-market — chasing buys the top.
+- **SMX**: already extended pre-market — chasing buys the top.
+- **SMX**: ultra-thin float — spreads and slippage can be severe.
+- **CDT**: already extended pre-market — chasing buys the top.
+- **CDT**: ultra-thin float — spreads and slippage can be severe.
+- **CIIT**: already extended pre-market — chasing buys the top.
+- **CIIT**: ultra-thin float — spreads and slippage can be severe.
+- **VSA**: already extended pre-market — chasing buys the top.
+- **VSA**: ultra-thin float — spreads and slippage can be severe.
+- **NAAS**: already extended pre-market — chasing buys the top.
+- **CABR**: already extended pre-market — chasing buys the top.
+- **MTVA**: already extended pre-market — chasing buys the top.
+- **SNT**: already extended pre-market — chasing buys the top.
+- **STAK**: high short interest (74% of float) — squeeze-prone and violent both ways.
+- **STAK**: already extended pre-market — chasing buys the top.
+- **ALPS**: already extended pre-market — chasing buys the top.
 - **ATPC**: ultra-thin float — spreads and slippage can be severe.
-- **IOTR**: ultra-thin float — spreads and slippage can be severe.
 - **VMAR**: ultra-thin float — spreads and slippage can be severe.
 - **SUGP**: high short interest (30% of float) — squeeze-prone and violent both ways.
 - **SUGP**: ultra-thin float — spreads and slippage can be severe.
+- **MASK**: ultra-thin float — spreads and slippage can be severe.
 - **PW**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
