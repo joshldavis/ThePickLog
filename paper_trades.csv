@@ -155,3 +155,20 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-09T11:57:52+00:00,enter,7421bb9f-eb73-4d62-a49b-9530a874fd15,SNT,entry_submitted,109,,61ba326c-ab4c-4045-9bec-9a5f16dfd0e7,pending_new,
 2026-11-09T11:57:52+00:00,enter,42102eb3-ec36-4e26-9bcb-ea761a130d78,STAK,entry_submitted,54,,f4b899e7-70a6-4434-b6ef-be2b21f053a3,pending_new,
 2026-11-09T11:57:52+00:00,enter,f6c2b0fb-7aad-43f8-afba-21be6dcb69d0,ALPS,entry_reject,121,,,,"HTTP 422: {""code"":42210000,""message"":""market order rejected due to trading halt on symbol: \""ALPS\"", please place a limit order instead""}"
+2026-11-09T23:08:23+00:00,arm,6554f571-faa3-443c-b071-3c715e00824f,ZNB,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,ce0f3ee8-ca67-442f-89c0-957891bee4fc,HTCR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,ea97166f-a5e5-42b2-b001-8519a560795f,INTZ,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,6e08e7bd-cbf5-4aea-8973-07bd15c347e1,DTIL,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,86ae88e0-7f93-489d-9bcc-46f69a33725d,MASK,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,163f6e8c-6ca1-42a8-9a3b-3fb4bb8a015d,ARQ,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,98a01722-183a-4a88-b6f9-a0f880837d53,FLYE,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,852cb94e-8dd3-4ea6-96a4-3cf57861859c,ENHA,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,d4a200f6-e1fb-4505-b316-8f773f717a0c,KLRS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,1a7ba81f-415c-4ed5-92dc-1bce0f39f8a4,CDT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,43649227-98d3-4c7c-9e1a-8c81d510c122,CIIT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,1d3701af-d394-4855-a6ab-ec3dff00ef56,VSA,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,187829a2-2e57-4fa8-a2db-427ca982f3e7,NAAS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,c0f244bd-1abf-4638-b8cf-52f77172bc9f,CABR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,e56ace9e-279d-48c4-b879-28c1e6e4de7e,MTVA,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-09T23:08:23+00:00,arm,7421bb9f-eb73-4d62-a49b-9530a874fd15,SNT,tp_submitted,109,2.09,1d20a1cb-fcaa-4aa9-8f5f-0baad6cdcc92,accepted,entry fill 1.9
+2026-11-09T23:08:23+00:00,arm,42102eb3-ec36-4e26-9bcb-ea761a130d78,STAK,entry_status,,,,expired,not filled yet — will retry next run
