@@ -172,3 +172,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-09T23:08:23+00:00,arm,e56ace9e-279d-48c4-b879-28c1e6e4de7e,MTVA,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-09T23:08:23+00:00,arm,7421bb9f-eb73-4d62-a49b-9530a874fd15,SNT,tp_submitted,109,2.09,1d20a1cb-fcaa-4aa9-8f5f-0baad6cdcc92,accepted,entry fill 1.9
 2026-11-09T23:08:23+00:00,arm,42102eb3-ec36-4e26-9bcb-ea761a130d78,STAK,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-10T02:24:15+00:00,manage,dbb16e55-60b5-4a27-b0d9-b9abc9353097,CCLD,tp_filled,92,2.444348,,,
