@@ -173,3 +173,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-09T23:08:23+00:00,arm,7421bb9f-eb73-4d62-a49b-9530a874fd15,SNT,tp_submitted,109,2.09,1d20a1cb-fcaa-4aa9-8f5f-0baad6cdcc92,accepted,entry fill 1.9
 2026-11-09T23:08:23+00:00,arm,42102eb3-ec36-4e26-9bcb-ea761a130d78,STAK,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-10T02:24:15+00:00,manage,dbb16e55-60b5-4a27-b0d9-b9abc9353097,CCLD,tp_filled,92,2.444348,,,
+2026-11-10T11:57:59+00:00,enter,a203b123-c41e-4876-9895-bcc5eb52f70a,WCT,entry_submitted,51,,f2c153da-a583-43c7-a3f2-e24e3f828480,pending_new,
+2026-11-10T11:57:59+00:00,enter,f3bfa195-48de-4c36-a9a4-db2363435200,TVRD,entry_submitted,141,,14d3884f-61e9-457a-9420-d5bacebf926a,pending_new,
+2026-11-10T11:57:59+00:00,enter,0fd26b03-3fde-4d56-b6b1-023a87d98a0e,BESS,entry_submitted,50,,dabb2b05-6138-4f4c-b501-dba8bca0d0c0,pending_new,
+2026-11-10T11:57:59+00:00,enter,bbabf75b-6df8-437c-aaf9-a4f1a2c7fdbd,UG,entry_submitted,22,,2502afa2-571f-45c3-8511-04f77aa1f1db,pending_new,
+2026-11-10T11:57:59+00:00,enter,0a24a6cd-89ce-4917-8542-d0915d64be9c,XHLD,entry_submitted,255,,cd0a4eb2-5a5b-4d0d-b9dd-844d85271cb9,pending_new,
+2026-11-10T11:57:59+00:00,enter,cb58bbbe-b6c7-401b-aac1-715af3f4f11d,WOK,entry_submitted,169,,b58e7ba0-59d3-4170-9ce4-452fe1819173,pending_new,
+2026-11-10T11:57:59+00:00,enter,5691627b-6459-470b-918d-5cba7e23c735,FISN,entry_submitted,71,,9166696a-251a-4fd9-905f-809036a2f40c,pending_new,
+2026-11-10T11:57:59+00:00,enter,d55fe899-17a5-4a71-9ec5-e0e9b7be3ece,ICCM,entry_submitted,227,,8b2bfe1a-cadd-4da3-9cb4-31f82c4a7046,pending_new,
+2026-11-10T11:57:59+00:00,enter,3e35b071-33da-406d-aced-f327657fc505,SNT,entry_skip,,,,,symbol already held (no overlapping holds)
+2026-11-10T11:57:59+00:00,enter,8b2dd484-dbc2-407b-973b-79e077d071fb,GFR,entry_submitted,25,,e51c409e-6760-4bee-8e6d-74d7b2d11069,pending_new,
