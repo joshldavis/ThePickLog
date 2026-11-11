@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-11-10
+# ThePickLog — experiments under test · 2026-11-11
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
@@ -18,21 +18,21 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP06-SUPERTREND — The Supertrend flip
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **29** (need 30) over **26** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.137%**, median **+0.108%**, 10% trimmed **-0.022%**, clustered 95% CI [-0.648, +0.321] over 26 names
-- day-matched excess, 5 sessions: mean **-0.946%**, median **-0.368%**
-- win rate 48% *(reported only — not a pass criterion)*
-- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 29/30 graded signals over 26/20 distinct names. The verdict locks at the first run where it is.**
+- graded signals: **30** (need 30) over **27** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.146%**, median **+0.034%**, 10% trimmed **+0.004%**, clustered 95% CI [-0.630, +0.305] over 27 names
+- day-matched excess, 5 sessions: mean **-0.939%**, median **-0.547%**
+- win rate 47% *(reported only — not a pass criterion)*
+- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-11 at n=30 over 27 names — computed once and never recomputed)***
 
 > Registered prior: Currently the most heavily marketed single indicator in retail video content, almost always at exactly these default settings (10, 3). It is a mechanically sane ATR trailing band, which is why it demos well — and why, on forty of the most liquid names on earth, it should already be arbitraged flat. Deliberately tested with NO trend filter because the claim as sold has none. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
 ## EXP07-SMAPULL — The moving-average pullback (buy the dip in an uptrend)
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **151** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **+0.011%**, median **+0.157%**, 10% trimmed **+0.060%**, clustered 95% CI [-0.208, +0.238] over 32 names
-- day-matched excess, 5 sessions: mean **+0.726%**, median **+1.071%**
-- win rate 49% *(reported only — not a pass criterion)*
+- graded signals: **153** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **+0.039%**, median **+0.172%**, 10% trimmed **+0.083%**, clustered 95% CI [-0.184, +0.265] over 32 names
+- day-matched excess, 5 sessions: mean **+0.757%**, median **+1.071%**
+- win rate 50% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=138 over 31 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: The most widely taught swing entry in existence — nearly every course teaches some form of buying the pullback to the 20-day in an uptrend. The mechanism (short-term reversion inside medium-term momentum) is at least coherent, which earns it a slightly better prior than a raw indicator flip: call it ~1 in 5. Registered expectation is still that the day-matched excess is indistinguishable from zero — textbook status is exactly what arbitrages an edge away.
@@ -40,21 +40,21 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP08-BOLLREVERT — Bollinger Band mean reversion
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **42** (need 30) over **16** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.138%**, median **-0.038%**, 10% trimmed **-0.176%**, clustered 95% CI [-0.466, +0.234] over 16 names
-- day-matched excess, 5 sessions: mean **-0.913%**, median **-1.177%**
-- win rate 33% *(reported only — not a pass criterion)*
-- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 42/30 graded signals over 16/20 distinct names. The verdict locks at the first run where it is.**
+- graded signals: **43** (need 30) over **17** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.080%**, median **-0.030%**, 10% trimmed **-0.133%**, clustered 95% CI [-0.402, +0.331] over 17 names
+- day-matched excess, 5 sessions: mean **-0.795%**, median **-1.012%**
+- win rate 35% *(reported only — not a pass criterion)*
+- **read: past the pre-declared verdict date (2026-11-02) with the floor not yet met — 43/30 graded signals over 17/20 distinct names. The verdict locks at the first run where it is.**
 
 > Registered prior: The same high-win-rate sales pitch as Experiment 02's RSI(2), through a different mechanism: the band adapts to volatility. Win-rate-flattering by construction — many small reverts punctuated by occasional large losses — which is precisely the shape the mean/median/clustered-CI reporting exists to expose. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
 ## EXP09-NR7 — Volatility contraction (NR7) in an uptrend
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **162** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.099%**, median **-0.027%**, 10% trimmed **-0.058%**, clustered 95% CI [-0.293, +0.085] over 33 names
-- day-matched excess, 5 sessions: mean **+0.420%**, median **+0.429%**
-- win rate 43% *(reported only — not a pass criterion)*
+- graded signals: **163** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.102%**, median **-0.030%**, 10% trimmed **-0.062%**, clustered 95% CI [-0.294, +0.084] over 33 names
+- day-matched excess, 5 sessions: mean **+0.418%**, median **+0.425%**
+- win rate 42% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=140 over 33 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: That contraction precedes expansion (Crabel's NR7) is well documented; what is SOLD is the direction, and direction is the part with no documented edge. This is also the honest daily-bar version of an intraday claim: entry is the next open, not a break of the range, because our pre-open logging gate forbids acting on the open print. That deviation is disclosed wherever this experiment is published. Registered expectation: excess indistinguishable from zero; ~1 in 6.

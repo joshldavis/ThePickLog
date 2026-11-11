@@ -2,3 +2,4 @@ experiment,locked_at,n,clusters,mean1,med1,ci_lo,ci_hi,verdict
 EXP03-MACD,2026-11-02,58,30,0.02279,0.1166,-0.30715,0.31286,NO EDGE DETECTED — the excess is indistinguishable from zero
 EXP07-SMAPULL,2026-11-02,138,31,0.04212,0.17325,-0.18867,0.27721,NO EDGE DETECTED — the excess is indistinguishable from zero
 EXP09-NR7,2026-11-02,140,33,-0.05729,-0.01065,-0.2949,0.15287,NO EDGE DETECTED — the excess is indistinguishable from zero
+EXP06-SUPERTREND,2026-11-11,30,27,-0.1455,0.034,-0.62984,0.30492,NO EDGE DETECTED — the excess is indistinguishable from zero

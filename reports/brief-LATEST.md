@@ -34,7 +34,7 @@ _Impersonal, educational watchlist — identical for all readers. Market regime:
 - **IOTR**: ultra-thin float — spreads and slippage can be severe.
 
 ## Finding A — the one edge that holds (from your own log)
-- Across **1905** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 29%) vs **-11%** (rug 12%) for C/D.
+- Across **1925** graded picks, the **hottest momentum tier (A/B) draws down deeper**: median worst-dip **-21%** (rug rate 29%) vs **-11%** (rug 12%) for C/D.
 - **Actionable read:** a top-of-leaderboard A/B name is the part most likely to gut you. Treat a high score as a *warning label on the downside*, not a green light.
 
 ## How to read this

@@ -1,0 +1,2 @@
+experiment,locked_at,n,clusters,mean1,med1,ci_lo,ci_hi,p_two,snapshots,mean5,med5,mean_rsiexit,med_rsiexit,verdict
+EXP02-RSI2,2026-11-11,46,21,-0.1408,0.09385,-0.43068,0.20984,0.39667,"0/3 (2026-10-24,2026-10-31,2026-11-07)",0.2875,0.70725,0.17117,0.98875,NO EDGE DETECTED — the bar is not met
