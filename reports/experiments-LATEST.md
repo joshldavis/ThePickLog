@@ -22,7 +22,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **-0.146%**, median **+0.034%**, 10% trimmed **+0.004%**, clustered 95% CI [-0.630, +0.305] over 27 names
 - day-matched excess, 5 sessions: mean **-0.939%**, median **-0.547%**
 - win rate 47% *(reported only — not a pass criterion)*
-- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-11 at n=30 over 27 names — computed once and never recomputed)***
+- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-11 at n=30 over 27 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: Currently the most heavily marketed single indicator in retail video content, almost always at exactly these default settings (10, 3). It is a mechanically sane ATR trailing band, which is why it demos well — and why, on forty of the most liquid names on earth, it should already be arbitraged flat. Deliberately tested with NO trend filter because the claim as sold has none. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
