@@ -208,3 +208,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-10T20:35:52+00:00,arm,5691627b-6459-470b-918d-5cba7e23c735,FISN,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-10T20:35:52+00:00,arm,d55fe899-17a5-4a71-9ec5-e0e9b7be3ece,ICCM,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-10T20:35:52+00:00,arm,8b2dd484-dbc2-407b-973b-79e077d071fb,GFR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-11T00:14:47+00:00,manage,7421bb9f-eb73-4d62-a49b-9530a874fd15,SNT,tp_filled,109,2.488899,,,
