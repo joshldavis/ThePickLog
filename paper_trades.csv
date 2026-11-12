@@ -220,3 +220,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-11T11:58:21+00:00,enter,d2b35c83-a06e-4f1b-bba4-2ca28ff77825,LGVN,entry_submitted,70,,5a6fcc39-4048-41ed-bab4-11cc2764b3e5,pending_new,
 2026-11-11T11:58:21+00:00,enter,1b2e1fee-b798-4090-8e52-21b4b2ca9ee6,EFOI,entry_submitted,40,,61462a55-4a38-4a4d-b218-a9e87fe3b936,pending_new,
 2026-11-12T01:41:08+00:00,manage,,,noop,,,,,nothing due
+2026-11-12T11:58:07+00:00,enter,eaebad59-8462-4b41-854e-31c9beaf7167,NXXT,entry_reject,117,,,,"HTTP 422: {""code"":42210000,""message"":""invalid otc time_in_force""}"
+2026-11-12T11:58:07+00:00,enter,471c648b-28c9-409c-9f6e-882e894216ce,WHLR,entry_submitted,360,,7a02685c-c88a-4934-9684-9fa9692d6747,pending_new,
+2026-11-12T11:58:07+00:00,enter,930af26f-d127-4ccb-961d-38eb27dd74dc,SFWL,entry_submitted,44,,77e8b082-edc0-45cc-b75e-3b150b9bc1d6,pending_new,
+2026-11-12T11:58:07+00:00,enter,f051664b-6f12-4077-9dca-7b19bf32e8c7,PLCE,entry_submitted,209,,6f4de19c-0ac8-41bf-b30d-b9c0161b6344,pending_new,
+2026-11-12T11:58:07+00:00,enter,ebd72a18-ea7f-4122-a771-b3ba9034fa27,CRVO,entry_submitted,114,,3249ace9-0a24-47c4-9b63-9f5db5c0ae71,pending_new,
+2026-11-12T11:58:07+00:00,enter,30c03750-fb68-43d2-9ff6-a8527abc68cd,ZDGE,entry_submitted,71,,849ebc51-6fca-40f4-b213-c09c5b5479e9,pending_new,
+2026-11-12T11:58:07+00:00,enter,586c2b21-9a3b-42c1-9144-d67e5cb3f8ba,NWTG,entry_submitted,204,,ee9cd86c-d979-48ec-86fb-55dd06cc4472,pending_new,
+2026-11-12T11:58:07+00:00,enter,a9ad8871-3ab8-4203-acd3-48dc041bc22d,NCT,entry_submitted,266,,2deb3ad9-0147-4571-a392-bc0ba5c512d5,pending_new,
+2026-11-12T11:58:07+00:00,enter,cd59863c-329e-470f-b5a9-bfa41950d447,OPTT,entry_submitted,340,,20075674-5240-4659-a3f3-fb1da583ea66,pending_new,
+2026-11-12T11:58:07+00:00,enter,a3955484-1308-4307-87cc-d2bf22f29818,JOB,entry_submitted,30,,4bc564dd-15b7-4500-8e2d-64ca1e301e6a,pending_new,
