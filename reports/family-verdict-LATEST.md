@@ -1,4 +1,4 @@
-# ThePickLog — family verdict (EXP02–EXP09) · 2026-11-11
+# ThePickLog — family verdict (EXP02–EXP09) · 2026-11-12
 
 Read date 2026-11-02. Benjamini–Hochberg at q = 0.05 across the declared family of **m = 8** (EXP02–EXP09); experiments not yet locked count as p = 1. Each row below was computed once, at the run where that experiment's own verdict locked, and is never recomputed. Rules: `family_verdict.py` (frozen 2026-10-23, before the read).
 
