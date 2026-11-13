@@ -284,3 +284,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-13T00:42:16+00:00,manage,dbb16e55-60b5-4a27-b0d9-b9abc9353097,CCLD,time_exit,,,,,session 5: no position left (target filled or entry never filled)
 2026-11-13T00:42:16+00:00,manage,852cb94e-8dd3-4ea6-96a4-3cf57861859c,ENHA,time_exit,,,,,session 5: no position left (target filled or entry never filled)
 2026-11-13T00:42:16+00:00,manage,d4a200f6-e1fb-4505-b316-8f773f717a0c,KLRS,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T11:58:14+00:00,enter,bf4cec1b-e468-4758-85cc-7b528460bcc4,POAS,entry_submitted,73,,44f49004-a363-454c-84a5-023a5acdf6e9,pending_new,
+2026-11-13T11:58:14+00:00,enter,394bafe0-09d4-4d78-8a11-ae0e995e1978,GP,entry_submitted,198,,a4a995c0-105a-4294-bf7a-f8b9062cf664,pending_new,
+2026-11-13T11:58:14+00:00,enter,d4bf0bb3-7c82-42bf-a94e-3d028bef9933,AIMD,entry_submitted,204,,7159a7b5-7c1e-4611-a608-edb02ee3f18b,pending_new,
+2026-11-13T11:58:14+00:00,enter,5db72cd3-18b5-4cbb-bf17-a28c785258b9,ADXN,entry_submitted,42,,c8479c7f-80b0-41df-ac29-d3953d3c0ed6,pending_new,
+2026-11-13T11:58:14+00:00,enter,4d995965-e784-4341-bdab-fcbac57510fe,ADVB,entry_submitted,65,,2fbb4bf9-b2fa-4f2a-b3ff-3148fe3e4732,pending_new,
+2026-11-13T11:58:14+00:00,enter,5af50f60-dfef-44f9-b09a-2cb112e7ad67,ICMB,entry_submitted,192,,541955b4-c260-42d2-aff6-284c8afa812f,pending_new,
+2026-11-13T11:58:14+00:00,enter,bafaf293-c35a-454d-8034-6919bd6ce386,TGHL,entry_submitted,388,,fc181d54-af31-423b-ab56-80c5c0ea5ce4,pending_new,
+2026-11-13T11:58:14+00:00,enter,1049beae-6722-4d0e-8e13-04236600df7a,OPTT,entry_skip,,,,,symbol already held (no overlapping holds)
+2026-11-13T11:58:14+00:00,enter,510fad1a-a889-4812-a7b7-bd6fe2919b6c,TGEN,entry_submitted,91,,1410c416-c780-4e85-a0b9-31cc183491a1,pending_new,
+2026-11-13T11:58:14+00:00,enter,c0cb87a9-3b75-4217-b06d-5aa45fd5d200,MYPS,entry_submitted,41,,f96219b6-6001-41e6-951d-e0923c667d85,pending_new,
