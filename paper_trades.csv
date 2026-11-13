@@ -294,3 +294,46 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-13T11:58:14+00:00,enter,1049beae-6722-4d0e-8e13-04236600df7a,OPTT,entry_skip,,,,,symbol already held (no overlapping holds)
 2026-11-13T11:58:14+00:00,enter,510fad1a-a889-4812-a7b7-bd6fe2919b6c,TGEN,entry_submitted,91,,1410c416-c780-4e85-a0b9-31cc183491a1,pending_new,
 2026-11-13T11:58:14+00:00,enter,c0cb87a9-3b75-4217-b06d-5aa45fd5d200,MYPS,entry_submitted,41,,f96219b6-6001-41e6-951d-e0923c667d85,pending_new,
+2026-11-13T20:38:41+00:00,arm,1a7ba81f-415c-4ed5-92dc-1bce0f39f8a4,CDT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,43649227-98d3-4c7c-9e1a-8c81d510c122,CIIT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,1d3701af-d394-4855-a6ab-ec3dff00ef56,VSA,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,187829a2-2e57-4fa8-a2db-427ca982f3e7,NAAS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,c0f244bd-1abf-4638-b8cf-52f77172bc9f,CABR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,e56ace9e-279d-48c4-b879-28c1e6e4de7e,MTVA,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,42102eb3-ec36-4e26-9bcb-ea761a130d78,STAK,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,a203b123-c41e-4876-9895-bcc5eb52f70a,WCT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,f3bfa195-48de-4c36-a9a4-db2363435200,TVRD,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,0fd26b03-3fde-4d56-b6b1-023a87d98a0e,BESS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,bbabf75b-6df8-437c-aaf9-a4f1a2c7fdbd,UG,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,0a24a6cd-89ce-4917-8542-d0915d64be9c,XHLD,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,cb58bbbe-b6c7-401b-aac1-715af3f4f11d,WOK,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,5691627b-6459-470b-918d-5cba7e23c735,FISN,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,d55fe899-17a5-4a71-9ec5-e0e9b7be3ece,ICCM,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,8b2dd484-dbc2-407b-973b-79e077d071fb,GFR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,c1767ef5-9db0-4547-bafa-434c86607fba,SKYE,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,c0304875-de43-4f77-845d-11097a932e51,PXLW,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,d1491e36-a751-4542-b2fd-6fcd654f1a84,AACG,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,4b678c55-0120-42c8-91eb-a67ee8ab65b3,INLF,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,1e9cf42c-4954-484d-9f86-f66fd9f203e4,XCUR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,860df984-b9af-4b13-a628-bdd236a5d5e3,MNDO,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,f90d50f6-1508-486f-9bbd-c7c81973b5f3,TREO,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,4ac6fa60-4ab3-4d52-876b-445fe79e451f,TTEC,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,d2b35c83-a06e-4f1b-bba4-2ca28ff77825,LGVN,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,1b2e1fee-b798-4090-8e52-21b4b2ca9ee6,EFOI,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,930af26f-d127-4ccb-961d-38eb27dd74dc,SFWL,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,f051664b-6f12-4077-9dca-7b19bf32e8c7,PLCE,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,ebd72a18-ea7f-4122-a771-b3ba9034fa27,CRVO,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,30c03750-fb68-43d2-9ff6-a8527abc68cd,ZDGE,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,586c2b21-9a3b-42c1-9144-d67e5cb3f8ba,NWTG,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,a9ad8871-3ab8-4203-acd3-48dc041bc22d,NCT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,cd59863c-329e-470f-b5a9-bfa41950d447,OPTT,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,a3955484-1308-4307-87cc-d2bf22f29818,JOB,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,bf4cec1b-e468-4758-85cc-7b528460bcc4,POAS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,394bafe0-09d4-4d78-8a11-ae0e995e1978,GP,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,d4bf0bb3-7c82-42bf-a94e-3d028bef9933,AIMD,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,5db72cd3-18b5-4cbb-bf17-a28c785258b9,ADXN,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,4d995965-e784-4341-bdab-fcbac57510fe,ADVB,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,5af50f60-dfef-44f9-b09a-2cb112e7ad67,ICMB,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,bafaf293-c35a-454d-8034-6919bd6ce386,TGHL,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,510fad1a-a889-4812-a7b7-bd6fe2919b6c,TGEN,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T20:38:41+00:00,arm,c0cb87a9-3b75-4217-b06d-5aa45fd5d200,MYPS,entry_status,,,,expired,not filled yet — will retry next run
