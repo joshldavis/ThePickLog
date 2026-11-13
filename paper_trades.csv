@@ -274,3 +274,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-12T21:05:20+00:00,arm,a9ad8871-3ab8-4203-acd3-48dc041bc22d,NCT,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-12T21:05:20+00:00,arm,cd59863c-329e-470f-b5a9-bfa41950d447,OPTT,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-12T21:05:20+00:00,arm,a3955484-1308-4307-87cc-d2bf22f29818,JOB,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-13T00:42:16+00:00,manage,6554f571-faa3-443c-b071-3c715e00824f,ZNB,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,ce0f3ee8-ca67-442f-89c0-957891bee4fc,HTCR,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,ea97166f-a5e5-42b2-b001-8519a560795f,INTZ,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,6e08e7bd-cbf5-4aea-8973-07bd15c347e1,DTIL,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,86ae88e0-7f93-489d-9bcc-46f69a33725d,MASK,time_exit,84,,,,session 5 time exit
+2026-11-13T00:42:16+00:00,manage,163f6e8c-6ca1-42a8-9a3b-3fb4bb8a015d,ARQ,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,98a01722-183a-4a88-b6f9-a0f880837d53,FLYE,time_exit,71,,,,session 5 time exit
+2026-11-13T00:42:16+00:00,manage,dbb16e55-60b5-4a27-b0d9-b9abc9353097,CCLD,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,852cb94e-8dd3-4ea6-96a4-3cf57861859c,ENHA,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-13T00:42:16+00:00,manage,d4a200f6-e1fb-4505-b316-8f773f717a0c,KLRS,time_exit,,,,,session 5: no position left (target filled or entry never filled)
