@@ -337,3 +337,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-13T20:38:41+00:00,arm,bafaf293-c35a-454d-8034-6919bd6ce386,TGHL,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-13T20:38:41+00:00,arm,510fad1a-a889-4812-a7b7-bd6fe2919b6c,TGEN,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-13T20:38:41+00:00,arm,c0cb87a9-3b75-4217-b06d-5aa45fd5d200,MYPS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-14T00:28:41+00:00,manage,,,noop,,,,,nothing due
