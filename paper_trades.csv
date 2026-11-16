@@ -340,3 +340,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-14T00:28:41+00:00,manage,,,noop,,,,,nothing due
 2026-11-14T11:56:34+00:00,enter,,,noop,,,,,no new v0.3 picks today
 2026-11-15T11:56:39+00:00,enter,,,noop,,,,,no new v0.3 picks today
+2026-11-16T11:57:59+00:00,enter,5ab0c0c1-ece9-43f3-990c-5862198f871c,TGL,entry_reject,46,,,,"HTTP 422: {""code"":42210000,""message"":""market order rejected due to trading halt on symbol: \""TGL\"", please place a limit order instead""}"
+2026-11-16T11:57:59+00:00,enter,cc9a5f95-9393-458a-a60b-5b6e19681eec,KALA,entry_reject,48,,,,"HTTP 422: {""code"":42210000,""message"":""market order rejected due to trading halt on symbol: \""KALA\"", please place a limit order instead""}"
+2026-11-16T11:57:59+00:00,enter,69f5b5f9-4c9e-4060-bd5e-430b613430e0,ONFO,entry_submitted,341,,920db251-2d82-42e1-8dc9-92a729fc1678,pending_new,
+2026-11-16T11:57:59+00:00,enter,4a1c600c-920d-46e0-8237-cc7f0d9ca7df,FCUV,entry_submitted,40,,b962fee2-9524-452f-b8e8-482368984070,pending_new,
+2026-11-16T11:57:59+00:00,enter,cb094b36-ab68-4872-999a-7c2e5e811369,AKAN,entry_reject,95,,,,"HTTP 422: {""code"":42210000,""message"":""asset \""AKAN\"" is not tradable""}"
+2026-11-16T11:57:59+00:00,enter,e5d5f9e5-adb3-473a-a9f6-739311b0028e,BKHA,entry_submitted,30,,bf1c4a19-8c95-4449-8558-42b86a58dff9,pending_new,
+2026-11-16T11:57:59+00:00,enter,92a6951d-5773-4497-bb96-d0095a501311,RAIN,entry_submitted,298,,74e37c5a-0f42-45e6-bb1f-74a4ea8fee6e,pending_new,
+2026-11-16T11:57:59+00:00,enter,2fd80f58-fd5c-4e9e-b6ca-c633f208d971,SNAL,entry_submitted,75,,88063881-ceac-4e7d-8a5c-a555406f87a8,pending_new,
+2026-11-16T11:57:59+00:00,enter,f6c88db0-179a-4aff-b53b-752bdbed6f7d,CNSY,entry_submitted,216,,679118f1-b587-4aac-9c81-d8c6a9d55f7c,pending_new,
+2026-11-16T11:57:59+00:00,enter,6976d45c-0742-4a9c-889f-e4e04305617a,VTSI,entry_submitted,45,,609c6029-85d6-470f-b60f-a66fe38a67a7,pending_new,
