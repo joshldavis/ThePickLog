@@ -1,4 +1,4 @@
-# ThePickLog — family verdict (EXP02–EXP09) · 2026-11-16
+# ThePickLog — family verdict (EXP02–EXP09) · 2026-11-17
 
 Read date 2026-11-02. Benjamini–Hochberg at q = 0.05 across the declared family of **m = 8** (EXP02–EXP09); experiments not yet locked count as p = 1. Each row below was computed once, at the run where that experiment's own verdict locked, and is never recomputed. Rules: `family_verdict.py` (frozen 2026-10-23, before the read).
 
@@ -12,7 +12,7 @@ Read date 2026-11-02. Benjamini–Hochberg at q = 0.05 across the declared famil
 | EXP05-CAL | not locked yet | — | — | counts as p = 1 | — |
 | EXP06-SUPERTREND | NO EDGE DETECTED — the excess is indistinguishable from zero | 0.564 | 1.0 | **no discovery to correct** | 2026-11-11 |
 | EXP07-SMAPULL | NO EDGE DETECTED — the excess is indistinguishable from zero | 0.73333 | 1.0 | **no discovery to correct** | 2026-11-02 |
-| EXP08-BOLLREVERT | not locked yet | — | — | counts as p = 1 | — |
+| EXP08-BOLLREVERT | NO EDGE DETECTED — the excess is indistinguishable from zero | 0.744 | 1.0 | **no discovery to correct** | 2026-11-17 |
 | EXP09-NR7 | NO EDGE DETECTED — the excess is indistinguishable from zero | 0.65067 | 1.0 | **no discovery to correct** | 2026-11-02 |
 
 A single pass that does not survive the correction is reported as *consistent with chance* until it survives a fresh forward window. EXP06–EXP09 share one universe, so they are correlated tests, not independent replications. Not investment advice.

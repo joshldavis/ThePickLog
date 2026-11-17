@@ -1,43 +1,43 @@
-# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-11-16
+# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-11-17
 
 Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W47**.
 
 **H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant — at **both** horizons, same-day and 5-day (enforced in code since the 2026-09-25 amendment; before that only same-day was checked, though both were always labelled *must stay ns*).
 
-### v0.2-yf — n_post = 718
+### v0.2-yf — n_post = 727
 
-- score -> |MAE| (drawdown depth): rho=+0.202 CI[+0.065,+0.321] n=718 tickers=16 SIG
-- score -> range (MFE-MAE): rho=+0.299 CI[+0.170,+0.408] n=718 tickers=16 SIG
-- score -> same-day return *(must stay ns)*: rho=-0.049 CI[-0.171,+0.063] n=718 tickers=16 ns
-- score -> 5-day return *(must stay ns)*: rho=-0.086 CI[-0.197,+0.022] n=718 tickers=16 ns
+- score -> |MAE| (drawdown depth): rho=+0.194 CI[+0.061,+0.311] n=727 tickers=16 SIG
+- score -> range (MFE-MAE): rho=+0.292 CI[+0.166,+0.402] n=727 tickers=16 SIG
+- score -> same-day return *(must stay ns)*: rho=-0.044 CI[-0.165,+0.068] n=727 tickers=16 ns
+- score -> 5-day return *(must stay ns)*: rho=-0.084 CI[-0.194,+0.023] n=727 tickers=16 ns
 - consecutive weekly snapshots with positive |MAE| rho: **15** (need >= 3)
 
 **v0.2-yf verdict: PASSES all H-RISK1 criteria**
 
-### v0.3-yf — n_post = 603
+### v0.3-yf — n_post = 613
 
-- score -> |MAE| (drawdown depth): rho=+0.244 CI[+0.168,+0.320] n=603 tickers=418 SIG
-- score -> range (MFE-MAE): rho=+0.282 CI[+0.204,+0.356] n=603 tickers=418 SIG
-- score -> same-day return *(must stay ns)*: rho=+0.017 CI[-0.068,+0.100] n=603 tickers=418 ns
-- score -> 5-day return *(must stay ns)*: rho=-0.233 CI[-0.310,-0.157] n=603 tickers=418 SIG
+- score -> |MAE| (drawdown depth): rho=+0.243 CI[+0.169,+0.317] n=613 tickers=425 SIG
+- score -> range (MFE-MAE): rho=+0.283 CI[+0.204,+0.357] n=613 tickers=425 SIG
+- score -> same-day return *(must stay ns)*: rho=+0.011 CI[-0.072,+0.094] n=613 tickers=425 ns
+- score -> 5-day return *(must stay ns)*: rho=-0.230 CI[-0.306,-0.157] n=613 tickers=425 SIG
 - consecutive weekly snapshots with positive |MAE| rho: **15** (need >= 3)
 
-**v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.233), so the score also carries DIRECTION information; that fails H-RISK1 as registered
+**v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.230), so the score also carries DIRECTION information; that fails H-RISK1 as registered
 
 ---
 
 **H-RISK2** — is the gauge *calibrated*, not merely correlated? v0.2 cohort only; the frozen probabilities are explicitly NOT transferable to v0.3 (different score distributions — see H-STR3).
 
-- Brier (frozen model) **0.2008** vs no-skill baseline **0.2065** -> BEATS baseline
-- realised P(MAE <= -20%): Q1 21.3% vs Q5 51.9%
-- Q5-Q1 gap: 30.5% (need >= 15%) -> OK
+- Brier (frozen model) **0.2017** vs no-skill baseline **0.2067** -> BEATS baseline
+- realised P(MAE <= -20%): Q1 21.9% vs Q5 50.9%
+- Q5-Q1 gap: 29.1% (need >= 15%) -> OK
 - per-quintile realised / predicted / n:
 
-  - Q1: realised 21.3% · predicted 20.2% · n=150
-  - Q2: realised 19.7% · predicted 39.6% · n=132
-  - Q3: realised 22.9% · predicted 34.9% · n=157
-  - Q4: realised 26.9% · predicted 38.2% · n=171
-  - Q5: realised 51.9% · predicted 48.3% · n=108
+  - Q1: realised 21.9% · predicted 20.2% · n=151
+  - Q2: realised 19.5% · predicted 39.6% · n=133
+  - Q3: realised 23.3% · predicted 34.9% · n=159
+  - Q4: realised 27.0% · predicted 38.2% · n=174
+  - Q5: realised 50.9% · predicted 48.3% · n=110
 
 **H-RISK2 verdict: PASSES**
 
