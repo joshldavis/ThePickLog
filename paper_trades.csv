@@ -417,3 +417,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-17T02:37:07+00:00,manage,5691627b-6459-470b-918d-5cba7e23c735,FISN,time_exit,,,,,session 5: no position left (target filled or entry never filled)
 2026-11-17T02:37:07+00:00,manage,d55fe899-17a5-4a71-9ec5-e0e9b7be3ece,ICCM,time_exit,,,,,session 5: no position left (target filled or entry never filled)
 2026-11-17T02:37:07+00:00,manage,8b2dd484-dbc2-407b-973b-79e077d071fb,GFR,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-17T11:57:56+00:00,enter,709451be-c972-450f-86dd-3a8314605388,GMM,entry_submitted,126,,1e0421d8-fd31-44b3-8b7b-1df53edfeee5,pending_new,
+2026-11-17T11:57:56+00:00,enter,f8b15409-4411-49ea-85f4-d9c6b6f22f58,AKAN,entry_submitted,74,,7f1c22d2-1028-48b8-b714-40fa274281ec,pending_new,
+2026-11-17T11:57:56+00:00,enter,a5c0ef29-1f3f-436f-b8cb-06f7dc6097af,HIHO,entry_submitted,163,,d641f0a9-794f-4e2b-b1c6-f56e384595e8,pending_new,
+2026-11-17T11:57:56+00:00,enter,2ec41fab-96bc-4305-9198-305a691b044b,GP,entry_submitted,86,,a39e5c6c-6c50-492e-9c7e-70c5a4e060ae,pending_new,
+2026-11-17T11:57:56+00:00,enter,ec81223b-9ed9-4785-93c8-fa8051fb4bc3,FEDU,entry_submitted,21,,3d7daa33-0d3d-4b31-bdb8-b9c93b87c120,pending_new,
+2026-11-17T11:57:56+00:00,enter,ceb15d97-67d5-44f5-9fb7-2d334dda0241,NOMA,entry_submitted,212,,58ba04af-a80a-4c6d-8f95-bbfb7ce637ad,pending_new,
+2026-11-17T11:57:56+00:00,enter,d23a9402-24a2-4ee0-8203-f72807e77187,GDHG,entry_submitted,139,,2329abcb-9532-4a50-a244-939440becdc0,pending_new,
+2026-11-17T11:57:56+00:00,enter,d5301a44-dc7d-4baf-8548-a395076fab91,BCG,entry_submitted,140,,1a5b1eec-3bd2-4570-b001-a48d28889feb,pending_new,
+2026-11-17T11:57:56+00:00,enter,dcb97c85-4ec6-4d9e-96ba-13b616f0f90b,AMST,entry_submitted,365,,56c4ce88-446d-4348-8b6b-98e954b6e881,pending_new,
+2026-11-17T11:57:56+00:00,enter,ac79310a-b439-486e-acea-d4f98c2055a8,CLRO,entry_submitted,44,,81524dd8-d5c9-47ae-82b5-63983f617195,pending_new,

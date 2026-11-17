@@ -44,7 +44,7 @@ Every experiment below is forward-only from its registration date, scored as an 
 - day-matched excess, 1 session: mean **-0.060%**, median **-0.030%**, 10% trimmed **-0.109%**, clustered 95% CI [-0.374, +0.310] over 20 names
 - day-matched excess, 5 sessions: mean **-0.605%**, median **-0.553%**
 - win rate 38% *(reported only — not a pass criterion)*
-- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-17 at n=47 over 20 names — computed once and never recomputed)***
+- **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-17 at n=47 over 20 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: The same high-win-rate sales pitch as Experiment 02's RSI(2), through a different mechanism: the band adapts to volatility. Win-rate-flattering by construction — many small reverts punctuated by occasional large losses — which is precisely the shape the mean/median/clustered-CI reporting exists to expose. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
 
