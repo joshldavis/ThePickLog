@@ -471,3 +471,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-17T21:54:14+00:00,arm,d5301a44-dc7d-4baf-8548-a395076fab91,BCG,tp_submitted,140,1.59,76efb780-7ad5-41b2-8ca3-15fae927371e,accepted,entry fill 1.45
 2026-11-17T21:54:14+00:00,arm,dcb97c85-4ec6-4d9e-96ba-13b616f0f90b,AMST,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-17T21:54:14+00:00,arm,ac79310a-b439-486e-acea-d4f98c2055a8,CLRO,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-18T01:52:15+00:00,manage,c1767ef5-9db0-4547-bafa-434c86607fba,SKYE,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,c0304875-de43-4f77-845d-11097a932e51,PXLW,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,d1491e36-a751-4542-b2fd-6fcd654f1a84,AACG,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,4b678c55-0120-42c8-91eb-a67ee8ab65b3,INLF,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,1e9cf42c-4954-484d-9f86-f66fd9f203e4,XCUR,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,860df984-b9af-4b13-a628-bdd236a5d5e3,MNDO,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,f90d50f6-1508-486f-9bbd-c7c81973b5f3,TREO,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,4ac6fa60-4ab3-4d52-876b-445fe79e451f,TTEC,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-18T01:52:15+00:00,manage,d2b35c83-a06e-4f1b-bba4-2ca28ff77825,LGVN,time_exit,51,,,,session 5 time exit
+2026-11-18T01:52:15+00:00,manage,1b2e1fee-b798-4090-8e52-21b4b2ca9ee6,EFOI,time_exit,,,,,session 5: no position left (target filled or entry never filled)
