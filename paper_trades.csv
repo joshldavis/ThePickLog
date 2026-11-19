@@ -534,3 +534,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-18T21:35:01+00:00,arm,9221de72-dfb9-41d3-8f2c-4c5bcd2fe8b3,SPAI,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-18T21:35:01+00:00,arm,2618a4ab-8da6-41c3-814a-c3c9bfa8efa7,CING,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-18T21:35:01+00:00,arm,693fa96e-34b4-440c-b1d2-1c04ce0b1b5f,BRAG,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-19T01:30:43+00:00,manage,471c648b-28c9-409c-9f6e-882e894216ce,WHLR,time_exit,360,,,,"session 5 time exit | close error: HTTP 403: {""available"":""0"",""code"":40310000,""existing_qty"":""360"",""held_for_orders"":""360"",""message"":""insufficient qty available for order (requested: 360, available: 0)"",""symbol"":""WHLR""}"
+2026-11-19T01:30:43+00:00,manage,930af26f-d127-4ccb-961d-38eb27dd74dc,SFWL,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-19T01:30:43+00:00,manage,f051664b-6f12-4077-9dca-7b19bf32e8c7,PLCE,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-19T01:30:43+00:00,manage,ebd72a18-ea7f-4122-a771-b3ba9034fa27,CRVO,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-19T01:30:43+00:00,manage,30c03750-fb68-43d2-9ff6-a8527abc68cd,ZDGE,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-19T01:30:43+00:00,manage,586c2b21-9a3b-42c1-9144-d67e5cb3f8ba,NWTG,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-19T01:30:43+00:00,manage,a9ad8871-3ab8-4203-acd3-48dc041bc22d,NCT,time_exit,29.25,,,,session 5 time exit
+2026-11-19T01:30:43+00:00,manage,cd59863c-329e-470f-b5a9-bfa41950d447,OPTT,time_exit,79,,,,session 5 time exit
+2026-11-19T01:30:43+00:00,manage,a3955484-1308-4307-87cc-d2bf22f29818,JOB,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-19T01:30:43+00:00,manage,d5301a44-dc7d-4baf-8548-a395076fab91,BCG,tp_filled,140,1.61,,,
