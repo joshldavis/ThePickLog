@@ -658,3 +658,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-20T21:31:35+00:00,arm,130571a2-8ed8-4a2a-ae0f-13e25273f71a,POAS,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-20T21:31:35+00:00,arm,c999f992-5fb4-4884-98f4-4c27481e4740,SCOR,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-20T21:31:35+00:00,arm,e1d15617-adac-422a-9ab2-e262e670e78e,SEGG,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-21T00:57:41+00:00,manage,c9d6f43f-1c76-46f0-a0fd-fd6871c13716,BRFH,tp_filled,295,0.8,,,
