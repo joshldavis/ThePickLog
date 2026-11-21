@@ -1,34 +1,34 @@
-# ThePickLog — exit-rule study · 2026-11-14
+# ThePickLog — exit-rule study · 2026-11-21
 
-Daily-resolution replay of **1091** graded picks (of 1143). Conservative same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / exploratory** — a chosen rule must be pre-registered and validated forward.
+Daily-resolution replay of **1132** graded picks (of 1184). Conservative same-day tie (stop fills first); 2% cost haircut; fills at level. **In-sample / exploratory** — a chosen rule must be pre-registered and validated forward.
 
 _Bar provenance: every bar comes from the append-only grade-time record (paths.csv); 52 excluded for having no grade-time path (predate path capture). **No bar is ever re-fetched live.** A re-fetch returns split-adjusted prices while `entry_open` was recorded unadjusted at grade time, so one reverse split can inject a four-figure return and inflate the mean of every rule that exits at a bar price. Fixed 2026-07-29; the previous revision of this file reported the same-day-close baseline as +8.0% for that reason. Every pick below is additionally reconciled: `bars[0]` must reproduce the stored `ret_open_close_net` to within 0.05pp, so the same-day-close row equals outcomes.csv by construction and a stranger can check it._
 
 | exit rule | n | win% | avg net/trade | median |
 |---|---|---|---|---|
-| Same-day close (current) | 1091 | 30% | -1.8% | -2.4% |
-| Hold to 5d close | 1091 | 27% | +nan% | -11.8% |
-| Target +10% | 1091 | 48% | -4.8% | -1.9% |
-| Target +15% | 1091 | 38% | -5.8% | -4.7% |
-| Target +20% | 1091 | 34% | +nan% | -5.5% |
-| Target +30% | 1091 | 32% | +nan% | -5.8% |
-| Stop -10% | 1091 | 22% | -5.6% | -12.0% |
-| Stop -15% | 1091 | 25% | -6.5% | -8.5% |
-| H-EX2 +10% target / -20% stop [registered 2026-06-24] | 1091 | 45% | -4.2% | -3.0% |
-| Target +20% / Stop -10% | 1091 | 27% | -4.1% | -12.0% |
-| Target +15% / Stop -10% | 1091 | 30% | -3.8% | -12.0% |
-| Target +20% / Stop -15% | 1091 | 30% | -4.8% | -7.2% |
-| Trailing 15% | 1091 | 26% | -2.0% | -6.6% |
-| Trailing 20% | 1091 | 28% | -3.3% | -7.1% |
-| H-EX3 Target +5% [registered 2026-07-02] | 1091 | 67% | -4.0% | +3.0% |
-| H-EX4 +10% target / day-2 time stop [registered 2026-07-02] | 1091 | 41% | -3.5% | -2.1% |
-| H-EX5a Day-1 close [registered 2026-07-02] | 1091 | 29% | -3.1% | -3.3% |
-| H-EX5b Day-2 close [registered 2026-07-02] | 1091 | 29% | -4.2% | -4.0% |
-| H-EX6 half at +10%, half to 5d close [registered 2026-07-02] | 1091 | 36% | +nan% | -9.5% |
-| H-EX7 trail 15% after +10% touch [registered 2026-07-02] | 1091 | 30% | -3.2% | -5.3% |
-| H-EX8 tier target A/B +20%, C/D +10% [registered 2026-07-02] | 1091 | 46% | -5.0% | -2.4% |
-| H-EX9a +10% target / -10% stop [registered 2026-07-02] | 1091 | 40% | -3.2% | -6.6% |
-| H-EX9b +10% target / -30% stop [registered 2026-07-02] | 1091 | 47% | -4.2% | -2.0% |
+| Same-day close (current) | 1132 | 31% | -1.9% | -2.4% |
+| Hold to 5d close | 1132 | 26% | +nan% | -11.4% |
+| Target +10% | 1132 | 47% | -5.0% | -2.0% |
+| Target +15% | 1132 | 37% | -6.0% | -4.9% |
+| Target +20% | 1132 | 33% | +nan% | -8.1% |
+| Target +30% | 1132 | 31% | +nan% | -8.2% |
+| Stop -10% | 1132 | 21% | -5.7% | -12.0% |
+| Stop -15% | 1132 | 24% | -6.7% | -8.7% |
+| H-EX2 +10% target / -20% stop [registered 2026-06-24] | 1132 | 45% | -4.3% | -3.2% |
+| Target +20% / Stop -10% | 1132 | 26% | -4.2% | -12.0% |
+| Target +15% / Stop -10% | 1132 | 30% | -3.9% | -12.0% |
+| Target +20% / Stop -15% | 1132 | 29% | -5.0% | -7.4% |
+| Trailing 15% | 1132 | 26% | -2.3% | -6.7% |
+| Trailing 20% | 1132 | 27% | -3.6% | -7.1% |
+| H-EX3 Target +5% [registered 2026-07-02] | 1132 | 67% | -4.1% | +3.0% |
+| H-EX4 +10% target / day-2 time stop [registered 2026-07-02] | 1132 | 41% | -3.5% | -2.1% |
+| H-EX5a Day-1 close [registered 2026-07-02] | 1132 | 29% | -3.1% | -3.3% |
+| H-EX5b Day-2 close [registered 2026-07-02] | 1132 | 29% | +nan% | -4.0% |
+| H-EX6 half at +10%, half to 5d close [registered 2026-07-02] | 1132 | 36% | +nan% | -8.9% |
+| H-EX7 trail 15% after +10% touch [registered 2026-07-02] | 1132 | 29% | -3.5% | -5.4% |
+| H-EX8 tier target A/B +20%, C/D +10% [registered 2026-07-02] | 1132 | 46% | -5.1% | -2.5% |
+| H-EX9a +10% target / -10% stop [registered 2026-07-02] | 1132 | 39% | -3.2% | -6.7% |
+| H-EX9b +10% target / -30% stop [registered 2026-07-02] | 1132 | 47% | -4.4% | -2.2% |
 
 ⭐ = avg net/trade at least +2pp better than the current same-day-close exit.
 
