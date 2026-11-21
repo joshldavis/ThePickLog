@@ -1,5 +1,52 @@
 # ThePickLog — Audit Log
 
+## 2026-11-21 — Weekly verifiability audit — **⚠️ Issues found (1)**
+
+*Snapshot: live build `3c9e05d` ("data: scan 2026-11-21"; build stamp `2026-11-21 06:57 ET · 3c9e05d`). Both served CSVs match `origin/main@3c9e05d` byte for byte (SHA-256 `6bf96eab…` picks, 397,136 B; `980b0b54…` outcomes, 275,324 B). Latest cohort is 11-20.*
+
+Every Track-record number, chip, tier row, CI and exclusion note re-derives from the CSVs again this week. The one issue is still the paths.csv carry-over from #22 / #26 / #28: the same 9 corrected rows, none new. Headline figures are unaffected. One new observation: NCT 11-09 is held in Pending by the non-finite-bar guard (working as designed, but see below). The weekend "scan" commits (11-15, 11-21) wrote no picks.
+
+- **Primary trigger health.** One successful `workflow_dispatch` run every day at 11:56:15 UTC from 11-10 through 11-21. No weekday missed. No open "Primary scan trigger did not fire" or "token expires soon" issue. The only open issues are #22, #26 and #28 (prior audits, same defect).
+- **Data served.** `/picks.csv` 200 (2,242 rows), `/outcomes.csv` 200 (2,110 rows), `skipped_sessions.csv` 200 (8 rows), `scale_preflight.csv` 200. All 24 sitemap pages return 200. All 60 same-origin link targets resolve except the `r/` and `u/` JS-concatenation artifacts, which aren't links. The receipt `/r/p-<latest pick_id>` returns 200.
+- **Real data shown.** `getTrackRecord().real === true`. "2052 picks across 101 trading days" (102 distinct logged dates minus the 06-19 VOID). The only "sample" wording in the view is prose ("out-of-sample", "the real sample is closer to…"), not a fallback badge.
+- **No silent gaps.** 109 distinct `trading_date`s, 06-09 → 11-20. This week (11-16 → 11-20) is complete, with 17–19 picks per cohort. Missing sessions are only the closed history: 08-27 → 09-03, 09-14 and 10-19. All 8 are in `skipped_sessions.csv` and named in the Track-record sentence. 06-19 is still the only holiday cohort (VOID). No weekend cohort. Every cohort 11-11 → 11-20 published at 06:56–06:57 ET, inside the 06:00–09:20 window. *Watch next week:* Thanksgiving, Thu 11-26, is the next holiday the guard has to refuse.
+- **Claims == data** (independent Python recompute = `aggregateReal()` in-page = rendered page).
+  - Logged **2,052** (2,242 − 128 late − 26 frozen − 36 scale).
+  - Graded **1,905**. Win rate **34%** (33.81: 644 W / 1,261 M). Median **−2.7%** (−2.67). Mean **−1.9%** (−1.869) †. Avg worst dip **−19.2%** (−19.17). 5-day swing **−7.4%** (−7.39, n 1,904).
+  - † "Without it: −2.5%" (JAGX 2026-09-22, +1116%) reproduces (−2.46).
+  - Tier table (n / tickers / mean / median / clustered CI), with CIs reproduced exactly under the double-emulated LCG:
+    - A 725 / 469 / −1.76 / −2.80 / [−2.91, −0.40]
+    - B 143 / 84 / −4.27 / −5.26 / [−6.38, −2.32]
+    - C 495 / 21 / −0.76† (−3.0 without JAGX; computed −3.02) / −2.39 / [−3.45, +3.96]
+    - D 542 / 16 / −2.39 / −2.40 / [−2.88, −1.92]
+  - Win rate by tier: A 40 / B 28 / C 35 / D 27%. No "best pick" figure is published, which is correct.
+- **Exclusions reproduce from scratch.**
+  - Late: **128 across 7 cohorts**, unchanged.
+  - Frozen-quote: **26** = rule A 12 (BNZI) + rule B 14 (HKIT 7, MASK 2, PHGE 2, ATPC/GLMD/HWH 1 each). Unchanged and equal to `python quote_integrity.py report`.
+  - Scale-mismatch: **36**, unchanged. The on-site note's 14 tickers and counts match.
+- **Honest grading.**
+  - All **2,074** rows carrying data reproduce (close/open − 1) − 2% within 0.01pp. `win` agrees with the sign on every one.
+  - 0 duplicate `pick_id`s in either file, 0 orphans, 0 non-finite 5-day values.
+  - All 36 ungradeable rows carry a note: 14 Juneteenth VOID, 12 no entry bar, 6 HKIT unpriceable, 4 "only n of 6 sessions".
+  - `fix_window5d_2026_10_25.py --find` reports exactly the 2 known windows (HKIT and IPW 2026-09-16). No new misalignment.
+  - **⚠️ Paths spot-check (carried, #22 / #26 / #28).** 2,008 graded rows have 6 bars. **9 still don't recompute**, all noted "5d values corrected 2026-10-07", and all are the rows already listed:
+    - CUPR 09-22 MFE; QNME 09-23, ONCO 09-24, IFBD 09-25 and EZGO 09-25 MAE.
+    - GCDT 09-24 ×2, 09-25 and 09-28 net: the 2026-10-01 bar has `close = nan`.
+    - No row graded since 10-07 fails. **Fix unchanged** (see #22): re-fetch and rewrite those bars through a `corrections/` CSV plus a ledger seal, and make the grader self-test fail on any non-finite stored bar under a graded row.
+  - **Observation (not a FAIL): NCT 2026-11-09 (tier B) is still ungraded**, 9 sessions after its trading date. The grader logs "non-finite bar for NCT 2026-11-09 — deferring (INCIDENT 2026-10-07 guard)" every night. The row is visible: it's counted in the Pending chip, not dropped. But the guard has no end state. If Yahoo never fills the bar, the row stays Pending forever, which is a slow silent gap. Suggested: after N deferrals, grade it UNGRADEABLE with an explicit note, like the "only n of 6 sessions" rows.
+- **Chips reconcile.** Graded 1,905 + Pending 113 + Void 34 = All 2,052 ✓. Wins 644 + Misses 1,261 = Graded ✓.
+- **Disclaimers.** Educational / not investment advice / not a registered investment adviser / not a broker-dealer: present on index (top disclaimer: "not a broker-dealer or registered investment adviser", plus the footer), method and disclaimer.
+- **Validity backing.**
+  - (a) Method §9 wording is unchanged since 7dc71d4. Its claims hold:
+    - Mean MAE A −24.50 / B −22.08 / C −15.77 / D −14.36: monotone, deepest at A.
+    - Mean MFE A 42.03 / B 36.84 vs C 22.06 / D 14.30, so min(A, B) > max(C, D).
+    - "Tier A still has the larger median run" holds (14.11 vs 10.30).
+    - All six tier CI pairs overlap, so no ordering is claimed, as stated. The A–B overlap is now thin (A's lower bound −2.91 vs B's upper −2.32). Tiers are framed as a heat scale, not a quality grade.
+  - (b) The "unvalidated" label is still present on index and method (Gate-1 verdict is left to its own task).
+  - (c) The Messick Framework, Domain-Coverage Spec and Structural Justification docs return 200 and are linked from method.html.
+- **Scale pre-flight (shadow).** 384 checks, 271 scored, 113 ungraded, 0 with no reference close. TP 0 / FP 3 (NUWE 10-28, VCIG 11-02, PLCE 11-12) / FN 12 (BJDX ×6, MASK ×5, ONCO ×1, all 10-26 → 11-02, unchanged) / TN 256. Coverage: every one of the 384 picks since 10-26 has exactly one row; none missing, none duplicated. All 4 would-refuse picks (NUWE 10-28, VCIG 11-02, PLCE 11-12, NCT 11-17) are still in picks.csv. Promotion rule **not met** (FP 3 > 0, TP 0 < 10). Nothing was dropped.
+- **Grading in the coming week** (6th session after the trading date, evening ET; could slip a day if Yahoo is missing a session; Thanksgiving 11-26 is not a session): 11-13 (19) → Mon 11-23 · 11-16 (19) → Tue 11-24 · 11-17 (19) → Wed 11-25 · 11-18 (17) → Fri 11-27 (half-day session) · plus NCT 11-09 (1) if its bar fills. 11-19 (19) grades Mon 11-30 and 11-20 (19) Tue 12-01.
+
 ## 2026-11-14 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 *Snapshot: live build `88f397c` ("data: scan 2026-11-14"; build stamp `2026-11-14 06:58 ET · 88f397c`). Both served CSVs match `origin/main@88f397c` byte for byte (SHA-256 `90946cce…` picks, 380,563 B; `ec4a693a…` outcomes, 264,056 B). Latest cohort is 11-13.*
