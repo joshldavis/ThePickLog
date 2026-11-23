@@ -5,11 +5,19 @@
   <link>https://thepicklog.com/</link>
   <description>We test what's being sold to traders. Rules frozen before the fact, graded forward against a control, verdicts published either way — starting with our own strategy, which failed.</description>
   <language>en-us</language>
-  <lastBuildDate>Fri, 06 Nov 2026 20:00:00 GMT</lastBuildDate>
+  <lastBuildDate>Mon, 23 Nov 2026 20:00:00 GMT</lastBuildDate>
   <atom:link href="https://thepicklog.com/feed.xml" rel="self" type="application/rss+xml"/>
 
   <!-- New items go at the TOP. One item per published verdict, field note,
        correction, or experiment registration. Keep guids stable forever. -->
+
+  <item>
+    <title>Correction: our own 10-07 fix left 11 rows you couldn&#8217;t rebuild</title>
+    <link>https://thepicklog.com/field-notes.html</link>
+    <guid isPermaLink="false">thepicklog-correction-paths5d-2026-11-23</guid>
+    <pubDate>Mon, 23 Nov 2026 20:00:00 GMT</pubDate>
+    <description>The 2026-10-07 correction of 125 NaN five-day grades swapped in final price bars but kept 7 worst-dip or best-run figures from the unfinished bars, and left 4 GCDT bars blank while taking their returns from a re-downloaded series. All 11 rows now rebuild from paths.csv alone, using only bars the grader had already stored. Values move by 0.01 to 0.1 points; the headline figures and every verdict are unchanged.</description>
+  </item>
 
   <item>
     <title>Verdicts: MACD crossover, moving-average pullback and NR7 &#8212; no edge detected</title>

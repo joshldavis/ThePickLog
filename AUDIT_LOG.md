@@ -1,5 +1,32 @@
 # ThePickLog — Audit Log
 
+## 2026-11-23 — Correction: 11 graded rows didn't recompute from their own bars (closes #22, #26, #28; headline unaffected)
+
+The paths spot-check carried in the 10-31, 11-07, 11-14 and 11-21 audits is fixed at the cause. Every row it flagged was touched by the 2026-10-07 NaN correction, and that correction had two gaps.
+
+- **The defect.**
+  - **7 MFE/MAE cells kept a value from the unfinished bar.** The 10-07 fix swapped each unfinished 5th-session bar in `paths.csv` for Yahoo's final bar, but only rewrote `mfe_5d` / `mae_5d` on the 7 rows where the swap moved them visibly. On 7 more rows the unfinished bar carried one extra decimal in its high or low, so the stored value no longer matched the stored bar, by 0.01–0.05pp: AVX 09-22 and CUPR 09-22 MFE; ATPC 09-23, QNME 09-23, ONCO 09-24, IFBD 09-25 and EZGO 09-25 MAE. The audit's tolerance counted 5 of these; AVX and ATPC are the same defect at 0.01pp.
+  - **4 GCDT rows had no final bar.** For GCDT 09-24 (v0.2 and v0.3 rows), 09-25 and 09-28, the 10-07 fix computed the 5-day net from a re-fetched, split-adjusted series and left the unfinished bar (`close = nan`) in `paths.csv`. Nobody could rebuild those nets from the public file, and the re-fetched series disagrees with the bars the grader itself captured.
+- **The correction** (`corrections/paths5d-2026-11-23.csv`, applied by `fix_paths5d_2026_11_23.py`):
+  - **No new price feed.** Each GCDT gap is filled with the final bar for the same session that the grader already stored in a neighbouring GCDT window: 10-01 from the 09-25 window, 10-02 from the 09-28 window, and 10-05 from the 09-30 window. The 09-30 window is on the post-split scale, so that bar is divided by 6 (volume ×6), as in window5d-2026-10-25. The 10-01 bar appears identically in three separate windows.
+  - The 5-day net (and, for 09-24, the MAE) is then recomputed with the grader's own formula. The 7 MFE/MAE cells are recomputed from the bars already stored.
+  - Every cell is checked against its old value; 11 outcome lines and 4 path lines change, every other line is byte-identical, and re-running is a no-op.
+  - The entry bar is untouched, so `entry_open`, `same_day_close`, `ret_open_close_net` and `win` do not change.
+  - `python fix_paths5d_2026_11_23.py --check` now reports **2,009 graded rows with 6 bars, 0 that don't recompute**.
+- **What moved** (old → new):
+  - GCDT 09-24 ×2: 5-day net −12.70 → **−12.60**; MAE −19.96 → **−20.00**. GCDT 09-25: −34.54 → **−34.55**. GCDT 09-28: −37.96 → **−37.97**.
+  - MFE: AVX 71.69 → 71.70, CUPR 13.72 → 13.70. MAE: ATPC −8.53 → −8.52, QNME −35.39 → −35.40, ONCO −15.13 → −15.18, IFBD −38.43 → −38.46, EZGO −20.52 → −20.56.
+- **Effect on published figures** (kept set, 1,905 graded):
+  - avg worst dip −19.1654 → −19.1655 (shown **−19.2%**, unchanged); 5-day swing −7.3908 → −7.3907 (shown **−7.4%**, unchanged).
+  - graded count, win rate, median and mean net: unchanged (the entry bar is untouched).
+  - **H-RISK2** (v0.2, deep drawdown = MAE ≤ −20%): the v0.2 GCDT 09-24 row now crosses −20%. Q5 realised 51.8% → **52.6%**, no-skill Brier 0.2086 → **0.2090** (model 0.2047). Verdict **PASSES**, unchanged.
+  - **H-RISK1**: one CI bound moves in the third decimal (v0.3 5-day, −0.304 → −0.303). Verdicts unchanged.
+  - **H-V3-EX5** (leaderboard, +10% limit with −20% stop, stop-first): the v0.3 GCDT 09-24 row now hits the stop. avg −9.9 → **−10.0**, delta −7.8 → **−7.9**; still significant and still worse than the baseline.
+  - **Exit study** (`reports/exit-study-LATEST.md`): the four GCDT NaN bars are why "Hold to 5d close", "Target +20%", "Target +30%" and "H-EX6" print `+nan%`. They get real averages on the next weekly run. "H-EX5b Day-2 close" stays `nan` because of NCT (below).
+  - H-EX1, H-JEV1/2 and the EXP02–09 family are not affected: their inputs for these rows don't change, or the rows are outside their windows.
+- **NCT's no-trade day (owner's call, 2026-11-23).** 3 graded NCT rows (11-10, 11-12 ×2) hold an all-NaN 2026-11-16 bar inside the window (volume 0). They recompute, because the grader's max/min skip a NaN bar the way pandas does, so 11-16 stays counted as a session with no trades and **those rows don't change**. The same bar is the 5th session of NCT 11-09, which the grader had deferred every night with no end state. `ignitionscan.py` grade now writes such a pick as `UNGRADEABLE` with the unfilled session named once it passes the existing stale horizon (more than 20 sessions; around 2026-12-09 for NCT 11-09), like the "only n of 6 sessions" rows. Before that it keeps deferring. Tested on a mocked feed: 10 sessions old → deferred; 21 → terminal row. `--check` still lists the three NCT rows by name.
+- **Seal.** No separate ledger event: the first scheduled scan or grade after merge seals the corrected files in `integrity_ledger.csv`, and the chain stays unbroken. Between the merge and that run, `log_integrity.py --verify-head` reports a head mismatch for `outcomes.csv` and `paths.csv`; this entry is the record of why.
+
 ## 2026-11-21 — Weekly verifiability audit — **⚠️ Issues found (1)**
 
 *Snapshot: live build `3c9e05d` ("data: scan 2026-11-21"; build stamp `2026-11-21 06:57 ET · 3c9e05d`). Both served CSVs match `origin/main@3c9e05d` byte for byte (SHA-256 `6bf96eab…` picks, 397,136 B; `980b0b54…` outcomes, 275,324 B). Latest cohort is 11-20.*
