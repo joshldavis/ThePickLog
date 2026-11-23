@@ -94,10 +94,20 @@ jobs:
         run: python market_time.py
       - name: Decide command
         id: cmd
+        # The dispatch input is free text, so it is read from the environment and
+        # allowlisted (2026-11-23) instead of being pasted into the script: pasted in,
+        # a value like "scan; <anything>" would run as shell in a job that can push to main.
+        env:
+          INPUT_COMMAND: ${{ github.event.inputs.command }}
         run: |
           CMD=scan
           if [ "${{ github.event.schedule }}" = "0 21 * * 1-5" ]; then CMD=grade; fi
-          if [ -n "${{ github.event.inputs.command }}" ]; then CMD="${{ github.event.inputs.command }}"; fi
+          if [ -n "$INPUT_COMMAND" ]; then
+            case "$INPUT_COMMAND" in
+              scan|scan-market|grade|report|brief|demo|check-grading|record-failure|gate-check) CMD="$INPUT_COMMAND" ;;
+              *) echo "::error::Unknown command input (expected scan, grade, report, ...)"; exit 1 ;;
+            esac
+          fi
           # Same-day idempotency guard (2026-08-29), the other half of the twin
           # scan crons above. The scanner already dedupes on (ticker, date), but
           # that is not enough: a second scan an hour later screens a moved market

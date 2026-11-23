@@ -41,10 +41,19 @@ jobs:
           python-version: "3.11"
       - name: Decide mode
         id: mode
+        # Dispatch input read from the environment and allowlisted (2026-11-23), never
+        # pasted into the script, so it can't run as shell.
+        env:
+          INPUT_MODE: ${{ github.event.inputs.mode }}
         run: |
           MODE=manage
           if [ "${{ github.event.schedule }}" = "40 13 * * 1-5" ]; then MODE=arm; fi
-          if [ -n "${{ github.event.inputs.mode }}" ]; then MODE="${{ github.event.inputs.mode }}"; fi
+          if [ -n "$INPUT_MODE" ]; then
+            case "$INPUT_MODE" in
+              enter|arm|manage) MODE="$INPUT_MODE" ;;
+              *) echo "::error::Unknown mode input (expected enter, arm or manage)"; exit 1 ;;
+            esac
+          fi
           echo "mode=$MODE" >> "$GITHUB_OUTPUT"
       - name: Run paper trader (${{ steps.mode.outputs.mode }})
         env:
