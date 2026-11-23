@@ -121,6 +121,13 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <p class="lead">Errors we found in our own record, written up in full — what broke, what it cost us, and the checks that catch it. Every one of these made our numbers look better than they were.</p>
   <p class="strip">Found in public data &nbsp;•&nbsp; Corrected, not quietly restated &nbsp;•&nbsp; The fix is in the write-up</p>
 
+  <a class="card" href="AUDIT_LOG.md" style="border-color:#5a2a3355">
+    <span class="no">FIELD NOTE · 2026-11-23</span><span class="pill v-fail">CORRECTION</span>
+    <h2>Our own correction left 11 rows you couldn't check</h2>
+    <p>On 2026-10-07 we fixed 125 five-day grades that had been written as NaN. That fix swapped in the final price bars, but on 7 rows it kept a worst-dip or best-run figure from the unfinished bar. On 4 GCDT rows it took the return from a re-downloaded price series and left the blank bar in the public file. Our weekly audit flagged it four weeks running. Every one of those rows now rebuilds from paths.csv alone, using only bars the grader had already stored. Most of the errors made drawdowns look a hair shallower than they were; the values move by 0.01 to 0.1 points.</p>
+    <div class="meta">11 rows / 15 cells corrected · headline unchanged · every verdict unchanged</div>
+  </a>
+
   <a class="card" href="how-many-did-you-test.html" style="border-color:#24405a88">
     <span class="no">FIELD NOTE · 2026-09-23</span><span class="pill v-inc">METHOD</span>
     <h2>The number nobody reports: how many strategies did you test before this one?</h2>
