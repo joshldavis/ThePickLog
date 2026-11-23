@@ -661,3 +661,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-21T00:57:41+00:00,manage,c9d6f43f-1c76-46f0-a0fd-fd6871c13716,BRFH,tp_filled,295,0.8,,,
 2026-11-21T11:56:34+00:00,enter,,,noop,,,,,no new v0.3 picks today
 2026-11-22T11:56:38+00:00,enter,,,noop,,,,,no new v0.3 picks today
+2026-11-23T11:58:11+00:00,enter,6529f998-87ae-4b2d-b0f2-ff875ec7a01e,CYAB,entry_reject,106,,,,"HTTP 422: {""code"":40010001,""message"":""asset CYAB is not active""}"
+2026-11-23T11:58:11+00:00,enter,c223d6a9-d320-4f92-83bd-cb4069124065,SRTM,entry_reject,265,,,,"HTTP 422: {""code"":42210000,""message"":""market order rejected due to trading halt on symbol: \""SRTM\"", please place a limit order instead""}"
+2026-11-23T11:58:11+00:00,enter,484f5127-e122-4afa-8b36-473ead498c72,MSS,entry_submitted,150,,ff79960e-efda-4ad8-9e22-42a39f5b8e72,pending_new,
+2026-11-23T11:58:11+00:00,enter,b1807960-17c5-41f5-999f-b79e2348ae62,RIME,entry_reject,384,,,,"HTTP 422: {""code"":42210000,""message"":""market order rejected due to trading halt on symbol: \""RIME\"", please place a limit order instead""}"
+2026-11-23T11:58:11+00:00,enter,4bd01f30-9de3-49ca-9d3e-3dddd000dfab,MEDS,entry_submitted,85,,30bcc2cd-7846-4371-afc6-634144825f1a,pending_new,
+2026-11-23T11:58:11+00:00,enter,5e435368-f9f0-40a7-bd84-6f888e2a32cf,RAYA,entry_submitted,341,,cde7c635-fc68-459c-a6f6-383cbf0168c4,pending_new,
+2026-11-23T11:58:11+00:00,enter,203c40c6-0bef-45d5-ba56-32814968fb4a,BNAI,entry_submitted,58,,ae253167-8b3a-4347-8f2c-897b5bb0a2c3,pending_new,
+2026-11-23T11:58:11+00:00,enter,5fdd405d-498b-4471-8ace-749accf7b6af,AMCI,entry_submitted,166,,ebe8221e-bdad-43fa-b6d4-43bf70b37922,pending_new,
+2026-11-23T11:58:11+00:00,enter,d174686d-e7d1-4cfc-a1be-858ebd24910a,UONE,entry_submitted,84,,512c5af1-027e-4897-be09-15f9c5a02f68,pending_new,
+2026-11-23T11:58:11+00:00,enter,144f34be-bfb5-41a5-80ce-0ef81f2d2c87,LVWR,entry_submitted,203,,d4e5779a-b857-4a2a-a15d-7e9c9bf300e4,pending_new,

@@ -1,6 +1,6 @@
-# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-11-22
+# ThePickLog — H-RISK1 / H-RISK2 forward evaluation · 2026-11-23
 
-Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W47**.
+Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading_date` strictly after that date are counted. Snapshot week: **2026-W48**.
 
 **H-RISK1** — the composite score ranks *magnitude* (drawdown depth, total range), not *direction*. The claim has two halves and BOTH must hold: the magnitude correlations are positive and clear the ticker-clustered 95% CI, **and** the signed-return correlation stays non-significant — at **both** horizons, same-day and 5-day (enforced in code since the 2026-09-25 amendment; before that only same-day was checked, though both were always labelled *must stay ns*).
 
@@ -10,7 +10,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> range (MFE-MAE): rho=+0.282 CI[+0.158,+0.393] n=759 tickers=16 SIG
 - score -> same-day return *(must stay ns)*: rho=-0.039 CI[-0.159,+0.073] n=759 tickers=16 ns
 - score -> 5-day return *(must stay ns)*: rho=-0.073 CI[-0.181,+0.029] n=759 tickers=16 ns
-- consecutive weekly snapshots with positive |MAE| rho: **15** (need >= 3)
+- consecutive weekly snapshots with positive |MAE| rho: **16** (need >= 3)
 
 **v0.2-yf verdict: PASSES all H-RISK1 criteria**
 
@@ -20,7 +20,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> range (MFE-MAE): rho=+0.282 CI[+0.208,+0.354] n=653 tickers=450 SIG
 - score -> same-day return *(must stay ns)*: rho=+0.001 CI[-0.079,+0.084] n=653 tickers=450 ns
 - score -> 5-day return *(must stay ns)*: rho=-0.230 CI[-0.304,-0.158] n=653 tickers=450 SIG
-- consecutive weekly snapshots with positive |MAE| rho: **15** (need >= 3)
+- consecutive weekly snapshots with positive |MAE| rho: **16** (need >= 3)
 
 **v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.230), so the score also carries DIRECTION information; that fails H-RISK1 as registered
 
