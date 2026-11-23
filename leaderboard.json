@@ -562,12 +562,12 @@
       "rule_str": "exit: mfe_5d ≥ +10% → +8% net; else mae_5d ≤ −20% → −22% net; else 5d close",
       "n_post": 753,
       "win_post": 34,
-      "avg_post": -9.9,
+      "avg_post": -10.0,
       "median_post": -22.0,
       "baseline_avg_post": -2.1,
-      "delta_post": -7.8,
+      "delta_post": -7.9,
       "ci95": [
-        -9.2,
+        -9.3,
         -6.5
       ],
       "significant": true,

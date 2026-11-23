@@ -19,7 +19,7 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 - score -> |MAE| (drawdown depth): rho=+0.244 CI[+0.171,+0.315] n=653 tickers=450 SIG
 - score -> range (MFE-MAE): rho=+0.282 CI[+0.208,+0.354] n=653 tickers=450 SIG
 - score -> same-day return *(must stay ns)*: rho=+0.001 CI[-0.079,+0.084] n=653 tickers=450 ns
-- score -> 5-day return *(must stay ns)*: rho=-0.230 CI[-0.304,-0.158] n=653 tickers=450 SIG
+- score -> 5-day return *(must stay ns)*: rho=-0.230 CI[-0.303,-0.158] n=653 tickers=450 SIG
 - consecutive weekly snapshots with positive |MAE| rho: **16** (need >= 3)
 
 **v0.3-yf verdict: not yet established** — score -> 5-day return is significant (rho -0.230), so the score also carries DIRECTION information; that fails H-RISK1 as registered
@@ -28,16 +28,16 @@ Pre-registered **2026-07-29** (HYPOTHESES.md batch #6). Only picks with `trading
 
 **H-RISK2** — is the gauge *calibrated*, not merely correlated? v0.2 cohort only; the frozen probabilities are explicitly NOT transferable to v0.3 (different score distributions — see H-STR3).
 
-- Brier (frozen model) **0.2047** vs no-skill baseline **0.2086** -> BEATS baseline
-- realised P(MAE <= -20%): Q1 23.9% vs Q5 51.8%
-- Q5-Q1 gap: 27.9% (need >= 15%) -> OK
+- Brier (frozen model) **0.2047** vs no-skill baseline **0.2090** -> BEATS baseline
+- realised P(MAE <= -20%): Q1 23.9% vs Q5 52.6%
+- Q5-Q1 gap: 28.7% (need >= 15%) -> OK
 - per-quintile realised / predicted / n:
 
   - Q1: realised 23.9% · predicted 20.2% · n=159
   - Q2: realised 19.6% · predicted 39.6% · n=138
   - Q3: realised 23.8% · predicted 34.9% · n=164
   - Q4: realised 27.2% · predicted 38.2% · n=184
-  - Q5: realised 51.8% · predicted 48.3% · n=114
+  - Q5: realised 52.6% · predicted 48.3% · n=114
 
 **H-RISK2 verdict: PASSES**
 
