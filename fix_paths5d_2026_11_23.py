@@ -36,7 +36,8 @@ WHAT THIS DOES
 
         python fix_paths5d_2026_11_23.py --check
 
-    Then seal the ledger:  python log_integrity.py --event=correction-paths5d-2026-11-23
+    No separate ledger event: the first scheduled CI scan or grade after merge seals the
+    corrected files (see AUDIT_LOG 2026-11-23).
 """
 import csv, io, math, sys
 from collections import defaultdict

@@ -820,6 +820,19 @@ def cmd_grade():
             close_5d = float(window.iloc[GRADE]["Close"])
             hi = float(window["High"].max()); lo = float(window["Low"].min())
             if not all(math.isfinite(v) for v in (o, c, close_5d, hi, lo)):
+                # END STATE (2026-11-23). A bar that is still non-finite past the stale
+                # horizon is not an unfinished bar any more; it is a session the feed will
+                # never fill (NCT 2026-11-16: all-NaN, volume 0). Deferring it forever is a
+                # slow silent gap, so write a terminal row with the reason, exactly like the
+                # "only n of 6 sessions" rows. Before the horizon, keep deferring.
+                if stale:
+                    bad = ",".join(str(window.iloc[i]["d"]) for i in range(len(window))
+                                   if not all(math.isfinite(float(window.iloc[i][k]))
+                                              for k in ("Open", "High", "Low", "Close")))
+                    append_outcome(p, f"UNGRADEABLE: the price feed never filled session(s) {bad} "
+                                      f"(non-finite bar after {tds} trading days)")
+                    graded += 1
+                    continue
                 print(f"  non-finite bar for {p['ticker']} {start} — deferring (INCIDENT 2026-10-07 guard)")
                 failed_by_ticker[p["ticker"]].append((p, tds))
                 continue
