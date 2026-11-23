@@ -292,7 +292,7 @@ function toggleMenu(force){
       <tr><td><b>3 · Realizable grading</b></td><td>Outcomes are scored at prices a normal participant could actually transact — a real entry, a real exit, net of realistic costs and slippage. "Ever touched +X%" is not a result.</td></tr>
       <tr><td><b>4 · Rules frozen in advance</b></td><td>Any decision rule is registered with a date and judged <i>only</i> on picks logged after it. Backtests may inform, but only out-of-sample counts as the record.</td></tr>
       <tr><td><b>5 · Sufficient sample</b></td><td>Headline statistics are claimed only once enough graded, out-of-sample picks exist to be meaningful — a working floor of <b>n ≥ 200</b>. Smaller samples are labeled provisional.</td></tr>
-      <tr><td><b>6 · Immutability</b></td><td>The log is append-only: picks can be added, never edited, deleted, or backdated. Grading runs as an automated, scheduled job — no human touches an outcome after the fact.</td></tr>
+      <tr><td><b>6 · Immutability</b></td><td>The log is append-only: picks can be added, never edited, deleted, or backdated. Grading runs as an automated, scheduled job. When a grading defect is found, the affected outcome rows are corrected in the open: dated in the row, kept in git, and written up as a <a href="field-notes.html">field note</a>.</td></tr>
       <tr><td><b>7 · Open verifiability</b></td><td>The underlying data is published so anyone can re-derive every headline figure. Nothing that matters is asserted; everything that matters is checkable.</td></tr>
     </tbody>
   </table>

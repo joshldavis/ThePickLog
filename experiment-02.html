@@ -138,15 +138,16 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 </script>
 
 <div class="wrap" id="main" tabindex="-1">
-  <span class="no">EXPERIMENT 02 · REGISTERED 2026-07-29 · RUNNING</span>
+  <span class="no">EXPERIMENT 02 · REGISTERED 2026-07-29 · VERDICT 2026-11-11 · INCONCLUSIVE</span>
   <h1>The 2-period RSI trade, tested the hard way</h1>
   <p class="standfirst">Buy a large-cap when its 2-day RSI collapses while it's still above its 200-day average. It's one of the most widely published retail setups of the last twenty years, and it is almost always sold on one number: the win rate. This page is the rule, frozen, before we have collected a single trade.</p>
 
-  <div class="status">
-    <div class="h">STATUS</div>
-    <div class="b">Past its verdict date (2026-11-02). Sample floor not yet met, so no verdict yet.</div>
-    <p style="margin-bottom:8px">On 2026-11-02 this experiment had not yet reached both pre-registered floors (at least 30 graded trades <i>and</i> at least 20 different companies). Under the rule fixed in advance, the verdict is computed automatically, once, at the first daily run where both floors are met, and published here either way. Until then the page shows no verdict language. The running count is in the <a href="reports/experiments-LATEST.md">live experiments report</a>.</p>
-    <p>Signals are logged automatically each session and graded five sessions later. <b>The verdict is written once, on or after 2 November 2026</b>, and published whether it passes or fails.</p>
+  <div class="status" style="border-color:#24405a;background:#10202e">
+    <div class="h" style="color:var(--blue)">VERDICT &middot; 2026-11-11 &middot; INCONCLUSIVE</div>
+    <div class="b">No edge detected. The bar is not met.</div>
+    <p>46 post-registration trades over 21 companies &middot; same-day excess over the day-matched control, net of costs: mean <b>&minus;0.14%</b>, median <b>+0.09%</b> &middot; company-clustered 95% CI <b>[&minus;0.43, +0.21]</b> percentage points, which includes zero &middot; positive in <b>0 of 3</b> weekly snapshots. Secondary exits, which cannot rescue a fail: 5-session mean +0.29%, RSI-exit mean +0.17%.</p>
+    <p style="margin-top:8px">Across the declared family of eight experiments (02&ndash;09), Benjamini&ndash;Hochberg adjusted p = 1.00 (raw two-sided p = 0.40): <b>no discovery to correct</b>. &ldquo;Inconclusive&rdquo; is not &ldquo;failed&rdquo;: the interval rules out only a large edge; it cannot confirm or rule out a small one.</p>
+    <p style="margin-top:8px">Computed once, at the first daily run after 2026-11-02 where both sample floors were met, written to an append-only file and never recomputed: see the <code>EXP02-RSI2</code> rows in <a href="experiments/EXP02-verdict.csv">EXP02-verdict.csv</a> and <a href="experiments/FAMILY-fdr.csv">FAMILY-fdr.csv</a>, and the <a href="reports/family-verdict-LATEST.md">family verdict report</a>. Scope: this rule, on this experiment&rsquo;s frozen universe, over this window.</p>
     <p><b>Why not September, as this page first said.</b> When we registered this test we said "around September, once 30 trades exist." On 28 August, before opening any outcome file, we noticed that wording left the verdict date open: we could have declared it on whichever week the result first looked good. That is the multiple-looks problem this site exists to catch in other people's records. So we fixed one evaluation date in advance (2 November, the date already set for Experiments 03 and 06–09, so the whole family can be corrected for multiple testing together) and added a floor of at least 20 distinct companies. Both changes can only make a pass harder. The amendment is dated in <a href="HYPOTHESES.md">HYPOTHESES.md</a>. This page should have said so at the time; it now does.</p>
   </div>
 
