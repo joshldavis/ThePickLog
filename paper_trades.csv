@@ -721,3 +721,20 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-24T01:11:36+00:00,arm,5fdd405d-498b-4471-8ace-749accf7b6af,AMCI,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-24T01:11:36+00:00,arm,d174686d-e7d1-4cfc-a1be-858ebd24910a,UONE,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-24T01:11:36+00:00,arm,144f34be-bfb5-41a5-80ce-0ef81f2d2c87,LVWR,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-24T04:27:21+00:00,manage,69f5b5f9-4c9e-4060-bd5e-430b613430e0,ONFO,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,4a1c600c-920d-46e0-8237-cc7f0d9ca7df,FCUV,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,e5d5f9e5-adb3-473a-a9f6-739311b0028e,BKHA,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,92a6951d-5773-4497-bb96-d0095a501311,RAIN,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,2fd80f58-fd5c-4e9e-b6ca-c633f208d971,SNAL,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,f6c88db0-179a-4aff-b53b-752bdbed6f7d,CNSY,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,6976d45c-0742-4a9c-889f-e4e04305617a,VTSI,time_exit,,,,,session 6: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,709451be-c972-450f-86dd-3a8314605388,GMM,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,f8b15409-4411-49ea-85f4-d9c6b6f22f58,AKAN,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,a5c0ef29-1f3f-436f-b8cb-06f7dc6097af,HIHO,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,2ec41fab-96bc-4305-9198-305a691b044b,GP,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,ec81223b-9ed9-4785-93c8-fa8051fb4bc3,FEDU,time_exit,14,,,,session 5 time exit
+2026-11-24T04:27:21+00:00,manage,ceb15d97-67d5-44f5-9fb7-2d334dda0241,NOMA,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,d23a9402-24a2-4ee0-8203-f72807e77187,GDHG,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,d5301a44-dc7d-4baf-8548-a395076fab91,BCG,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,dcb97c85-4ec6-4d9e-96ba-13b616f0f90b,AMST,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-24T04:27:21+00:00,manage,ac79310a-b439-486e-acea-d4f98c2055a8,CLRO,time_exit,,,,,session 5: no position left (target filled or entry never filled)
