@@ -802,3 +802,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-25T03:10:25+00:00,manage,9221de72-dfb9-41d3-8f2c-4c5bcd2fe8b3,SPAI,time_exit,,,,,session 5: no position left (target filled or entry never filled)
 2026-11-25T03:10:25+00:00,manage,2618a4ab-8da6-41c3-814a-c3c9bfa8efa7,CING,time_exit,,,,,session 5: no position left (target filled or entry never filled)
 2026-11-25T03:10:25+00:00,manage,693fa96e-34b4-440c-b1d2-1c04ce0b1b5f,BRAG,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T11:58:02+00:00,enter,3c15af46-e453-44b8-8e76-47e200b7253b,FGL,entry_submitted,323,,a00082e0-c8db-49df-9b8d-b6d74b778db8,pending_new,
+2026-11-25T11:58:02+00:00,enter,6fe09be9-644b-4ce7-8d08-b8420247bbc7,LGHL,entry_submitted,235,,86477443-1c64-470f-8006-850f1c6b6e2a,pending_new,
+2026-11-25T11:58:02+00:00,enter,c27fbed0-084e-40d2-a408-7011e05d75fb,BENF,entry_submitted,226,,1ed48a6d-eb14-46d5-99f4-450d14094ba7,pending_new,
+2026-11-25T11:58:02+00:00,enter,2df5b463-4f3f-4de7-8cdb-0de8ba38e09a,GLXG,entry_submitted,190,,3f31acc7-1ff7-4cbe-aefe-3617e45407ae,pending_new,
+2026-11-25T11:58:02+00:00,enter,aa6acc4b-1799-48d2-b09c-150db07a9c4c,AKAN,entry_reject,35,,,,"HTTP 422: {""code"":42210000,""message"":""asset \""AKAN\"" is not tradable""}"
+2026-11-25T11:58:02+00:00,enter,6a6c2d7d-9dae-4b5a-a6b8-0779f929cc06,LVWR,entry_submitted,109,,7ee0c1d4-c310-427b-88a0-20689055a4bf,pending_new,
+2026-11-25T11:58:02+00:00,enter,f1fc0c0b-b0d2-4be3-b9a7-d6569d62dd19,YFOR,entry_submitted,208,,4c475ebb-4b1d-4a30-a9cc-8c82f7cd4de0,pending_new,
+2026-11-25T11:58:02+00:00,enter,a6c833fd-d629-4981-acd3-e16481859319,ALTG,entry_submitted,32,,59e8b352-e37a-420c-ad91-e9cbc6a0016b,pending_new,
+2026-11-25T11:58:02+00:00,enter,3b48f8f4-a403-4800-bbcf-657cb6eacc3f,YHGJ,entry_submitted,57,,bae4f67c-3e52-409c-8676-bd323997817f,pending_new,
+2026-11-25T11:58:02+00:00,enter,be292938-51d5-4268-96b0-07ba0456ebac,APUS,entry_submitted,67,,910e4dd9-f6a6-4a28-9f25-79ac3e12915a,pending_new,
