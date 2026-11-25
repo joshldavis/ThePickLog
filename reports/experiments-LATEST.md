@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-11-24
+# ThePickLog — experiments under test · 2026-11-25
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
@@ -29,9 +29,9 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP07-SMAPULL — The moving-average pullback (buy the dip in an uptrend)
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **175** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.047%**, median **+0.039%**, 10% trimmed **+0.004%**, clustered 95% CI [-0.266, +0.174] over 32 names
-- day-matched excess, 5 sessions: mean **+0.578%**, median **+0.770%**
+- graded signals: **177** (need 30) over **32** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.048%**, median **+0.039%**, 10% trimmed **+0.002%**, clustered 95% CI [-0.267, +0.171] over 32 names
+- day-matched excess, 5 sessions: mean **+0.567%**, median **+0.707%**
 - win rate 48% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=138 over 31 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
@@ -51,9 +51,9 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP09-NR7 — Volatility contraction (NR7) in an uptrend
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **188** (need 30) over **33** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.104%**, median **-0.027%**, 10% trimmed **-0.049%**, clustered 95% CI [-0.300, +0.082] over 33 names
-- day-matched excess, 5 sessions: mean **+0.351%**, median **+0.354%**
+- graded signals: **191** (need 30) over **35** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.087%**, median **-0.023%**, 10% trimmed **-0.031%**, clustered 95% CI [-0.280, +0.100] over 35 names
+- day-matched excess, 5 sessions: mean **+0.416%**, median **+0.425%**
 - win rate 43% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=140 over 33 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
