@@ -792,3 +792,13 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-24T23:15:49+00:00,arm,473ee29b-6072-4249-8bc9-ae34a0f1202d,FFR,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-24T23:15:49+00:00,arm,3546c4e5-a502-4909-a18f-b33214135648,MEDS,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-24T23:15:49+00:00,arm,8c81ba89-19be-48f0-ae42-e710331b7288,RSSS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-25T03:10:25+00:00,manage,27597369-619f-4ba9-8094-ac1e1cbc08f6,GP,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,c2ee7e80-0774-4fff-a8b5-6a53b219317d,MPU,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,cbf41b1c-2866-4a01-91e6-fa23902b2cdb,FRTT,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,51fb538a-1c6e-4176-8c2f-094815d4cabb,AZI,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,c9d6f43f-1c76-46f0-a0fd-fd6871c13716,BRFH,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,f604bc95-57e1-4dc0-a643-c2175ce53177,AYTU,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,170fa1b5-40b2-4add-894e-928df97292c2,LUCK,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,9221de72-dfb9-41d3-8f2c-4c5bcd2fe8b3,SPAI,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,2618a4ab-8da6-41c3-814a-c3c9bfa8efa7,CING,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-25T03:10:25+00:00,manage,693fa96e-34b4-440c-b1d2-1c04ce0b1b5f,BRAG,time_exit,,,,,session 5: no position left (target filled or entry never filled)
