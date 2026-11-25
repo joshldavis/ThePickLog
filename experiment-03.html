@@ -143,9 +143,11 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 
   <div class="status" style="border-color:#24405a;background:#10202e">
     <div class="h" style="color:var(--blue)">VERDICT &middot; 2026-11-02 &middot; INCONCLUSIVE</div>
-    <div class="b">No edge detected. The excess is indistinguishable from zero.</div>
-    <p>58 post-registration trades over 30 companies &middot; same-day excess over the day-matched control, net of costs: mean <b>+0.02%</b>, median <b>+0.12%</b> &middot; company-clustered 95% CI <b>[&minus;0.31, +0.31]</b> percentage points, which includes zero.</p>
-    <p style="margin-top:8px">Across the declared family of eight experiments (02&ndash;09), Benjamini&ndash;Hochberg adjusted p = 1.00 (raw two-sided p = 0.89): <b>no discovery to correct</b>. Our registered prior was exactly this. &ldquo;Inconclusive&rdquo; is not &ldquo;failed&rdquo;: the interval rules out a large edge in either direction, but it neither confirms nor refutes a small one.</p>
+    <div class="b">No edge detected, and too few trades to detect a small one.</div>
+    <p>58 post-registration trades over 30 companies &middot; same-day excess over the day-matched control: mean <b>+0.02%</b>, median <b>+0.12%</b> &middot; company-clustered 95% CI <b>[&minus;0.31, +0.31]</b> percentage points, which includes zero.</p>
+    <p style="margin-top:8px"><b>What it rules out:</b> a same-day edge larger than about +0.3 points per trade, or a loss worse than about &minus;0.3. <b>What it cannot rule out:</b> anything smaller, which includes every edge size we would consider plausible for a signal this widely followed. With 58 trades the test could reliably detect only an edge of about 0.44 points (80% power), and it had about a 10% chance of detecting a true 0.10-point edge. The registration never named the effect it was looking for, so the result could not be classed as underpowered; every new registration now has to name one and size its sample to find it (<a href="HYPOTHESES.md">HYPOTHESES.md</a>, 2026-11-25).</p>
+    <p style="margin-top:8px">Across the declared family of eight experiments (02&ndash;09), Benjamini&ndash;Hochberg adjusted p = 1.00 (raw two-sided p = 0.89): <b>no discovery to correct</b>. Our registered prior was exactly this. &ldquo;Inconclusive&rdquo; is not &ldquo;failed&rdquo;.</p>
+    <p style="margin-top:8px">Secondary, five-session excess: mean +0.13%, median &minus;0.18%, 95% CI [&minus;0.77, +0.97], uninformative. The 0.10% cost is charged to the trade and to the control alike, so it cancels in the excess: the excess measures selection against buying the whole universe at the same moment, and against simply holding the mean is about &minus;0.08 points. Clustering by signal date rather than by company, which fits how same-day signals move together, gives a slightly wider interval of [&minus;0.34, +0.39] and does not change the verdict. Every figure in this paragraph and the one above it re-derives from the locked rows with <code>null_bounds.py</code>.</p>
     <p style="margin-top:8px">Computed once, at the pre-declared verdict date, written to an append-only file and never recomputed: see the <code>EXP03-MACD</code> rows in <a href="experiments/HARNESS-verdicts.csv">HARNESS-verdicts.csv</a> and <a href="experiments/FAMILY-fdr.csv">FAMILY-fdr.csv</a>, and the <a href="reports/family-verdict-LATEST.md">family verdict report</a>. Scope: this rule, on these 40 names, over this window &mdash; not evidence about MACD in general, or trend following as a family. Experiments 06&ndash;09 share one universe, so they are correlated tests, not independent replications.</p>
   </div>
 
@@ -170,7 +172,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
       <dt>Benchmark</dt>
       <dd>A <b>day-matched control</b>: the equal-weight return of the entire 40-name universe over the identical window, from the same data fetch. The scored quantity is the excess over that control, not the raw return — otherwise the test mostly measures whether the market went up.</dd>
       <dt>Window</dt>
-      <dd>Only signals dated strictly after 2026-07-31 count. Nothing before the registration date is evidence.</dd>
+      <dd>Only signals dated strictly after 2026-07-31 count. Nothing before the registration date is evidence. The rule was first committed to the public repository on 2026-08-01, the day after that date; the first signal that counts is dated 2026-08-03.</dd>
     </dl>
   </div>
 

@@ -1352,3 +1352,55 @@ choice below is either already registered or the stricter of the readings availa
 None of this changes a rule, universe, entry, exit, cost, floor, date or stored row. It makes the
 registered read mechanical so it cannot be steered on the day.
 
+
+## Amendment — registration standard and three harness fixes, 2026-11-25
+
+**Written after the 2026-11-02 verdicts were locked and published, as a post-hoc review of H-EXP03.**
+Nothing here re-decides any verdict, changes a registered rule, or alters a stored row. Every
+harness verdict locked so far (EXP03, EXP06, EXP07, EXP08, EXP09) reads NO EDGE DETECTED, and none
+of the changes below can move one.
+
+**Why.** H-EXP03 locked at n = 58 over 30 names with a ticker-clustered 95% CI of [−0.31, +0.31]
+percentage points. The 30-trade floor was a convention, not derived from an effect size, and no
+registration in the harness family named the effect it was looking for. With a bootstrap standard
+error of about 0.155 points, the test's minimum detectable effect at 80% power was about 0.44 points
+per trade; a true 0.10-point edge had about a 10% chance of showing. The five-outcome legend on
+`experiments.html` defines UNDERPOWERED against "the effect the registration said we were looking
+for", so without a named effect that label could never apply and INCONCLUSIVE was the default.
+`null_bounds.py` re-derives these figures from the locked rows.
+
+**1. Registration standard, for every registration dated 2026-11-25 or later.** Before the window
+opens, a registration states:
+- a **smallest effect size of interest** (SESOI) on the primary metric, in its units;
+- a **power calculation** for that SESOI at the declared α, with the variance it assumes and where
+  that variance came from, and the sample size (or date) it implies. Floors are set from it, not by
+  convention;
+- the **primary horizon**, named once, and which exits are secondary (secondaries cannot rescue a
+  fail);
+- the **unit of dependence** the interval clusters on (ticker, date, or both), with a reason;
+- which legs pay the declared cost (`cost_on` below);
+- the **decision rule** in four parts: an edge (interval excludes zero on the positive side), harmful
+  (excludes zero on the negative side), equivalent to zero (two one-sided tests at ±SESOI), or
+  undetermined, which is published as UNDERPOWERED.
+
+**2. Criterion 4 is now code.** Every harness registration (H-EXP03, H-EXP06…09) requires the
+direction to hold across ≥ 3 consecutive weekly snapshots, but `experiment_harness.py` never checked
+it; only `family_verdict.py` did, for H-EXP02. The harness now applies the same rule
+(`snapshots_hold`, with a selftest): a pass also needs the last three Saturdays up to the read to show
+mean AND median on the same side of zero. No locked verdict was a pass, so none is affected.
+
+**3. Cost leg is declared.** In the harness the 0.10% round trip is charged to the trade AND to the
+day-matched control, so it cancels in `excess_1d`: the excess measures selection against a random
+same-moment entry, not profit against a passive holder. That stays the frozen rule for every
+experiment registered before today (`cost_on` defaults to `"both"`, and the selftest refuses an
+existing declaration that sets it). A new registration may declare `cost_on="strategy"`.
+
+**4. A date-clustered interval is reported beside the registered one.** In H-EXP03's locked sample
+the within-date correlation is +0.38 and the within-ticker correlation is −0.17, so the
+ticker-clustered bootstrap runs narrow (date-clustered 95% CI [−0.34, +0.39]). The report now prints a
+date-clustered interval next to each registered interval. No verdict reads it.
+
+**Also disclosed.** H-EXP03 is labelled "registered 2026-07-31"; the rule's first commit to the public
+repository is dated 2026-08-01, and the first counted signal is dated 2026-08-03. No scored data
+predates either date. A post-hoc review also looked at the 7 EXP03 rows graded after the lock, so any
+confirmatory follow-up must open its own window after its own registration date.
