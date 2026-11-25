@@ -196,6 +196,30 @@ def supertrend_state(bars, period=10, mult=3.0):
 
 
 # --------------------------------------------------------------- statistics
+def date_cluster_ci(vals, keys):
+    """Mean + 95% interval from a CR1 cluster-robust standard error, clustering on the SIGNAL
+    DATE (t with G-1 df, rounded to a conservative tabled value). Reported beside the
+    registered ticker-clustered interval, never in place of it: same-day signals share one
+    market session, and in EXP03 the within-date correlation was positive (+0.38) while the
+    within-ticker correlation was not (-0.17), so the ticker bootstrap alone runs narrow.
+    Added 2026-11-25; reporting only, no verdict reads it."""
+    if len(vals) < 10:
+        return None
+    m = sum(vals) / float(len(vals))
+    g = {}
+    for v, k in zip(vals, keys):
+        g[k] = g.get(k, 0.0) + (v - m)
+    G = len(g)
+    if G < 3:
+        return None
+    se = (G / (G - 1.0) * sum(u * u for u in g.values())) ** 0.5 / len(vals)
+    tab = [(10, 2.228), (15, 2.131), (20, 2.086), (25, 2.060), (30, 2.042), (40, 2.021),
+           (60, 2.000), (120, 1.980)]
+    below = [t for d, t in tab if d <= G - 1]
+    tcrit = below[-1] if below else 2.262
+    return {"mean": m, "lo": m - tcrit * se, "hi": m + tcrit * se, "se": se, "clusters": G}
+
+
 def median(xs):
     if not xs:
         return None
@@ -574,6 +598,13 @@ def grade_one(e, data=None):
         print(f"  {e['id']}: no data (non-fatal)")
         return 0
     N, C = e["hold_sessions"], e["cost_roundtrip"]
+    # Which legs pay the declared cost. "both" (the default, and the frozen rule for every
+    # experiment registered before 2026-11-25) charges the trade AND the day-matched control,
+    # so the cost cancels out of the excess: the excess then measures selection against a
+    # random same-moment entry, not profit against a passive holder. A NEW registration may
+    # declare cost_on="strategy" to charge the trade only. Existing declarations must not set
+    # it: changing it would change a frozen rule.
+    CB = C if e.get("cost_on", "both") == "both" else 0.0
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     idxs = {t: {b["d"]: i for i, b in enumerate(rows)} for t, rows in data.items()}
 
@@ -586,8 +617,8 @@ def grade_one(e, data=None):
             en = rows[i + 1]["o"]
             if not en:
                 continue
-            r1.append((rows[i + 1]["c"] - en) / en * 100.0 - C)
-            rn.append((rows[i + 1 + N]["c"] - en) / en * 100.0 - C)
+            r1.append((rows[i + 1]["c"] - en) / en * 100.0 - CB)
+            rn.append((rows[i + 1 + N]["c"] - en) / en * 100.0 - CB)
         if len(r1) < 10:
             return None
         return sum(r1) / len(r1), sum(rn) / len(rn)
@@ -656,15 +687,52 @@ def summarise(e):
     ex1 = [_f(r["excess_1d"]) for r in g if _f(r["excess_1d"]) is not None]
     exn = [_f(r["excess_nd"]) for r in g if _f(r["excess_nd"]) is not None]
     tk = [r["ticker"] for r in g if _f(r["excess_1d"]) is not None]
+    dk = [r["signal_date"] for r in g if _f(r["excess_1d"]) is not None]
     wins = [int(r["win_1d"]) for r in g if r.get("win_1d") not in ("", None)]
     ci1 = cluster_ci(ex1, tk) if len(ex1) >= 10 else None
-    return {"n": n, "ci1": ci1,
+    return {"n": n, "ci1": ci1, "ci1_date": date_cluster_ci(ex1, dk),
             "mean1": (sum(ex1) / len(ex1)) if ex1 else None, "med1": median(ex1),
             "trim1": trimmed_mean(ex1), "meann": (sum(exn) / len(exn)) if exn else None,
             "medn": median(exn),
             "win": (100.0 * sum(wins) / len(wins)) if wins else None,
             "clusters": len(set(tk)),
             "mature": len(ex1) >= MIN_N}
+
+
+SNAPSHOTS = 3   # registered pass criterion 4: direction held across >= 3 consecutive weeks
+
+
+def _saturdays_upto(asof, after):
+    d = datetime.strptime(asof, "%Y-%m-%d").date()
+    d -= timedelta(days=(d.weekday() - 5) % 7)          # last Saturday on/before asof
+    start = datetime.strptime(after, "%Y-%m-%d").date()
+    out = []
+    while d > start:
+        out.append(d.isoformat())
+        d -= timedelta(days=7)
+    return sorted(out)
+
+
+def snapshots_hold(e, sign, today, k=SNAPSHOTS):
+    """Registered pass criterion 4, which until 2026-11-25 the harness never checked (it was
+    coded for EXP02 in family_verdict.py only). Rebuilt exactly as family_verdict.py does: the
+    outcomes file is append-only and stamps graded_at, so the state on any Saturday is the rows
+    graded on or before it. The LAST k Saturdays up to the read must each show mean AND median
+    excess_1d on the same side of zero as the read. Disclosure: every harness verdict locked
+    before this fix was NO EDGE DETECTED, which this criterion cannot change, so no locked
+    verdict is affected."""
+    rows = [r for r in _read(out_path(e)) if _f(r.get("excess_1d")) is not None]
+    snaps = _saturdays_upto(today, e["registered_at"])[-k:]
+    if len(snaps) < k:
+        return False
+    for d in snaps:
+        xs = [_f(r["excess_1d"]) for r in rows if (r.get("graded_at") or "")[:10] <= d]
+        if not xs:
+            return False
+        mu, md = sum(xs) / len(xs), median(xs)
+        if not ((mu > 0 and md > 0) if sign > 0 else (mu < 0 and md < 0)):
+            return False
+    return True
 
 
 def _compute_verdict(s):
@@ -706,6 +774,9 @@ def verdict_line(s, e=None, today=None):
         return (f"past the pre-declared verdict date ({vd}) with the floor not yet met — "
                 f"{prog}. The verdict locks at the first run where it is.")
     v = _compute_verdict(s)
+    if v and v.startswith("CLEARS THE BAR") and not snapshots_hold(e, 1, today):
+        v = ("NO EDGE DETECTED — the interval excludes zero but the direction did not hold "
+             f"across {SNAPSHOTS} consecutive weekly snapshots")
     if v is None:
         return (f"past the pre-declared verdict date ({vd}) but the interval could not be "
                 f"computed — {prog}")
@@ -749,9 +820,14 @@ def cmd_report():
         if s.get("n"):
             ci = s.get("ci1")
             cis = f"[{ci['lo']:+.3f}, {ci['hi']:+.3f}] over {ci['clusters']} names" if ci else "n/a"
+            cd = s.get("ci1_date")
+            cds = (f"[{cd['lo']:+.3f}, {cd['hi']:+.3f}] over {cd['clusters']} dates"
+                   if cd else "n/a")
             L += [f"- day-matched excess, 1 session: mean **{s['mean1']:+.3f}%**, "
                   f"median **{s['med1']:+.3f}%**, 10% trimmed **{s['trim1']:+.3f}%**, "
                   f"clustered 95% CI {cis}",
+                  f"- same, date-clustered 95% CI {cds} *(reported beside the registered "
+                  f"interval; no verdict reads it)*",
                   f"- day-matched excess, {e['hold_sessions']} sessions: mean "
                   f"**{s['meann']:+.3f}%**, median **{s['medn']:+.3f}%**",
                   f"- win rate {s['win']:.0f}% *(reported only — not a pass criterion)*"]
@@ -844,6 +920,21 @@ def _selftest():
         _e = {"id": "SELFTEST-X", "registered_at": "2026-01-01", "verdict_on": "2026-06-01"}
         _pass = {"n": 99, "mature": True, "clusters": 40, "mean1": 1.0, "med1": 1.0,
                  "ci1": {"lo": 0.5, "hi": 1.5, "clusters": 40}}
+        # criterion 4: a pass needs the direction held across the last 3 Saturdays. First a
+        # twin experiment whose rows flip negative in the last week must NOT pass...
+        _flip = {"id": "SELFTEST-FLIP", "registered_at": "2026-01-01", "verdict_on": "2026-06-01"}
+        _append(out_path(_flip), OUT_FIELDS,
+                [{"signal_id": f"f{i}", "ticker": "T", "signal_date": "2026-05-01",
+                  "graded_at": "2026-05-10T21:00:00+00:00", "excess_1d": 1.0} for i in range(5)]
+                + [{"signal_id": f"g{i}", "ticker": "T", "signal_date": "2026-05-20",
+                    "graded_at": "2026-05-28T21:00:00+00:00", "excess_1d": -5.0}
+                   for i in range(5)])
+        _r = verdict_line(_pass, _flip, today="2026-06-01")
+        assert "CLEARS" not in _r and "snapshots" in _r, _r
+        # ...and the real selftest experiment, positive in every week, may pass.
+        _append(out_path(_e), OUT_FIELDS,
+                [{"signal_id": f"p{i}", "ticker": "T", "signal_date": "2026-05-01",
+                  "graded_at": "2026-05-10T21:00:00+00:00", "excess_1d": 1.0} for i in range(5)])
         # before the date: progress only, and the date is advertised
         _r = verdict_line(_pass, _e, today="2026-05-31")
         assert "accruing" in _r and "CLEARS" not in _r and "2026-06-01" in _r, _r
@@ -859,7 +950,15 @@ def _selftest():
         _outs = {verdict_line(_neg, _e, today=d) for d in
                  ("2026-06-02", "2026-09-01", "2027-01-01")}
         assert len(_outs) == 1 and "CLEARS THE BAR" in list(_outs)[0], _outs
-        assert len(_read(verdicts_path())) == 1
+        assert len(_read(verdicts_path())) == 2      # SELFTEST-FLIP and SELFTEST-X
+        # cost leg: no frozen declaration may set cost_on (it would change a frozen rule)
+        assert all("cost_on" not in x for x in EXPERIMENTS)
+        # date-clustered interval brackets the mean and widens with same-day correlation
+        _v = [(1.0 if (i // 4) % 2 else -1.0) + 0.1 * (i % 4) for i in range(60)]
+        _dc = date_cluster_ci(_v, [f"D{i // 4}" for i in range(60)])      # 15 dates of 4
+        assert _dc and _dc["lo"] < _dc["mean"] < _dc["hi"] and _dc["clusters"] == 15
+        _iid = date_cluster_ci(_v, [f"S{i}" for i in range(60)])          # no clustering
+        assert _dc["se"] > _iid["se"], (_dc, _iid)
         # default date for a declaration that omits one
         assert verdict_date({"id": "NEW", "registered_at": "2026-01-01"}) == "2026-04-01"
     finally:

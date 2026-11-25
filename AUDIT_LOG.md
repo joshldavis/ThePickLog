@@ -1,5 +1,14 @@
 # ThePickLog — Audit Log
 
+## 2026-11-25 — Change: Experiment 03 verdict box states what the null rules out; harness checks criterion 4
+
+A post-hoc review of the locked H-EXP03 verdict. **No locked number, verdict, rule or stored row changed.**
+
+- **Page (`experiment-03.html`).** The verdict box keeps every locked figure and adds: what the interval rules out (a same-day edge beyond about ±0.3 points per trade) and what it cannot (anything smaller); the test's minimum detectable effect (about 0.44 points at 80% power) and its power at a true 0.10-point edge (about 10%); the five-session secondary; that the 0.10% cost is charged to both legs and so cancels in the excess (about −0.08 points against a passive holder); and the date-clustered interval [−0.34, +0.39]. "Net of costs" is dropped from the headline line because the excess is cost-neutral by construction. The Window entry notes the rule's first commit (2026-08-01) and first counted signal (2026-08-03).
+- **Source of every new number:** `null_bounds.py`, read-only, from the first 58 rows of `experiments/EXP03-MACD-outcomes.csv` (the rows the locked verdict saw; the script refuses if they don't match `HARNESS-verdicts.csv`).
+- **Harness (`experiment_harness.py`).** Registered pass criterion 4 (direction across ≥ 3 weekly snapshots) is now checked, with a selftest; it had been coded only for EXP02. A `cost_on` declaration key (default `"both"`, the frozen rule). A date-clustered interval in the report beside the registered one. All five locked harness verdicts are NO EDGE DETECTED, which none of this can change.
+- **Registration standard (`HYPOTHESES.md`, amendment 2026-11-25).** From today every registration names a smallest effect size of interest, a power calculation, the primary horizon, the clustering unit, the cost legs and a four-part decision rule.
+
 ## 2026-11-23 — Correction: 11 graded rows didn't recompute from their own bars (closes #22, #26, #28; headline unaffected)
 
 The paths spot-check carried in the 10-31, 11-07, 11-14 and 11-21 audits is fixed at the cause. Every row it flagged was touched by the 2026-10-07 NaN correction, and that correction had two gaps.
