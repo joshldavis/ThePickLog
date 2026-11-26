@@ -64,6 +64,54 @@ Every experiment below is forward-only from its registration date, scored as an 
 
 > Registered prior: That contraction precedes expansion (Crabel's NR7) is well documented; what is SOLD is the direction, and direction is the part with no documented edge. This is also the honest daily-bar version of an intraday claim: entry is the next open, not a break of the range, because our pre-open logging gate forbids acting on the open print. That deviation is disclosed wherever this experiment is published. Registered expectation: excess indistinguishable from zero; ~1 in 6.
 
+## EXP13A-MACD — Relaunch: the MACD bullish crossover (S&P 500)
+
+- status: **registered**, registered 2026-11-27, universe 503 names (frozen S&P 500 list), primary = 5-session excess, cost 0.1% on the trade only, control excludes the traded name, SESOI ±0.75 pp
+- floors: **0**/1000 graded trades, **0**/100 names, **0**/150 signal sessions. *Design v2 shows counts only until the floors are met — no running mean or interval is published, so no one watches the number.*
+- **read: accruing — 0/1000 graded trades, 0/100 names, 0/150 signal sessions. No verdict is computed until all three floors are met.**
+
+> Registered prior: Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.
+
+## EXP13B-RSI2 — Relaunch: the 2-period RSI trade (S&P 500)
+
+- status: **registered**, registered 2026-11-27, universe 503 names (frozen S&P 500 list), primary = 5-session excess, cost 0.1% on the trade only, control excludes the traded name, SESOI ±0.75 pp
+- floors: **0**/1000 graded trades, **0**/100 names, **0**/150 signal sessions. *Design v2 shows counts only until the floors are met — no running mean or interval is published, so no one watches the number.*
+- **read: accruing — 0/1000 graded trades, 0/100 names, 0/150 signal sessions. No verdict is computed until all three floors are met.**
+
+> Registered prior: Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.
+
+## EXP13C-SUPERTREND — Relaunch: the Supertrend flip (S&P 500)
+
+- status: **registered**, registered 2026-11-27, universe 503 names (frozen S&P 500 list), primary = 5-session excess, cost 0.1% on the trade only, control excludes the traded name, SESOI ±0.75 pp
+- floors: **0**/1000 graded trades, **0**/100 names, **0**/150 signal sessions. *Design v2 shows counts only until the floors are met — no running mean or interval is published, so no one watches the number.*
+- **read: accruing — 0/1000 graded trades, 0/100 names, 0/150 signal sessions. No verdict is computed until all three floors are met.**
+
+> Registered prior: Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.
+
+## EXP13D-SMAPULL — Relaunch: the moving-average pullback (S&P 500)
+
+- status: **registered**, registered 2026-11-27, universe 503 names (frozen S&P 500 list), primary = 5-session excess, cost 0.1% on the trade only, control excludes the traded name, SESOI ±0.75 pp
+- floors: **0**/1000 graded trades, **0**/100 names, **0**/150 signal sessions. *Design v2 shows counts only until the floors are met — no running mean or interval is published, so no one watches the number.*
+- **read: accruing — 0/1000 graded trades, 0/100 names, 0/150 signal sessions. No verdict is computed until all three floors are met.**
+
+> Registered prior: Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.
+
+## EXP13E-BOLLREVERT — Relaunch: the Bollinger reversion (S&P 500)
+
+- status: **registered**, registered 2026-11-27, universe 503 names (frozen S&P 500 list), primary = 5-session excess, cost 0.1% on the trade only, control excludes the traded name, SESOI ±0.75 pp
+- floors: **0**/1000 graded trades, **0**/100 names, **0**/150 signal sessions. *Design v2 shows counts only until the floors are met — no running mean or interval is published, so no one watches the number.*
+- **read: accruing — 0/1000 graded trades, 0/100 names, 0/150 signal sessions. No verdict is computed until all three floors are met.**
+
+> Registered prior: Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.
+
+## EXP13F-NR7 — Relaunch: the NR7 uptrend squeeze (S&P 500)
+
+- status: **registered**, registered 2026-11-27, universe 503 names (frozen S&P 500 list), primary = 5-session excess, cost 0.1% on the trade only, control excludes the traded name, SESOI ±0.75 pp
+- floors: **0**/1000 graded trades, **0**/100 names, **0**/150 signal sessions. *Design v2 shows counts only until the floors are met — no running mean or interval is published, so no one watches the number.*
+- **read: accruing — 0/1000 graded trades, 0/100 names, 0/150 signal sessions. No verdict is computed until all three floors are met.**
+
+> Registered prior: Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.
+
 ---
 
 Rules are frozen in `experiment_harness.py`; changing any constant voids that experiment and requires a new registration with a new window. Signals and outcomes are append-only under `experiments/`. Not investment advice.
