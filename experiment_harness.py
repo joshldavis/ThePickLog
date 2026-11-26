@@ -272,6 +272,37 @@ UNIVERSE_LARGECAP40 = [
 ]
 
 
+def _load_universe(rel):
+    """A frozen universe file committed under universes/. Returns [] if it is missing, so a
+    broken checkout scans nothing rather than something else."""
+    p = os.path.join(HERE, rel)
+    if not os.path.exists(p):
+        return []
+    with io.open(p, newline="", encoding="utf-8") as fh:
+        return [r["ticker"] for r in csv.DictReader(fh) if r.get("ticker")]
+
+
+# EXPERIMENT 13 universe (registered 2026-11-27): the S&P 500 constituent list as published in
+# the open dataset github.com/datasets/s-and-p-500-companies (data/constituents.csv, fetched
+# 2026-11-26, SHA-256 5307d7eb…4995), 503 share classes, Yahoo symbols (BRK.B -> BRK-B).
+# FROZEN: adding or removing a name voids Experiment 13. It is the list as published that day,
+# not a claim about the index's true membership; names that stop trading simply drop out.
+UNIVERSE_SP500_2026_11_26 = _load_universe(os.path.join("universes", "sp500-2026-11-26.csv"))
+
+
+def entry_rsi2(bars):
+    """EXP13B entry (the H-EXP02 rule, ported unchanged): Wilder RSI(2) < 5 with the close
+    above its 200-day SMA. Most oversold first."""
+    closes = [b["c"] for b in bars]
+    s200 = sma(closes, 200)
+    r2 = rsi(closes, 2)
+    if s200 is None or r2 is None:
+        return False, {}
+    ok = bool(r2 < 5.0 and closes[-1] > s200)
+    return ok, {"rsi2": round(r2, 3), "sma200": round(s200, 4), "close": round(closes[-1], 4),
+                "rank_metric": r2}
+
+
 def entry_macd_cross(bars):
     """EXP03 entry: MACD(12,26,9) histogram crosses from <=0 to >0 on the latest bar,
     with the close above its 200-day SMA. Long-only trend-following, the most widely
@@ -366,6 +397,50 @@ def entry_nr7_uptrend(bars):
                   "close": round(c, 4), "sma200": round(s200, 4),
                   "rank_metric": rel}   # narrowest relative range first
 
+
+# ------------------------------------------------- EXPERIMENT 13 — the relaunch (design v2)
+# Registered 2026-11-27 (HYPOTHESES.md, "Registration batch #12"). The six cross-sectional rules
+# that ended INCONCLUSIVE on the 40-name universe, re-run as six arms of one new experiment on
+# the frozen S&P 500 list, under the 2026-11-25 registration standard. Every constant below is
+# frozen; changing one voids the arm. Planning arithmetic is in the registration and in
+# planned_sessions() below.
+V2_COMMON = {
+    "design": "v2",
+    "registered_at": "2026-11-27",
+    "verdict_on": "2026-11-27",      # no calendar gate: the verdict is computed once, at the
+                                     # first run where all three floors are met
+    "status": "registered",
+    "universe": UNIVERSE_SP500_2026_11_26,
+    "lookback_days": 500,
+    "hold_sessions": 5,
+    "max_per_day": 10,
+    "cost_roundtrip": 0.10,
+    "cost_on": "strategy",           # the control pays nothing: excess = profit vs holding
+    "bench_excludes_self": True,     # the traded name is left out of its own control
+    "primary": "nd",                 # PRIMARY = 5-session excess; same-session is secondary
+    "sesoi": 0.50,                   # smallest effect of interest, pp per 5-session trade
+    "min_n": 1000,                   # graded trades
+    "min_clusters": 100,             # distinct tickers
+    "min_sessions": 330,             # distinct signal dates (the binding unit: see planning)
+    "family": "EXP13",
+    "family_m": 6,
+}
+V2_PRIOR = ("Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: "
+            "equivalent to zero at the ±0.50 pp bound; no arm is expected to clear the bar.")
+EXPERIMENTS_V2 = [
+    dict(V2_COMMON, id="EXP13A-MACD", title="Relaunch: the MACD bullish crossover (S&P 500)",
+         entry=entry_macd_cross, prior=V2_PRIOR),
+    dict(V2_COMMON, id="EXP13B-RSI2", title="Relaunch: the 2-period RSI trade (S&P 500)",
+         entry=entry_rsi2, prior=V2_PRIOR),
+    dict(V2_COMMON, id="EXP13C-SUPERTREND", title="Relaunch: the Supertrend flip (S&P 500)",
+         entry=entry_supertrend_flip, prior=V2_PRIOR),
+    dict(V2_COMMON, id="EXP13D-SMAPULL", title="Relaunch: the moving-average pullback (S&P 500)",
+         entry=entry_sma_pullback, prior=V2_PRIOR),
+    dict(V2_COMMON, id="EXP13E-BOLLREVERT", title="Relaunch: the Bollinger reversion (S&P 500)",
+         entry=entry_bollinger_revert, prior=V2_PRIOR),
+    dict(V2_COMMON, id="EXP13F-NR7", title="Relaunch: the NR7 uptrend squeeze (S&P 500)",
+         entry=entry_nr7_uptrend, prior=V2_PRIOR),
+]
 
 EXPERIMENTS = [
     {
@@ -474,6 +549,9 @@ EXPERIMENTS = [
 ]
 
 
+EXPERIMENTS += EXPERIMENTS_V2
+
+
 # --------------------------------------------------------------- io helpers
 def _f(x):
     try:
@@ -522,7 +600,32 @@ OUT_FIELDS = ["signal_id", "experiment", "ticker", "signal_date", "entry_date", 
               "excess_1d", "excess_nd", "win_1d", "note"]
 
 
+FETCH_CHUNK = 100   # added 2026-11-27 for the 503-name EXP13 universe; <= 100 names fetch as before
+
+
 def fetch(universe, days):
+    if len(universe) > FETCH_CHUNK:
+        import time
+        out = {}
+        for i in range(0, len(universe), FETCH_CHUNK):
+            part = universe[i:i + FETCH_CHUNK]
+            for attempt in (1, 2):           # one retry per chunk, then move on
+                try:
+                    got = _fetch_once(part, days)
+                except Exception as ex:
+                    print(f"  fetch chunk {i // FETCH_CHUNK + 1} failed ({type(ex).__name__})")
+                    got = {}
+                if len(got) >= 0.8 * len(part) or attempt == 2:
+                    break
+                time.sleep(5)
+            out.update(got)
+            time.sleep(1)
+        print(f"  fetched {len(out)}/{len(universe)} names")
+        return out
+    return _fetch_once(universe, days)
+
+
+def _fetch_once(universe, days):
     import yfinance as yf
     df = yf.download(universe, period=f"{days}d", interval="1d", auto_adjust=False,
                      group_by="ticker", progress=False, threads=True)
@@ -623,6 +726,22 @@ def grade_one(e, data=None):
             return None
         return sum(r1) / len(r1), sum(rn) / len(rn)
 
+    def bench_map(sd):
+        """Per-name returns for every universe name on that window, so a trade's control can
+        leave the traded name out (bench_excludes_self, design v2 only)."""
+        m = {}
+        for t, rows in data.items():
+            i = idxs[t].get(sd)
+            if i is None or i + 1 + N >= len(rows):
+                continue
+            en = rows[i + 1]["o"]
+            if not en:
+                continue
+            m[t] = ((rows[i + 1]["c"] - en) / en * 100.0 - CB,
+                    (rows[i + 1 + N]["c"] - en) / en * 100.0 - CB)
+        return m if len(m) >= 10 else None
+
+    excl = bool(e.get("bench_excludes_self"))
     cache, rows_out, immature, failed = {}, [], 0, 0
     for s in todo:
         t, sd = s["ticker"], s["signal_date"]
@@ -639,11 +758,14 @@ def grade_one(e, data=None):
             failed += 1
             continue
         if sd not in cache:
-            cache[sd] = bench(sd)
+            cache[sd] = bench_map(sd) if excl else bench(sd)
         b = cache[sd]
         if b is None:
             immature += 1
             continue
+        if excl:
+            others = [v for k, v in b.items() if k != t]
+            b = (sum(v[0] for v in others) / len(others), sum(v[1] for v in others) / len(others))
         r1 = (rows[i + 1]["c"] - en) / en * 100.0 - C
         rn = (rows[i + 1 + N]["c"] - en) / en * 100.0 - C
         rows_out.append({"signal_id": s["signal_id"], "experiment": e["id"], "ticker": t,
@@ -713,7 +835,7 @@ def _saturdays_upto(asof, after):
     return sorted(out)
 
 
-def snapshots_hold(e, sign, today, k=SNAPSHOTS):
+def snapshots_hold(e, sign, today, k=SNAPSHOTS, col="excess_1d"):
     """Registered pass criterion 4, which until 2026-11-25 the harness never checked (it was
     coded for EXP02 in family_verdict.py only). Rebuilt exactly as family_verdict.py does: the
     outcomes file is append-only and stamps graded_at, so the state on any Saturday is the rows
@@ -721,12 +843,12 @@ def snapshots_hold(e, sign, today, k=SNAPSHOTS):
     excess_1d on the same side of zero as the read. Disclosure: every harness verdict locked
     before this fix was NO EDGE DETECTED, which this criterion cannot change, so no locked
     verdict is affected."""
-    rows = [r for r in _read(out_path(e)) if _f(r.get("excess_1d")) is not None]
+    rows = [r for r in _read(out_path(e)) if _f(r.get(col)) is not None]
     snaps = _saturdays_upto(today, e["registered_at"])[-k:]
     if len(snaps) < k:
         return False
     for d in snaps:
-        xs = [_f(r["excess_1d"]) for r in rows if (r.get("graded_at") or "")[:10] <= d]
+        xs = [_f(r[col]) for r in rows if (r.get("graded_at") or "")[:10] <= d]
         if not xs:
             return False
         mu, md = sum(xs) / len(xs), median(xs)
@@ -747,6 +869,159 @@ def _compute_verdict(s):
     return "NO EDGE DETECTED — the excess is indistinguishable from zero"
 
 
+# ------------------------------------------------------------------ design v2 (EXP13)
+def _phi(z):
+    import math
+    return 0.5 * (1.0 + math.erf(z / math.sqrt(2.0)))
+
+
+def twoway_se(vals, k1, k2):
+    """Cluster-robust (CR1) standard error of the mean, clustered two ways — by ticker AND by
+    signal date (Cameron, Gelbach & Miller 2011): V = V_ticker + V_date - V_intersection. Falls
+    back to the larger one-way variance if the combination is not positive."""
+    n = len(vals)
+    m = sum(vals) / float(n)
+
+    def v(keys):
+        g = {}
+        for x, k in zip(vals, keys):
+            g[k] = g.get(k, 0.0) + (x - m)
+        G = len(g)
+        return (G / (G - 1.0)) * sum(u * u for u in g.values()) / (n * n) if G > 1 else 0.0, G
+
+    vt, gt = v(k1)
+    vd, gd = v(k2)
+    vi, _ = v([a + "|" + b for a, b in zip(k1, k2)])
+    var = vt + vd - vi
+    if var <= 0:
+        var = max(vt, vd)
+    return var ** 0.5, min(gt, gd)
+
+
+def planned_sessions(sd=4.0, icc=0.35, per_day=10, sesoi=0.50, z_alpha=2.638, z_power=0.8416):
+    """The EXP13 planning arithmetic, so the floor is re-derivable: trades needed if independent,
+    then divided by the effective trades per session under a same-day correlation `icc`
+    (design effect 1 + (m-1)*icc). Defaults are the registered inputs: SD of the 5-session
+    excess ~4.0 pp and same-date correlation ~0.35 (medians over the six locked 40-name
+    experiments), 10 signals a day, SESOI 0.50 pp, two-sided alpha 0.05/6 (a lone arm must
+    survive the family correction), 80% power."""
+    n_eff = ((z_alpha + z_power) * sd / sesoi) ** 2
+    per_session = per_day / (1.0 + (per_day - 1.0) * icc)
+    return n_eff, per_session, n_eff / per_session
+
+
+V2_FIELDS = ["experiment", "locked_at", "primary", "n", "tickers", "sessions", "mean", "median",
+             "se_twoway", "ci95_lo", "ci95_hi", "ci90_lo", "ci90_hi", "sesoi", "p_two",
+             "mean_1d", "median_1d", "verdict"]
+FAMILY2_FIELDS = ["experiment", "decided_at", "family", "m", "p_values_used", "bh_adjusted_p",
+                  "q", "family_status"]
+
+
+def v2_path():
+    return os.path.join(DATA, "EXP13-verdicts.csv")
+
+
+def v2_family_path():
+    return os.path.join(DATA, "EXP13-fdr.csv")
+
+
+def summarise_v2(e):
+    col = "excess_nd" if e.get("primary") == "nd" else "excess_1d"
+    g = [r for r in _read(out_path(e)) if _f(r.get(col)) is not None]
+    s = {"n": len(g), "tickers": len({r["ticker"] for r in g}),
+         "sessions": len({r["signal_date"] for r in g}), "col": col}
+    if len(g) < 10:
+        return s
+    x = [_f(r[col]) for r in g]
+    se, G = twoway_se(x, [r["ticker"] for r in g], [r["signal_date"] for r in g])
+    m = sum(x) / len(x)
+    x1 = [_f(r["excess_1d"]) for r in g if _f(r.get("excess_1d")) is not None]
+    s.update(mean=m, median=median(x), se=se, G=G,
+             ci95=(m - 1.96 * se, m + 1.96 * se), ci90=(m - 1.645 * se, m + 1.645 * se),
+             p=(2 * (1 - _phi(abs(m) / se)) if se > 0 else 1.0),
+             mean_1d=(sum(x1) / len(x1)) if x1 else None, median_1d=median(x1))
+    return s
+
+
+def compute_verdict_v2(s, e, today):
+    """Four outcomes, registered in advance (HYPOTHESES.md, batch #12):
+      CLEARS THE BAR        95% CI above zero, mean AND median > 0, direction held 3 weeks
+      SIGNIFICANTLY NEGATIVE 95% CI below zero
+      EQUIVALENT TO ZERO    90% CI inside (-SESOI, +SESOI): two one-sided tests at the bound
+      UNDERPOWERED          none of the above — the honest name for 'could not tell'"""
+    lo, hi = s["ci95"]
+    l9, h9 = s["ci90"]
+    d = e["sesoi"]
+    if lo > 0 and s["mean"] > 0 and s["median"] > 0:
+        if snapshots_hold(e, 1, today, col=s["col"]):
+            return "CLEARS THE BAR — 95% CI above zero, mean and median positive, held 3 weeks"
+        return "UNDERPOWERED — CI above zero but the direction did not hold 3 weekly snapshots"
+    if hi < 0:
+        return "SIGNIFICANTLY NEGATIVE — worse than the day-matched control"
+    if -d < l9 and h9 < d:
+        return f"EQUIVALENT TO ZERO — any edge is smaller than ±{d:.2f} pp per trade"
+    return f"UNDERPOWERED — neither an edge nor equivalence at ±{d:.2f} pp can be shown"
+
+
+def _bh(ps):
+    m = len(ps)
+    order = sorted(range(m), key=lambda i: ps[i])
+    adj, running = [0.0] * m, 1.0
+    for rank in range(m, 0, -1):
+        i = order[rank - 1]
+        running = min(running, ps[i] * m / rank)
+        adj[i] = min(1.0, running)
+    return adj
+
+
+def verdict_line_v2(e, today=None):
+    """One look, gated on three sample floors rather than a calendar date. Before the floors:
+    counts only — no mean, no interval, no verdict language, so nobody (us included) watches a
+    running number. At the first run where all three floors are met: computed once, appended
+    to EXP13-verdicts.csv and, with the family's Benjamini-Hochberg read (m fixed at 6, unlocked
+    arms counted as p = 1), to EXP13-fdr.csv. Displayed verbatim ever after."""
+    today = today or datetime.now(timezone.utc).date().isoformat()
+    locked = {r["experiment"]: r for r in _read(v2_path())}
+    if e["id"] in locked:
+        lk = locked[e["id"]]
+        return (f"**{lk['verdict']}** *(locked {lk['locked_at']} at n={lk['n']}, "
+                f"{lk['tickers']} names, {lk['sessions']} sessions — computed once, never "
+                f"recomputed)*")
+    s = summarise_v2(e)
+    prog = (f"{s['n']}/{e['min_n']} graded trades, {s['tickers']}/{e['min_clusters']} names, "
+            f"{s['sessions']}/{e['min_sessions']} signal sessions")
+    if not (s["n"] >= e["min_n"] and s["tickers"] >= e["min_clusters"]
+            and s["sessions"] >= e["min_sessions"] and "se" in s):
+        return f"accruing — {prog}. No verdict is computed until all three floors are met."
+    v = compute_verdict_v2(s, e, today)
+    r5 = lambda x: round(x, 5)
+    _append(v2_path(), V2_FIELDS, [{
+        "experiment": e["id"], "locked_at": today, "primary": s["col"], "n": s["n"],
+        "tickers": s["tickers"], "sessions": s["sessions"], "mean": r5(s["mean"]),
+        "median": r5(s["median"]), "se_twoway": r5(s["se"]), "ci95_lo": r5(s["ci95"][0]),
+        "ci95_hi": r5(s["ci95"][1]), "ci90_lo": r5(s["ci90"][0]), "ci90_hi": r5(s["ci90"][1]),
+        "sesoi": e["sesoi"], "p_two": r5(s["p"]),
+        "mean_1d": r5(s["mean_1d"]) if s["mean_1d"] is not None else "",
+        "median_1d": r5(s["median_1d"]) if s["median_1d"] is not None else "", "verdict": v}])
+    fam = [x for x in EXPERIMENTS if x.get("family") == e.get("family") and x["id"] != e["id"]]
+    fam.append(e)
+    now = {r["experiment"]: r for r in _read(v2_path())}
+    ps = [float(now[x["id"]]["p_two"]) if x["id"] in now else 1.0 for x in fam]
+    adj = _bh(ps)
+    me = [x["id"] for x in fam].index(e["id"])
+    real = v.startswith("CLEARS") or v.startswith("SIGNIFICANTLY")
+    _append(v2_family_path(), FAMILY2_FIELDS, [{
+        "experiment": e["id"], "decided_at": today, "family": e.get("family"),
+        "m": e.get("family_m", len(fam)),
+        "p_values_used": ";".join(f"{x['id']}={p:.4g}" for x, p in zip(fam, ps)),
+        "bh_adjusted_p": round(adj[me], 5), "q": 0.05,
+        "family_status": ("survives the family correction" if real and adj[me] <= 0.05 else
+                          "consistent with chance after the family correction" if real else
+                          "no discovery to correct")}])
+    print(f"  LOCKED verdict for {e['id']}: {v}")
+    return f"**{v}** *(locked {today} — computed once, never recomputed)*"
+
+
 def verdict_line(s, e=None, today=None):
     """One experiment, one look (amendment 2026-08-07).
 
@@ -758,6 +1033,8 @@ def verdict_line(s, e=None, today=None):
         return "no graded signals yet"
     if e is None:
         return f"accruing — {s['n']}/{MIN_N} graded, no verdict yet"
+    if e.get("design") == "v2":
+        return verdict_line_v2(e, today)
     lk = locked_verdicts().get(e["id"])
     if lk:
         return (f"**{lk['verdict']}** *(locked {lk['locked_at']} at n={lk['n']} over "
@@ -809,6 +1086,19 @@ def cmd_report():
          "set from the batch's already-planned continue/kill read, without inspecting any "
          "current result. Full detail in HYPOTHESES.md.", ""]
     for e in EXPERIMENTS:
+        if e.get("design") == "v2":
+            sv = summarise_v2(e)
+            L += [f"## {e['id']} — {e['title']}", "",
+                  f"- status: **{e.get('status')}**, registered {e['registered_at']}, universe "
+                  f"{len(e['universe'])} names (frozen S&P 500 list), primary = "
+                  f"{e['hold_sessions']}-session excess, cost {e['cost_roundtrip']}% on the "
+                  f"trade only, control excludes the traded name, SESOI ±{e['sesoi']:.2f} pp",
+                  f"- floors: **{sv['n']}**/{e['min_n']} graded trades, **{sv['tickers']}**/"
+                  f"{e['min_clusters']} names, **{sv['sessions']}**/{e['min_sessions']} signal "
+                  f"sessions. *Design v2 shows counts only until the floors are met — no "
+                  f"running mean or interval is published, so no one watches the number.*",
+                  f"- **read: {verdict_line_v2(e)}**", "", f"> Registered prior: {e['prior']}", ""]
+            continue
         s = summarise(e)
         L += [f"## {e['id']} — {e['title']}", "",
               f"- status: **{e.get('status')}**, registered {e['registered_at']}, "
@@ -952,7 +1242,8 @@ def _selftest():
         assert len(_outs) == 1 and "CLEARS THE BAR" in list(_outs)[0], _outs
         assert len(_read(verdicts_path())) == 2      # SELFTEST-FLIP and SELFTEST-X
         # cost leg: no frozen declaration may set cost_on (it would change a frozen rule)
-        assert all("cost_on" not in x for x in EXPERIMENTS)
+        assert all("cost_on" not in x for x in EXPERIMENTS
+                   if x["registered_at"] < "2026-11-25")
         # date-clustered interval brackets the mean and widens with same-day correlation
         _v = [(1.0 if (i // 4) % 2 else -1.0) + 0.1 * (i % 4) for i in range(60)]
         _dc = date_cluster_ci(_v, [f"D{i // 4}" for i in range(60)])      # 15 dates of 4
@@ -963,6 +1254,73 @@ def _selftest():
         assert verdict_date({"id": "NEW", "registered_at": "2026-01-01"}) == "2026-04-01"
     finally:
         DATA = _keep
+
+    # ---------------- design v2 (EXP13)
+    assert len(UNIVERSE_SP500_2026_11_26) == 503, len(UNIVERSE_SP500_2026_11_26)
+    assert len(set(UNIVERSE_SP500_2026_11_26)) == 503
+    assert all("." not in t for t in UNIVERSE_SP500_2026_11_26)        # Yahoo symbols
+    v2 = [x for x in EXPERIMENTS if x.get("design") == "v2"]
+    assert len(v2) == 6 and len({x["id"] for x in v2}) == 6
+    assert all(x["family_m"] == 6 and x["cost_on"] == "strategy" for x in v2)
+    n_eff, per_s, sess = planned_sessions()
+    assert 770 < n_eff < 780 and 2.3 < per_s < 2.5 and 315 < sess < 330, (n_eff, per_s, sess)
+    assert all(x["min_sessions"] >= sess for x in v2)
+    # RSI(2) entry: a long uptrend with a sharp 2-day drop fires; a flat series does not
+    rs = [{"d": f"d{i}", "o": c, "h": c, "l": c, "c": c}
+          for i, c in enumerate([100.0 + i * 0.5 for i in range(260)] + [225.0, 215.0])]
+    assert entry_rsi2(rs)[0]
+    assert not entry_rsi2(flat)[0]
+    # two-way SE: equals the one-way date SE when every ticker appears once
+    _x = [((i // 5) % 2) * 2.0 - 1.0 + 0.01 * i for i in range(60)]
+    _se2, _ = twoway_se(_x, [f"T{i}" for i in range(60)], [f"D{i // 5}" for i in range(60)])
+    _dc = date_cluster_ci(_x, [f"D{i // 5}" for i in range(60)])
+    assert abs(_se2 - _dc["se"]) / _dc["se"] < 0.15, (_se2, _dc["se"])
+    _keep2 = DATA
+    try:
+        DATA = _tf.mkdtemp()
+        _ex = dict(v2[0], id="SELFTEST-V2", family="SELFTEST", min_n=40, min_clusters=10,
+                   min_sessions=8, registered_at="2026-01-01")
+        # control leaves out the traded name: 12 names, the traded one +10% on the day
+        bars = {}
+        for k in range(12):
+            rows = []
+            for i in range(230):
+                c = 100.0 + (10.0 if (k == 0 and i >= 221) else 0.0)
+                rows.append({"d": f"2026-0{1 + i // 31 % 9}-{1 + i % 28:02d}" if False else
+                             (datetime(2026, 1, 1) + timedelta(days=i)).date().isoformat(),
+                             "o": 100.0, "h": c, "l": 100.0, "c": c})
+            bars[f"N{k}"] = rows
+        sd = bars["N0"][220]["d"]
+        _append(sig_path(_ex), SIG_FIELDS, [{"signal_id": "s1", "experiment": _ex["id"],
+                                            "captured_at": "x", "signal_date": sd,
+                                            "ticker": "N0", "rank_in_day": 1, "meta": ""}])
+        grade_one(_ex, bars)
+        _g = _read(out_path(_ex))[0]
+        assert abs(float(_g["bench_1d_net"])) < 1e-9, _g        # others flat, no cost charged
+        assert abs(float(_g["ret_1d_net"]) - 9.9) < 1e-6, _g    # +10% less 0.10 on the trade
+        # four-way decision
+        _eq = {"ci95": (-0.2, 0.2), "ci90": (-0.15, 0.15), "mean": 0.0, "median": 0.0,
+               "col": "excess_nd"}
+        assert compute_verdict_v2(_eq, _ex, "2026-06-01").startswith("EQUIVALENT")
+        _up = dict(_eq, ci95=(-0.9, 0.9), ci90=(-0.7, 0.7))
+        assert compute_verdict_v2(_up, _ex, "2026-06-01").startswith("UNDERPOWERED")
+        _ng = dict(_eq, ci95=(-0.9, -0.1), ci90=(-0.8, -0.2), mean=-0.5, median=-0.4)
+        assert compute_verdict_v2(_ng, _ex, "2026-06-01").startswith("SIGNIFICANTLY")
+        # floors gate the look, and the lock is final with a family row
+        _ex = dict(_ex, id="SELFTEST-V2B")
+        _append(sig_path(_ex), SIG_FIELDS, [{"signal_id": "s0", "experiment": _ex["id"]}])
+        _rows = [{"signal_id": f"v{i}", "experiment": _ex["id"], "ticker": f"T{i % 12}",
+                  "signal_date": f"2026-02-{1 + i % 9:02d}",
+                  "graded_at": "2026-03-01T21:00:00+00:00", "excess_1d": 0.0,
+                  "excess_nd": 0.02 * ((i % 7) - 3)} for i in range(45)]
+        assert "accruing" in verdict_line_v2(_ex, "2026-03-02")      # no graded rows yet
+        _append(out_path(_ex), OUT_FIELDS, _rows)
+        _r = verdict_line_v2(_ex, "2026-03-02")
+        assert "locked" in _r and "EQUIVALENT" in _r, _r
+        assert verdict_line_v2(_ex, "2027-01-01") == verdict_line_v2(_ex, "2028-01-01")
+        assert len(_read(v2_path())) == 1 and len(_read(v2_family_path())) == 1
+    finally:
+        DATA = _keep2
 
     # every declared experiment is well formed
     for e in EXPERIMENTS:
