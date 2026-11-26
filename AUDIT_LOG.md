@@ -1,5 +1,12 @@
 # ThePickLog — Audit Log
 
+## 2026-11-26 — Change: exploratory historical backtest of the six Experiment 13 rules (plan fixed first)
+
+- **What:** `backtest_exp13.py` replays the six Experiment 13 entries, exit, control and cost on 2005–2025 Yahoo prices, on the frozen 503-name list (A) and on point-in-time S&P 500 members (B, from `universes/sp500-pit-fja05680-2026-08-18.csv`, source and SHA-256 in `HYPOTHESES.md`). Runs only in GitHub Actions (`.github/workflows/backtest-exp13.yml`) and writes to `backtests/exp13-history/` on its branch.
+- **Order:** the plan (`HYPOTHESES.md`, "Exploratory backtest for Experiment 13 — plan fixed 2026-11-26"), the script and the workflow were committed together before the script first ran on real prices. Later runs never overwrite the first run's outputs.
+- **Status:** exploratory, labelled so wherever shown. It does not count toward Experiment 13, which is judged only by its forward test.
+- **Unchanged:** every registration, rule, locked verdict and stored row, including all of batch #12.
+
 ## 2026-11-26 — Change: Experiment 13 amended to SESOI ±0.75 pp and a 150-session floor (before any signal)
 
 - **When, and why it is clean:** batch #12 merged 2026-11-26 05:50 UTC; no EXP13 signal or outcome file existed when this change was made (the daily workflow had not run since, and only signals dated after 2026-11-27 count). The owner chose a faster read: about July 2027 instead of about March 2028.

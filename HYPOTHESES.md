@@ -1514,3 +1514,67 @@ instead of about sixteen.
 
 **Unchanged:** universe, entries, exit, control, costs, clustering, the other two floors (1,000 trades,
 100 names), the four outcomes, the one-look rule and the family correction (m = 6).
+
+## Exploratory backtest for Experiment 13 — plan fixed 2026-11-26 (not a registration, no verdict)
+
+**What this is.** An early, retrospective read on the six Experiment 13 rules: the same entries, exit,
+control and cost replayed on past prices. It is **exploratory**. It does not count toward, change, or
+stand in for Experiment 13, which is judged only by its forward test and its one look (batch #12 and
+its 2026-11-26 amendment). Per `ROADMAP.md`, the forward log is the only judge and a backtest selects
+variables. The owner asked for it ("Add historical run").
+
+**Fixed before any result existed.** This text, `backtest_exp13.py` and its workflow are committed
+before the script has ever run on real prices (the commit order on the branch is the proof). Nothing
+below may change after the first run; any change is a new dated entry, and the first run's outputs
+stay as published.
+
+**Window.** Signal dates 2005-01-03 to 2025-12-31 inclusive. Prices fetched 2003-01-01 to 2026-01-31
+for indicator warm-up and exits.
+
+**Data.** Yahoo daily bars through `yfinance` 1.7.0 with `auto_adjust=False`, as the forward harness
+uses: split-adjusted, dividends not included. Free, fetched in GitHub Actions; nothing on Vercel.
+
+**Two universes, both reported.**
+- **A, the frozen list:** the 503 names of `universes/sp500-2026-11-26.csv` on every date. Today's
+  members looked back on: survivorship bias by construction.
+- **B, point-in-time (the headline read):** on each date, the S&P 500 members in the latest snapshot
+  dated on or before it, from `universes/sp500-pit-fja05680-2026-08-18.csv` (a copy of "S&P 500
+  Historical Components & Changes" from github.com/fja05680/sp500, MIT licence, Farrell J. Aultman;
+  2,720 snapshots 1996-01-02 to 2026-08-18; SHA-256 36326709d46d6cd25834de5df457b16f5f96fad3a06b9beac28f7b88aa0b0d54).
+  Symbols map "." to "-". Only names Yahoo still serves can be used; most delisted members are
+  missing. The share of member-days with data is measured by year and published (`coverage.csv`).
+
+**Rules, unchanged from batch #12.** The six entry functions of `experiment_harness.py` (MACD cross,
+RSI(2) < 5, Supertrend flip, SMA(20) pullback, Bollinger reversion, NR7), each computed over the name's
+whole history; `backtest_exp13.py selftest` checks them bar for bar against the harness functions. A
+name is eligible on a date if it is in the universe, has a bar that day and has more than 210 bars to
+that date. At most 10 signals a day per arm, lowest `rank_metric` first (ties: list order for A,
+alphabetical for B). Entry at the next session's open; exit at the close 5 sessions after the entry
+day; 0.10 pp charged on the trade only. Control: the equal-weight mean of the same window's return,
+uncharged, over every other eligible name that day (at least 10 names). A signal whose name has no
+exit bar (delisted) is counted as not graded, as the harness would leave it. Indicators in the forward
+test run on a trailing ~500-calendar-day window; here they run on full history, so moving-average seeds
+differ slightly before they converge.
+
+**Statistics, per universe and arm.** Primary: the 5-session excess. Mean, median, two-way cluster-robust
+standard error (CR1, ticker × signal date, as `twoway_se`), 95% and 90% intervals, two-sided normal p;
+Benjamini–Hochberg across the six arms at q = 0.05, within each universe. Robustness: the same SE with
+dates coarsened to calendar months (overlapping 5-session windows correlate across adjacent dates).
+Same-session excess is secondary. Split halves 2005-01-03 to 2014-12-31 and 2015-01-01 to 2025-12-31.
+Excess by calendar year is published but not tested.
+
+**Labels (exploratory, never verdict language).**
+- *positive in both halves:* 95% CI above zero, mean and median above zero, and both halves' means above zero;
+- *negative:* 95% CI below zero;
+- *inside ±0.75 pp:* 90% CI inside (−0.75, +0.75), the Experiment 13 bound;
+- *unclear:* none of these.
+
+**Known limits, stated now.** Survivorship (A by construction; B where delisted names are missing,
+which removes many losers); a symbol Yahoo now uses for a different company could be misread in B;
+no dividends (the control lacks them too, so they mostly net out of the excess); Yahoo data errors;
+in-sample by definition, and a 21-year average need not hold in 2027. With tens of thousands of trades
+the intervals will be narrow, so a statistically clear difference may still be economically small.
+
+**Outputs** (written once by the workflow to `backtests/exp13-history/`): `summary.csv`, `by_year.csv`,
+`coverage.csv`, `run.csv` (run metadata and a SHA-256 fingerprint of the price data used) and
+`trades.csv.gz` (every graded trade), so every published number can be re-derived.
