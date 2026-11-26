@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Six retail signals, relaunched on the S&amp;P 500 | Experiment 13 — ThePickLog</title>
+<meta name="description" content="The six retail techniques that came back inconclusive on 40 large caps, re-run on 503 S&amp;P 500 names with the sample size, decision rule and one verdict look fixed in advance.">
+<link rel="canonical" href="https://thepicklog.com/experiment-13.html">
+<meta property="og:title" content="Experiment 13: six retail signals, relaunched on the S&amp;P 500">
+<meta property="og:description" content="Registered 2026-11-27: the six inconclusive techniques, re-run on 503 names with a power-based sample size and four possible outcomes, including a real &lsquo;equivalent to zero&rsquo;.">
+<meta property="og:type" content="article">
+<style>
+  :root{--a-text:#31b3aa;--bg:#0a0e14;--panel:#121826;--panel2:#0f1521;--line:#1f2937;--tx:#e6edf3;--dim:#8b97a7;
+        --a:#1f6f6b;--green:#2ec27e;--red:#f0506e;--amber:#f5b14c;--blue:#4c9ff5;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+  .top{position:sticky;top:0;z-index:20;background:rgba(10,14,20,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1280px;margin:0 auto;padding:0 18px;display:flex;align-items:center;gap:12px;height:56px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.02em;font-size:18px;color:var(--tx);text-decoration:none;white-space:nowrap;flex-shrink:0}
+  .logo:hover{color:var(--a-text)}
+  .logo .spark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,var(--a),#8fd0cb);display:grid;place-items:center;color:#1a0f0a;font-size:14px}
+  nav.tabs{display:flex;gap:2px;flex-wrap:nowrap;min-width:0;overflow-x:auto;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs a{color:var(--dim);font-size:13.5px;padding:8px 10px;border-radius:9px;font-weight:600;text-decoration:none;white-space:nowrap}
+  nav.tabs a:hover{color:var(--tx);background:#ffffff08}
+  nav.tabs a.on{color:var(--tx);background:#ffffff10}
+  .menu-btn{display:none;background:#ffffff0d;border:1px solid var(--line);color:var(--tx);border-radius:10px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;align-items:center;gap:7px;white-space:nowrap;flex-shrink:0;margin-left:auto}
+  #mobileMenu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(10,14,20,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:6px 10px 12px;box-shadow:0 18px 40px #000a}
+  #mobileMenu.open{display:block}
+  #mobileMenu a{display:block;color:var(--tx);text-decoration:none;font-size:15px;font-weight:600;padding:13px 12px;border-radius:10px}
+  @media(max-width:980px){nav.tabs{display:none}.menu-btn{display:flex}}
+  .wrap{max-width:760px;margin:0 auto;padding:30px 18px 90px}
+  .no{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--dim);letter-spacing:.08em}
+  h1{font-size:34px;margin:.15em 0 .35em;letter-spacing:-.025em;line-height:1.14}
+  h2{font-size:22px;margin:1.8em 0 .5em;letter-spacing:-.015em}
+  p{margin:0 0 1.05em}
+  a{color:var(--blue)}
+  .standfirst{font-size:18px;color:var(--dim);margin-bottom:1.4em}
+  .status{border:1px solid #5a3a22;background:#2a1d10;border-radius:14px;padding:16px 20px;margin:22px 0}
+  .status .h{font-size:12px;letter-spacing:.1em;color:var(--amber);font-weight:800;margin-bottom:5px}
+  .status .b{font-size:19px;font-weight:700;margin-bottom:6px}
+  .status p{color:var(--dim);font-size:14.5px;margin:0}
+  .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:20px 0}
+  .box h3{margin:0 0 10px;font-size:17px}
+  .box p:last-child{margin-bottom:0}
+  dl{margin:0}
+  dt{font-weight:700;font-size:14px;color:var(--tx);margin-top:12px}
+  dd{margin:2px 0 0;color:var(--dim);font-size:14.5px}
+  dt:first-child{margin-top:0}
+  code{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:1px 5px;font-size:13px;font-family:ui-monospace,Menlo,monospace}
+  .pull{border-left:3px solid var(--a);padding:4px 0 4px 18px;margin:22px 0;font-size:18px}
+  .foot{color:var(--dim);font-size:12.5px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px}
+
+  /* ===== a11y baseline — UI audit 2026-08-19 =====
+     3.1 a visible focus ring everywhere (there were 2 :focus rules on the whole site)
+     3.2 footer links to a 24px touch target (they were 14px)
+     3.7 skip-to-content, so keyboard users don't tab 12 nav links on every page */
+  .skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--panel,#121826);
+    color:var(--blue,#4c9ff5);border:1px solid var(--blue,#4c9ff5);border-radius:0 0 8px 0;
+    padding:10px 16px;font-weight:600;font-size:14px;text-decoration:none}
+  .skip:focus{left:0}
+  :focus-visible{outline:2px solid var(--blue,#4c9ff5);outline-offset:2px;border-radius:3px}
+  .foot a,footer a{display:inline-block;padding:5px 2px}
+
+  /* ===== 2.1 one canonical nav — UI audit 2026-08-19 =====
+     There were FIVE different navs across 19 pages. Method/Trust/Guide/Privacy were
+     unreachable from the homepage nav, and Compete existed ONLY on the homepage.
+     Both marker classes are styled so a page's own CSS can use either. */
+  .tabs a.active,.tabs a.on{color:var(--tx,#e6edf3);background:#ffffff14}
+  .fnav{display:inline-block;margin-top:2px}
+  .fnav b{font-weight:600;opacity:.75;margin-right:6px}
+  /* The mobile menu had no z-index on 16 of 19 pages, so the panel painted BEHIND
+     the article text, and a translucent background left it unreadable wherever
+     backdrop-filter did not apply. Opaque and lifted. */
+  #mobileMenu{z-index:60;background:var(--bg,#0a0e14)}
+
+  /* ===== 2.3 one long-form type scale — UI audit 2026-08-19 =====
+     Body copy ran 15px in an 820px column on the proof pages: ~113 characters a
+     line, the smallest text on the site on the pages that most need careful
+     reading. method.html set its section headings at 16px against 15px body, so
+     its hierarchy had effectively collapsed. H1 ranged 26–36px with no scale.
+     One scale now: 17px/1.65 in a 720px column (~80ch), H1 34 / H2 23 / H3 17.5. */
+  body{font-size:17px;line-height:1.65}
+  .wrap{max-width:720px}
+  h1{font-size:34px;line-height:1.15;letter-spacing:-.02em;margin:.15em 0 .3em}
+  h2{font-size:23px;line-height:1.25;letter-spacing:-.015em;margin:1.7em 0 .45em}
+  h3{font-size:17.5px;line-height:1.35;margin:1.5em 0 .35em}
+  p{margin:0 0 1.05em}
+  .lead,.standfirst{font-size:18.5px;line-height:1.5}
+  @media(max-width:560px){
+    body{font-size:16.5px}
+    h1{font-size:28px}
+    h2{font-size:20.5px}
+    .lead,.standfirst{font-size:17px}
+  }
+</style>
+<meta property="og:image" content="https://thepicklog.com/og/card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://thepicklog.com/og/card.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/rss+xml" title="ThePickLog — verdicts &amp; field notes" href="https://thepicklog.com/feed.xml">
+<script defer src="/_vercel/insights/script.js"></script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="top">
+  <div class="top-in">
+    <a class="logo" href="index.html" title="ThePickLog home"><span class="spark">⛓</span> ThePickLog</a>
+    <nav class="tabs">
+      <a href="index.html">Overview</a>
+      <a href="experiments.html" class="active">Experiments</a>
+      <a href="field-notes.html">Field notes</a>
+      <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+      <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+      <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+      <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+      <a href="about.html">About</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰ Menu</button>
+  </div>
+  <div id="mobileMenu" role="menu" aria-label="Site menu">
+    <a href="index.html">Overview</a>
+    <a href="experiments.html" class="active">Experiments</a>
+    <a href="field-notes.html">Field notes</a>
+    <a href="index.html#performance" title="Every pick ever logged, graded 5 trading days later — winners and losers, straight from the immutable log.">Track record</a>
+    <a href="index.html#watchlist" title="The live low-float screen — the strategy tested in Experiment 01, still running in public.">Today&rsquo;s screen</a>
+    <a href="index.html#compete" title="Free $100,000 paper-trading simulation with a public leaderboard.">Compete</a>
+    <a href="method.html" title="How a hypothesis is scored, and how to re-derive every number yourself.">Method</a>
+    <a href="about.html">About</a>
+  </div>
+</div>
+<script>
+function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.getElementById("menuBtn");
+  const o=(f!==undefined)?f:!m.classList.contains("open");m.classList.toggle("open",o);b.textContent=o?"✕ Close":"☰ Menu";}
+</script>
+
+<div class="wrap" id="main" tabindex="-1">
+  <span class="no">EXPERIMENT 13 · REGISTERED 2026-11-27 · RUNNING</span>
+  <h1>Six retail signals, relaunched on the S&amp;P 500</h1>
+  <p class="standfirst">Six techniques came back inconclusive on our 40-name universe: the tests could rule out large edges, not small ones. This is the same six rules, unchanged, on 503 names, with the sample size worked out in advance from the effect we are looking for. This page is the design, frozen before the first signal.</p>
+
+  <div class="status" style="border-color:#24405a;background:#10202e">
+    <div class="h" style="color:var(--blue)">STATUS &middot; RUNNING &middot; NO RESULT YET</div>
+    <div class="b">One verdict per arm, computed once, when the sample is big enough to answer.</div>
+    <p>Until each arm reaches its floors (330 signal sessions, 1,000 trades, 100 companies) we publish counts only: no running average, no interval, no verdict language. At the rates seen on 40 names, scaled to 503, we expect the floors in roughly 16 months, about March 2028. The counts update daily in the <a href="reports/experiments-LATEST.md">live experiments report</a>.</p>
+  </div>
+
+  <h2>Why a relaunch</h2>
+  <p>Experiments 02, 03 and 06&ndash;09 all ended <b>inconclusive</b>. That label was honest, but on its own it says less than it should. Experiment 03 is typical: its interval ruled out a same-day edge bigger than about &plusmn;0.3 points per trade, and the test had only about a 10% chance of catching a 0.10-point edge (<a href="experiment-03.html">the full read</a>). The question was right; the sample could not answer it.</p>
+  <p>The first run used 40 liquid large caps on purpose: a 0.10% round trip meant costs could not explain a null, a fixed list could not drift, and a short list kept the daily download small on the free data feed this project runs on. What it lacked was a sample sized for the effect we cared about, and no registration named that effect. Since 2026-11-25 every registration must (<a href="HYPOTHESES.md">HYPOTHESES.md</a>). This is the first one built that way.</p>
+  <p class="pull">This experiment is about method first. Whatever it finds, it is built to be able to say so.</p>
+
+  <h2>What the first run taught us about sample size</h2>
+  <p>Signals that fire on the same day move together. In the six locked 40-name samples, the same-day correlation of the 5-session excess was about 0.35, so ten trades on one day carry the evidence of roughly 2.4 independent ones. <b>Trading sessions, not names, are the binding unit.</b> A bigger universe fills every session and lets us take more signals a day. It cannot replace time, which is why the floors are set in sessions.</p>
+
+  <h2>The design, frozen</h2>
+  <div class="box">
+    <dl>
+      <dt>Arms</dt>
+      <dd>13A MACD bullish crossover &middot; 13B 2-period RSI &middot; 13C Supertrend flip &middot; 13D moving-average pullback &middot; 13E Bollinger reversion &middot; 13F NR7 contraction. Each uses its registered entry rule, unchanged.</dd>
+      <dt>Universe</dt>
+      <dd>503 S&amp;P 500 share classes across all 11 sectors, frozen from a public constituent list on 2026-11-26 (<code>universes/sp500-2026-11-26.csv</code>, source and checksum in the registration). Large caps only, so the 0.10% cost stays credible. Adding or removing a name voids the test.</dd>
+      <dt>Entry and exit</dt>
+      <dd>Signals evaluated after the close, logged before the next open; at most 10 per arm per day, the registered tie-break first. Entry at the next open. <b>Primary exit: the fifth session&rsquo;s close.</b> The same-session result is reported as secondary and cannot rescue a fail.</dd>
+      <dt>Control</dt>
+      <dd>The equal-weight return of the rest of the universe over the identical window, leaving the traded name out.</dd>
+      <dt>Costs</dt>
+      <dd>0.10% round trip, charged to the trade only, so the excess is the edge over simply holding the universe.</dd>
+      <dt>Window</dt>
+      <dd>Only signals dated strictly after 2026-11-27 count.</dd>
+    </dl>
+  </div>
+
+  <h2>The sample size, worked out first</h2>
+  <div class="box">
+    <p><b>Smallest effect we care about:</b> &plusmn;0.50 percentage points per 5-session trade.<br>
+    <b>Error rates:</b> two-sided &alpha; = 0.05/6, so a single arm can survive the family correction, and 80% power.<br>
+    <b>Inputs from the first run:</b> a 5-session standard deviation of about 4.0 points and a same-day correlation of about 0.35.<br>
+    <b>Result:</b> about 775 independent trades&rsquo; worth of evidence, or about 322 sessions at 10 signals a day. <b>Floor: 330 sessions</b>, plus at least 1,000 trades and 100 companies. The arithmetic is in <code>planned_sessions()</code> in <code>experiment_harness.py</code>, pinned by a test.</p>
+  </div>
+
+  <h2>What it can conclude</h2>
+  <p>Four outcomes, fixed now, with intervals from standard errors clustered by both company and day:</p>
+  <div class="box">
+    <p><b>Clears the bar:</b> the 95% interval is above zero, the mean and median are both positive, and the direction held for three weekly snapshots.<br>
+    <b>Significantly negative:</b> the 95% interval is below zero.<br>
+    <b>Equivalent to zero:</b> the 90% interval sits inside &plusmn;0.50 points, so any edge is smaller than the one we care about. This is the result the first run could not give.<br>
+    <b>Underpowered:</b> none of the above.</p>
+    <p style="margin-top:12px">The six arms are one family: a pass also has to survive a Benjamini&ndash;Hochberg correction across all six. They share a universe and many days, so they are correlated tests, not six independent replications.</p>
+  </div>
+
+  <h2>What we expect</h2>
+  <p>Our registered expectation is that every arm comes back <b>equivalent to zero</b>. These rules are published, taught and widely followed, and none of them showed anything on 40 names. If one clears the bar, that would be genuinely surprising, and we will say so, with the same scope limits as every verdict here.</p>
+
+  <h2>How you&rsquo;ll be able to check it</h2>
+  <p>Every signal is written to <code>experiments/EXP13*-signals.csv</code> before its entry session, and graded outcomes alongside it, both public and append-only. Verdicts are appended once to <code>experiments/EXP13-verdicts.csv</code> and the family correction to <code>experiments/EXP13-fdr.csv</code>. The runs happen in the project&rsquo;s daily public GitHub workflow.</p>
+
+  <div class="box">
+    <h3>What this experiment is not</h3>
+    <p>It is not a recommendation to trade this or anything else, and nothing here is advice. It is not a claim about any author, platform or educator. It does not reopen any earlier verdict. And whichever way it lands, it describes these rules, on this list, over this window.</p>
+  </div>
+
+
+  <!-- ===== FREE VERDICT-EMAIL LIST ===== -->
+  <div id="verdict-email" style="border:1px solid #1f6f6b55;background:var(--panel,#121826);border-radius:14px;padding:20px 22px;margin:34px 0 8px;scroll-margin-top:70px">
+    <h2 style="margin:0 0 6px;font-size:20px">Get every verdict by email</h2>
+    <p style="margin:0 0 12px;color:var(--dim,#8b97a7);font-size:14.5px">Verdicts land on dates fixed in advance; each experiment page shows its date. We'll email you each one, free, the day it publishes — and nothing else. No signals, no picks, no offers. Verdicts stay free and public for everyone either way; this just means you don't have to remember to check back.</p>
+    <form onsubmit="return tplVerdicts(event)" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input type="email" name="email" required autocomplete="email" placeholder="you@email.com" aria-label="Email address for verdict emails"
+        style="flex:1;min-width:200px;background:var(--panel2,#0f1521);border:1px solid var(--line,#1f2937);color:var(--tx,#e6edf3);border-radius:10px;padding:10px 12px;font:inherit;font-size:16px">
+      <button type="submit" style="background:var(--a,#1f6f6b);border:0;color:#eafffb;border-radius:10px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer">Email me each verdict</button>
+    </form>
+    <p class="vl-msg" role="status" aria-live="polite" style="margin:8px 0 0;font-size:13px"></p>
+    <p style="margin:8px 0 0;font-size:11.5px;color:var(--dim,#8b97a7)">One confirmation email first — you're not on the list until you click it. <a href="privacy.html" style="color:var(--dim,#8b97a7)">Privacy</a></p>
+  </div>
+
+<script>
+async function tplVerdicts(ev){
+  ev.preventDefault();
+  var f=ev.target, i=f.querySelector('input[name="email"]'), b=f.querySelector('button'),
+      m=f.parentElement.querySelector('.vl-msg');
+  var email=(i.value||'').trim();
+  var say=function(t,c){ if(m){ m.textContent=t; m.style.color=(c==='err')?'#f0506e':'#2ec27e'; } };
+  if(!email){ say('Enter an email first.','err'); return false; }
+  b.disabled=true; var lbl=b.textContent; b.textContent='Adding…'; say('');
+  try{
+    var ac=new AbortController(); var tmo=setTimeout(function(){ac.abort();},15000);
+      var r=await fetch('https://qkdgijiotxxndrfagexr.supabase.co/rest/v1/rpc/is_join_waitlist',{
+      method:'POST',
+      headers:{'content-type':'application/json','apikey':'sb_publishable_BPnBKNu7BbWgPvpMI_PhIg_G_BBwfm3'},
+      body:JSON.stringify({p_email:email,p_tier:'any',p_source:'verdicts-experiment-13'}),signal:ac.signal});
+    clearTimeout(tmo);
+    var d=await r.json();
+    if(d && d.ok===false){
+      say(d.error==='invalid_email' ? "That doesn't look like an email address."
+        : d.error==='rate_limited' ? "We're getting an unusual number of signups right now — try again in a little while."
+        : "Couldn't add you just now — try again in a moment.",'err');
+    } else if(d && d.already){
+      say(d.confirmed ? "You're already confirmed on this list."
+                      : "You're already on this list — check for the confirmation email.",'ok');
+      f.style.display='none';
+    } else {
+      say("Almost — check your inbox and click the confirmation link. You're not on the list until you do.",'ok');
+      f.style.display='none';
+    }
+  }catch(e){ say("Couldn't add you just now — try again in a moment.",'err'); }
+  b.disabled=false; b.textContent=lbl;
+  return false;
+}
+</script>
+
+  <p class="foot">
+    Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. ThePickLog is operated by AMD Ventures, LLC (Florida).
+    <br><a href="experiment-12.html">← Experiment 12: the AI-judge study</a> &middot; <a href="experiments.html">All experiments →</a>
+  
+  <br><span class="fnav"><b>Evidence</b> <a href="index.html#validation">Validation</a> &middot; <a href="index.html#scoring">Score &amp; metrics</a> &middot; <a href="trust.html">Trust &amp; Data</a></span>
+  <br><span class="fnav"><b>Tools</b> <a href="index.html#calculator">Calculator</a> &middot; <a href="guide.html">Vetting Guide</a> &middot; <a href="scorecard.html">7-Check Scorecard</a></span>
+  <br><span class="fnav"><b>Legal</b> <a href="disclaimer.html">Disclaimer</a> &middot; <a href="privacy.html">Privacy</a> &middot; <a href="terms.html">Terms</a></span>
+  </p>
+</div>
+</body>
+</html>
