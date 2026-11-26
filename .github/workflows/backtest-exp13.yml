@@ -1,0 +1,69 @@
+# Experiment 13 — EXPLORATORY historical backtest (2005-2025). Not a verdict, not the record.
+# Plan fixed in HYPOTHESES.md ("Exploratory backtest for Experiment 13 — plan fixed 2026-11-26").
+# Runs on GitHub's servers because Yahoo is only reachable from here. Free; nothing on Vercel.
+# Commits its outputs to backtests/exp13-history/ on the branch it ran for, never to main.
+name: EXP13 historical backtest (exploratory)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "backtest_exp13.py"
+      - ".github/workflows/backtest-exp13.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: backtest-exp13-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  backtest:
+    # same-repository branches only (a fork's PR gets no write token and no run)
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      BRANCH: ${{ github.head_ref || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Skip when the first run's outputs already exist (unless run by hand)
+        # GitHub's paths filter looks at the whole PR diff, so every push to the PR would rerun
+        # the replay. The first run's outputs stand; a rerun happens only on workflow_dispatch.
+        id: gate
+        run: |
+          if [ -f backtests/exp13-history/summary.csv ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "outputs exist; skipping"; echo "skip=1" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.skip != '1'
+        with:
+          python-version: "3.11"
+      - name: Install deps (same pins as the other workflows)
+        if: steps.gate.outputs.skip != '1'
+        run: pip install "yfinance==1.7.0" "pandas==3.0.6" "numpy==2.4.6"
+      - name: Harness selftest
+        if: steps.gate.outputs.skip != '1'
+        run: python experiment_harness.py --selftest
+      - name: Backtest selftest (rules match the harness bar for bar)
+        if: steps.gate.outputs.skip != '1'
+        run: python backtest_exp13.py selftest
+      - name: Run the 2005-2025 replay
+        if: steps.gate.outputs.skip != '1'
+        run: python backtest_exp13.py run
+      - name: Commit outputs to this branch (never main)
+        if: steps.gate.outputs.skip != '1'
+        run: |
+          if [ "$BRANCH" = "main" ]; then echo "refusing to commit to main"; exit 0; fi
+          git config user.name "joshldavis"
+          git config user.email "davis1163@gmail.com"
+          git add backtests/exp13-history
+          if git diff --cached --quiet; then echo "no outputs"; exit 0; fi
+          git commit -m "backtest: EXP13 exploratory historical replay outputs $(date -u +%F)"
+          for i in 1 2 3; do
+            git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH" && break
+            echo "push attempt $i failed; retrying"; sleep 5
+          done
