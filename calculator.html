@@ -170,9 +170,16 @@ function toggleMenu(force){
     <h1>The<span class="dot">PickLog</span> · Exit-Rule Scenario Calculator</h1>
     <span class="sub" id="updated">loading live data…</span>
   </header>
-  <div class="sub">"What could the +10%-target exit (H-EX1) earn <i>if</i> it works?" Every input below is
-    recomputed live in your browser from the raw log — <a href="outcomes.csv" download>outcomes.csv</a> —
-    using the same plug-in convention as <a href="reports/bayes-h-ex1-LATEST.md">the Bayesian read-out</a>.
+  <div class="caveat" style="margin-top:12px"><b>Verdict already in:</b> H-EX1 was tested forward and
+    <b>did not hold up</b>. On 2026-07-29 it lost to simply selling at the first day's close by 3.0 percentage
+    points per trade, and the interval excluded zero (<a href="experiment-01.html">Experiment 01</a>). This
+    calculator stays up to show <i>how far</i> the touch rate would have to move for the rule to pay, not because
+    the rule is still open.</div>
+  <div class="sub">"What would the +10%-target exit (H-EX1) have to look like to pay?" Every input below is
+    recomputed live in your browser from the raw log — <a href="picks.csv" download>picks.csv</a> ×
+    <a href="outcomes.csv" download>outcomes.csv</a> — on the same sample and plug-in convention as
+    <a href="reports/bayes-h-ex1-LATEST.md">the Bayesian read-out</a>: the v0.2 cohort H-EX1 was registered on,
+    with picks logged after the opening bell excluded, as everywhere else on the site.
     This is a scenario tool, not a forecast: the honest OOS test lives in
     <a href="reports/LATEST.md">the weekly report §4d</a>. Click any <button class="ib" style="cursor:default">i</button>
     for the exact definition, formula, and data lineage of that number.</div>
@@ -193,8 +200,11 @@ function toggleMenu(force){
     <p>1. The scanner stamps each pick into <code>picks.csv</code> <b>before the outcome is known</b> (append-only, never edited).
        2. Five trading days later the grader writes one row per pick to <code>outcomes.csv</code> with the entry open,
        same-day close, 5-day close, and the 5-day max-favorable / max-adverse excursions (<code>mfe_5d</code> / <code>mae_5d</code>),
-       all net of a 2% round-trip cost haircut on return columns. 3. This page fetches <code>outcomes.csv</code> raw and
-       recomputes everything in your browser — download it and check any number yourself.</p>
+       all net of a 2% round-trip cost haircut on return columns. 3. This page fetches <code>picks.csv</code> and
+       <code>outcomes.csv</code> raw, keeps the v0.2 cohort H-EX1 was frozen on, drops picks logged at or after their own
+       session's 09:30 ET open (derived from <code>published_at</code>, mirroring <code>market_time.split_timely</code>), and
+       recomputes everything in your browser — download them and check any number yourself. This is the same sample
+       <code>bayes_h_ex1.py</code> uses.</p>
 
     <h3>The exit rule being modeled (H-EX1, frozen 2026-06-23)</h3>
     <p>Rest a +10% limit order over the 5-trading-day hold. If the 5-day high (<code>mfe_5d</code>) reaches +10%, the order
@@ -479,14 +489,33 @@ function render(){
   });
 }
 
+/* Same sample as bayes_h_ex1.load_evaluable(): v0.2 cohort (H-EX1 was frozen on it) and
+   the PRE-OPEN SEAL — a pick logged at or after its own session's 09:30 ET open is not
+   evidence. Mirrors market_time.split_timely / index.html isTimelyPick. Fails closed. */
+const _ET_HM=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",
+  hour:"2-digit",minute:"2-digit",hour12:false,year:"numeric",month:"2-digit",day:"2-digit"});
+function isTimelyPick(p){
+  const ts=p&&p.published_at, td=p&&p.trading_date;
+  if(!ts||!td) return false;
+  const d=new Date(ts); if(isNaN(d)) return false;
+  const part={}; for(const x of _ET_HM.formatToParts(d)) part[x.type]=x.value;
+  const et=`${part.year}-${part.month}-${part.day}`;
+  if(et<td) return true;
+  if(et>td) return false;
+  return (+part.hour*60 + +part.minute) < 570;
+}
 async function main(){
   try{
-    const txt=await fetch("outcomes.csv",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error("outcomes.csv "+r.status);return r.text();});
-    const rows=parseCSV(txt);
+    const get=(f)=>fetch(f,{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(f+" "+r.status);return r.text();});
+    const [pTxt,txt]=await Promise.all([get("picks.csv"),get("outcomes.csv")]);
+    const keep=new Set(parseCSV(pTxt)
+      .filter(p=>(p.model_version||"").startsWith("v0.2")&&isTimelyPick(p))
+      .map(p=>p.pick_id));
+    const rows=parseCSV(txt).filter(r=>keep.has(r.pick_id));
     S.all=windowStats(rows);
     S.oos=windowStats(rows.filter(r=>(r.trading_date||"")>REG));
     S.touch=Math.round(S.all.p*10)/10;S.preset=0;
-    document.getElementById("updated").textContent=`live from outcomes.csv · ${S.all.n} evaluable graded picks`;
+    document.getElementById("updated").textContent=`live from picks.csv × outcomes.csv · ${S.all.n} evaluable graded picks (v0.2, logged before the open)`;
     render();
   }catch(e){
     document.getElementById("root").innerHTML=`<div class="err">Couldn't load the live log (${e.message}). Nothing to calculate without the raw record — that's the point.</div>`;

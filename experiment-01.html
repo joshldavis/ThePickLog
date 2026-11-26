@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>We tested our own stock screener. It lost money. | Experiment 01 — ThePickLog</title>
-<meta name="description" content="We built a low-float momentum screener, pre-registered the edge we believed in, and ran it forward for seven weeks. It lost significantly — in the opposite direction to our prediction. The full result, including the number that flipped sign as the sample grew.">
+<meta name="description" content="We built a low-float momentum screener, pre-registered the edge we believed in, and ran it forward for five weeks. It lost significantly — in the opposite direction to our prediction. The full result, including the number that flipped sign as the sample grew.">
 <link rel="canonical" href="https://thepicklog.com/experiment-01.html">
 <meta property="og:title" content="Experiment 01 — We tested our own stock screener. It lost money.">
 <meta property="og:description" content="Pre-registered, graded forward, published either way. The edge we believed in came out significantly negative — and the early positive read was noise.">
@@ -151,7 +151,7 @@ function toggleMenu(force){
 <div class="wrap" id="main" tabindex="-1">
   <span class="no">EXPERIMENT 01 · REGISTERED 2026-06-23 · VERDICT 2026-07-29</span>
   <h1>We tested our own stock screener. It lost money.</h1>
-  <p class="standfirst">We built a screener for low-float stocks gapping up on heavy volume, wrote down the edge we believed in before we could see whether it worked, and ran it forward for seven weeks. It didn't just fail. It failed in the opposite direction to our prediction — and the early result that made us optimistic turned out to be noise.</p>
+  <p class="standfirst">We built a screener for low-float stocks gapping up on heavy volume, wrote down the edge we believed in before we could see whether it worked, and ran it forward for five weeks. It didn't just fail. It failed in the opposite direction to our prediction — and the early result that made us optimistic turned out to be noise.</p>
 
   <div style="border:1px solid #5a2a33;background:#2a1218;border-radius:14px;padding:16px 20px;margin:22px 0">
     <div style="font-size:12px;letter-spacing:.1em;color:#ffb3c0;font-weight:800;margin-bottom:5px">CORRECTION · 2026-08-04</div>
@@ -163,6 +163,7 @@ function toggleMenu(force){
     <div class="h">VERDICT</div>
     <div class="b">FAILED. The pre-registered edge is significantly negative out-of-sample.</div>
     <p class="s">309 post-registration trades · −3.0 percentage points per trade versus the honest alternative · 95% confidence interval [−4.4, −1.5] · holds after correcting for the fact that we were repeatedly betting on the same 16 names.</p>
+    <p class="s"><b>Recomputed 2026-11-26</b> without the 64 trades in this sample that were logged after the bell, the exclusion the rest of the site applies: 245 trades &middot; &minus;2.6 percentage points &middot; pooled 95% interval [&minus;4.2, &minus;1.0]. The verdict holds, and the gap is somewhat smaller than the registered figure, which stays above as published. The ticker-clustered interval has not been recomputed yet. Reproduce it with <a href="https://github.com/joshldavis/thepicklog/blob/main/exp01_preopen_recheck_2026_11_26.py">exp01_preopen_recheck_2026_11_26.py</a>.</p>
   </div>
 
   <h2>What we claimed</h2>
