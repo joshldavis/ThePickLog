@@ -43,6 +43,11 @@
   .box{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:18px 20px;margin:20px 0}
   .box h3{margin:0 0 10px;font-size:17px}
   .box p:last-child{margin-bottom:0}
+  .tw{overflow-x:auto;margin:18px 0}
+  .tw table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:520px}
+  .tw th,.tw td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  .tw th{color:var(--dim);font-weight:600;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+  .tw td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
   dl{margin:0}
   dt{font-weight:700;font-size:14px;color:var(--tx);margin-top:12px}
   dd{margin:2px 0 0;color:var(--dim);font-size:14.5px}
@@ -194,6 +199,28 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 
   <h2>What we expect</h2>
   <p>Our registered expectation is that every arm comes back <b>equivalent to zero</b>. These rules are published, taught and widely followed, and none of them showed anything on 40 names. If one clears the bar, that would be genuinely surprising, and we will say so, with the same scope limits as every verdict here.</p>
+
+  <h2>An early look backward: 2005&ndash;2025 (exploratory, not the verdict)</h2>
+  <p><b>Over 21 years of past prices, none of the six rules beat simply holding the rest of the S&amp;P 500 over the same five sessions.</b> Four did reliably worse, by about 0.1 to 0.2 points per trade: roughly the 0.10% cost plus a little. The other two were indistinguishable from the control. Every interval sits well inside &plusmn;0.75 points.</p>
+  <p>This replays the same six entries, exit, control and cost on Yahoo prices for signals dated 2005-01-03 to 2025-12-31. The plan, including how results would be labelled, was committed before the script first ran (<a href="HYPOTHESES.md">HYPOTHESES.md</a>, &ldquo;Exploratory backtest for Experiment 13&rdquo;). It is in-sample by definition, so it does not count toward Experiment 13, which is still decided only by the forward test above.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Rule</th><th>Point-in-time members</th><th>95% interval</th><th>Today&rsquo;s 503</th><th>Read</th></tr></thead>
+    <tbody>
+      <tr><td>13A MACD crossover</td><td class="num">&minus;0.16</td><td class="num">&minus;0.21 to &minus;0.11</td><td class="num">&minus;0.18</td><td>Worse than the control</td></tr>
+      <tr><td>13B 2-period RSI</td><td class="num">&minus;0.07</td><td class="num">&minus;0.17 to +0.02</td><td class="num">&minus;0.03</td><td>No difference</td></tr>
+      <tr><td>13C Supertrend flip</td><td class="num">&minus;0.20</td><td class="num">&minus;0.27 to &minus;0.13</td><td class="num">&minus;0.15</td><td>Worse than the control</td></tr>
+      <tr><td>13D Moving-average pullback</td><td class="num">&minus;0.15</td><td class="num">&minus;0.20 to &minus;0.10</td><td class="num">&minus;0.16</td><td>Worse than the control</td></tr>
+      <tr><td>13E Bollinger reversion</td><td class="num">&minus;0.05</td><td class="num">&minus;0.13 to +0.03</td><td class="num">&minus;0.02</td><td>No difference</td></tr>
+      <tr><td>13F NR7 contraction</td><td class="num">&minus;0.10</td><td class="num">&minus;0.15 to &minus;0.06</td><td class="num">&minus;0.15</td><td>Worse than the control</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:14px;color:var(--dim)">Mean 5-session excess per trade, in percentage points, net of the 0.10% cost. Intervals are clustered by company and day. About 21,000 to 50,000 trades per rule. The four negative reads hold in both halves (2005&ndash;2014 and 2015&ndash;2025), on both lists, after the correction across six rules, and with dates clustered by month.</p>
+  <div class="box">
+    <h3>What this backtest can&rsquo;t tell you</h3>
+    <p><b>Missing companies.</b> The point-in-time list only works for names the free data feed still carries. It covered 53% of member-days in 2005, rising to 97% by 2025. Most of the gap is companies that were acquired or failed, so the early years lean toward survivors. Today&rsquo;s 503 lean on survivors entirely. The two lists agree closely, which is reassuring but not proof.<br>
+    <b>No dividends,</b> in the trade or the control, so they mostly cancel. <b>Data errors</b> in a free feed are possible. <b>The past need not hold:</b> a 21-year average says little about 2027.</p>
+    <p>Every trade is public: <a href="backtests/exp13-history/summary.csv">summary</a>, <a href="backtests/exp13-history/by_year.csv">by year</a>, <a href="backtests/exp13-history/coverage.csv">coverage</a>, <a href="backtests/exp13-history/trades.csv.gz">all trades</a>, and the script, <code>backtest_exp13.py</code>, whose selftest checks each rule bar for bar against the forward harness.</p>
+  </div>
 
   <h2>How you&rsquo;ll be able to check it</h2>
   <p>Every signal is written to <code>experiments/EXP13*-signals.csv</code> before its entry session, and graded outcomes alongside it, both public and append-only. Verdicts are appended once to <code>experiments/EXP13-verdicts.csv</code> and the family correction to <code>experiments/EXP13-fdr.csv</code>. The runs happen in the project&rsquo;s daily public GitHub workflow.</p>
