@@ -1,0 +1,2 @@
+run_at,commit,symbols_requested,symbols_usable,frozen_list_missing,data_fingerprint_sha256,window,sessions_A,sessions_B,thin_control_A,thin_control_B,yfinance
+2026-11-26T06:19:44+00:00,0277e870a3b2737008112a25932659c851be506a,982,661,FDXF HONA Q VYLR,8f5499ba0c7fec351c384f1326fabaac875bd32a43983d4cdb7fb564e3d977fe,2005-01-03..2025-12-31,5283,5283,0,0,1.7.0
