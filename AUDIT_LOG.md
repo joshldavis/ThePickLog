@@ -1,5 +1,12 @@
 # ThePickLog — Audit Log
 
+## 2026-11-26 — Change: Experiment 13 amended to SESOI ±0.75 pp and a 150-session floor (before any signal)
+
+- **When, and why it is clean:** batch #12 merged 2026-11-26 05:50 UTC; no EXP13 signal or outcome file existed when this change was made (the daily workflow had not run since, and only signals dated after 2026-11-27 count). The owner chose a faster read: about July 2027 instead of about March 2028.
+- **What:** `experiment_harness.py` (`sesoi` 0.75, `min_sessions` 150, `planned_sessions()` default and selftest), dated amendment in `HYPOTHESES.md`, numbers and an amendment note on `experiment-13.html`, the `experiments.html` card and the `feed.xml` item.
+- **Cost, disclosed:** an EQUIVALENT TO ZERO verdict now bounds edges at ±0.75 pp; smaller edges would more likely read UNDERPOWERED.
+- **Unchanged:** everything else in batch #12, and every earlier registration, verdict and stored row.
+
 ## 2026-11-27 — Change: Experiment 13 registered (six inconclusive rules relaunched on the S&P 500)
 
 - **Registration** (`HYPOTHESES.md`, batch #12, its own commit): arms 13A–13F re-run the registered entry rules of H-EXP02/03/06/07/08/09 on a frozen 503-name S&P 500 list (`universes/sp500-2026-11-26.csv`, source and SHA-256 in the registration). Primary = 5-session excess; control leaves the traded name out; 0.10% cost on the trade only; ≤ 10 signals a day; SESOI ±0.50 pp; α = 0.05/6, 80% power; floors 330 sessions, 1,000 trades, 100 names; two-way clustered SE; four-outcome decision rule; one look; BH across the six arms. Window opens after 2026-11-27.

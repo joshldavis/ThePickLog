@@ -144,7 +144,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <div class="status" style="border-color:#24405a;background:#10202e">
     <div class="h" style="color:var(--blue)">STATUS &middot; RUNNING &middot; NO RESULT YET</div>
     <div class="b">One verdict per arm, computed once, when the sample is big enough to answer.</div>
-    <p>Until each arm reaches its floors (330 signal sessions, 1,000 trades, 100 companies) we publish counts only: no running average, no interval, no verdict language. At the rates seen on 40 names, scaled to 503, we expect the floors in roughly 16 months, about March 2028. The counts update daily in the <a href="reports/experiments-LATEST.md">live experiments report</a>.</p>
+    <p>Until each arm reaches its floors (150 signal sessions, 1,000 trades, 100 companies) we publish counts only: no running average, no interval, no verdict language. At the rates seen on 40 names, scaled to 503, we expect the floors in about seven months, around July 2027. The counts update daily in the <a href="reports/experiments-LATEST.md">live experiments report</a>.</p>
   </div>
 
   <h2>Why a relaunch</h2>
@@ -175,10 +175,11 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
 
   <h2>The sample size, worked out first</h2>
   <div class="box">
-    <p><b>Smallest effect we care about:</b> &plusmn;0.50 percentage points per 5-session trade.<br>
+    <p><b>Smallest effect we care about:</b> &plusmn;0.75 percentage points per 5-session trade.<br>
     <b>Error rates:</b> two-sided &alpha; = 0.05/6, so a single arm can survive the family correction, and 80% power.<br>
     <b>Inputs from the first run:</b> a 5-session standard deviation of about 4.0 points and a same-day correlation of about 0.35.<br>
-    <b>Result:</b> about 775 independent trades&rsquo; worth of evidence, or about 322 sessions at 10 signals a day. <b>Floor: 330 sessions</b>, plus at least 1,000 trades and 100 companies. The arithmetic is in <code>planned_sessions()</code> in <code>experiment_harness.py</code>, pinned by a test.</p>
+    <b>Result:</b> about 344 independent trades&rsquo; worth of evidence, or about 143 sessions at 10 signals a day. <b>Floor: 150 sessions</b>, plus at least 1,000 trades and 100 companies. The arithmetic is in <code>planned_sessions()</code> in <code>experiment_harness.py</code>, pinned by a test.</p>
+    <p style="margin-top:12px"><b>Amended 2026-11-26, before any Experiment 13 signal existed:</b> the registration set &plusmn;0.50 points and a 330-session floor, about 16 months. We moved to &plusmn;0.75 and 150 sessions to get a read in about seven months. The cost: an &ldquo;equivalent to zero&rdquo; verdict now rules out only edges of 0.75 points or more, and a smaller real edge would more likely come back underpowered. Nothing had been observed when the change was made; the amendment is in <a href="HYPOTHESES.md">HYPOTHESES.md</a>.</p>
   </div>
 
   <h2>What it can conclude</h2>
@@ -186,7 +187,7 @@ function toggleMenu(f){const m=document.getElementById("mobileMenu"),b=document.
   <div class="box">
     <p><b>Clears the bar:</b> the 95% interval is above zero, the mean and median are both positive, and the direction held for three weekly snapshots.<br>
     <b>Significantly negative:</b> the 95% interval is below zero.<br>
-    <b>Equivalent to zero:</b> the 90% interval sits inside &plusmn;0.50 points, so any edge is smaller than the one we care about. This is the result the first run could not give.<br>
+    <b>Equivalent to zero:</b> the 90% interval sits inside &plusmn;0.75 points, so any edge is smaller than the one we care about. This is the result the first run could not give.<br>
     <b>Underpowered:</b> none of the above.</p>
     <p style="margin-top:12px">The six arms are one family: a pass also has to survive a Benjamini&ndash;Hochberg correction across all six. They share a universe and many days, so they are correlated tests, not six independent replications.</p>
   </div>

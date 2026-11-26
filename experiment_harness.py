@@ -418,15 +418,18 @@ V2_COMMON = {
     "cost_on": "strategy",           # the control pays nothing: excess = profit vs holding
     "bench_excludes_self": True,     # the traded name is left out of its own control
     "primary": "nd",                 # PRIMARY = 5-session excess; same-session is secondary
-    "sesoi": 0.50,                   # smallest effect of interest, pp per 5-session trade
+    "sesoi": 0.75,                   # smallest effect of interest, pp per 5-session trade
+                                     # (0.50 at registration; amended 2026-11-26, before any
+                                     # EXP13 signal existed — HYPOTHESES.md)
     "min_n": 1000,                   # graded trades
     "min_clusters": 100,             # distinct tickers
-    "min_sessions": 330,             # distinct signal dates (the binding unit: see planning)
+    "min_sessions": 150,             # distinct signal dates (the binding unit: see planning;
+                                     # 330 at registration, amended with the SESOI 2026-11-26)
     "family": "EXP13",
     "family_m": 6,
 }
 V2_PRIOR = ("Re-run of a rule that ended INCONCLUSIVE on 40 names. Registered expectation: "
-            "equivalent to zero at the ±0.50 pp bound; no arm is expected to clear the bar.")
+            "equivalent to zero at the ±0.75 pp bound; no arm is expected to clear the bar.")
 EXPERIMENTS_V2 = [
     dict(V2_COMMON, id="EXP13A-MACD", title="Relaunch: the MACD bullish crossover (S&P 500)",
          entry=entry_macd_cross, prior=V2_PRIOR),
@@ -898,12 +901,13 @@ def twoway_se(vals, k1, k2):
     return var ** 0.5, min(gt, gd)
 
 
-def planned_sessions(sd=4.0, icc=0.35, per_day=10, sesoi=0.50, z_alpha=2.638, z_power=0.8416):
+def planned_sessions(sd=4.0, icc=0.35, per_day=10, sesoi=0.75, z_alpha=2.638, z_power=0.8416):
     """The EXP13 planning arithmetic, so the floor is re-derivable: trades needed if independent,
     then divided by the effective trades per session under a same-day correlation `icc`
     (design effect 1 + (m-1)*icc). Defaults are the registered inputs: SD of the 5-session
     excess ~4.0 pp and same-date correlation ~0.35 (medians over the six locked 40-name
-    experiments), 10 signals a day, SESOI 0.50 pp, two-sided alpha 0.05/6 (a lone arm must
+    experiments), 10 signals a day, SESOI 0.75 pp (amended 2026-11-26 from 0.50), two-sided
+    alpha 0.05/6 (a lone arm must
     survive the family correction), 80% power."""
     n_eff = ((z_alpha + z_power) * sd / sesoi) ** 2
     per_session = per_day / (1.0 + (per_day - 1.0) * icc)
@@ -1263,7 +1267,8 @@ def _selftest():
     assert len(v2) == 6 and len({x["id"] for x in v2}) == 6
     assert all(x["family_m"] == 6 and x["cost_on"] == "strategy" for x in v2)
     n_eff, per_s, sess = planned_sessions()
-    assert 770 < n_eff < 780 and 2.3 < per_s < 2.5 and 315 < sess < 330, (n_eff, per_s, sess)
+    assert 340 < n_eff < 350 and 2.3 < per_s < 2.5 and 138 < sess < 148, (n_eff, per_s, sess)
+    assert 315 < planned_sessions(sesoi=0.50)[2] < 330      # the registered 0.50 arithmetic
     assert all(x["min_sessions"] >= sess for x in v2)
     # RSI(2) entry: a long uptrend with a sharp 2-day drop fires; a flat series does not
     rs = [{"d": f"d{i}", "o": c, "h": c, "l": c, "c": c}
@@ -1302,7 +1307,7 @@ def _selftest():
         _eq = {"ci95": (-0.2, 0.2), "ci90": (-0.15, 0.15), "mean": 0.0, "median": 0.0,
                "col": "excess_nd"}
         assert compute_verdict_v2(_eq, _ex, "2026-06-01").startswith("EQUIVALENT")
-        _up = dict(_eq, ci95=(-0.9, 0.9), ci90=(-0.7, 0.7))
+        _up = dict(_eq, ci95=(-1.1, 1.1), ci90=(-0.9, 0.9))
         assert compute_verdict_v2(_up, _ex, "2026-06-01").startswith("UNDERPOWERED")
         _ng = dict(_eq, ci95=(-0.9, -0.1), ci90=(-0.8, -0.2), mean=-0.5, median=-0.4)
         assert compute_verdict_v2(_ng, _ex, "2026-06-01").startswith("SIGNIFICANTLY")

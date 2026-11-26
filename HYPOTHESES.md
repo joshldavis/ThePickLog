@@ -1489,3 +1489,28 @@ claim about any author, platform or educator, and it is not advice. No trade is 
 
 **Runs.** On the existing daily GitHub Actions workflow, through the harness steps already there
 (one chunked free fetch of the 503 names per run). Nothing runs on Vercel.
+
+## Amendment to batch #12 (Experiment 13) — SESOI ±0.75 pp, floor 150 sessions, 2026-11-26
+
+**Made before any Experiment 13 data existed.** At the time of this change no file under
+`experiments/` held a single EXP13 signal or outcome: the batch was merged to `main` on 2026-11-26 at
+05:50 UTC, the daily workflow had not run since, and only signals dated strictly after 2026-11-27
+count. Nothing was observed, so nothing could have informed the change. The owner chose it to get a
+read in months rather than years.
+
+**What changed.**
+- **SESOI: ±0.50 → ±0.75 pp per 5-session trade.** This sets both the effect the power calculation
+  targets and the equivalence bound in outcome 3 (the 90% CI must now lie inside (−0.75, +0.75)).
+- **Floor: 330 → 150 distinct signal sessions.** Same inputs as registered (SD 4.0, same-date
+  correlation 0.35, 10 signals a day, α = 0.05/6, 80% power): ≈ 344 effective trades ÷ ≈ 2.41 per
+  session ≈ 143 sessions, rounded up to 150. `planned_sessions()` now defaults to 0.75 and its
+  selftest pins both the amended and the registered arithmetic. Expected read: about July 2027.
+- The registered prior now reads "equivalent to zero at ±0.75 pp".
+
+**What this costs, said plainly.** The test is now sized to find an edge of 0.75 pp per 5-session trade
+or larger, and an EQUIVALENT TO ZERO verdict now rules out only edges of that size. A smaller real edge
+would more likely come back UNDERPOWERED. That is the trade for an answer in about seven months
+instead of about sixteen.
+
+**Unchanged:** universe, entries, exit, control, costs, clustering, the other two floors (1,000 trades,
+100 names), the four outcomes, the one-look rule and the family correction (m = 6).
