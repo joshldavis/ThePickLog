@@ -1404,3 +1404,88 @@ date-clustered interval next to each registered interval. No verdict reads it.
 repository is dated 2026-08-01, and the first counted signal is dated 2026-08-03. No scored data
 predates either date. A post-hoc review also looked at the 7 EXP03 rows graded after the lock, so any
 confirmatory follow-up must open its own window after its own registration date.
+
+## Registration batch #12 — EXPERIMENT 13, the relaunch on the S&P 500, frozen 2026-11-27
+
+**The claim under test, six times.** The six cross-sectional rules that ended INCONCLUSIVE on the
+frozen 40-name universe (H-EXP02 RSI(2), H-EXP03 MACD, H-EXP06 Supertrend, H-EXP07 SMA pullback,
+H-EXP08 Bollinger reversion, H-EXP09 NR7) are re-run as six arms of one new experiment, **13A–13F**,
+on a universe 12.6 times larger, under the 2026-11-25 registration standard. Each entry rule is the
+registered one, unchanged (constants in `experiment_harness.py`, `EXPERIMENTS_V2`). This is a new
+experiment with a new window. It does not reopen, extend or re-decide any locked verdict.
+
+**Why a relaunch, and why the first run used 40 names.** The 40-name list was chosen at H-EXP02's
+registration for liquidity (a 0.10% round trip, so cost could not explain a null) and stability
+(a fixed list that could not drift). A short list also kept the daily download small on the free
+data feed the project runs on. It was never sized for power: no registration named the effect it
+was looking for, and the locked results could only rule out large edges (H-EXP03: minimum
+detectable effect ≈ 0.44 pp per same-session trade at 80% power). The 2026-11-25 amendment is the
+fix; this batch applies it.
+
+**What the 40-name data teach about sample size, stated before any EXP13 signal exists.** In the
+six locked 40-name samples the 5-session excess has a standard deviation of about 4.0 pp (median
+of 4.12, 6.02, 3.93, 3.32, 3.27, 4.17) and a same-date correlation of about 0.35 (median of 0.63,
+0.53, 0.10, 0.57, −0.06, 0.18). Same-day signals move together, so **the number of trading
+sessions, not the number of names, is the binding unit**: ten trades on one day carry about 2.4
+trades' worth of independent evidence. A bigger universe fills every session and allows a larger
+daily cap; it cannot replace time.
+
+**Rule (frozen; every arm):**
+- **Universe:** the S&P 500 constituent list as published in the open dataset
+  github.com/datasets/s-and-p-500-companies (`data/constituents.csv`, fetched 2026-11-26, SHA-256
+  `5307d7ebfe868913b59c53463993b4ce4544a9bd031cf9d4fe4f093d743c4995`), 503 share classes across
+  all 11 GICS sectors, committed as `universes/sp500-2026-11-26.csv` with Yahoo symbols (BRK.B →
+  BRK-B). Fixed: adding or removing a name voids the experiment. It is the list as published that
+  day, not a claim about the index's true membership; a name that stops trading drops out.
+  Large caps only, on purpose: the 0.10% cost stays credible across the whole list.
+- **Entry:** each arm's registered rule, evaluated after the close; at most **10** signals per
+  arm per day, the registered tie-break first. Next session's open; signals logged before it.
+- **Primary metric:** the **5-session excess** over the day-matched control (closer to how the
+  trend rules are taught than a same-session exit, and the published exit horizon of the
+  mean-reversion rules). The same-session excess is reported as secondary and cannot rescue a fail.
+- **Control:** the equal-weight return of the rest of the universe over the identical window,
+  **leaving the traded name out**.
+- **Costs:** 0.10% round trip, charged to the trade only (`cost_on="strategy"`), so the excess is
+  the edge over holding the universe, not over a costless same-moment entry.
+- **Window:** signals dated strictly after 2026-11-27.
+
+**Planning (the power calculation the standard requires).** SESOI **±0.50 pp per 5-session trade**.
+Two-sided α = 0.05/6, so a lone arm can survive the family correction; 80% power. With SD 4.0 and
+same-date correlation 0.35 at 10 signals a day: ≈ 775 effective trades ÷ ≈ 2.41 per session ≈
+**322 sessions**. `planned_sessions()` in the harness reproduces this, and a selftest pins it.
+**Floors: ≥ 330 distinct signal sessions, ≥ 1,000 graded trades and ≥ 100 distinct names.** At the
+signal rates seen on 40 names, scaled to 503, every arm should signal on nearly every session, so
+the floors should be met in roughly 16 months (about March 2028). An arm that averages fewer than
+10 signals a day carries less evidence per session and is somewhat underpowered at its floor;
+that is disclosed now rather than fixed later.
+
+**Inference.** Mean of the primary metric with a **two-way cluster-robust standard error** (ticker
+and signal date; Cameron, Gelbach & Miller 2011). 95% and 90% intervals from that standard error.
+
+**Decision rule (four outcomes, frozen):**
+1. **CLEARS THE BAR**: the 95% CI is above zero, mean AND median are positive, and the direction
+   held across the last 3 weekly snapshots.
+2. **SIGNIFICANTLY NEGATIVE**: the 95% CI is below zero.
+3. **EQUIVALENT TO ZERO**: the 90% CI lies inside (−0.50, +0.50) pp (two one-sided tests at the
+   SESOI).
+4. **UNDERPOWERED**: none of the above.
+
+**One look.** Before the floors: the report shows counts only (trades, names, sessions), with no
+mean, interval or verdict language, so no running number is watched. At the first run where all
+three floors are met, each arm's verdict is computed once and appended to
+`experiments/EXP13-verdicts.csv`, never recomputed.
+
+**Family.** The six arms are one family, **m = 6**, Benjamini–Hochberg at q = 0.05, unlocked arms
+counted as p = 1, appended to `experiments/EXP13-fdr.csv` at each arm's lock. The arms share a
+universe and many sessions, so they are correlated tests, not independent replications. This
+family is separate from the EXP02–EXP09 family, whose reads are final.
+
+**Registered prior.** Every arm is expected to be **equivalent to zero** at ±0.50 pp. These rules
+are published, taught and widely followed, and none showed anything on 40 names. A pass would be
+surprising, and would be reported with the same scope limits as every verdict here.
+
+**Scope limits.** A verdict describes these rules, on this list, over this window. It is not a
+claim about any author, platform or educator, and it is not advice. No trade is executed.
+
+**Runs.** On the existing daily GitHub Actions workflow, through the harness steps already there
+(one chunked free fetch of the 503 names per run). Nothing runs on Vercel.

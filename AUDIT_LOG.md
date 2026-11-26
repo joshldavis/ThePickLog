@@ -1,5 +1,12 @@
 # ThePickLog — Audit Log
 
+## 2026-11-27 — Change: Experiment 13 registered (six inconclusive rules relaunched on the S&P 500)
+
+- **Registration** (`HYPOTHESES.md`, batch #12, its own commit): arms 13A–13F re-run the registered entry rules of H-EXP02/03/06/07/08/09 on a frozen 503-name S&P 500 list (`universes/sp500-2026-11-26.csv`, source and SHA-256 in the registration). Primary = 5-session excess; control leaves the traded name out; 0.10% cost on the trade only; ≤ 10 signals a day; SESOI ±0.50 pp; α = 0.05/6, 80% power; floors 330 sessions, 1,000 trades, 100 names; two-way clustered SE; four-outcome decision rule; one look; BH across the six arms. Window opens after 2026-11-27.
+- **Code** (`experiment_harness.py`): a design-v2 path that publishes counts only until the floors are met, then locks each arm once to `experiments/EXP13-verdicts.csv` and the family read to `experiments/EXP13-fdr.csv`; chunked fetch for universes over 100 names (the 40-name fetch is unchanged); RSI(2) entry for 13B; selftests. Runs in the existing daily GitHub workflow, nothing on Vercel.
+- **Pages:** new `experiment-13.html`; card on `experiments.html`; `sitemap.xml` and `feed.xml` entries; `experiment-03.html` gains one paragraph on why the first run used 40 names and a link to Experiment 13.
+- **Unchanged:** every earlier registration, rule, locked verdict and stored row.
+
 ## 2026-11-25 — Change: Experiment 03 verdict box states what the null rules out; harness checks criterion 4
 
 A post-hoc review of the locked H-EXP03 verdict. **No locked number, verdict, rule or stored row changed.**

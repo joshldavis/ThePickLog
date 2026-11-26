@@ -5,11 +5,19 @@
   <link>https://thepicklog.com/</link>
   <description>We test what's being sold to traders. Rules frozen before the fact, graded forward against a control, verdicts published either way — starting with our own strategy, which failed.</description>
   <language>en-us</language>
-  <lastBuildDate>Mon, 23 Nov 2026 20:00:00 GMT</lastBuildDate>
+  <lastBuildDate>Fri, 27 Nov 2026 20:00:00 GMT</lastBuildDate>
   <atom:link href="https://thepicklog.com/feed.xml" rel="self" type="application/rss+xml"/>
 
   <!-- New items go at the TOP. One item per published verdict, field note,
        correction, or experiment registration. Keep guids stable forever. -->
+
+  <item>
+    <title>Experiment 13: six inconclusive signals, relaunched on the S&amp;P 500</title>
+    <link>https://thepicklog.com/experiment-13.html</link>
+    <guid isPermaLink="true">https://thepicklog.com/experiment-13.html</guid>
+    <pubDate>Fri, 27 Nov 2026 20:00:00 GMT</pubDate>
+    <description>The six techniques that ended inconclusive on 40 large caps (RSI(2), MACD, Supertrend, moving-average pullback, Bollinger reversion, NR7) are re-run unchanged on 503 S&amp;P 500 names. The sample size was set in advance from the smallest edge worth finding (0.50 points per 5-session trade), and each arm can now conclude &#8220;equivalent to zero&#8221;. One verdict look per arm, at 330 signal sessions, expected around March 2028.</description>
+  </item>
 
   <item>
     <title>Correction: our own 10-07 fix left 11 rows you couldn&#8217;t rebuild</title>
