@@ -855,3 +855,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-25T22:44:41+00:00,arm,a6c833fd-d629-4981-acd3-e16481859319,ALTG,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-25T22:44:41+00:00,arm,3b48f8f4-a403-4800-bbcf-657cb6eacc3f,YHGJ,tp_submitted,57,4.15,78b6735d-8873-4f38-baab-c3203850def1,accepted,entry fill 3.77
 2026-11-25T22:44:41+00:00,arm,be292938-51d5-4268-96b0-07ba0456ebac,APUS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-26T02:28:31+00:00,manage,75d86d0e-c6de-4aba-abcc-2799b89a1073,CUE,tp_filled,32,6.7,,,
