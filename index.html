@@ -581,13 +581,13 @@
         <h2 style="margin:0;font-size:19px">The experiments</h2>
         <a href="experiments.html" style="margin-left:auto;font-size:13.5px;color:var(--blue);text-decoration:none">All experiments &amp; how they work &rarr;</a>
       </div>
-      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch"><b>Seven decided, three running in public right now.</b> Each is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control it has to beat.</p>
+      <p class="muted" style="font-size:13.5px;margin:6px 0 0;max-width:78ch"><b>Seven decided, four running in public right now.</b> Each is a claim someone is selling, written down as an exact rule with a date, then graded forward against a control it has to beat.</p>
       <div class="grid exp-cards">
         <a class="panel exp-card" href="experiment-01.html">
-          <div class="exp-no">EXPERIMENT 01 <span class="exp-pill v-fail">FAILED</span></div>
+          <div class="exp-no">EXPERIMENT 01 <span class="exp-pill v-fail">DIDN&rsquo;T HOLD UP</span></div>
           <h3>Our own low-float momentum screen</h3>
-          <p>We pre-registered the edge we believed in and ran it forward for seven weeks. It lost — and at 30 trades it had looked like it was working. That early read was noise.</p>
-          <div class="exp-meta">verdict 2026-07-29 &middot; n=309 &middot; <b>&minus;3.0pp vs baseline</b></div>
+          <p>We pre-registered the edge we believed in and ran it forward for five weeks. It lost — and at 30 trades it had looked like it was working. That early read was noise.</p>
+          <div class="exp-meta">verdict 2026-07-29 &middot; n=309 &middot; <b>&minus;3.0pp vs baseline</b> &middot; &minus;2.6pp with late picks excluded</div>
         </a>
         <a class="panel exp-card" href="experiment-02.html">
           <div class="exp-no">EXPERIMENT 02 <span class="exp-pill v-inc">INCONCLUSIVE</span></div>
@@ -841,7 +841,7 @@
 
     <div class="panel" style="margin-top:18px">
       <h3 style="margin:0 0 6px;font-size:15px">Where these numbers come from</h3>
-      <p class="note" style="margin:0">Fundamentals are read from <a href="trust.html" style="color:var(--a-text)">SEC EDGAR</a> public filings. Live quotes come from a market-data vendor whose terms don't permit public redistribution, so today's screen shows clearly-labeled <b>sample prices</b> to visitors — the banner at the top of the page says so whenever that's the case. <b>The pick log, the track record and every experiment on this site are unaffected:</b> they have never used this feed, and they re-derive from <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a>. One known limit worth stating: <b>float</b> here is approximated from shares outstanding; true public float and short interest need a paid feed.</p>
+      <p class="note" style="margin:0">Fundamentals are read from <a href="trust.html" style="color:var(--a-text)">SEC EDGAR</a> public filings. Live quotes come from a market-data vendor whose terms don't permit public redistribution, so visitors see the last session the scanner actually logged to <code>picks.csv</code>, at the prices it screened before that open — the banner at the top of the page says which session. Clearly labelled sample prices appear only if the pick log itself can't be loaded. <b>The pick log, the track record and every experiment on this site are unaffected:</b> they have never used this feed, and they re-derive from <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> and <a href="outcomes.csv" download style="color:var(--a-text)">outcomes.csv</a>. One known limit worth stating: <b>float</b> here is approximated from shares outstanding; true public float and short interest need a paid feed.</p>
     </div>
 
     <div id="ownerPanels" hidden>
@@ -1577,6 +1577,17 @@
   </div>
 </section>
 
+<!-- Embedded views sit before the footer so the footer renders below them (audit 2026-11-26). -->
+<!-- ============ VALIDATION (embedded dashboard.html) ============ -->
+<section class="view" id="view-validation">
+  <iframe class="embed-tab" id="embed-validation" data-src="dashboard.html?embed=1" title="Model validation dashboard" loading="lazy"></iframe>
+</section>
+
+<!-- ============ CALCULATOR (embedded calculator.html) ============ -->
+<section class="view" id="view-calculator">
+  <iframe class="embed-tab" id="embed-calculator" data-src="calculator.html?embed=1" title="Exit-rule scenario calculator" loading="lazy"></iframe>
+</section>
+
 <footer class="foot"><div class="wrap">
   ThePickLog — a public testing lab for trading claims, operated by AMD Ventures, LLC (Florida).
   Educational and informational only — not investment advice, not a recommendation, and not a broker-dealer. Simulated (paper) trading only; no real money is ever placed.
@@ -1670,16 +1681,6 @@
     <div id="daBody"><div class="muted" style="padding:34px;text-align:center">Loading…</div></div>
   </div>
 </div>
-
-<!-- ============ VALIDATION (embedded dashboard.html) ============ -->
-<section class="view" id="view-validation">
-  <iframe class="embed-tab" id="embed-validation" data-src="dashboard.html?embed=1" title="Model validation dashboard" loading="lazy"></iframe>
-</section>
-
-<!-- ============ CALCULATOR (embedded calculator.html) ============ -->
-<section class="view" id="view-calculator">
-  <iframe class="embed-tab" id="embed-calculator" data-src="calculator.html?embed=1" title="Exit-rule scenario calculator" loading="lazy"></iframe>
-</section>
 
 <!-- info tooltip popover (shared) -->
 <div id="infopop"></div>
@@ -1932,11 +1933,30 @@ async function loadUniverse(){
   return SAMPLE_QUOTES;
 }
 
+let LOGGED_DATE=null;
+async function latestLoggedScreen(){
+  try{
+    const tr=await getTrackRecord();
+    if(!tr.real||!tr.picks.length) return null;
+    const date=tr.picks.reduce((m,p)=>p.trading_date>m?p.trading_date:m,"");
+    const n=(x)=>{const v=parseFloat(x);return isFinite(v)?v:0;};
+    const rows=tr.picks.filter(p=>p.trading_date===date).map(p=>({
+      symbol:p.ticker, price:n(p.price_at_screen), gap:n(p.gap_pct), rvol:n(p.rvol),
+      floatM:n(p.float_shares)/1e6, score:n(p.score), tier:p.tier||tierOf(n(p.score)),
+      watch:n(p.watch_level)||+(n(p.price_at_screen)*(1+CONFIG.WATCH_LEVEL_PCT)).toFixed(2),
+      parts:{float:n(p.float_score),rvol:n(p.rvol_score),gap:n(p.gap_score),price:n(p.price_score)}
+    })).filter(r=>r.symbol&&r.price>0);
+    return rows.length?{date,rows}:null;
+  }catch(e){ return null; }
+}
+
 /* ---------- RENDER: banner ---------- */
 function renderBanner(){
   const el=document.getElementById("srcBanner");
   if(DATA_MODE==="live"){
     el.innerHTML=`<span class="dot live"></span><b style="color:var(--green)">Live data</b> — quotes pulled from Financial Modeling Prep for the seed universe. Float approximated from shares outstanding.`;
+  }else if(DATA_MODE==="logged"){
+    el.innerHTML=`<span class="dot live"></span><b>Today's screen shows the last logged session (${LOGGED_DATE})</b> — the prices and scores the scanner wrote to <a href="picks.csv" download style="color:var(--a-text)">picks.csv</a> before that open. <span class="dim">Live quotes are owner-only (data-vendor licensing).</span>`;
   }else if(DATA_MODE.startsWith("unavailable")||DATA_MODE.startsWith("error")){
     const reason=/429|rate/i.test(DATA_MODE)?"data feed rate limit reached":"live feed temporarily unavailable";
     el.innerHTML=`<span class="dot sample"></span><b style="color:var(--amber)">Sample data — ${reason}</b>. This affects only <b>today's screen</b> (live quotes); the <b>Track record & model validation run on the committed pick log, not this feed</b>. The live screen refreshes automatically once the feed recovers. <span class="dim">(The Quality Lens still uses live SEC filings.)</span>`;
@@ -1975,7 +1995,11 @@ function renderWatchlist(rows){
     ${stat("Hottest (A/B)",actionable)}
     ${stat("Top score",tops?tops.score.toFixed(1):"—")}
     ${stat("Top ticker",tops?tops.symbol:"—")}`;
-  document.getElementById("asof").textContent="As of "+new Date().toLocaleDateString()+" · "+(DATA_MODE==="live"?"live":"sample")+" data · prices Yahoo-derived, may be delayed · not for execution";
+  document.getElementById("asof").textContent = DATA_MODE==="logged"
+    ? "Logged before the open on "+LOGGED_DATE+" · prices as screened, from picks.csv · not for execution"
+    : DATA_MODE==="live"
+    ? "As of "+new Date().toLocaleDateString()+" · live data · prices Yahoo-derived, may be delayed · not for execution"
+    : "Illustrative sample prices, not today's market · the pick log couldn't be loaded · not for execution";
   window.LASTPX = window.LASTPX || {};
   window.SCORED_BY_SYM = window.SCORED_BY_SYM || {};
   rows.forEach(r=>{ window.LASTPX[r.symbol]=r.price; window.SCORED_BY_SYM[r.symbol]=r; });
@@ -3942,7 +3966,7 @@ async function renderDashboardQuality(scored){
     </div>
     <table class="sortable"><thead><tr><th>Ticker ${infoBtn("ticker")}</th><th>Tier ${infoBtn("tier")}</th><th class="num">Momentum ${infoBtn("momentumScore")}</th><th class="num">Price ${infoBtn("price")}</th><th>Quality ${infoBtn("quality")}</th><th>Class ${infoBtn("cls")}</th></tr></thead>
     <tbody>${rows}</tbody></table>
-    ${avoid?`<div class="note" style="margin-top:12px">${avoid} of today's top ${top.length} movers flag <b>Red/Black</b> on the quality lens — exactly the names momentum-only scanners would have you chasing.</div>`:""}`;
+    ${avoid?`<div class="note" style="margin-top:12px">${avoid} of ${DATA_MODE==="logged"?"this session's":DATA_MODE==="live"?"today's":"these sample"} top ${top.length} movers flag <b>Red/Black</b> on the quality lens — exactly the names momentum-only scanners would have you chasing.</div>`:""}`;
 }
 
 /* ---------- render: Quality Lens methodology (scoring page) ---------- */
@@ -3959,8 +3983,17 @@ function renderQualityMethodology(){
 /* ---------- BOOT ---------- */
 async function boot(){
   const quotes=await loadUniverse();
-  const scored=quotes.map(scoreQuote)
+  let scored=quotes.map(scoreQuote)
     .filter(r=>r.price>=CONFIG.FILTERS.priceMin); // basic band filter for demo
+  /* No live feed for visitors (data-vendor licensing). Rather than show invented
+     prices on real tickers, show the most recent session the scanner actually
+     logged to picks.csv before the open, with the score and tier it was logged
+     at. Same exclusions as the Track record. Invented SAMPLE_QUOTES remain only
+     as the last resort when the pick log itself can't be loaded. */
+  if(DATA_MODE!=="live"){
+    const logged=await latestLoggedScreen();
+    if(logged){ scored=logged.rows; DATA_MODE="logged"; LOGGED_DATE=logged.date; }
+  }
   renderBanner();
   renderWatchlist(scored);
   renderLandingKpis();
