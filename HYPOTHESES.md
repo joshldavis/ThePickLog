@@ -1578,3 +1578,30 @@ the intervals will be narrow, so a statistically clear difference may still be e
 **Outputs** (written once by the workflow to `backtests/exp13-history/`): `summary.csv`, `by_year.csv`,
 `coverage.csv`, `run.csv` (run metadata and a SHA-256 fingerprint of the price data used) and
 `trades.csv.gz` (every graded trade), so every published number can be re-derived.
+
+## Exploratory backtest for Experiment 13 — second run with filled coverage, plan fixed 2026-11-27
+
+**Why.** The first run (2026-11-26, `backtests/exp13-history/`) had prices for only 53% of
+point-in-time member-days in 2005, rising to 97% in 2025. The owner asked to fill that gap and
+rerun. A diagnostic (`coverage_probe_exp13.py`, report in `backtests/exp13-history/coverage-probe/`)
+found 318 point-in-time members with no usable Yahoo history. Alpaca's free SIP history (since
+2016, the project's existing keys) has in-membership bars for 146 of them. Stooq was unreachable
+from GitHub Actions. No free, licensed source was found for members that left before 2016. A
+public GitHub dataset claiming full coverage carries no licence and states that it rests on CRSP
+and Tiingo data, which their terms do not let others republish, so it is not used.
+
+**Fixed before the second run, which has not run yet.** Everything in the first plan stands
+(window, rules, exit, control, cost, statistics, labels, halves, robustness SE). Only universe
+B's price data changes, filled in this order for each member with no usable Yahoo history:
+1. **Renamed companies.** If Alpaca's split-adjusted SIP close for the old symbol matches the
+   Yahoo close of a current symbol within 1% on at least 95% of at least 60 common dates, the
+   member is treated as that security, and the Yahoo history is used for the member's dates in
+   every year. On a date when both symbols are listed as members, the old symbol is skipped.
+2. **Otherwise, Alpaca.** The member's Alpaca SIP daily bars (split-adjusted, no dividends, like
+   Yahoo's) are used on its own dates from 2016.
+3. Members still without data stay missing, and coverage is reported by year as before.
+
+Universe A is unchanged. Outputs go to `backtests/exp13-history/run2-filled/`. The first run's
+outputs stay as published. Both runs are reported. The headline becomes run 2's universe B.
+Known limits: members that left before 2016 remain mostly missing; Alpaca's and Yahoo's opens
+and closes come from different vendors; label rules are the same.
