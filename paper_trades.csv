@@ -903,3 +903,11 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-26T22:34:47+00:00,arm,f1fc0c0b-b0d2-4be3-b9a7-d6569d62dd19,YFOR,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-26T22:34:47+00:00,arm,a6c833fd-d629-4981-acd3-e16481859319,ALTG,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-26T22:34:47+00:00,arm,be292938-51d5-4268-96b0-07ba0456ebac,APUS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-27T02:24:55+00:00,manage,d481173e-2968-40cb-ba27-8c5639270587,SVRE,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,15ce0305-7b5f-4a7a-b756-ce30dd3f07e6,VWAV,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,5a35917c-af98-4729-854c-69eb9293c617,BTOC,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,6bffb60e-e996-4113-a51e-af6bb46d6fef,MPU,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,962d2cb2-7470-46de-8831-1b1e49dbd3a8,HIHO,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,2052bca0-8a35-40bf-8b38-26dfa553dc79,GMM,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,15479a8e-a84d-47e4-b0cb-815bed89dfca,ICCM,time_exit,,,,,session 5: no position left (target filled or entry never filled)
+2026-11-27T02:24:55+00:00,manage,5a0b4a5a-4356-4cb1-9456-54895a48c044,CUE,time_exit,,,,,session 5: no position left (target filled or entry never filled)
