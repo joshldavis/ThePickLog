@@ -1,5 +1,12 @@
 # ThePickLog — Audit Log
 
+## 2026-11-27 — Change: second, coverage-filled run of the exploratory Experiment 13 backtest
+
+- **Why:** the first run priced only 53% of point-in-time S&P 500 member-days in 2005; the owner asked to fill the gap with free sources.
+- **Order:** a diagnostic (`coverage_probe_exp13.py`) listed 318 members with no usable Yahoo history. The fill rules were then fixed in `HYPOTHESES.md` ("second run with filled coverage, plan fixed 2026-11-27") before `backtest_exp13_filled.py` ran: renamed companies matched by price (Alpaca vs Yahoo, 1% on 95% of dates) use their current symbol's Yahoo history; others use Alpaca's free SIP history from 2016. Outputs in `backtests/exp13-history/run2-filled/`, with `fill_log.csv`. The first run's outputs are untouched.
+- **Result:** 25 renames and 162 Alpaca-filled companies; coverage 56% in 2005, 77% in 2015, at least 96% from 2016, 83% overall (first run 76%). Every estimate moved by less than 0.02 pp and every label is unchanged. `experiment-13.html` now shows the second run.
+- **Not used:** a public GitHub dataset claiming complete coverage, because it has no licence and states it rests on CRSP and Tiingo data. Stooq did not respond from GitHub Actions.
+
 ## 2026-11-26 — Change: exploratory historical backtest of the six Experiment 13 rules (plan fixed first)
 
 - **What:** `backtest_exp13.py` replays the six Experiment 13 entries, exit, control and cost on 2005–2025 Yahoo prices, on the frozen 503-name list (A) and on point-in-time S&P 500 members (B, from `universes/sp500-pit-fja05680-2026-08-18.csv`, source and SHA-256 in `HYPOTHESES.md`). Runs only in GitHub Actions (`.github/workflows/backtest-exp13.yml`) and writes to `backtests/exp13-history/` on its branch.
