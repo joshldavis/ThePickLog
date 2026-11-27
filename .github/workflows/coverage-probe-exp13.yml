@@ -1,0 +1,58 @@
+# Diagnostic for the EXP13 exploratory backtest: which point-in-time S&P 500 members are missing
+# from the replay and whether a free source (Alpaca's free SIP history, Stooq) has them.
+# Computes no strategy result. Commits its report to the branch it ran for, never to main.
+name: EXP13 coverage probe (diagnostic)
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "coverage_probe_exp13.py"
+      - ".github/workflows/coverage-probe-exp13.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      BRANCH: ${{ github.head_ref || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - name: Skip when a probe report already exists (unless run by hand)
+        id: gate
+        run: |
+          if [ -f backtests/exp13-history/coverage-probe/missing.csv ] && [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            echo "skip=1" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.skip != '1'
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        if: steps.gate.outputs.skip != '1'
+        run: pip install "yfinance==1.7.0" "pandas==3.0.6" "numpy==2.4.6"
+      - name: Probe
+        if: steps.gate.outputs.skip != '1'
+        env:
+          ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+        run: python coverage_probe_exp13.py
+      - name: Commit report to this branch (never main)
+        if: steps.gate.outputs.skip != '1'
+        run: |
+          if [ "$BRANCH" = "main" ]; then echo "refusing to commit to main"; exit 0; fi
+          git config user.name "joshldavis"
+          git config user.email "davis1163@gmail.com"
+          git add backtests/exp13-history/coverage-probe
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "probe: EXP13 coverage of point-in-time members by free source"
+          for i in 1 2 3; do
+            git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH" && break
+            sleep 5
+          done
