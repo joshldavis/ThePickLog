@@ -1,4 +1,4 @@
-# ThePickLog — experiments under test · 2026-11-27
+# ThePickLog — experiments under test · 2026-11-28
 
 Every experiment below is forward-only from its registration date, scored as an **excess over a day-matched control** (the equal-weight return of its own frozen universe over the identical window), net of a declared cost. Mean, median and a ticker-clustered 95% CI are reported together, because a mean on financial data can be a single lucky trade. **Win rate is reported but is never a pass criterion.**
 
@@ -43,11 +43,11 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP08-BOLLREVERT — Bollinger Band mean reversion
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **49** (need 30) over **21** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.238%**, median **-0.043%**, 10% trimmed **-0.144%**, clustered 95% CI [-0.675, +0.207] over 21 names
-- same, date-clustered 95% CI [-0.755, +0.279] over 28 dates *(reported beside the registered interval; no verdict reads it)*
-- day-matched excess, 5 sessions: mean **-0.717%**, median **-0.553%**
-- win rate 37% *(reported only — not a pass criterion)*
+- graded signals: **51** (need 30) over **21** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.256%**, median **-0.043%**, 10% trimmed **-0.158%**, clustered 95% CI [-0.689, +0.169] over 21 names
+- same, date-clustered 95% CI [-0.753, +0.241] over 29 dates *(reported beside the registered interval; no verdict reads it)*
+- day-matched excess, 5 sessions: mean **-0.621%**, median **-0.486%**
+- win rate 35% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-17 at n=47 over 20 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: The same high-win-rate sales pitch as Experiment 02's RSI(2), through a different mechanism: the band adapts to volatility. Win-rate-flattering by construction — many small reverts punctuated by occasional large losses — which is precisely the shape the mean/median/clustered-CI reporting exists to expose. Registered expectation: excess indistinguishable from zero; ~1 in 6 it clears.
@@ -55,11 +55,11 @@ Every experiment below is forward-only from its registration date, scored as an 
 ## EXP09-NR7 — Volatility contraction (NR7) in an uptrend
 
 - status: **registered**, registered 2026-08-06, universe 40 names, hold 5 sessions, cost 0.1% round trip
-- graded signals: **194** (need 30) over **35** distinct names (need 20); single pre-declared verdict date **2026-11-02**
-- day-matched excess, 1 session: mean **-0.064%**, median **-0.018%**, 10% trimmed **-0.020%**, clustered 95% CI [-0.254, +0.114] over 35 names
-- same, date-clustered 95% CI [-0.262, +0.134] over 58 dates *(reported beside the registered interval; no verdict reads it)*
-- day-matched excess, 5 sessions: mean **+0.417%**, median **+0.429%**
-- win rate 43% *(reported only — not a pass criterion)*
+- graded signals: **196** (need 30) over **35** distinct names (need 20); single pre-declared verdict date **2026-11-02**
+- day-matched excess, 1 session: mean **-0.067%**, median **-0.018%**, 10% trimmed **-0.023%**, clustered 95% CI [-0.263, +0.117] over 35 names
+- same, date-clustered 95% CI [-0.262, +0.129] over 59 dates *(reported beside the registered interval; no verdict reads it)*
+- day-matched excess, 5 sessions: mean **+0.394%**, median **+0.429%**
+- win rate 42% *(reported only — not a pass criterion)*
 - **read: **NO EDGE DETECTED — the excess is indistinguishable from zero** *(locked 2026-11-02 at n=140 over 33 names — computed once, at the pre-declared verdict date, and never recomputed)***
 
 > Registered prior: That contraction precedes expansion (Crabel's NR7) is well documented; what is SOLD is the direction, and direction is the part with no documented edge. This is also the honest daily-bar version of an intraday claim: entry is the next open, not a break of the range, because our pre-open logging gate forbids acting on the open print. That deviation is disclosed wherever this experiment is published. Registered expectation: excess indistinguishable from zero; ~1 in 6.
