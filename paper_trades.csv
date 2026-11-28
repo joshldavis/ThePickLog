@@ -965,3 +965,4 @@ ts_utc,mode,pick_id,ticker,event,qty,price,order_id,status,note
 2026-11-27T22:19:07+00:00,arm,b3458f70-d7cb-48c6-a72d-7a233ed226b7,AMBO,entry_status,,,,expired,not filled yet — will retry next run
 2026-11-27T22:19:07+00:00,arm,847c23eb-e75e-4211-a16e-6b1541ce28d6,KYNB,tp_submitted,112,2.16,995521d2-2f27-4de4-8248-4c5faed8ecfe,accepted,entry fill 1.96
 2026-11-27T22:19:07+00:00,arm,fc5264e9-bf79-46c4-abab-44beb972a41f,ALGS,entry_status,,,,expired,not filled yet — will retry next run
+2026-11-28T02:11:36+00:00,manage,,,noop,,,,,nothing due
